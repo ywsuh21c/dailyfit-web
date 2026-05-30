@@ -1,0 +1,76 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/*
+ * Design tokens as CSS variables (mirror of tailwind.config.ts).
+ * Source of truth: LOCKED brand.md §2/§3. Amber & lime intentionally absent.
+ */
+:root {
+  --color-sage: #4a7c59;
+  --color-navy: #1e2d40;
+  --color-ivory: #f5f0e8;
+  --color-ink: #1a1a1a;
+  --color-ink-soft: #4a4a6a;
+  --color-bg: #fafaf8;
+  --color-surface: #f4f1ec;
+  --color-line: #e5e7eb;
+  --tap-min: 48px; /* senior tap-target floor */
+  --focus-ring: #4a7c59;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background-color: var(--color-bg);
+    color: var(--color-ink);
+    /* Senior a11y floor: 18px body, generous Korean line-height */
+    font-size: 1.125rem;
+    line-height: 1.8;
+    /* Prevent Korean words from splitting mid-word (brand a11y rule) */
+    word-break: keep-all;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    word-break: keep-all;
+    line-height: 1.2;
+    text-wrap: balance;
+  }
+
+  /* Visible focus for keyboard users on every interactive element */
+  a:focus-visible,
+  button:focus-visible,
+  input:focus-visible,
+  textarea:focus-visible,
+  select:focus-visible,
+  [tabindex]:focus-visible {
+    outline: 2px solid var(--focus-ring);
+    outline-offset: 4px;
+    border-radius: 4px;
+  }
+}
+
+@layer components {
+  /* Skip-link: hidden until focused (keyboard / screen-reader users) */
+  .skip-link {
+    position: absolute;
+    left: -9999px;
+    top: 0;
+    z-index: 100;
+    padding: 0.75rem 1.25rem;
+    background: var(--color-sage);
+    color: #fff;
+    border-radius: 0 0 8px 0;
+  }
+  .skip-link:focus {
+    left: 0;
+  }
+}
