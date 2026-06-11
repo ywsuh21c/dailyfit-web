@@ -13,6 +13,13 @@ export const site = {
     '한국 액티브 시니어 세대를 위한 AI 에이전트 — 대화 한 번으로 하루를 설계합니다.',
 } as const;
 
+/**
+ * Active activity catalog count — single source for every on-site mention
+ * (home metric strip, traction, agent console). 수도권 트림(2026-06-11) 후
+ * active 기준; 트림 원복 시 이 값만 갱신하면 사이트 전체가 따라온다.
+ */
+export const activeCatalogCount = 5207;
+
 export type NavItem = { href: string; label: string };
 
 // Option-B primary nav. "Product" = Home itself (Anthropic/Linear pattern).

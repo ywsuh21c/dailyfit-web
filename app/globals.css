@@ -24,6 +24,11 @@
     scroll-behavior: smooth;
   }
 
+  /* Anchor targets must clear the sticky 72px header when smooth-scrolled. */
+  [id] {
+    scroll-margin-top: 88px;
+  }
+
   body {
     background-color: var(--color-bg);
     color: var(--color-ink);
@@ -127,26 +132,29 @@
   background-size: 44px 44px;
   mask-image: radial-gradient(72% 78% at 64% 28%, black 25%, transparent 100%);
 }
+/* Soft blobs via radial-gradient, NOT filter:blur — an animated 70px blur
+ * keeps two large GPU layers re-sampling forever; the gradient looks the
+ * same and composites as a plain translated texture. */
 .aurora {
   position: absolute;
   border-radius: 50%;
-  filter: blur(70px);
   pointer-events: none;
+  will-change: transform;
 }
 .aurora-1 {
-  width: 440px;
-  height: 440px;
-  top: -130px;
-  right: 6%;
-  background: rgba(74, 124, 89, 0.17);
+  width: 560px;
+  height: 560px;
+  top: -190px;
+  right: 4%;
+  background: radial-gradient(closest-side, rgba(74, 124, 89, 0.17), transparent);
   animation: drift 16s ease-in-out infinite alternate;
 }
 .aurora-2 {
-  width: 360px;
-  height: 360px;
-  bottom: -150px;
-  left: -70px;
-  background: rgba(143, 191, 159, 0.22);
+  width: 480px;
+  height: 480px;
+  bottom: -210px;
+  left: -110px;
+  background: radial-gradient(closest-side, rgba(143, 191, 159, 0.22), transparent);
   animation: drift 21s ease-in-out infinite alternate-reverse;
 }
 
@@ -315,9 +323,9 @@
 }
 .marquee-track {
   display: flex;
-  gap: 12px;
   width: max-content;
   animation: marquee 38s linear infinite;
+  will-change: transform;
 }
 .marquee:hover .marquee-track {
   animation-play-state: paused;
@@ -328,6 +336,9 @@
   background: #fff;
   border-radius: 999px;
   padding: 9px 18px;
+  /* spacing via margin (not flex gap) so translateX(-50%) lands exactly on
+   * the duplicated copy's origin — no snap at the loop point */
+  margin-right: 12px;
   font-size: 14.5px;
   color: var(--color-ink-soft);
 }

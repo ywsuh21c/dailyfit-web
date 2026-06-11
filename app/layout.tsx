@@ -35,6 +35,10 @@ export default function RootLayout({
   return (
     <html lang="ko" className={pretendard.variable}>
       <body className="font-sans">
+        {/* Reveal/CountUp depend on client JS — without it, force content visible. */}
+        <noscript>
+          <style>{`.reveal{opacity:1 !important;transform:none !important}`}</style>
+        </noscript>
         <a href="#main" className="skip-link">
           본문으로 건너뛰기
         </a>

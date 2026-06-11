@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { site } from '@/lib/site';
+import { activeCatalogCount, site } from '@/lib/site';
 import { AgentConsole } from '@/components/home/AgentConsole';
 import { Reveal } from '@/components/motion/Reveal';
 import { CountUp } from '@/components/motion/CountUp';
@@ -11,12 +11,13 @@ import { CountUp } from '@/components/motion/CountUp';
 // brighter, more motion). Dark survives only in the console + footer.
 //
 // Verified content sources:
-// - 활성 활동 5,207건: 수도권 트림 실행(2026-06-11) 후 active 기준
-//   (총 적재 11,530 — 트림 원복 시 수치 갱신).
+// - 카탈로그 수치: lib/site.ts activeCatalogCount 단일 출처 (수도권 트림
+//   2026-06-11 후 active 기준; 트림 원복 시 그 상수만 갱신).
 // - 에이전트 3티어·취미 포지셔닝·메모리 moat·텍스트 병행:
 //   Critical Docs 260604-V2 Alignment-Co-founder Note (DECIDED #1~#10).
-//   네이밍: Sijo/Minyo/Pansori (한국 시가 스케일 — Michael 방향 승인 2026-06-11,
-//   Anthropic Haiku→Sonnet→Opus 패턴의 한국 시가 버전. 교체는 AgentCard name만).
+//   네이밍: Sijo/Minyo/Pansori (한국 시가 스케일 — Michael 방향 승인 2026-06-11).
+//   에이전트명 등장 위치 3곳: 아래 AgentCard · AgentConsole STEPS tag ·
+//   /technology Layer 2 — 변경 시 세 곳 모두.
 // - 1,500만 시장: approved 2026-05-31 mockup (option-b-v2-company-site.html).
 // - 티커 활동명: LJS 인터뷰 특이취미 + 자체공급 라이브 활동 (전부 문서 출처).
 // - TODO(Michael): 정식 출시일 확정(6월 말 예정) — metric strip · traction.
@@ -87,7 +88,7 @@ export default function HomePage() {
         <div className="relative border-t border-ink/10 bg-white/40">
           <dl className="mx-auto grid max-w-6xl grid-cols-2 px-5 lg:grid-cols-4">
             {[
-              [<CountUp key="m1" to={5207} />, '활성 활동 카탈로그'],
+              [<CountUp key="m1" to={activeCatalogCount} />, '활성 활동 카탈로그'],
               ['3', '에이전트 캐퍼빌리티 티어'],
               ['음성 + 텍스트', '멀티모달 인터페이스'],
               ['2026.06', '정식 출시'],
@@ -405,7 +406,7 @@ export default function HomePage() {
               label="한국 5060 세대 시장"
               delay={100}
             />
-            <TractionItem big={<CountUp to={5207} />} label="활성 활동 카탈로그" delay={200} />
+            <TractionItem big={<CountUp to={activeCatalogCount} />} label="활성 활동 카탈로그" delay={200} />
           </div>
         </div>
       </section>

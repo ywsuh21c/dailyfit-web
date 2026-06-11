@@ -8,7 +8,7 @@ export const metadata: Metadata = {
 };
 
 // /product — 시니어 고객용 페이지 (mockup product-page-customer.html 기준).
-// 단일 청자: 시니어. 2인칭 카피 허용 구역. 큰 글씨(본문 19px+) 유지.
+// 단일 청자: 시니어. 2인칭 카피 허용 구역. 본문 ≥18px (시니어 a11y 플로어).
 // 정직성: 가짜 후기·별점 게재 금지 — 실사용 후기는 베타 고객 동의 후 추가.
 // TODO(PM): App Store / Play Store 링크 입고 시 #get 배지를 실링크로 교체.
 // TODO(Michael): 히어로 실사 이미지(공원 아침 산책, 자연광·따뜻한 색조) 입고.
@@ -264,7 +264,7 @@ function ProblemCard({
       <div className="h-full rounded-2xl border border-line bg-white p-7">
         <p className="eyebrow-mono text-sage">{n}</p>
         <h3 className="mt-3 text-[20px] font-bold text-ink">{title}</h3>
-        <p className="mt-2 text-[16px] leading-relaxed text-ink-soft">{children}</p>
+        <p className="mt-2 text-[18px] leading-relaxed text-ink-soft">{children}</p>
       </div>
     </Reveal>
   );
@@ -290,7 +290,7 @@ function Bubble({
       <span className="block text-[11px] font-bold uppercase tracking-wider opacity-60">
         {who}
       </span>
-      <span className="text-[16px] leading-relaxed">{children}</span>
+      <span className="text-[18px] leading-relaxed">{children}</span>
     </div>
   );
 }
@@ -299,7 +299,7 @@ function ValueItem({ title, children }: { title: string; children: React.ReactNo
   return (
     <div className="rounded-2xl border border-line border-l-[3px] border-l-sage bg-white px-6 py-5">
       <p className="text-[18px] font-bold text-ink">{title}</p>
-      <p className="mt-1 text-[16px] leading-relaxed text-ink-soft">{children}</p>
+      <p className="mt-1 text-[18px] leading-relaxed text-ink-soft">{children}</p>
     </div>
   );
 }
@@ -322,7 +322,7 @@ function StepCard({
           {n}
         </span>
         <h3 className="mt-4 text-[20px] font-bold text-ink">{title}</h3>
-        <p className="mt-2 text-[16px] leading-relaxed text-ink-soft">{children}</p>
+        <p className="mt-2 text-[18px] leading-relaxed text-ink-soft">{children}</p>
       </div>
     </Reveal>
   );
@@ -341,7 +341,7 @@ function HelpCard({
     <Reveal delay={delay}>
       <div className="h-full rounded-2xl border border-line bg-white p-7">
         <h3 className="text-[20px] font-bold text-ink">{title}</h3>
-        <p className="mt-2 text-[16px] leading-relaxed text-ink-soft">{children}</p>
+        <p className="mt-2 text-[18px] leading-relaxed text-ink-soft">{children}</p>
       </div>
     </Reveal>
   );
@@ -370,7 +370,7 @@ function Faq({
           +
         </span>
       </summary>
-      <p className="border-t border-line pt-4 text-[16.5px] leading-[1.75] text-ink-soft">
+      <p className="border-t border-line pt-4 text-[18px] leading-[1.75] text-ink-soft">
         {children}
       </p>
     </details>

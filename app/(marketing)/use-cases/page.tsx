@@ -53,7 +53,7 @@ export default function UseCasesPage() {
           </Reveal>
           <div className="mt-12 grid gap-5 md:grid-cols-2">
             <CaseCard
-              badge="Real · 베타"
+              real
               cat="시니어 개인"
               title="65세, 새 취미를 시작한 하루"
               persona="대상: 베타 사용자 (composite persona)"
@@ -64,7 +64,6 @@ export default function UseCasesPage() {
               리듬 위에서 이어집니다.
             </CaseCard>
             <CaseCard
-              badge="Probable"
               cat="B2B2C 파트너"
               title="복지관 프로그램 큐레이션 채널"
               persona="대상: 복지관 · 평생학습관 운영자"
@@ -75,7 +74,6 @@ export default function UseCasesPage() {
               기관의 큐레이션 채널이 됩니다.
             </CaseCard>
             <CaseCard
-              badge="Probable"
               cat="시니어 개인 · 자녀 채널"
               title="떨어져 사는 부모, 자녀의 안심 채널"
               persona="대상: 시니어 부모를 둔 30~40대 자녀"
@@ -86,7 +84,6 @@ export default function UseCasesPage() {
               공유하는 가치를 인식합니다.
             </CaseCard>
             <CaseCard
-              badge="Probable"
               cat="커뮤니티"
               title="시니어 동호회 운영 도구"
               persona="대상: 동호회 · 모임 리더"
@@ -168,20 +165,16 @@ export default function UseCasesPage() {
   );
 }
 
-const BADGE_STYLES: Record<string, string> = {
-  'Real · 베타': 'bg-sage text-white',
-  Probable: 'bg-sage/10 text-sage border border-sage/25',
-};
-
 function CaseCard({
-  badge,
+  real,
   cat,
   title,
   persona,
   delay,
   children,
 }: {
-  badge: string;
+  // Confidence tier drives BOTH label and style — copy can't drift from styling.
+  real?: boolean;
   cat: string;
   title: string;
   persona: string;
@@ -194,9 +187,9 @@ function CaseCard({
         <div className="flex items-center justify-between gap-3">
           <span className="eyebrow-mono text-ink-soft/70">{cat}</span>
           <span
-            className={`rounded-md px-2.5 py-1 text-[11px] font-bold uppercase tracking-wider ${BADGE_STYLES[badge] ?? BADGE_STYLES.Probable}`}
+            className={`rounded-md px-2.5 py-1 text-[11px] font-bold uppercase tracking-wider ${real ? 'bg-sage text-white' : 'border border-sage/25 bg-sage/10 text-sage'}`}
           >
-            {badge}
+            {real ? 'Real · 베타' : 'Probable'}
           </span>
         </div>
         <h3 className="mt-4 text-[21px] font-bold text-ink">{title}</h3>

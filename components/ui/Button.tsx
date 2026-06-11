@@ -49,8 +49,15 @@ export function ButtonLink({
 }: CommonProps & { href: string; external?: boolean }) {
   const classes = cn(base, variants[variant], sizes[size], className);
   if (external) {
+    // mailto/tel must not get target=_blank — browsers leave a dead blank tab
+    // behind while the mail client opens.
+    const newTab = !/^(mailto|tel):/.test(href);
     return (
-      <a href={href} className={classes} target="_blank" rel="noopener noreferrer">
+      <a
+        href={href}
+        className={classes}
+        {...(newTab ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+      >
         {children}
       </a>
     );
