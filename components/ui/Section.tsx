@@ -42,12 +42,7 @@ export function SectionHeader({
   return (
     <div className="max-w-prose">
       {eyebrow && (
-        <p
-          className={cn(
-            'text-base font-semibold',
-            invert ? 'text-ivory/70' : 'text-sage',
-          )}
-        >
+        <p className={cn('eyebrow-mono', invert ? 'text-sage-lt' : 'text-sage')}>
           {eyebrow}
         </p>
       )}

@@ -11,11 +11,12 @@ import { CountUp } from '@/components/motion/CountUp';
 // brighter, more motion). Dark survives only in the console + footer.
 //
 // Verified content sources:
-// - 활동 그래프 11,530건: 2. Outputs/service-build/2026-06-10-orc-c8-supply-handoff/summary.md
-//   TODO(Michael): 수도권 트림(옵션3, 보류) 실행 시 수치 갱신.
-// - 에이전트 3종(미경/윤목/영우)·취미 포지셔닝·메모리 moat·텍스트 병행:
+// - 활성 활동 5,207건: 수도권 트림 실행(2026-06-11) 후 active 기준
+//   (총 적재 11,530 — 트림 원복 시 수치 갱신).
+// - 에이전트 3티어·취미 포지셔닝·메모리 moat·텍스트 병행:
 //   Critical Docs 260604-V2 Alignment-Co-founder Note (DECIDED #1~#10).
-//   TODO(Michael): 에이전트 네이밍 ideation open (#14) — 이름 확정 시 갱신.
+//   네이밍: Sijo/Minyo/Pansori (한국 시가 스케일 — Michael 방향 승인 2026-06-11,
+//   Anthropic Haiku→Sonnet→Opus 패턴의 한국 시가 버전. 교체는 AgentCard name만).
 // - 1,500만 시장: approved 2026-05-31 mockup (option-b-v2-company-site.html).
 // - 티커 활동명: LJS 인터뷰 특이취미 + 자체공급 라이브 활동 (전부 문서 출처).
 // - TODO(Michael): 정식 출시일 확정(6월 말 예정) — metric strip · traction.
@@ -86,7 +87,7 @@ export default function HomePage() {
         <div className="relative border-t border-ink/10 bg-white/40">
           <dl className="mx-auto grid max-w-6xl grid-cols-2 px-5 lg:grid-cols-4">
             {[
-              [<CountUp key="m1" to={11530} />, '활동 그래프 인덱싱'],
+              [<CountUp key="m1" to={5207} />, '활성 활동 카탈로그'],
               ['3', '에이전트 캐퍼빌리티 티어'],
               ['음성 + 텍스트', '멀티모달 인터페이스'],
               ['2026.06', '정식 출시'],
@@ -176,40 +177,44 @@ export default function HomePage() {
               <br className="sm:hidden" /> 세 개의 에이전트
             </h2>
             <p className="mt-5 text-body text-ink-soft">
-              역량 단계가 다른 세 에이전트가 한 사람의 하루를 나눠 맡습니다.
-              정식 출시 앱에는 최상위 에이전트가 기본 탑재됩니다.
+              이름은 한국 시가에서 왔습니다 — 시조에서 판소리로, 서사가
+              길어질수록 에이전트가 더 많은 하루를 맡습니다. 정식 출시 앱에는
+              최상위 에이전트가 기본 탑재됩니다.
             </p>
           </Reveal>
           <div className="mt-14 grid gap-5 md:grid-cols-3">
             <AgentCard
-              name="MIKYUNG"
-              tier="Full autonomy"
-              title="슈퍼 에이전트"
-              level={3}
+              name="SIJO"
+              koName="시조"
+              tier="Discovery"
+              title="탐색 에이전트"
+              level={1}
               delay={0}
             >
-              일상 설계 A부터 Z까지. 탐색·플래닝·신청까지 끝까지 책임지는
-              풀 오토노미 에이전트입니다.
+              세 줄의 시처럼 짧고 정확하게. 관심사를 학습해 동네 밖, 평소
+              몰랐던 활동까지 발굴합니다.
             </AgentCard>
             <AgentCard
-              name="YUNMOK"
+              name="MINYO"
+              koName="민요"
               tier="Planning · Reminders"
               title="리마인더 에이전트"
               level={2}
               delay={120}
             >
-              &ldquo;내일 아침 9시에 신청하셔야 해요.&rdquo; 놓치기 쉬운 신청
-              시점과 일정을 대신 챙깁니다.
+              일상의 리듬을 챙기는 노래. &ldquo;내일 아침 9시에 신청하셔야
+              해요&rdquo; — 놓치기 쉬운 시점을 대신 기억합니다.
             </AgentCard>
             <AgentCard
-              name="YOUNGWOO"
-              tier="Discovery"
-              title="탐색 에이전트"
-              level={1}
+              name="PANSORI"
+              koName="판소리"
+              tier="Full autonomy"
+              title="슈퍼 에이전트"
+              level={3}
               delay={240}
             >
-              관심사를 학습해 활동을 발굴합니다. 동네 밖, 평소 몰랐던 가치까지
-              찾아냅니다.
+              완창처럼, 하루 전체의 서사를 혼자 끝까지. 탐색·플래닝·신청까지
+              책임지는 풀 오토노미 에이전트입니다.
             </AgentCard>
           </div>
         </div>
@@ -400,7 +405,7 @@ export default function HomePage() {
               label="한국 5060 세대 시장"
               delay={100}
             />
-            <TractionItem big={<CountUp to={11530} />} label="활동 그래프 인덱싱" delay={200} />
+            <TractionItem big={<CountUp to={5207} />} label="활성 활동 카탈로그" delay={200} />
           </div>
         </div>
       </section>
@@ -466,6 +471,7 @@ function ChatBubble({
 
 function AgentCard({
   name,
+  koName,
   tier,
   title,
   level,
@@ -473,6 +479,7 @@ function AgentCard({
   children,
 }: {
   name: string;
+  koName: string;
   tier: string;
   title: string;
   level: 1 | 2 | 3;
@@ -483,7 +490,9 @@ function AgentCard({
     <Reveal delay={delay}>
       <div className="agent-card flex h-full flex-col p-8">
         <div className="flex items-center justify-between gap-3">
-          <span className="eyebrow-mono text-sage">{name}</span>
+          <span className="eyebrow-mono text-sage">
+            {name} <span className="font-sans font-bold tracking-normal text-ink-soft/70">{koName}</span>
+          </span>
           <span className="rounded-md border border-sage/25 bg-sage/10 px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wider text-sage">
             {tier}
           </span>

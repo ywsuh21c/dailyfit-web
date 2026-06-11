@@ -20,15 +20,15 @@ export default function InvestorsPage() {
   return (
     <>
       {/* 1. Hero teaser — Draft B (market-thesis). 14M figure pending D1 confirm. */}
-      <Section tone="dark" className="pt-24">
-        <p className="text-base font-semibold text-ivory/70">DailyFit · Investors</p>
+      <Section tone="light" className="pt-24">
+        <p className="eyebrow-mono text-sage">DailyFit · Investors</p>
         <h1 className="mt-3 max-w-3xl text-h1">
           한국에서 가장 빠르게 늘어나는 인구는 디지털을 씁니다.
         </h1>
-        <p className="mt-6 max-w-prose text-body text-ivory/85">
+        <p className="mt-6 max-w-prose text-body text-ink-soft">
           1,400만 명의 한국 시니어(55–70세)가 이미 카카오톡으로 하루를 운영합니다.
-          DailyFit은 그 위에 AI 에이전트를 얹어 "건강하게 오래 사는 일상"을 매일
-          설계합니다.
+          DailyFit은 그 위에 AI 에이전트를 얹어 &ldquo;건강하게 오래 사는 일상&rdquo;을
+          매일 설계합니다.
         </p>
         <div className="mt-8">
           <ButtonLink href="#contact" variant="primary" size="lg">
@@ -98,9 +98,8 @@ export default function InvestorsPage() {
       </Section>
 
       {/* 6. Get in touch — founder-direct only */}
-      <Section tone="dark" id="contact">
+      <Section tone="surface" id="contact">
         <SectionHeader
-          invert
           eyebrow="Get in touch"
           title="직접 이야기 나눠요"
           lead="덱을 받기 전에, 먼저 창업자에게 직접 연락 주세요. 가장 빠르고 정확한 대화입니다."

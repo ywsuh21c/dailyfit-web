@@ -80,22 +80,21 @@ export default function TechnologyPage() {
       </Section>
 
       {/* 4. System architecture — VC-first */}
-      <Section tone="dark">
+      <Section tone="surface">
         <SectionHeader
-          invert
           eyebrow="System architecture"
           title="프로덕션에서 동작하는 AI-native 시스템"
           lead="4개 레이어, 12개 컴포넌트 — 음성·카카오·검색·매칭·외부 채널을 잇는 에이전트 구조."
         />
-        <div className="mt-8 rounded-xl border border-ivory/20 bg-navy p-8 text-center text-ivory/70">
+        <div className="mt-8 rounded-xl border border-line bg-white p-8 text-center text-ink-soft">
           {/* TODO(CTO M2): AI Agent Architecture Diagram (정적 PNG, 4-layer/12-component) */}
           아키텍처 다이어그램 입고 예정 — 4-layer · 12-component
         </div>
-        <div className="mt-6 grid gap-4 text-base text-ivory/80 sm:grid-cols-2">
-          <p>· Layer 1 — User Channel (카카오 · 음성 · 검색)</p>
-          <p>· Layer 2 — Service (에이전트 오케스트레이션)</p>
-          <p>· Layer 3 — Data (프로필 · 메모리 · 매칭)</p>
-          <p>· Layer 4 — External (복지 · 일자리 · 외부 포털)</p>
+        <div className="mt-6 grid gap-4 text-base text-ink-soft sm:grid-cols-2">
+          <p>· Layer 1 — User Channel (음성 · 텍스트 · 카카오 로그인)</p>
+          <p>· Layer 2 — Agents (Pansori · Minyo · Sijo 오케스트레이션)</p>
+          <p>· Layer 3 — Data (프로필 · per-user 메모리 · 매칭)</p>
+          <p>· Layer 4 — External (활동 그래프 — 공공 API · 스크래핑 · 자체 공급)</p>
         </div>
       </Section>
 
@@ -109,8 +108,8 @@ export default function TechnologyPage() {
         <div className="mt-8 grid gap-4 sm:grid-cols-2">
           <StackRow label="LLM" value="Anthropic Claude — 한국어 시니어 voice 적합도" />
           <StackRow label="Backend" value="Python · FastAPI · Postgres" />
-          <StackRow label="Channel" value="Kakao i 오픈빌더 — 시니어 친숙 채널 우선" />
-          <StackRow label="Voice" value="음성 입력 — 타이핑 부담 없는 진입점" />
+          <StackRow label="Channel" value="네이티브 앱 + 카카오 로그인 — 익숙한 진입" />
+          <StackRow label="Voice" value="실시간 음성 스트리밍 + 텍스트 병행 입력" />
         </div>
       </Section>
 
@@ -129,19 +128,18 @@ export default function TechnologyPage() {
       </Section>
 
       {/* 7. Open vs closed declaration + CTA */}
-      <Section tone="dark">
+      <Section tone="light">
         <SectionHeader
-          invert
           eyebrow="공개 · 비공개"
           title="우리는 아키텍처를 공개합니다"
           lead="카피될 위험보다, 우리가 어떤 회사인지 시그널을 못 보내는 위험이 더 큽니다. 단, 시니어의 실제 일상 데이터는 절대 공개하지 않습니다."
         />
         <div className="mt-8 flex flex-wrap gap-4">
-          <ButtonLink href="/#download" variant="primary" size="lg">
-            앱 다운로드
+          <ButtonLink href="/product" variant="primary" size="lg">
+            제품 사용해보기 →
           </ButtonLink>
-          <ButtonLink href="/investors" variant="ghost" size="lg">
-            투자자 페이지 →
+          <ButtonLink href="/use-cases" variant="ghost" size="lg">
+            Use cases →
           </ButtonLink>
         </div>
       </Section>

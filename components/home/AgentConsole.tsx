@@ -12,17 +12,16 @@ import { useEffect, useState } from 'react';
  * the keyframes are disabled under prefers-reduced-motion.
  *
  * Content notes:
- * - 활동 그래프 11,530건 — source: `2. Outputs/service-build/
- *   2026-06-10-orc-c8-supply-handoff/summary.md`.
- *   TODO(Michael): 수도권 트림(옵션3, 보류 중) 실행 시 수치 갱신 필요.
+ * - 활성 활동 5,207건 — 수도권 트림 실행(2026-06-11) 후 active 기준
+ *   (총 적재 11,530 중 active 5,207; 트림 원복 시 수치 갱신).
  * - 한옥공예/AI 교실 — LJS 인터뷰 특이취미 예시 + 자체공급 라이브 활동.
  */
 const CYCLE_MS = 15000;
 
 const STEPS = [
-  { tag: 'mikyung', label: '의도 분석', body: '학습 · 새로운 것 · 다음 주 오전', delay: 'console-d2' },
+  { tag: 'pansori', label: '의도 분석', body: '학습 · 새로운 것 · 다음 주 오전', delay: 'console-d2' },
   { tag: 'memory', label: '리콜', body: '문정동 · 오전 선호 · 지난주: 스트레칭', delay: 'console-d3' },
-  { tag: 'curation', label: '활동 그래프 탐색', body: '11,530건 중 특색 활동 2건 선별', delay: 'console-d4' },
+  { tag: 'sijo', label: '활동 그래프 탐색', body: '5,207건 중 특색 활동 2건 선별', delay: 'console-d4' },
 ];
 
 export function AgentConsole() {
