@@ -75,10 +75,13 @@
   }
 }
 
+
 /* ============================================================
- * Home (full-launch) — agent-runtime visual language.
+ * Home (full-launch) — agent-runtime visual language, LIGHT-first.
  * Expression layer only: every color below derives from the four
  * LOCKED brand tokens (sage/navy/ivory/ink) or their mockup shades.
+ * Dark surfaces survive only where they mean something: the agent
+ * console (a runtime) and the footer.
  * ============================================================ */
 
 :root {
@@ -110,31 +113,51 @@
   transform: none;
 }
 
-/* --- hero backdrop: faint sage grid + glow over deep navy --- */
+/* --- hero backdrop: warm ivory field + sage grid + drifting auroras --- */
 .hero-field {
   background:
-    radial-gradient(58% 64% at 78% 12%, rgba(74, 124, 89, 0.22), transparent 62%),
-    radial-gradient(40% 48% at 12% 88%, rgba(74, 124, 89, 0.1), transparent 60%),
-    linear-gradient(180deg, var(--navy-deep) 0%, var(--color-navy) 100%);
+    radial-gradient(56% 64% at 82% 8%, rgba(74, 124, 89, 0.14), transparent 62%),
+    radial-gradient(44% 52% at 6% 92%, rgba(74, 124, 89, 0.08), transparent 60%),
+    linear-gradient(180deg, #fafaf8 0%, #f5f0e8 100%);
 }
 .hero-grid {
   background-image:
-    linear-gradient(rgba(143, 191, 159, 0.07) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(143, 191, 159, 0.07) 1px, transparent 1px);
+    linear-gradient(rgba(74, 124, 89, 0.09) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(74, 124, 89, 0.09) 1px, transparent 1px);
   background-size: 44px 44px;
-  mask-image: radial-gradient(70% 75% at 65% 30%, black 30%, transparent 100%);
+  mask-image: radial-gradient(72% 78% at 64% 28%, black 25%, transparent 100%);
+}
+.aurora {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(70px);
+  pointer-events: none;
+}
+.aurora-1 {
+  width: 440px;
+  height: 440px;
+  top: -130px;
+  right: 6%;
+  background: rgba(74, 124, 89, 0.17);
+  animation: drift 16s ease-in-out infinite alternate;
+}
+.aurora-2 {
+  width: 360px;
+  height: 360px;
+  bottom: -150px;
+  left: -70px;
+  background: rgba(143, 191, 159, 0.22);
+  animation: drift 21s ease-in-out infinite alternate-reverse;
 }
 
-/* --- agent runtime console --- */
+/* --- agent runtime console (stays dark — it is a runtime) --- */
 .console {
-  border: 1px solid rgba(143, 191, 159, 0.22);
+  border: 1px solid rgba(30, 45, 64, 0.5);
   border-radius: 18px;
-  background: linear-gradient(180deg, rgba(36, 52, 74, 0.92), rgba(22, 32, 46, 0.96));
+  background: linear-gradient(180deg, var(--navy-2), var(--navy-deep));
   box-shadow:
-    0 0 0 1px rgba(22, 32, 46, 0.6),
-    0 32px 80px -32px rgba(0, 0, 0, 0.65),
-    0 0 64px -24px rgba(74, 124, 89, 0.45);
-  backdrop-filter: blur(8px);
+    0 24px 64px -28px rgba(30, 45, 64, 0.45),
+    0 0 72px -28px rgba(74, 124, 89, 0.35);
   overflow: hidden;
 }
 .console-bar {
@@ -179,11 +202,11 @@
   animation: line-in 0.55s cubic-bezier(0.2, 0.6, 0.2, 1) forwards;
 }
 .console-d1 { animation-delay: 0.4s; }
-.console-d2 { animation-delay: 1.3s; }
-.console-d3 { animation-delay: 2.1s; }
-.console-d4 { animation-delay: 2.9s; }
-.console-d5 { animation-delay: 3.9s; }
-.console-d6 { animation-delay: 4.8s; }
+.console-d2 { animation-delay: 2.2s; }
+.console-d3 { animation-delay: 3.0s; }
+.console-d4 { animation-delay: 3.8s; }
+.console-d5 { animation-delay: 4.8s; }
+.console-d6 { animation-delay: 5.7s; }
 .console-prompt {
   color: var(--sage-lt);
   font-family: var(--mono);
@@ -194,6 +217,12 @@
   color: var(--color-ivory);
   font-size: 16.5px;
   font-weight: 600;
+}
+.console-type {
+  display: inline-block;
+  clip-path: inset(0 100% 0 0);
+  animation: type 1.5s steps(22, end) forwards;
+  animation-delay: 0.55s;
 }
 .console-step {
   display: flex;
@@ -279,32 +308,88 @@
   text-transform: uppercase;
 }
 
-/* --- agent family cards --- */
+/* --- live activity ticker (marquee) --- */
+.marquee {
+  overflow: hidden;
+  mask-image: linear-gradient(90deg, transparent, black 8%, black 92%, transparent);
+}
+.marquee-track {
+  display: flex;
+  gap: 12px;
+  width: max-content;
+  animation: marquee 38s linear infinite;
+}
+.marquee:hover .marquee-track {
+  animation-play-state: paused;
+}
+.chip {
+  white-space: nowrap;
+  border: 1px solid var(--color-line);
+  background: #fff;
+  border-radius: 999px;
+  padding: 9px 18px;
+  font-size: 14.5px;
+  color: var(--color-ink-soft);
+}
+.chip .chip-tag {
+  font-family: var(--mono);
+  font-size: 11.5px;
+  font-weight: 700;
+  color: var(--color-sage);
+  margin-right: 8px;
+  letter-spacing: 0.06em;
+}
+
+/* --- agent family cards (light) --- */
 .agent-card {
   position: relative;
-  border: 1px solid rgba(143, 191, 159, 0.16);
+  border: 1px solid var(--color-line);
   border-radius: 18px;
-  background: linear-gradient(180deg, rgba(36, 52, 74, 0.75), rgba(22, 32, 46, 0.9));
+  background: #fff;
   transition:
     transform 0.25s cubic-bezier(0.2, 0.6, 0.2, 1),
     border-color 0.25s,
     box-shadow 0.25s;
 }
 .agent-card:hover {
-  transform: translateY(-5px);
-  border-color: rgba(143, 191, 159, 0.45);
-  box-shadow: 0 24px 56px -28px rgba(0, 0, 0, 0.7), 0 0 48px -20px rgba(74, 124, 89, 0.5);
+  transform: translateY(-6px);
+  border-color: rgba(74, 124, 89, 0.45);
+  box-shadow:
+    0 28px 56px -28px rgba(30, 45, 64, 0.28),
+    0 0 0 4px rgba(74, 124, 89, 0.07);
 }
 
-/* --- architecture layers: pulsing flow --- */
-.flow-pulse {
-  animation: pulse-dot 2.6s ease-in-out infinite;
+/* --- architecture: data packet traveling between layers --- */
+.arch-link {
+  position: relative;
+  width: 2px;
+  height: 32px;
+  margin: 0 auto;
+  background: rgba(74, 124, 89, 0.22);
+  border-radius: 2px;
+}
+.arch-link::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: -4px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--color-sage);
+  transform: translateX(-50%);
+  animation: packet 1.7s ease-in infinite;
 }
 
 @keyframes line-in {
   to {
     opacity: 1;
     transform: none;
+  }
+}
+@keyframes type {
+  to {
+    clip-path: inset(0 0 0 0);
   }
 }
 @keyframes pulse-dot {
@@ -321,6 +406,35 @@
     opacity: 0;
   }
 }
+@keyframes drift {
+  from {
+    transform: translate(0, 0) scale(1);
+  }
+  to {
+    transform: translate(44px, 30px) scale(1.12);
+  }
+}
+@keyframes marquee {
+  to {
+    transform: translateX(-50%);
+  }
+}
+@keyframes packet {
+  0% {
+    top: -4px;
+    opacity: 0;
+  }
+  15% {
+    opacity: 1;
+  }
+  80% {
+    opacity: 1;
+  }
+  100% {
+    top: calc(100% - 4px);
+    opacity: 0;
+  }
+}
 
 @media (prefers-reduced-motion: reduce) {
   .reveal {
@@ -328,15 +442,23 @@
     transform: none;
     transition: none;
   }
-  .console-line {
+  .console-line,
+  .console-type {
     opacity: 1;
     transform: none;
+    clip-path: none;
     animation: none;
   }
   .console-live-dot,
   .console-caret,
-  .flow-pulse {
+  .aurora-1,
+  .aurora-2,
+  .marquee-track {
     animation: none;
+  }
+  .arch-link::after {
+    animation: none;
+    opacity: 0;
   }
   html {
     scroll-behavior: auto;

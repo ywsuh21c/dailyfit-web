@@ -3,14 +3,14 @@ import { companyNav, primaryNav, productCta, site } from '@/lib/site';
 import { BrandMark } from '@/components/brand/BrandMark';
 
 /**
- * Global nav — dark (navy), Option-B structure:
+ * Global nav — light, Option-B structure:
  * Product / Technology / Use cases / Company ▾ + 제품 사용해보기 →.
  * Company dropdown is pure CSS (hover + focus-within) — keyboard reachable.
  * TODO(phase-2): mobile hamburger — below md only brand + CTA show.
  */
 export function Nav() {
   return (
-    <header className="sticky top-0 z-40 border-b border-ivory/10 bg-navy/85 backdrop-blur-md">
+    <header className="sticky top-0 z-40 border-b border-line bg-bg/85 backdrop-blur-md">
       <nav
         className="mx-auto flex h-[72px] max-w-6xl items-center justify-between gap-4 px-5"
         aria-label="주요 메뉴"
@@ -21,7 +21,7 @@ export function Nav() {
           aria-label={`${site.name} 홈`}
         >
           <BrandMark idPrefix="nav-logo" className="h-8 w-8" />
-          <span className="text-[22px] font-extrabold tracking-tight text-ivory">
+          <span className="text-[22px] font-extrabold tracking-tight text-ink">
             {site.name}
           </span>
         </Link>
@@ -31,7 +31,7 @@ export function Nav() {
             <li key={item.href}>
               <Link
                 href={item.href}
-                className="flex min-h-tap items-center rounded-lg px-3.5 text-base font-medium text-ivory/75 transition-colors hover:bg-ivory/5 hover:text-ivory"
+                className="flex min-h-tap items-center rounded-lg px-3.5 text-base font-medium text-ink-soft transition-colors hover:bg-surface hover:text-ink"
               >
                 {item.label}
               </Link>
@@ -40,7 +40,7 @@ export function Nav() {
           <li className="nav-company relative">
             <button
               type="button"
-              className="flex min-h-tap items-center gap-1.5 rounded-lg px-3.5 text-base font-medium text-ivory/75 transition-colors hover:bg-ivory/5 hover:text-ivory"
+              className="flex min-h-tap items-center gap-1.5 rounded-lg px-3.5 text-base font-medium text-ink-soft transition-colors hover:bg-surface hover:text-ink"
               aria-haspopup="true"
             >
               Company
@@ -48,12 +48,12 @@ export function Nav() {
                 ▾
               </span>
             </button>
-            <ul className="nav-sub absolute left-0 top-full min-w-[180px] rounded-xl border border-ivory/10 bg-navy-2 p-1.5 shadow-2xl shadow-navy-deep/60">
+            <ul className="nav-sub absolute left-0 top-full min-w-[180px] rounded-xl border border-line bg-white p-1.5 shadow-xl shadow-navy/15">
               {companyNav.map((item) => (
                 <li key={item.href}>
                   <Link
                     href={item.href}
-                    className="flex min-h-tap items-center rounded-lg px-3.5 text-base text-ivory/80 transition-colors hover:bg-ivory/5 hover:text-ivory"
+                    className="flex min-h-tap items-center rounded-lg px-3.5 text-base text-ink-soft transition-colors hover:bg-surface hover:text-ink"
                   >
                     {item.label}
                   </Link>
