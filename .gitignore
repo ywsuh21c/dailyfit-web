@@ -31,3 +31,6 @@ yarn-error.log*
 
 # typescript
 *.tsbuildinfo
+
+# design mockup reference (extracted from workspace git history — not source)
+/design-reference

@@ -1,7 +1,7 @@
 /**
- * Site-wide config. Nav structure is Option-A (senior-first) default per the
- * homepage-v2 plan; the Option-A/B fork is decided on beta data (~launch +2-4w).
- * Swapping to Option-B nav = edit `primaryNav` here only.
+ * Site-wide config. Nav structure is Option-B (company site) — LOCKED by
+ * Michael 2026-06-11 for the full-launch homepage (HANDOFF §6 resolved).
+ * Pattern: Linear/Cursor — Product / Technology / Use cases / Company ▾.
  */
 export const site = {
   name: 'DailyFit',
@@ -10,24 +10,44 @@ export const site = {
   contactEmail: 'team@dailyfitai.app',
   tagline: 'AI는 수단, 시니어가 정체성',
   description:
-    'AI 기반 일상 설계 서비스 — 활동적인 한국 시니어(55–70)의 하루를 함께 만듭니다.',
+    '한국 액티브 시니어 세대를 위한 AI 에이전트 — 대화 한 번으로 하루를 설계합니다.',
 } as const;
 
 export type NavItem = { href: string; label: string };
 
-// Option-A primary nav (top of every page). /investors intentionally excluded
-// from top nav (footer + direct link only — per plan Tier-1 decision D).
+// Option-B primary nav. "Product" = Home itself (Anthropic/Linear pattern).
 export const primaryNav: NavItem[] = [
-  { href: '/trends', label: '트렌드' },
-  { href: '/about', label: '소개' },
-  { href: '/technology', label: '기술' },
+  { href: '/', label: 'Product' },
+  { href: '/technology', label: 'Technology' },
+  { href: '/use-cases', label: 'Use cases' },
 ];
 
-export const footerNav: NavItem[] = [
-  { href: '/about', label: '소개' },
-  { href: '/technology', label: '기술' },
-  { href: '/trends', label: '트렌드' },
+// Company sub-nav (dropdown under "Company").
+export const companyNav: NavItem[] = [
+  { href: '/about', label: 'About' },
+  { href: '/how-we-work', label: 'How we work' },
+  { href: '/writing', label: 'Writing' },
   { href: '/investors', label: 'Investors' },
+];
+
+// Top-right product gateway — the ONLY senior-product entry on the company
+// site (Anthropic→Claude pattern). Label avoids "Try DailyFit" because the
+// company name doubles as the product name.
+export const productCta = { href: '/product', label: '제품 사용해보기' } as const;
+
+export const footerNav: { heading: string; items: NavItem[] }[] = [
+  {
+    heading: 'Product',
+    items: [
+      { href: '/', label: 'Product' },
+      { href: '/technology', label: 'Technology' },
+      { href: '/use-cases', label: 'Use cases' },
+    ],
+  },
+  {
+    heading: 'Company',
+    items: companyNav,
+  },
 ];
 
 export const legalNav: NavItem[] = [

@@ -28,6 +28,12 @@ const config: Config = {
         bg: '#FAFAF8', // Page background
         surface: '#F4F1EC', // Card / alternating section
         line: '#E5E7EB', // Border
+        // Expression shades of the locked primaries (all present in the
+        // approved 2026-05-31 mockup) — not new brand colors.
+        'sage-dk': '#3C6549',
+        'sage-lt': '#8FBF9F',
+        'navy-2': '#24344A',
+        'navy-deep': '#16202E',
       },
       fontFamily: {
         sans: ['var(--font-pretendard)', 'system-ui', 'sans-serif'],
