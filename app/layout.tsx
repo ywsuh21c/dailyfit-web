@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import localFont from 'next/font/local';
 import { site } from '@/lib/site';
+import { Analytics } from '@/components/analytics/Analytics';
 import './globals.css';
 
 // Self-hosted Pretendard Variable (fixes v1's external-CDN dependency).
@@ -43,6 +44,7 @@ export default function RootLayout({
           본문으로 건너뛰기
         </a>
         {children}
+        <Analytics />
       </body>
     </html>
   );

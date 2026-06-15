@@ -475,3 +475,99 @@
     scroll-behavior: auto;
   }
 }
+
+/* ============================================================
+ * Writing — long-form essay prose (/writing/[slug]).
+ * File-based markdown (content/writing/*.md) rendered via markdown-to-jsx.
+ * Senior-readable: ≥18px body, 1.85 line-height, sage links, generous rhythm.
+ * Every color derives from the LOCKED brand tokens.
+ * ============================================================ */
+.prose-essay {
+  color: var(--color-ink);
+  font-size: 1.1875rem; /* 19px — above the 18px floor for long-form reading */
+  line-height: 1.85;
+}
+.prose-essay > * + * {
+  margin-top: 1.5rem;
+}
+.prose-essay h2 {
+  margin-top: 2.75rem;
+  font-size: 1.6rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--color-ink);
+}
+.prose-essay h3 {
+  margin-top: 2rem;
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--color-ink);
+}
+.prose-essay p {
+  color: var(--color-ink-soft);
+}
+.prose-essay strong {
+  color: var(--color-ink);
+  font-weight: 700;
+}
+.prose-essay em {
+  font-style: italic;
+}
+.prose-essay a {
+  color: var(--color-sage);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  font-weight: 600;
+}
+.prose-essay a:hover {
+  text-decoration-thickness: 2px;
+}
+.prose-essay ul,
+.prose-essay ol {
+  padding-left: 1.4rem;
+  color: var(--color-ink-soft);
+}
+.prose-essay ul {
+  list-style: disc;
+}
+.prose-essay ol {
+  list-style: decimal;
+}
+.prose-essay li + li {
+  margin-top: 0.5rem;
+}
+.prose-essay blockquote {
+  border-left: 3px solid var(--color-sage);
+  padding-left: 1.25rem;
+  color: var(--color-ink-soft);
+  font-style: italic;
+}
+.prose-essay code {
+  font-family: var(--mono);
+  font-size: 0.9em;
+  background: var(--color-surface);
+  padding: 0.15em 0.4em;
+  border-radius: 5px;
+}
+.prose-essay pre {
+  background: var(--navy-deep);
+  color: var(--color-ivory);
+  padding: 1.1rem 1.25rem;
+  border-radius: 12px;
+  overflow-x: auto;
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+.prose-essay pre code {
+  background: transparent;
+  padding: 0;
+}
+.prose-essay hr {
+  border: 0;
+  border-top: 1px solid var(--color-line);
+  margin: 2.5rem 0;
+}
+.prose-essay img {
+  border-radius: 12px;
+  margin-top: 1.5rem;
+}

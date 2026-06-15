@@ -1,4 +1,6 @@
 import type { Metadata } from 'next';
+import Link from 'next/link';
+import { getAllPosts } from '@/lib/writing';
 
 export const metadata: Metadata = {
   title: 'Writing',
@@ -6,54 +8,22 @@ export const metadata: Metadata = {
     '우리는 만들면서 씁니다 — DailyFit을 만드는 동안 배운 것, 틀린 것, 그리고 그 사고 과정.',
 };
 
-// /writing — Option-B 의무 페이지 (thought leadership = 핵심 acquisition
-// lever). 정직성 원칙: 본문 없는 글에 가짜 발행일을 달지 않는다 — 시드
-// 에세이 입고 전까지 전부 "곧 공개" 티저.
-// TODO(Michael): 시드 에세이 3편 (mockup 제목 기준: Radically Transparent /
-// AI 에이전트 팀 운영 / 한국 시니어 시장 thesis). 입고 시 발행일 + 본문
-// 라우트(/writing/[slug]) 연결.
+// /writing — Option-B 의무 페이지 (thought leadership = 핵심 acquisition lever).
+// 콘텐츠 출처: content/writing/*.md → lib/writing.ts (swap seam). 저자=영우·현진
+// GitHub 커밋. 비기술 저자 합류 시 lib/writing.ts 3개 함수만 Sanity로 교체.
+// 정직성: published:false 글은 발행일 없이 "곧 공개" 티저로만 — 가짜 날짜 금지.
 // TODO(Michael): 팟캐스트 링크 + 공개 가능 수치 (HANDOFF §7 콘텐츠 펜딩).
 
-const ESSAYS: Array<{ cat: string; title: string; teaser: string }> = [
-  {
-    cat: 'Principles',
-    title: 'Radically Transparent — 우리가 실패를 공개하는 이유',
-    teaser:
-      '대부분의 회사는 잘된 것만 보여줍니다. 우리는 반대로 합니다. 틀린 가설, 엎은 결정, 안 풀린 실험을 공개하는 것이 신뢰와 더 나은 판단으로 이어지는 이유.',
-  },
-  {
-    cat: 'Operating',
-    title: 'AI 에이전트 팀으로 회사를 운영한다는 것',
-    teaser:
-      '전략·리서치·제품·디자인을 AI 에이전트가 분담하고, 사람이 판단합니다. 작은 팀이 큰 조직의 속도와 체계를 만드는 실제 운영 구조.',
-  },
-  {
-    cat: 'Thesis',
-    title: '한국 시니어 시장이라는 thesis',
-    teaser:
-      '1,500만 명, 가장 빠르게 디지털로 옮겨오는 세대. 왜 이 시장이 다음 10년의 기회인지 — AI는 수단, 시니어가 정체성입니다.',
-  },
-  {
-    cat: 'Product',
-    title: '멀티 에이전트가 하루를 설계하는 법 — orchestration 설계 노트',
-    teaser:
-      '단순한 LLM 호출과 멀티 에이전트 오케스트레이션의 차이. 시조·민요·판소리 — 에이전트 패밀리가 한 사람의 하루를 구성하기까지의 설계 결정.',
-  },
-  {
-    cat: 'Data',
-    title: '영어 LLM에 없는 것 — 한국어 시니어 언어 데이터를 모으는 일',
-    teaser:
-      '왜 직접 데이터를 수집하고 정제하는가. 톤·표현·맥락이 모델의 진짜 해자가 되는 과정과, 그 작업의 현실적인 어려움.',
-  },
-  {
-    cat: 'Building',
-    title: '베타까지 — 작은 팀이 매주 출하하기 위해 버린 것들',
-    teaser:
-      '속도를 위해 의도적으로 하지 않기로 한 결정들. 우선순위를 좁히는 일이 기능을 더하는 일보다 어려웠던 이유.',
-  },
-];
+function formatDate(iso: string | null): string {
+  if (!iso) return '';
+  const [y, m, d] = iso.split('-');
+  return `${y}.${m}.${d}`;
+}
 
 export default function WritingPage() {
+  const posts = getAllPosts();
+  const publishedCount = posts.filter((p) => p.published).length;
+
   return (
     <>
       {/* manifesto hero */}
@@ -82,30 +52,50 @@ export default function WritingPage() {
         </div>
       </section>
 
-      {/* essay list — all teasers until seed essays land */}
+      {/* essay list — published essays link out; drafts stay "곧 공개" teasers */}
       <section className="bg-bg py-16 sm:py-20">
         <div className="mx-auto max-w-3xl px-5">
           <div className="flex items-center justify-between border-b border-line pb-4">
             <span className="eyebrow-mono text-ink-soft/70">Essays</span>
-            <span className="text-caption text-ink-soft">곧 공개</span>
+            <span className="text-caption text-ink-soft">
+              {publishedCount > 0 ? `${publishedCount}편 발행` : '곧 공개'}
+            </span>
           </div>
           <div className="divide-y divide-line">
-            {ESSAYS.map((e) => (
-              <article key={e.title} className="py-9">
-                <div className="flex items-center gap-3">
-                  <span className="eyebrow-mono text-sage">{e.cat}</span>
-                  <span className="rounded-md bg-sage/10 px-2.5 py-1 text-[11px] font-bold uppercase tracking-wider text-sage">
-                    곧 공개
+            {posts.map((p) =>
+              p.published ? (
+                <Link key={p.slug} href={`/writing/${p.slug}`} className="group block py-9">
+                  <div className="flex items-center gap-3">
+                    <span className="eyebrow-mono text-sage">{p.category}</span>
+                    <span className="text-caption text-ink-soft">{formatDate(p.date)}</span>
+                  </div>
+                  <h2 className="mt-3 text-[24px] font-bold leading-[1.3] tracking-[-0.02em] text-ink transition-colors group-hover:text-sage">
+                    {p.title}
+                  </h2>
+                  <p className="mt-3 text-[16px] leading-relaxed text-ink-soft">
+                    {p.summary}
+                  </p>
+                  <span className="eyebrow-mono mt-3 inline-block text-sage opacity-0 transition-opacity group-hover:opacity-100">
+                    읽기 →
                   </span>
-                </div>
-                <h2 className="mt-3 text-[24px] font-bold leading-[1.3] tracking-[-0.02em] text-ink">
-                  {e.title}
-                </h2>
-                <p className="mt-3 text-[16px] leading-relaxed text-ink-soft">
-                  {e.teaser}
-                </p>
-              </article>
-            ))}
+                </Link>
+              ) : (
+                <article key={p.slug} className="py-9">
+                  <div className="flex items-center gap-3">
+                    <span className="eyebrow-mono text-sage">{p.category}</span>
+                    <span className="rounded-md bg-sage/10 px-2.5 py-1 text-[11px] font-bold uppercase tracking-wider text-sage">
+                      곧 공개
+                    </span>
+                  </div>
+                  <h2 className="mt-3 text-[24px] font-bold leading-[1.3] tracking-[-0.02em] text-ink">
+                    {p.title}
+                  </h2>
+                  <p className="mt-3 text-[16px] leading-relaxed text-ink-soft">
+                    {p.summary}
+                  </p>
+                </article>
+              ),
+            )}
           </div>
         </div>
       </section>
