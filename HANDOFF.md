@@ -1,188 +1,134 @@
 # HANDOFF — dailyfit-web (Full Launch Homepage)
 
-_작성: 2026-06-11 · 목적: 새 Claude Code 세션이 이 진행 상태에서 그대로 이어받기 위한 단일 인수인계 문서._
+_갱신: 2026-06-15 · **이 문서가 최신.** 2026-06-11 버전(A/B 결정 대기·원격 없음)은 폐기됨 — 그 사이 Option B 락인 + GitHub 푸시 + 12개 페이지 빌드까지 진행됨._
 
-> **이 문서 하나만 읽고 시작해도 됩니다.** 코드 위치, 승인된 디자인 방향, 절대 규칙,
-> 막힌 지점, 다음 작업이 전부 아래에 있습니다. 막연한 "셋업 필요" 대신 정확한 경로와 명령을 적었습니다.
-
----
-
-## 0. 30초 요약 (두괄식)
-
-- **무엇**: DailyFit 풀 런칭용 마케팅 홈페이지(v2). 프로덕션 도메인 `dailyfitai.app`. 런칭 시 기존 정적 랜딩을 DNS cut-over로 교체.
-- **목표 시점**: 앱 풀 런칭 **2026년 6월 말 경** (홈페이지는 그 시점에 베타 랜딩을 대체).
-- **지금 상태**: Next.js 15 스캐폴드가 **빌드는 통과**하지만 *공용 백본(shared backbone)* 6개 라우트만 존재. 승인된 디자인(Option B 회사사이트 구조)의 페이지들은 **아직 코드로 안 옮겨짐**.
-- **승인된 방향**: Option B "회사 사이트 = 루트 / 제품 페이지 = 우상단 버튼" 구조. Michael이 mockup 단계에서 승인함. 단 **최종 락은 아니었고**, 원래는 베타 데이터(~7/25)를 보고 확정하기로 했음 → **런칭이 6월 말로 당겨졌으니 이 타이밍 충돌을 Michael에게 먼저 확인할 것** (§6).
-- **가장 큰 갭**: 승인된 10페이지 HTML 프로토타입이 **현재 워킹트리에 없음**(삭제됨). git 히스토리에서 복원 가능 (§3).
-- **막힌 것**: 배포·CMS·폼은 전부 Michael의 **계정 발급** 대기 (§5). 코드로 못 푸는 부분.
+> 새 세션은 **이 repo(`~/Hive-work/dailyfit-web`)를 열고 이 문서만 읽으면** 이어받을 수 있습니다.
+> 직전 작업 세션(claude.ai/code, 모델 "Fable 5")이 도구 결과 직후 **멈춰서** 핸드오프를 못 남겼고,
+> 이 문서는 그 세션의 git 산출물 + 트랜스크립트를 역추적해 2026-06-15에 재구성한 것입니다.
 
 ---
 
-## 1. 두 개의 산출물 — 위치와 상태
+## 0. 30초 요약 (현재 상태)
 
-이 작업은 **별개의 두 곳**에 흩어져 있습니다. 둘 다 실재합니다.
-
-### (A) 코드 — `~/Hive-work/dailyfit-web/` ← 지금 이 repo
-- Next.js 15 App Router + TS strict + Tailwind v3.4 + pnpm.
-- `pnpm build` ✓ · `pnpm typecheck` ✓.
-- **git: 로컬 `main`, 커밋 1개(`9096ef0` shared-backbone scaffold), 원격 미연결(no remote).**
-- 기존 v1 정적 랜딩은 **다른 repo** `~/Hive-work/dailyfit-website/` (`ywsuh21c/dailyfit-website`, 764KB index.html) — 런칭까지 공존, 건드리지 말 것.
-
-**현재 라우트 (6개, 전부 공용 백본):**
-```
-app/(marketing)/page.tsx          /            Home (Option-A 임시 — 교체 대상)
-app/(marketing)/about/            /about
-app/(marketing)/technology/       /technology  (7섹션)
-app/(marketing)/investors/        /investors   (6섹션, noindex)
-app/(marketing)/trends/           /trends      (Sanity 연결 전 EmptyState)
-app/en/investors/                 /en/investors (영문 단일 미러)
-lib/site.ts                       사이트 config + nav (Option A/B 스왑 지점)
-components/ui/                     Button · Section · States(Loading/Error/Empty)
-components/layout/                 Nav · Footer
-```
-
-**이미 된 것 (재작업 금지):**
-- LOCKED `brand.md` 토큰 → Tailwind + CSS vars
-- 시니어 a11y 베이스라인 (본문 18px · tap 48px · 행간 1.8 · `word-break:keep-all` · skip link · focus-visible)
-- Pretendard Variable **self-host** (`public/fonts/` — v1의 외부 CDN 의존 실패를 의도적으로 수정)
-- Nav · Footer · 4-state UI(Loading/Error/Empty + icon/retry)
-- robots(investors noindex) · sitemap · 404 · error boundary
-
-### (B) 디자인 + 기획 — 오케스트레이터 워크스페이스 안
-경로 베이스: `~/Hive-work/1. Entrepreneurship/2. Outputs/marketing-web/`
-
-- **`2026-05-28-homepage-v2-planning/`** ← **현재 존재함**. 각 에이전트의 상세 빌드 스펙:
-  - `summary.md` — 전체 플랜 (공용 백본 + 옵션별 작업 분해)
-  - `frontend-engineer-setup-spec.md` — 스캐폴드/스택/i18n 스펙 (코드의 근거)
-  - `option-b-web-designer-ia-wireframe.md` — **Option B 페이지별 IA·와이어프레임** (코드로 옮길 청사진)
-  - `option-b-brand-designer-visual-system.md` — Option B 비주얼 시스템
-  - `option-b-content-strategist-use-cases.md` — use-cases 페이지 카피
-  - `option-b-sa-ai-first-framing.md` — AI-first 메시징 프레임
-  - `cto-technology-page-scope.md` · `ir-investors-page-scope.md` — /technology, /investors 실제 카피 소스
-  - (Option A 버전 파일들도 같이 있음: `web-designer-ia-wireframe.md`, `brand-designer-visual-system.md` 등)
-- **`2026-05-31-web-homepage-mockups/`** ← **워킹트리에서 삭제됨. git 복원 필요 (§3).** 승인된 클릭형 HTML 프로토타입 10페이지.
+- **무엇**: DailyFit 풀 런칭용 회사 홈페이지(Option B). prod 도메인 `dailyfitai.app`. 출시 ~2026년 6월 말.
+- **코드**: `~/Hive-work/dailyfit-web` — Next.js 15. **GitHub `ywsuh21c/dailyfit-web`에 푸시 완료**(origin/main = 로컬, 0/0). 워킹트리 clean. 12개 페이지 빌드됨.
+- **방향**: **Option B 락인** (루트 = 회사 사이트 / 시니어 제품 페이지는 우상단 버튼 뒤). A/B 고민 끝남.
+- **검증**: 직전 세션에서 `/verify`(실브라우저) + `/code-review`(10건→11픽스) 통과. 그 후 코드 변경 0이라 여전히 green일 것(새 세션은 `pnpm build`로 1회 재확인 권장).
+- **멈춘 지점 = 다음 작업**: **Writing CMS + Analytics + "다른 섹션도 편집 가능해야?"** 논의 중 세션 정지 → **아무것도 안 만들어짐.** 여기서 이어받으면 됨 (§5).
+- **라이브까지 막힌 것**: Vercel 연결 → DNS → (Sanity·Resend) 계정. 전부 Michael 액션 (§6).
 
 ---
 
-## 2. 승인된 디자인 방향 — Option B "회사 사이트" 구조
+## 1. 현재 코드 상태 (ground truth)
 
-2026-05-31에 Michael이 HTML mockup을 보고 잡은 방향. **단일 청자 원칙을 깨는 PYLER식 twin-homepage가 아니라**, 위계가 분명한 구조:
-
-- **루트 `/` = 회사 사이트** (청자: VC·프레스·탤런트 = AI-savvy). 레퍼런스 = **Sierra** (Harvey/Cursor 류). Anthropic 아님 — DailyFit은 *응용* vertical-AI 회사로 프레임("한국 시니어를 위한 AI를 푼 팀"), "AI 연구 파워하우스" 과대주장 금지.
-- **제품 페이지 = 우상단 단일 버튼**("제품 사용해보기")으로만 도달하는 고객(시니어) destination. Anthropic→Claude 패턴.
-- **"Meet the agents" 섹션이 핵심** — 4 에이전트(Planner/Wellbeing/Companion/Memory, 잠정 네이밍) 이름+설명.
-- **루트엔 시니어 2인칭 CTA 0개**. 단 시니어는 **3인칭 *증거***(트랙션·use-case 카드)로는 유지. (이 구분을 Michael이 명시 수용함.)
-- 채용 레이어: `/how-we-work` + `/writing` + 팀 소개. **단 UNPROVEN 베팅** — 실제 오픈 포지션 확인 전 과투자 금지(VC 목표가 우선).
-- 제품 버튼 라벨은 "제품 사용해보기"(회사명=제품명이라 "Try DailyFit" 회피). 앱 서브브랜드 네이밍은 backlog.
-
-**승인된 페이지 셋 (회사 사이트):** Home(`option-b-v2-company-site.html`) · `technology` · `use-cases` · `about` · `how-we-work` · `writing` · `investors`
-**제품 측:** `product-page-customer.html` (우상단 버튼으로 진입, 상단에 "← 회사 소개" 역링크)
-
-> ⚠️ **mockup 단계 승인 ≠ 프로덕션 락.** Michael이 "나중에 페이지별로 더 손볼 거야"라고 했고, 디테일 폴리시 패스 전에 멈췄음.
+- repo: `~/Hive-work/dailyfit-web`, 브랜치 `main`, remote `github.com/ywsuh21c/dailyfit-web` (푸시 완료).
+- 최신 커밋 `4b809fe fix(review)`. 이력(오래된→최신):
+  - `9096ef0` 공용 백본 스캐폴드
+  - `f249f72` 풀런칭 Home — "agent-runtime" 비주얼 (Option B, 처음엔 다크)
+  - `bf9875b` **light-first 리테마 + 모션 5종** (Michael 6/11 피드백)
+  - `bb2b3d8` **phase 2 — Option B 전체 페이지 셋 + Sijo/Minyo/Pansori 에이전트 패밀리**
+  - `df153e5` favicon(`app/icon.svg`) — 유일한 404 제거
+  - `4b809fe` 코드리뷰 11픽스 (a11y 18px·legal 404·앵커·perf·5207 단일상수 등)
+- **페이지 12개**: `/` · `/technology` · `/use-cases` · `/about` · `/how-we-work` · `/writing` · `/investors` · `/product`(시니어 전용, 자체 chrome) · `/privacy` · `/terms` · `/trends`(→ `/writing` 리다이렉트) · `/en/investors`(영문 미러).
+- **컴포넌트**: `home/AgentConsole`(15s 루프+타이핑) · `motion/Reveal` · `motion/CountUp` · `brand/BrandMark` · `(product)/layout`(제품측 별도 chrome). `app/globals.css`에 비주얼 언어 토큰·모션 전부.
 
 ---
 
-## 3. ⚠️ 먼저 할 일 — 삭제된 mockup 복원
+## 2. 락인된 결정 (코드만 봐선 놓치는 "왜")
 
-승인된 프로토타입 폴더가 워킹트리에 없습니다. git 히스토리(커밋 `59294482`)에 있으니 복원하세요:
+1. **Option B 락인 (Michael 6/11).** 루트=회사(VC·프레스·AI-savvy), 제품(시니어)은 우상단 "제품 사용해보기" 버튼 뒤. 5/31 mockup의 **콘텐츠·IA·하드룰은 유지, 비주얼 언어만 교체**(다크→라이트). nav = Product / Technology / Use cases / Company▾(About·How we work·Writing·Investors). 패턴=Linear/Cursor/Anthropic.
+2. **에이전트 리네이밍 → Sijo·Minyo·Pansori (시조·민요·판소리), 락인.** 기존 이름은 **사람 이름(Mikyung/Yunmok/Youngwoo)**이었고, Michael이 "Anthropic이 Sonnet→Opus 하듯 **스토리텔링 되는** 이름"을 원함. 채택된 논리 = 한국 시가 스케일이 자율성 티어에 매핑:
+   - **Sijo 시조** = Discovery(짧고 정밀한 탐색)
+   - **Minyo 민요** = Planning/Reminders(everyday 리듬, 대중 티어)
+   - **Pansori 판소리** = Full autonomy(혼자 몇 시간 서사를 완성하는 슈퍼에이전트)
+   - 서사가 길수록 더 많은 하루를 맡는다. VC에겐 Anthropic 오마주, 시니어에겐 친숙. **이름 등장 3곳**(Home AgentCard · AgentConsole STEPS 태그 · `/technology` Layer 2) — 바꾸려면 세 곳 모두. (Michael이 싫어하면 카드 `name` 필드로 교체 가능.)
+3. **Light-first + 모션 (Michael 6/11 원문):** "난 Dark Theme 안 좋아해. 조금 더 밝았으면. Animation 더. Video 도 들어갈 수 있나?" → warm ivory 베이스 + sage 강조, **다크는 hero 콘솔·푸터에만** 잔류. 모션 5종(hero aurora·콘솔 루프/타이핑·활동 티커 마퀴·숫자 count-up·아키텍처 패킷플로우, 전부 코드 생성). **Video는 기술적으로 trivial, 자산만 없음** → `public/media/demo.mp4` seam 대기(15~30s 폰 화면녹화 음성검색→큐레이션 권장). **hero 배경 비디오는 비권장**(aurora+콘솔로 충분).
+4. **카탈로그 수치 = 5,207, `lib/site.ts:21` 단일 출처.** 원래 11,530이었으나 6/11 **수도권 트림**(동시 다른 세션)으로 active 5,207. 허위 방지로 전 사이트 5,207 정렬. **트림 원복 시 이 상수만 11,530으로** 바꾸면 사이트 전체 따라옴.
+5. **정직성 strip (mockup 허구 제거):** `/writing` 가짜 발행일 삭제(전부 "곧 공개"), `/product` 가짜 별점 후기 삭제, `/use-cases` Real/Probable/Aspirational 신뢰도 배지(미체결 파트너십을 시그널로 오인 방지). 사이트의 모든 숫자는 읽은 문서 출처가 있거나 TODO.
+
+---
+
+## 3. 절대 규칙 (HARD RULES — 유지)
+
+1. **fundraise 진행 노출 0.** `/investors`는 티저 + founder 직접 컨택만.
+2. **서피스당 단일 청자.** 루트/회사 페이지엔 **시니어 2인칭 CTA 0** (시니어는 3인칭 증거로만). 2인칭 CTA는 `/product`에서만. 트윈 홈페이지 금지.
+3. **브랜드 토큰 LOCKED**: Sage `#4A7C59` · Navy `#1E2D40` · Ivory `#F5F0E8` · ink `#1A1A1A`. Amber=슬라이드 전용(웹 미사용), lime 미사용.
+4. **시니어 a11y floor** (특히 `/product`): 본문 ≥18px · tap ≥48px · 행간 1.75–1.8 · `word-break:keep-all`. Pretendard self-host.
+5. **카피 간결·줄 wrap 회피·깔끔·PPT 아이콘 금지·의료/돌봄 이미지 0.** 검증 안 된 수치는 안 쓴다(TODO 처리).
+
+---
+
+## 4. 비주얼/메시징 톤 (현재 Home 기준)
+
+- Hero: eyebrow "Agent-as-a-Service · 한국 액티브 시니어 세대" / H1 "한국 시니어를 위한 **AI 에이전트**를 만듭니다." + 영문 미러 1줄 / "1,500만 명…" / CTA = **Talk to us**(mailto) + "에이전트 만나보기 ↓".
+- Metric strip: 5,207 활성 카탈로그 · 3 티어 · 음성+텍스트 · 2026.06 출시.
+- 라이브 활동 티커(마퀴) = 문서 출처 활동명. AgentConsole = 우측 다크 패널, 15s 루프.
+
+---
+
+## 5. ⚠️ 멈춘 지점 = 새 세션 픽업 포인트
+
+직전 세션은 아래 요청을 **받고, 현재상태 1회 조사(Bash)까지 하고, 답/빌드 없이 정지**함. **아무 코드도 안 만들어짐.**
+
+**Michael 요청(원문):** "Writing 같은 섹션에 나 포함 우리 직원들(미래 직원 포함)이 글을 올리고 편집·수정할 수 있어야 함. 지금 버전엔 없을 것 같음. + 유입 고객/트래픽 분석할 Analytics(외부 솔루션이라도)도 미리 준비해야 하지 않나? no-regret으로 지금 가능한 부분."
+
+**그리고 미처리된 후속(중요 — 스코프 확장):** "생각해보니까 Writing 섹션 뿐만 아니라 **다른 부분들도 다 편집 가능해야 되는 거 아니야?**"
+
+**조사로 드러난 사실(다음 세션 출발점):**
+- `/writing` = 하드코딩 페이지(`app/(marketing)/writing/page.tsx`), 글 6개 전부 "곧 공개" 티저, **본문·`/writing/[slug]`·CMS 없음.**
+- `.env.example`에 스택 **이미 stub**: Plausible(`NEXT_PUBLIC_PLAUSIBLE_DOMAIN`, no-cookie/PIPA-friendly), Sanity(project id/read token/webhook secret), Resend, `CONSENT_VERSION=2026-06-25-v1`. **단 패키지(deps)는 미설치.**
+
+**픽업 시 결정 필요(빌드 전 Michael 확인):**
+1. **Writing CMS 방식** — 직전 세션 권고는 "지금은 가벼운 쪽": Sanity는 외부계정+에디터앱 유지 부담 → 지금 저자=영우·현진 둘 다 GitHub 가능하니 **MD/MDX 파일 기반 + `/writing/[slug]` 렌더 + 교체 seam 한 곳**으로 시작, 비기술 직원 들어오는 시점에 Sanity로 30분 교체. (이게 진짜 no-regret.)
+2. **"다른 섹션도 편집 가능?" 스코프** — 전 사이트를 CMS화할지, 아니면 Writing만 동적 + 나머지는 코드로 둘지. **이게 미답 질문.** 전면 CMS화는 무게가 큼 → 권고는 "콘텐츠가 자주 바뀌는 면(Writing·Use cases·Trends)만 점진 CMS, 마케팅 카피는 코드". 결정은 Michael.
+3. **Analytics** — Plausible 래퍼만 깔고 키는 나중에 꽂는 구조(계정 없이 코드 가능, 단순 no-regret).
+
+> 계정 없이 **오늘 가능한 것**: 글 렌더 파이프라인(MD/MDX) + `/writing/[slug]` + 교체 seam + Plausible 래퍼 컴포넌트(스크립트 env-gated). 계정 필요한 것: Sanity 실연결, Plausible 도메인 활성.
+
+---
+
+## 6. 배포/계정 체인 (라이브 전 필수, 순서대로 — Michael 액션)
+
+1. **GitHub** — ✅ **완료** (`ywsuh21c/dailyfit-web` 푸시됨). _주의: 6/11 핸드오프의 "원격 없음=로컬안전"은 무효. origin/main이 라이브임._
+2. **Vercel** — ⏳ 연결만 하면 staging 뜸. (import → 빌드)
+3. **DNS `dailyfitai.app`** — ⏳ Vercel 후. `/guide-me`로 클릭 단위 안내.
+4. **Sanity** — ⏳ CMS 갈 경우. (§5 결정 후)
+5. **Resend** — ⏳ 폼 메일. DKIM/SPF.
+6. **Plausible** — ⏳ analytics 도메인 활성.
+
+> `/guide-me`는 직전 세션이 계속 제안했지만 Michael이 아직 안 누름. 위 2~6을 클릭 단위로 안내해줌.
+
+---
+
+## 7. Michael이 제공할 자산 (코드에 TODO/seam으로 대기 — 지어내지 말 것)
+
+- 앱스토어/플레이스토어 링크
+- 창업자 사진 + 현진 bio 동의
+- Writing 시드 에세이(입고 전까지 "곧 공개" 유지) · 팟캐스트 링크
+- 제품 데모 영상 → `public/media/demo.mp4` (drop 시 home what-we-build 우측 패널 `<video>`로 교체)
+- 정식 출시일 확정 문구(6월 말)
+- `/product` 실제 베타 후기(동의 후) — 가짜 후기는 이미 제거됨
+
+---
+
+## 8. 빠른 시작
 
 ```bash
-cd "/Users/youngwoomichaelsuh/Hive-work/1. Entrepreneurship"
-git checkout 59294482 -- "2. Outputs/marketing-web/2026-05-31-web-homepage-mockups/"
-```
-
-복원되는 파일 (11개):
-```
-option-b-v2-company-site.html   ★ 회사 사이트 Home (진입점 — 브라우저로 먼저 열어볼 것)
-technology.html  use-cases.html  about.html  how-we-work.html  writing.html  investors.html
-product-page-customer.html      ★ 제품(고객) 페이지
-option-a-senior-first.html  option-b-ai-first.html   (구버전, 참고용)
-summary.md                      (방향·검증·차이표 전체 정리)
-```
-`option-b-v2-company-site.html`을 브라우저로 열면 nav/footer/CTA로 전 페이지 클릭 이동됩니다. **이게 코드로 옮길 시각적 정답지입니다.**
-
----
-
-## 4. 절대 규칙 (HARD RULES — 깨면 안 됨)
-
-1. **fundraise 진행 노출 0.** 웹 어디에도 "We are raising / 투자 유치 중" 류 금지. `/investors`는 티저 + **founder 직접 컨택 CTA만**. (Michael 강한 reject 이력.)
-2. **서피스당 단일 청자.** 루트=회사(AI-savvy), 제품 페이지=시니어. 한 페이지에 두 청자 섞지 말 것. **고객/투자자 트윈 홈페이지 절대 제안 금지** (PYLER 사고).
-3. **루트 회사 페이지에 시니어 2인칭 CTA 금지.** "앱 받기" 류 제거. 시니어는 3인칭 증거로만.
-4. **브랜드 토큰 LOCKED**: Sage `#4A7C59` · Navy `#1E2D40` · Ivory `#F5F0E8` · ink `#1A1A1A`. **Warm Amber `#D4A843`는 슬라이드 전용 — 웹 미사용.** lime 미사용.
-5. **Pretendard self-host** (외부 CDN 의존 금지 — v1 실패 원인).
-6. **시니어 a11y floor**: 본문 ≥18px, 행간 1.75–1.8, `word-break:keep-all`, tap ≥48px, `:active` scale.
-7. **UI 카피·디자인 원칙**: 카피 간결 · 줄 wrap 회피 · 깔끔 · **PPT식 아이콘 절대 금지** · 의료/돌봄 이미지 0.
-8. **로고**: 실제 자산 = `~/Hive-work/1. Entrepreneurship/4. Reference/Critical Docs/brand-assets/logo/` (Direction E "the bound page", Sage on Ivory, 2026-05-26 락). 마스터 SVG 인라인.
-
----
-
-## 5. 계정/액션 블로커 — Michael만 가능 (코드로 못 푸는 것)
-
-배포·CMS·폼·이메일은 전부 여기서 막힘. 코드를 다 짜도 이게 없으면 라이브 못 감.
-
-| # | 블로커 | 결과물 |
-|---|---|---|
-| 1 | 도메인 DNS `dailyfitai.app` → Vercel 연결 | 프로덕션 도메인 |
-| 2 | GitHub org `dailyfit` 생성 + 이 repo push | 원격/CI (현재 로컬 git만) |
-| 3 | Vercel 프로젝트 + 결제 | 호스팅/staging |
-| 4 | Sanity 프로젝트 (project id → `.env`) | CMS (trends/team/page) |
-| 5 | Resend 가입 + DKIM/SPF DNS (`team@dailyfitai.app`) | 폼 메일 발송 |
-
-> 막혔을 때 Michael에게 넘기는 방식: `/guide-me` 스킬로 클릭 단위 가이드 제공.
-
----
-
-## 6. ⚠️ 결정 포인트 — 새 세션이 Michael에게 먼저 물을 것
-
-원래 계획: Option A vs B 최종 확정은 **베타 데이터(~2026-07-25) 보고** 결정. 그동안은 *공용 백본*만 빌드.
-그런데 **앱 풀 런칭이 6월 말로 잡혔음** → 홈페이지도 그때 라이브여야 함 → 데이터 트리거(7/25)보다 **빠름**.
-
-**→ 충돌. 단독 결정 금지. 첫 응답에서 Michael에게 확인할 것:**
-- "런칭이 6월 말이면 Option B 회사사이트 방향을 **지금 락**하고 빌드 들어갈까요, 아니면 런칭엔 v1 랜딩 유지하고 v2는 데이터 후로 미룰까요?"
-- 옵션표 → 권고 → 멈춰서 확정받기 (단독 결정 금지 규칙).
-
----
-
-## 7. 다음 작업 (Option B 락 가정 시, 우선순위순)
-
-1. **mockup 복원**(§3) → `option-b-v2-company-site.html` 브라우저로 확인.
-2. **Option B 페이지를 코드로 이식** — `option-b-web-designer-ia-wireframe.md` + 복원한 HTML을 정답지로:
-   - Home `/` 교체 (현재 Option-A 임시본 → Option B 회사사이트), `lib/site.ts` nav를 Option B 구조로.
-   - 신규 라우트 추가: `/use-cases` · `/how-we-work` · `/writing` · 제품 페이지(`/product` 또는 버튼 destination).
-   - 기존 `/technology` `/investors` `/about`은 Option B 카피로 정렬(스펙 파일 참조).
-3. **콘텐츠 펜딩(코드에 `TODO` 마킹된 것):**
-   - `/investors`: 1,400만 수치 공개여부 · 팟캐스트 수치 · 정부 프로그램 · 베타 코호트 처리 · Calendly · 현진 사진/bio 동의
-   - `/technology`: Sample Mockup · 아키텍처 다이어그램 (CTO 자산 대기)
-   - Home: 앱스토어/플레이스토어 링크(PM) · 창업자/Trends preview 확장
-4. **계정 발급 후(§5):** Vercel staging 배포 → Sanity 스키마(trendPost·teamMember·page·investorMomentum) + GROQ + ISR → 폼 3종(beta-signup·newsletter·investor-contact) + Postgres + Resend + zod.
-5. **i18n**: 현재 next-intl 미도입(`/en/investors` 단일 미러만). 영문 확장 시 도입 (setup-spec §5). 라우팅 구조는 이미 호환.
-
----
-
-## 8. 빠른 시작 명령
-
-```bash
-# 코드
 cd ~/Hive-work/dailyfit-web
 pnpm install
 pnpm dev          # http://localhost:3000
-pnpm build        # 프로덕션 빌드 확인
+pnpm build        # 인계 상태 green 재확인
 pnpm typecheck
 
-# 승인된 디자인 정답지 복원 + 열기
-cd "/Users/youngwoomichaelsuh/Hive-work/1. Entrepreneurship"
-git checkout 59294482 -- "2. Outputs/marketing-web/2026-05-31-web-homepage-mockups/"
-open "2. Outputs/marketing-web/2026-05-31-web-homepage-mockups/option-b-v2-company-site.html"
-
-# 빌드 스펙 읽기
-open "2. Outputs/marketing-web/2026-05-28-homepage-v2-planning/option-b-web-designer-ia-wireframe.md"
+# 승인된 디자인 정답지(참고): 워크스페이스
+open "/Users/youngwoomichaelsuh/Hive-work/1. Entrepreneurship/2. Outputs/marketing-web/2026-05-31-web-homepage-mockups/option-b-v2-company-site.html"
 ```
+
+핵심 파일: `lib/site.ts`(nav·5207·CTA) · `app/(marketing)/page.tsx`(Home, 상단 주석에 출처·TODO) · `app/(marketing)/writing/page.tsx`(CMS 픽업 대상) · `.env.example`(스택 stub) · `app/globals.css`(비주얼 언어).
 
 ---
 
-## 9. 참고 문서
-
-- 이 repo: `README.md`, `.env.example`
-- 빌드 스펙: `…/2026-05-28-homepage-v2-planning/frontend-engineer-setup-spec.md`
-- 방향·검증 정리: `…/2026-05-31-web-homepage-mockups/summary.md` (복원 후)
+## 9. 참고
+- 직전 세션 재구성 출처: 트랜스크립트 `~/.claude/projects/-Users-…-Entrepreneurship/b9498ab2-…jsonl` (도구결과 직후 정지, work 손실 0 — 미시작 CMS/analytics만 미완).
 - 오케스트레이터 규칙: `~/Hive-work/1. Entrepreneurship/CLAUDE.md`
+- 콘텐츠 펜딩 원전: Critical Docs `260604-V2 Alignment-Co-founder Note` (DECIDED #1~#10).
