@@ -52,6 +52,12 @@ export default function ProductLayout({
               자주 묻는 질문
             </a>
             <a
+              href="#contact"
+              className="hidden min-h-tap items-center rounded-lg px-4 text-[17px] font-medium text-ink-soft transition-colors hover:bg-surface hover:text-ink sm:flex"
+            >
+              문의
+            </a>
+            <a
               href="#get"
               className="ml-2 flex min-h-tap items-center whitespace-nowrap rounded-lg bg-sage px-5 text-[17px] font-semibold text-white transition-colors hover:bg-sage-dk active:scale-[0.98]"
             >

@@ -1,7 +1,9 @@
 import type { Metadata } from 'next';
 import { Reveal } from '@/components/motion/Reveal';
 import { StoreBadge } from '@/components/product/StoreBadge';
-import { storeLinks } from '@/lib/site';
+import { ButtonLink } from '@/components/ui/Button';
+import { storeLinks, site } from '@/lib/site';
+import { getHelp, type FaqItem } from '@/lib/help';
 
 export const metadata: Metadata = {
   title: '내가 설계하는 나의 하루',
@@ -18,7 +20,12 @@ export const metadata: Metadata = {
 // 없음) StoreBadge 클릭 시 스토어로 전달된다.
 // TODO(Michael): 히어로 실사 이미지(공원 아침 산책, 자연광·따뜻한 색조) 입고.
 
-export default function ProductPage() {
+export default async function ProductPage() {
+  // FAQ + contact from the single source of truth (GET /api/help). On unset
+  // NEXT_PUBLIC_API_URL or any failure, getHelp() returns the bundled fallback
+  // (same 10 items the app ships) so this page never breaks. See lib/help.ts.
+  const { faq, contact } = await getHelp();
+
   return (
     <>
       {/* 1. hero */}
@@ -205,24 +212,53 @@ export default function ProductPage() {
             </h2>
           </Reveal>
           <div className="mt-10 flex flex-col gap-3.5">
-            <Faq q="정말 무료인가요?" open>
-              무료로 시작하실 수 있습니다. 카드 등록 없이 앱만 받으면 바로
-              시작됩니다.
-            </Faq>
-            <Faq q="스마트폰이 익숙하지 않아도 괜찮을까요?">
-              평소 말하듯 입력하거나 음성으로 말씀하시면 됩니다. 큰 글씨와
-              단순한 화면으로, 처음 켜는 순간부터 안내해 드립니다.
-            </Faq>
-            <Faq q="제 정보는 안전하게 보관되나요?">
-              대화 내용은 암호화해 보관하며, 본인 동의 없이 외부에 제공하지
-              않습니다. 언제든 직접 내려받거나 삭제하실 수 있습니다.
-            </Faq>
-            <Faq q="AI가 정해주는 대로 따라야 하나요?">
-              아닙니다. AI는 제안만 합니다. 무엇을 할지는 언제나 본인이
-              고르시면 되고, 마음에 들지 않으면 다른 제안을 받아보실 수
-              있습니다.
-            </Faq>
+            {faq.map((item, i) => (
+              <Faq key={item.id} item={item} open={i === 0} />
+            ))}
           </div>
+        </div>
+      </section>
+
+      {/* 6.5 사람과 연결 — FAQ로 안 풀리면 진짜 사람에게 (founder decision:
+          전화번호 공개 안 함, 전화는 카카오 1:1 안에서만 공유). */}
+      <section id="contact" className="bg-bg py-20 sm:py-24">
+        <div className="mx-auto max-w-3xl px-5">
+          <Reveal className="rounded-3xl border border-line bg-white p-8 text-center shadow-[0_30px_70px_-40px_rgba(30,45,64,0.3)] sm:p-12">
+            <p className="eyebrow-mono text-sage">사람과 연결</p>
+            <h2 className="mt-4 text-[30px] font-extrabold tracking-[-0.03em] text-ink sm:text-[36px]">
+              여전히 궁금한 점이 있으신가요?
+            </h2>
+            <p className="mx-auto mt-4 max-w-[46ch] text-[19px] leading-[1.7] text-ink-soft">
+              찾으시는 답이 없으면, 사람이 직접 도와드립니다. 편하게 연락 주세요.
+            </p>
+            <div className="mt-9 flex flex-col flex-wrap items-center justify-center gap-4 sm:flex-row">
+              {contact.kakao_url ? (
+                <ButtonLink
+                  href={contact.kakao_url}
+                  external
+                  variant="primary"
+                  size="lg"
+                  className="w-full sm:w-auto"
+                >
+                  카카오톡으로 문의하기
+                </ButtonLink>
+              ) : null}
+              <ButtonLink
+                href={`mailto:${contact.email || site.contactEmail}`}
+                external
+                variant={contact.kakao_url ? 'ghost' : 'primary'}
+                size="lg"
+                className="w-full sm:w-auto"
+              >
+                이메일로 문의하기
+              </ButtonLink>
+            </div>
+            {contact.response_note ? (
+              <p className="mt-6 text-[16px] leading-[1.6] text-ink-soft">
+                {contact.response_note}
+              </p>
+            ) : null}
+          </Reveal>
         </div>
       </section>
 
@@ -351,22 +387,14 @@ function HelpCard({
   );
 }
 
-function Faq({
-  q,
-  open,
-  children,
-}: {
-  q: string;
-  open?: boolean;
-  children: React.ReactNode;
-}) {
+function Faq({ item, open }: { item: FaqItem; open?: boolean }) {
   return (
     <details
       open={open}
       className="group rounded-2xl border border-line bg-white px-6 py-1 open:pb-5"
     >
       <summary className="flex min-h-[56px] cursor-pointer list-none items-center justify-between gap-4 text-[18px] font-bold text-ink [&::-webkit-details-marker]:hidden">
-        {q}
+        {item.q}
         <span
           className="text-sage transition-transform group-open:rotate-45"
           aria-hidden="true"
@@ -374,9 +402,11 @@ function Faq({
           +
         </span>
       </summary>
-      <p className="border-t border-line pt-4 text-[18px] leading-[1.75] text-ink-soft">
-        {children}
-      </p>
+      <div className="border-t border-line pt-4">
+        <p className="whitespace-pre-line text-[18px] leading-[1.75] text-ink-soft">
+          {item.a}
+        </p>
+      </div>
     </details>
   );
 }
