@@ -232,21 +232,21 @@ export default async function ProductPage() {
               찾으시는 답이 없으면, 사람이 직접 도와드립니다. 편하게 연락 주세요.
             </p>
             <div className="mt-9 flex flex-col flex-wrap items-center justify-center gap-4 sm:flex-row">
-              {contact.kakao_channel_url ? (
+              {contact.kakao_url ? (
                 <ButtonLink
-                  href={contact.kakao_channel_url}
+                  href={contact.kakao_url}
                   external
                   variant="primary"
                   size="lg"
                   className="w-full sm:w-auto"
                 >
-                  {contact.kakao_label || '카카오톡으로 문의하기'}
+                  카카오톡으로 문의하기
                 </ButtonLink>
               ) : null}
               <ButtonLink
                 href={`mailto:${contact.email || site.contactEmail}`}
                 external
-                variant={contact.kakao_channel_url ? 'ghost' : 'primary'}
+                variant={contact.kakao_url ? 'ghost' : 'primary'}
                 size="lg"
                 className="w-full sm:w-auto"
               >
@@ -406,14 +406,6 @@ function Faq({ item, open }: { item: FaqItem; open?: boolean }) {
         <p className="whitespace-pre-line text-[18px] leading-[1.75] text-ink-soft">
           {item.a}
         </p>
-        {item.escalate ? (
-          <a
-            href="#contact"
-            className="mt-3 inline-flex min-h-tap items-center text-[17px] font-semibold text-sage underline-offset-4 hover:underline"
-          >
-            사람과 연결 →
-          </a>
-        ) : null}
       </div>
     </details>
   );

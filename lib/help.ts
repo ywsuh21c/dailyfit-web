@@ -5,29 +5,31 @@ import { site } from '@/lib/site';
  *
  * ── SINGLE SOURCE OF TRUTH ──────────────────────────────────────────────────
  * Canonical source = backend `GET /api/help` (same payload the app reads), so
- * the website FAQ and the in-app FAQ never drift. The whole site reads help
- * content ONLY through `getHelp()` below — swap the source by changing that one
- * function; every caller keeps working.
+ * the website FAQ and the in-app FAQ never drift. The website reads help content
+ * ONLY through `getHelp()` below.
  *
- * Safe-fallback rule: if NEXT_PUBLIC_API_URL is unset OR the fetch fails, we
- * fall back to FALLBACK_FAQ / FALLBACK_CONTACT (the SAME 10 items the app
- * ships) so the page renders identical content offline and NEVER breaks.
+ * The payload mirrors the app's two source files (apps/mobile/src/lib/
+ * supportFaq.ts FAQ_ITEMS + support.ts contact). The website renders FAQ q/a and
+ * the email/Kakao handoff; it deliberately does NOT surface a public phone
+ * number (founder decision — phone is shared only inside Kakao 1:1).
+ *
+ * Safe-fallback rule: if NEXT_PUBLIC_API_URL is unset OR the fetch fails / is
+ * malformed, fall back to FALLBACK_FAQ / FALLBACK_CONTACT (the SAME items the
+ * app ships) so the page renders identical content and NEVER breaks.
  * ────────────────────────────────────────────────────────────────────────────
  */
 
 export type FaqItem = {
   id: string;
-  category: string;
   q: string;
   a: string;
-  /** true = answer should route the user to the "사람과 연결" handoff. */
-  escalate: boolean;
 };
 
 export type HelpContact = {
   email: string;
-  kakao_channel_url: string;
-  kakao_label: string;
+  /** KakaoTalk channel 1:1 https URL. Empty until the channel is live → CTA hidden. */
+  kakao_url: string;
+  kakao_handle: string;
   response_note: string;
 };
 
@@ -37,80 +39,60 @@ export type Help = {
 };
 
 /**
- * Local fallback FAQ — MUST stay verbatim-identical to the app's 10 items.
+ * Local fallback FAQ — verbatim mirror of the app's FAQ_ITEMS (supportFaq.ts).
  * Canonical source is `GET /api/help`; this only renders when the API is
  * unreachable so the page degrades gracefully without content drift.
  */
 const FALLBACK_FAQ: FaqItem[] = [
   {
-    id: 'first-time',
-    category: '시작하기',
-    q: '앱을 처음 켰는데 뭘 해야 하나요?',
-    a: '화면 가운데 큰 버튼을 누르고, 찾고 싶은 걸 편하게 말씀하세요. 예: "집 근처 운동", "노래 교실". 그러면 추천 카드가 나오고, 카드를 누르면 자세한 내용을 볼 수 있어요.',
-    escalate: false,
+    id: 'what',
+    q: 'DailyFit은 어떤 앱인가요?',
+    a: '말이나 글로 "이런 활동 하고 싶어요"라고 하면, 가까운 곳에서 할 수 있는 활동을 찾아드리는 앱이에요. 운동·배움·모임·나들이 같은 활동을 한곳에서 찾을 수 있어요.',
   },
   {
-    id: 'voice-only',
-    category: '사용법',
-    q: '꼭 말로 해야 하나요? 글자로는 못 쓰나요?',
-    a: '지금은 말로 검색하는 방식이에요. 주변이 시끄럽거나 말하기 불편하시면 조용한 곳에서 한 문장으로 또박또박 말씀해 보세요. 글자로 입력하는 기능은 준비하고 있어요.',
-    escalate: false,
+    id: 'search',
+    q: '활동은 어떻게 찾나요?',
+    a: '첫 화면에서 마이크 버튼을 누르고 말씀하시거나, 글로 적어서 찾을 수 있어요. 예를 들어 "주말에 가족이랑 갈 만한 곳"이라고 하시면 돼요.',
   },
   {
-    id: 'mic-permission',
-    category: '문제 해결',
-    q: '마이크가 안 켜져요.',
-    a: '휴대폰 설정 → 앱 → 데일리핏 → 권한 → 마이크를 켜 주세요. 그래도 안 되면 앱을 껐다 다시 켜 보세요.',
-    escalate: false,
+    id: 'guest',
+    q: '회원가입을 꼭 해야 하나요?',
+    a: '아니에요. 가입 없이 게스트로 둘러볼 수 있어요. 다만 카카오로 로그인하면 즐겨찾기와 검색 기록이 안전하게 저장돼요.',
   },
   {
-    id: 'no-results',
-    category: '사용법',
-    q: '말했는데 결과가 안 나오거나 이상해요.',
-    a: '① 짧은 한 단어보다 "주말에 할 만한 취미"처럼 문장으로 말해 보세요. ② 다른 말로 바꿔 보세요(예: "체조" 대신 "운동"). ③ 마음에 드는 카드의 하트(♡)를 누르면 비슷한 걸 더 보여드려요.',
-    escalate: false,
+    id: 'kakao',
+    q: '카카오 로그인은 어떻게 하나요?',
+    a: '왼쪽 메뉴나 설정에서 "카카오로 시작하기"를 누르면 돼요. 카카오톡에 로그인되어 있으면 한 번에 연결돼요.',
   },
   {
-    id: 'only-jobs',
-    category: '사용법',
-    q: '일자리만 나오고 취미·여가는 잘 안 보여요.',
-    a: '활동을 매일 늘려가고 있어요. "그림 교실", "등산 모임"처럼 구체적으로 말씀하시면 더 잘 찾아요. 원하시는 활동이 안 보이면 알려 주세요 — 우선해서 채워 넣을게요.',
-    escalate: false,
+    id: 'apply',
+    q: '활동 신청은 앱에서 바로 되나요?',
+    a: '신청 방법을 단계별로 안내해드려요. 다만 외부 기관 신청·결제처럼 되돌리기 어려운 일은 마지막 "신청" 버튼을 꼭 본인이 직접 누르도록 되어 있어요.',
   },
   {
-    id: 'font-size',
-    category: '문제 해결',
-    q: '글자가 너무 작아요. 크게 볼 수 없나요?',
-    a: '휴대폰 설정에서 글자 크기를 키우시면 앱 글자도 함께 커져요. 아이폰: 설정 → 디스플레이 및 밝기 → 텍스트 크기. 안드로이드: 설정 → 디스플레이 → 글꼴 크기.',
-    escalate: false,
+    id: 'location',
+    q: '위치 정보는 왜 필요한가요?',
+    a: '가까운 활동을 먼저 보여드리려고 사용해요. 검색할 때만 확인하고, 설정 > 이용 환경에서 언제든 끌 수 있어요.',
   },
   {
-    id: 'download',
-    category: '시작하기',
-    q: '앱 다운로드가 안 돼요. QR이 안 읽혀요.',
-    a: '① 문자로 받은 설치 링크를 다시 눌러 보세요. ② 그래도 안 되면 앱스토어·플레이스토어에서 "데일리핏"으로 검색해 보세요. ③ 계속 안 되면 아래 "사람과 연결"로 편하게 연락 주세요. 같이 봐 드릴게요.',
-    escalate: true,
+    id: 'fontsize',
+    q: '글자가 작아요. 크게 볼 수 있나요?',
+    a: '네. 설정 > 이용 환경에서 "글자 크기"를 "크게"로 바꾸면 앱 전체 글자가 커져요.',
   },
   {
     id: 'privacy',
-    category: '개인정보',
-    q: '제 정보는 안전한가요? 개인정보를 얼마나 모으나요?',
-    a: '활동을 추천하는 데 필요한 나이와 관심사 정도만 사용해요. 동의 없이 다른 곳에 정보를 넘기지 않고, 대한민국 개인정보 보호법을 따릅니다. 자세한 내용은 개인정보처리방침에서 보실 수 있어요.',
-    escalate: false,
+    q: '개인정보는 안전한가요?',
+    a: '활동 추천에 필요한 최소한의 정보만 모으고, 게스트 모드에서는 본인 정보를 모으지 않아요. 자세한 내용은 설정 > 개인정보 처리방침에서 보실 수 있어요.',
   },
   {
-    id: 'slow',
-    category: '문제 해결',
-    q: '앱이 느리거나 말을 잘 못 알아들어요.',
-    a: '① 와이파이나 데이터 연결이 안정적인지 확인해 주세요. ② 앱을 껐다 켜 보세요. ③ 조금 천천히, 휴대폰에 가까이 대고 말씀해 보세요.',
-    escalate: false,
+    id: 'withdraw',
+    q: '회원탈퇴는 어떻게 하나요?',
+    a: '설정 > 회원탈퇴에서 할 수 있어요. 탈퇴하면 내 정보·즐겨찾기·신청 기록이 모두 지워지고 되돌릴 수 없어요.',
   },
   {
-    id: 'delegation',
-    category: '신청·지원',
-    q: '신청 버튼을 누르면 저 대신 신청해 주나요? 어디까지 진행됐는지 어떻게 아나요?',
-    a: '지금은 해당 기관의 신청 페이지로 안내해 드리는 단계예요. 저희가 처음부터 끝까지 대신 신청해 드리는 기능은 준비하고 있어요. 진행 상황이 궁금하시면 아래 "사람과 연결"로 물어봐 주세요.',
-    escalate: true,
+    id: 'history',
+    q: '검색 기록을 지우고 싶어요.',
+    a: '설정 > 검색 기록 삭제에서 한 번에 지울 수 있어요.',
   },
 ];
 
@@ -121,9 +103,9 @@ const FALLBACK_FAQ: FaqItem[] = [
  */
 const FALLBACK_CONTACT: HelpContact = {
   email: site.contactEmail,
-  kakao_channel_url: '',
-  kakao_label: '카카오톡으로 문의하기',
-  response_note: '평일 기준 하루 안에 답변드려요. 편하게 연락 주세요.',
+  kakao_url: '',
+  kakao_handle: '@데일리핏',
+  response_note: '문의 주시면 운영시간 안에 순서대로 답변드려요.',
 };
 
 const FALLBACK_HELP: Help = { faq: FALLBACK_FAQ, contact: FALLBACK_CONTACT };
@@ -131,12 +113,7 @@ const FALLBACK_HELP: Help = { faq: FALLBACK_FAQ, contact: FALLBACK_CONTACT };
 function isFaqItem(v: unknown): v is FaqItem {
   if (typeof v !== 'object' || v === null) return false;
   const o = v as Record<string, unknown>;
-  return (
-    typeof o.id === 'string' &&
-    typeof o.category === 'string' &&
-    typeof o.q === 'string' &&
-    typeof o.a === 'string'
-  );
+  return typeof o.id === 'string' && typeof o.q === 'string' && typeof o.a === 'string';
 }
 
 /**
@@ -155,28 +132,26 @@ export async function getHelp(): Promise<Help> {
     if (!res.ok) return FALLBACK_HELP;
 
     const data = (await res.json()) as Partial<Help>;
-    const faq = Array.isArray(data.faq) ? data.faq.filter(isFaqItem) : [];
+    const faq = Array.isArray(data.faq)
+      ? data.faq.filter(isFaqItem).map((item) => ({ id: item.id, q: item.q, a: item.a }))
+      : [];
     if (faq.length === 0) return FALLBACK_HELP; // empty/invalid → safe fallback
 
-    const c = data.contact ?? ({} as Partial<HelpContact>);
+    const c = (data.contact ?? {}) as Record<string, unknown>;
     const contact: HelpContact = {
       email: typeof c.email === 'string' && c.email ? c.email : site.contactEmail,
-      kakao_channel_url:
-        typeof c.kakao_channel_url === 'string' ? c.kakao_channel_url : '',
-      kakao_label:
-        typeof c.kakao_label === 'string' && c.kakao_label
-          ? c.kakao_label
-          : FALLBACK_CONTACT.kakao_label,
+      kakao_url: typeof c.kakao_url === 'string' ? c.kakao_url : '',
+      kakao_handle:
+        typeof c.kakao_handle === 'string' && c.kakao_handle
+          ? c.kakao_handle
+          : FALLBACK_CONTACT.kakao_handle,
       response_note:
         typeof c.response_note === 'string' && c.response_note
           ? c.response_note
           : FALLBACK_CONTACT.response_note,
     };
 
-    return {
-      faq: faq.map((item) => ({ ...item, escalate: item.escalate === true })),
-      contact,
-    };
+    return { faq, contact };
   } catch {
     return FALLBACK_HELP; // network/parse failure → never break the page
   }
