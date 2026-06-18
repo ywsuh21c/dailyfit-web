@@ -10,8 +10,8 @@ import { site } from '@/lib/site';
  *
  * The payload mirrors the app's two source files (apps/mobile/src/lib/
  * supportFaq.ts FAQ_ITEMS + support.ts contact). The website renders FAQ q/a and
- * the email/Kakao handoff; it deliberately does NOT surface a public phone
- * number (founder decision — phone is shared only inside Kakao 1:1).
+ * the contact handoff: both founders' public phone numbers, the team email, and
+ * the KakaoTalk 1:1 channel.
  *
  * Safe-fallback rule: if NEXT_PUBLIC_API_URL is unset OR the fetch fails / is
  * malformed, fall back to FALLBACK_FAQ / FALLBACK_CONTACT (the SAME items the
@@ -25,8 +25,12 @@ export type FaqItem = {
   a: string;
 };
 
+export type PhoneEntry = { label: string; display: string; tel: string };
+
 export type HelpContact = {
   email: string;
+  /** Both founders' public phone numbers. Empty array → no phone shown. */
+  phones: PhoneEntry[];
   /** KakaoTalk channel 1:1 https URL. Empty until the channel is live → CTA hidden. */
   kakao_url: string;
   kakao_handle: string;
@@ -103,6 +107,10 @@ const FALLBACK_FAQ: FaqItem[] = [
  */
 const FALLBACK_CONTACT: HelpContact = {
   email: site.contactEmail,
+  phones: [
+    { label: '서영우', display: '010-8807-6397', tel: '01088076397' },
+    { label: '김현진', display: '010-4901-7898', tel: '01049017898' },
+  ],
   kakao_url: 'http://pf.kakao.com/_kxmUXX/chat',
   kakao_handle: '@데일리핏',
   response_note: '문의 주시면 운영시간 안에 순서대로 답변드려요.',
@@ -140,6 +148,16 @@ export async function getHelp(): Promise<Help> {
     const c = (data.contact ?? {}) as Record<string, unknown>;
     const contact: HelpContact = {
       email: typeof c.email === 'string' && c.email ? c.email : site.contactEmail,
+      phones: Array.isArray(c.phones)
+        ? (c.phones as unknown[]).filter(
+            (p): p is PhoneEntry =>
+              typeof p === 'object' &&
+              p !== null &&
+              typeof (p as Record<string, unknown>).label === 'string' &&
+              typeof (p as Record<string, unknown>).display === 'string' &&
+              typeof (p as Record<string, unknown>).tel === 'string',
+          )
+        : FALLBACK_CONTACT.phones,
       kakao_url: typeof c.kakao_url === 'string' ? c.kakao_url : '',
       kakao_handle:
         typeof c.kakao_handle === 'string' && c.kakao_handle
