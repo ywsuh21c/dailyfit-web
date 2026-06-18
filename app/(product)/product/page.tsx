@@ -1,5 +1,7 @@
 import type { Metadata } from 'next';
 import { Reveal } from '@/components/motion/Reveal';
+import { StoreBadge } from '@/components/product/StoreBadge';
+import { storeLinks } from '@/lib/site';
 
 export const metadata: Metadata = {
   title: '내가 설계하는 나의 하루',
@@ -10,7 +12,10 @@ export const metadata: Metadata = {
 // /product — 시니어 고객용 페이지 (mockup product-page-customer.html 기준).
 // 단일 청자: 시니어. 2인칭 카피 허용 구역. 본문 ≥18px (시니어 a11y 플로어).
 // 정직성: 가짜 후기·별점 게재 금지 — 실사용 후기는 베타 고객 동의 후 추가.
-// TODO(PM): App Store / Play Store 링크 입고 시 #get 배지를 실링크로 교체.
+// 스토어 링크 = lib/site.ts storeLinks 단일 출처(env override 가능). 6/26 앱 공개
+// 시 채우면 StoreBadge가 실링크 + UTM 전달(Play referrer). 비면 "곧 출시" 안전 배포.
+// 광고 착지 = 이 페이지(/product). 진입 UTM은 그대로 보존되며(미들웨어/리다이렉트
+// 없음) StoreBadge 클릭 시 스토어로 전달된다.
 // TODO(Michael): 히어로 실사 이미지(공원 아침 산책, 자연광·따뜻한 색조) 입고.
 
 export default function ProductPage() {
@@ -231,10 +236,9 @@ export default function ProductPage() {
             <p className="mt-5 text-[19px] text-white/85">
               지금 앱을 받고 첫 하루를 시작해 보세요.
             </p>
-            {/* TODO(PM): 스토어 링크 입고 시 실링크 배지로 교체 */}
             <div className="mt-9 flex flex-wrap justify-center gap-4">
-              <StoreBadge store="Google Play" />
-              <StoreBadge store="App Store" />
+              <StoreBadge store="Google Play" href={storeLinks.android} />
+              <StoreBadge store="App Store" href={storeLinks.ios} />
             </div>
             <p className="mt-6 text-[15px] text-white/70">
               무료로 시작 · 카드 등록 없이
@@ -374,16 +378,5 @@ function Faq({
         {children}
       </p>
     </details>
-  );
-}
-
-function StoreBadge({ store }: { store: string }) {
-  return (
-    <span className="inline-flex min-h-[58px] items-center gap-3 rounded-xl border border-white/35 bg-white/10 px-7">
-      <span className="text-left leading-tight">
-        <span className="block text-[12px] text-white/70">{store}</span>
-        <span className="block text-[17px] font-bold">곧 출시</span>
-      </span>
-    </span>
   );
 }

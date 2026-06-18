@@ -61,3 +61,20 @@ export const legalNav: NavItem[] = [
   { href: '/terms', label: '이용약관' },
   { href: '/privacy', label: '개인정보처리방침' },
 ];
+
+/**
+ * App store install links — the ONLY ad→install exit (6/26 검색광고는 /product로
+ * 착지, 여기 배지가 유일한 설치 출구). 앱은 2026-06-26 공개 → 그 전까지 빈 값이면
+ * <StoreBadge>가 "곧 출시"(비클릭) 상태로 안전하게 배포된다.
+ *
+ * ── 6/26 플립 (한 단계) ─────────────────────────────────────────────────────
+ * 아래에 실 URL을 넣거나 Vercel 환경변수(NEXT_PUBLIC_IOS_APP_URL /
+ * NEXT_PUBLIC_ANDROID_APP_URL)로 설정 후 재배포. 값이 채워지면 배지가 실링크가
+ * 되고, 착지 UTM을 스토어로 전달한다(Google Play는 `referrer` 파라미터 = Play
+ * Install Referrer 귀속). 라이브 전 iOS App Store URL(숫자 app id)·Play 패키지
+ * id를 반드시 검증할 것.
+ */
+export const storeLinks = {
+  ios: process.env.NEXT_PUBLIC_IOS_APP_URL ?? '',
+  android: process.env.NEXT_PUBLIC_ANDROID_APP_URL ?? '',
+} as const;
