@@ -7,7 +7,7 @@ export const site = {
   name: 'DailyFit',
   domain: 'dailyfitai.app',
   url: 'https://dailyfitai.app',
-  contactEmail: 'team@dailyfitai.app',
+  contactEmail: 'dailyfitkorea@gmail.com',
   tagline: 'AI는 수단, 시니어가 정체성',
   description:
     '한국 액티브 시니어 세대를 위한 AI 에이전트 — 대화 한 번으로 하루를 설계합니다.',
