@@ -103,7 +103,7 @@ const FALLBACK_FAQ: FaqItem[] = [
  */
 const FALLBACK_CONTACT: HelpContact = {
   email: site.contactEmail,
-  kakao_url: '',
+  kakao_url: 'http://pf.kakao.com/_kxmUXX/chat',
   kakao_handle: '@데일리핏',
   response_note: '문의 주시면 운영시간 안에 순서대로 답변드려요.',
 };
