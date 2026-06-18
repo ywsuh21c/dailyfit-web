@@ -219,8 +219,8 @@ export default async function ProductPage() {
         </div>
       </section>
 
-      {/* 6.5 사람과 연결 — FAQ로 안 풀리면 진짜 사람에게 (founder decision:
-          전화번호 공개 안 함, 전화는 카카오 1:1 안에서만 공유). */}
+      {/* 6.5 사람과 연결 — FAQ로 안 풀리면 진짜 사람에게.
+          채널: 카카오 1:1 · 이메일 · 두 창업자 공개 전화(결정 ④, 6/18 공개로 변경). */}
       <section id="contact" className="bg-bg py-20 sm:py-24">
         <div className="mx-auto max-w-3xl px-5">
           <Reveal className="rounded-3xl border border-line bg-white p-8 text-center shadow-[0_30px_70px_-40px_rgba(30,45,64,0.3)] sm:p-12">
@@ -253,6 +253,25 @@ export default async function ProductPage() {
                 이메일로 문의하기
               </ButtonLink>
             </div>
+            {contact.phones.length > 0 ? (
+              <div className="mt-6 flex flex-col items-center gap-3">
+                <p className="text-[17px] font-bold text-ink">전화로 바로 연결</p>
+                <div className="flex flex-col flex-wrap items-center justify-center gap-3 sm:flex-row">
+                  {contact.phones.map((p) => (
+                    <ButtonLink
+                      key={p.tel}
+                      href={`tel:${p.tel}`}
+                      external
+                      variant="ghost"
+                      size="lg"
+                      className="w-full sm:w-auto"
+                    >
+                      {p.label} · {p.display}
+                    </ButtonLink>
+                  ))}
+                </div>
+              </div>
+            ) : null}
             {contact.response_note ? (
               <p className="mt-6 text-[16px] leading-[1.6] text-ink-soft">
                 {contact.response_note}
