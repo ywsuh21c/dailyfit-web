@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { activeCatalogCount, site } from '@/lib/site';
 import { AgentConsole } from '@/components/home/AgentConsole';
+import { GrowthEngine } from '@/components/home/GrowthEngine';
 import { Reveal } from '@/components/motion/Reveal';
 import { CountUp } from '@/components/motion/CountUp';
 
@@ -294,6 +295,12 @@ export default function HomePage() {
           </Reveal>
         </div>
       </section>
+
+      {/* ───────────────────── GROWTH ENGINE ───────────────────── */}
+      {/* 3rd-person business mechanic (credit · habit-XP · referral loops).
+          Senior-facing felt version lives on /product. Variant picked at
+          /preview/growth-engine — swap the prop below once Michael chooses. */}
+      <GrowthEngine variant="b" />
 
       {/* ─────────────────────── EVIDENCE ──────────────────────── */}
       <section className="border-y border-line bg-ivory py-24 sm:py-32">
