@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { activeCatalogCount, site } from '@/lib/site';
 import { AgentConsole } from '@/components/home/AgentConsole';
-import { GrowthEngine } from '@/components/home/GrowthEngine';
+import { RetentionEngine } from '@/components/gami/RetentionEngine';
 import { Reveal } from '@/components/motion/Reveal';
 import { CountUp } from '@/components/motion/CountUp';
 
@@ -296,11 +296,11 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ───────────────────── GROWTH ENGINE ───────────────────── */}
-      {/* 3rd-person business mechanic (credit · habit-XP · referral loops).
-          Senior-facing felt version lives on /product. Variant picked at
-          /preview/growth-engine — swap the prop below once Michael chooses. */}
-      <GrowthEngine variant="b" />
+      {/* ──────────────────── RETENTION ENGINE ──────────────────── */}
+      {/* 3rd-person: the real character/level/credit/referral loops that make
+          seniors return. Mirrors the in-app gamification (assets/brand +
+          LevelHome). Senior-facing 2nd-person version lives on /product. */}
+      <RetentionEngine />
 
       {/* ─────────────────────── EVIDENCE ──────────────────────── */}
       <section className="border-y border-line bg-ivory py-24 sm:py-32">

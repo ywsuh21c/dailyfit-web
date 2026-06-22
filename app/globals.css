@@ -573,128 +573,45 @@
 }
 
 /* ============================================================
- * Gamification — growth engine (company face) + habit (product).
- * Extends the home visual language: every color derives from the four
- * LOCKED brand tokens (sage/navy/ivory/ink); all motion is CSS-only and
- * respects prefers-reduced-motion. Reuses the existing motion idioms
- * (orbiting dot ≈ arch packet, pulse-dot, marquee mask).
+ * Gamification — real character system, mirrored from the app
+ * (apps/mobile assets/brand + LevelHome / WelcomePoints / AttendSuccess).
+ * The warm category palette (건강 blue · 취미 gold · 배움 purple) is
+ * intentional here — a colorful, friendly counterpoint to the austere
+ * company chrome, matching exactly what active seniors see in-app.
+ * CSS-only motion, prefers-reduced-motion safe.
  * ============================================================ */
 
-/* --- orbit ring: a loop with a dot traveling its rim (Variant A + B) --- */
-.ge-ring {
-  position: relative;
-  display: grid;
-  place-items: center;
-  border-radius: 50%;
-  border: 2px dashed rgba(74, 124, 89, 0.34);
-}
-.ge-ring-core {
-  font-family: var(--mono);
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--color-sage);
-  text-align: center;
-  line-height: 1.15;
-}
-.ge-ring-spin {
-  position: absolute;
-  inset: 0;
-  animation: ge-spin 7.5s linear infinite;
+/* category card gradients — mirror LevelHome GROUP_META */
+.cat-health { background-image: linear-gradient(135deg, #3e83c4, #2f6fb0); }
+.cat-hobby  { background-image: linear-gradient(135deg, #d9ae45, #c99a2e); }
+.cat-learn  { background-image: linear-gradient(135deg, #9576b4, #7e5e9e); }
+
+/* mascot / character gentle bob */
+.char-float {
+  animation: char-bob 4.6s ease-in-out infinite;
   will-change: transform;
 }
-.ge-ring-spin.s2 { animation-duration: 9.5s; }
-.ge-ring-spin.s3 { animation-duration: 11.5s; animation-direction: reverse; }
-.ge-ring-dot {
-  position: absolute;
-  top: -6px;
-  left: 50%;
-  height: 11px;
-  width: 11px;
-  margin-left: -5.5px;
-  border-radius: 50%;
-  background: var(--color-sage);
-  box-shadow: 0 0 0 5px rgba(74, 124, 89, 0.12);
+@keyframes char-bob {
+  0%, 100% { transform: translateY(0) rotate(-1.5deg); }
+  50% { transform: translateY(-9px) rotate(1.5deg); }
 }
 
-/* --- cyclic connector arrow (loops close the cycle) --- */
-.ge-arrow {
-  color: var(--sage-lt);
-  font-size: 22px;
-  font-weight: 700;
-  line-height: 1;
+/* gold coin (welcome points) */
+.coin-gold {
+  background: radial-gradient(circle at 35% 30%, #e7c766, #b8923c 72%);
+  box-shadow: 0 6px 16px -6px rgba(184, 146, 60, 0.7);
 }
 
-/* --- value bar: free credit → value delivered → pay (Variant B, 신뢰) --- */
-.ge-bar {
-  position: relative;
-  overflow: hidden;
-  border-radius: 999px;
-  background: rgba(74, 124, 89, 0.1);
-}
-.ge-bar-shimmer {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    90deg,
-    transparent,
-    rgba(74, 124, 89, 0.28),
-    transparent
-  );
-  transform: translateX(-100%);
-  animation: ge-shimmer 2.8s ease-in-out infinite;
-}
-
-/* --- spread nodes: referral fanning out to peers (Variant B, 확산) --- */
-.ge-node {
-  height: 13px;
-  width: 13px;
-  border-radius: 50%;
-  background: var(--color-sage);
-  animation: pulse-dot 2.2s ease-in-out infinite;
-}
-.ge-node-sm {
-  height: 9px;
-  width: 9px;
-  background: var(--sage-lt);
-}
-.ge-spoke {
-  height: 2px;
-  background: rgba(74, 124, 89, 0.25);
-  transform-origin: left center;
-}
-
-/* --- product habit: attendance stamp grid (calm, senior-friendly) --- */
-.ge-stamp {
-  display: grid;
-  place-items: center;
-  border-radius: 12px;
-  background: rgba(74, 124, 89, 0.1);
-  color: var(--color-sage);
-  font-weight: 800;
-  font-size: 18px;
-}
-.ge-stamp-on {
-  background: var(--color-sage);
-  color: #fff;
-  box-shadow: 0 8px 18px -10px rgba(74, 124, 89, 0.7);
-}
-
-@keyframes ge-spin {
-  to {
-    transform: rotate(360deg);
-  }
-}
-@keyframes ge-shimmer {
-  to {
-    transform: translateX(220%);
-  }
+/* sparkle twinkle (welcome points) */
+.sparkle-tw { animation: sparkle-tw 2.4s ease-in-out infinite; }
+@keyframes sparkle-tw {
+  0%, 100% { opacity: 0.35; transform: scale(0.85); }
+  50% { opacity: 1; transform: scale(1.1); }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .ge-ring-spin,
-  .ge-bar-shimmer,
-  .ge-node {
+  .char-float,
+  .sparkle-tw {
     animation: none;
   }
 }

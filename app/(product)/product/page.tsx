@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { Reveal } from '@/components/motion/Reveal';
 import { StoreBadge } from '@/components/product/StoreBadge';
-import { BrandMark } from '@/components/brand/BrandMark';
+import { HabitGamification } from '@/components/gami/HabitGamification';
 import { storeLinks } from '@/lib/site';
 
 export const metadata: Metadata = {
@@ -196,66 +196,9 @@ export default function ProductPage() {
         </div>
       </section>
 
-      {/* 5.5 habit / encouragement — senior-facing gamification (2nd person).
-          The felt version of the company-site "growth engine" loops. Tone =
-          Duolingo-style encouragement, NOT 쿠키런 flash. Non-competitive.
-          ≥18px body, decorative viz aria-hidden. Numbers are illustrative
-          (예시) — no traction claims. */}
-      <section className="bg-surface py-20 sm:py-24">
-        <div className="mx-auto max-w-6xl px-5">
-          <Reveal className="mx-auto max-w-[54ch] text-center">
-            <p className="eyebrow-mono text-sage">함께 쌓는 하루</p>
-            <h2 className="mt-4 text-[30px] font-extrabold tracking-[-0.03em] text-ink sm:text-[38px]">
-              꾸준함이, 눈에 보입니다.
-            </h2>
-            <p className="mt-4 text-[19px] leading-[1.7] text-ink-soft">
-              매일의 작은 활동이 쌓여 나만의 기록이 됩니다. 남과 겨루지 않아요 —
-              어제의 나와의 약속이에요.
-            </p>
-          </Reveal>
-          <div className="mt-12 grid gap-5 md:grid-cols-3">
-            <Reveal>
-              <div className="flex h-full flex-col rounded-2xl border border-line bg-white p-7">
-                <h3 className="text-[20px] font-bold text-ink">다녀오면 도장 하나</h3>
-                <p className="mt-2 text-[18px] leading-relaxed text-ink-soft">
-                  활동 다녀오신 뒤 사진 한 장이면, 이번 달 달력에 도장이
-                  쌓입니다.
-                </p>
-                <StampGrid className="mt-5" filled={11} total={20} />
-                <p className="mt-4 text-[16px] font-semibold text-sage">
-                  이번 달 11일 참여 · 예시
-                </p>
-              </div>
-            </Reveal>
-            <Reveal delay={120}>
-              <div className="flex h-full flex-col items-center rounded-2xl border border-line bg-white p-7 text-center">
-                <LevelRing level={4} pct={0.64} />
-                <h3 className="mt-5 text-[20px] font-bold text-ink">
-                  나의 속도로 한 단계씩
-                </h3>
-                <p className="mt-2 text-[18px] leading-relaxed text-ink-soft">
-                  꾸준히 나가면 단계가 오릅니다. 1등을 다투는 게 아니라, 나의
-                  꾸준함이 쌓이는 거예요.
-                </p>
-              </div>
-            </Reveal>
-            <Reveal delay={240}>
-              <div className="flex h-full flex-col items-center rounded-2xl border border-line bg-white p-7 text-center">
-                <div className="flex h-[112px] items-center justify-center">
-                  <BrandMark idPrefix="habit-mascot" className="h-16 w-16" />
-                </div>
-                <h3 className="mt-5 text-[20px] font-bold text-ink">
-                  혼자가 아니에요
-                </h3>
-                <p className="mt-2 text-[18px] leading-relaxed text-ink-soft">
-                  함께 걷는 캐릭터가 곁에서 응원하고, 같이 활동한 또래와 손뼉을
-                  마주칩니다. &ldquo;오늘도 잘 하고 계세요.&rdquo;
-                </p>
-              </div>
-            </Reveal>
-          </div>
-        </div>
-      </section>
+      {/* 5.5 habit / gamification — senior-facing (2nd person). Real characters
+          + levels + welcome points, mirrored from the in-app screens. */}
+      <HabitGamification />
 
       {/* 6. FAQ */}
       <section id="faq" className="border-y border-line bg-ivory py-20 sm:py-24">
@@ -440,55 +383,5 @@ function Faq({
         {children}
       </p>
     </details>
-  );
-}
-
-function StampGrid({
-  filled,
-  total,
-  className,
-}: {
-  filled: number;
-  total: number;
-  className?: string;
-}) {
-  return (
-    <div className={`grid grid-cols-5 gap-2 ${className ?? ''}`} aria-hidden="true">
-      {Array.from({ length: total }, (_, i) => (
-        <span key={i} className={`ge-stamp aspect-square ${i < filled ? 'ge-stamp-on' : ''}`}>
-          {i < filled ? '✓' : ''}
-        </span>
-      ))}
-    </div>
-  );
-}
-
-function LevelRing({ level, pct }: { level: number; pct: number }) {
-  const r = 42;
-  const circ = 2 * Math.PI * r;
-  const offset = circ * (1 - pct);
-  return (
-    <div className="relative h-[116px] w-[116px]">
-      <svg className="h-full w-full -rotate-90" viewBox="0 0 100 100" aria-hidden="true">
-        <circle cx="50" cy="50" r={r} fill="none" stroke="var(--color-line)" strokeWidth="8" />
-        <circle
-          cx="50"
-          cy="50"
-          r={r}
-          fill="none"
-          stroke="var(--color-sage)"
-          strokeWidth="8"
-          strokeLinecap="round"
-          strokeDasharray={circ}
-          strokeDashoffset={offset}
-        />
-      </svg>
-      <div className="absolute inset-0 grid place-items-center">
-        <span className="text-[28px] font-extrabold leading-none text-ink">
-          {level}
-          <span className="ml-0.5 text-[15px] font-bold text-ink-soft">단계</span>
-        </span>
-      </div>
-    </div>
   );
 }
