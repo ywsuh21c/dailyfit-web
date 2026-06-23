@@ -21,12 +21,12 @@ import { activeCatalogCount } from '@/lib/site';
 const CYCLE_MS = 15000;
 
 const STEPS = [
-  { tag: 'pansori', label: '의도 분석', body: '학습 · 새로운 것 · 다음 주 오전', delay: 'console-d2' },
+  { tag: '의도', label: '의도 분석', body: '학습 · 새로운 것 · 다음 주 오전', delay: 'console-d2' },
   { tag: 'memory', label: '리콜', body: '문정동 · 오전 선호 · 지난주: 스트레칭', delay: 'console-d3' },
   {
-    tag: 'sijo',
-    label: '활동 그래프 탐색',
-    body: `${activeCatalogCount.toLocaleString('ko-KR')}건 중 특색 활동 2건 선별`,
+    tag: '큐레이션',
+    label: '활동 큐레이션',
+    body: `${activeCatalogCount.toLocaleString('ko-KR')}건 중 딱 맞는 활동 선별`,
     delay: 'console-d4',
   },
 ];
@@ -87,11 +87,11 @@ export function AgentConsole() {
           <p className="console-plan-head">
             <span className="console-glyph console-glyph-done" aria-hidden="true">✓</span>
             <span className="console-tag">plan</span>
-            <span className="console-step-label">다음 주 하루 설계 완료</span>
+            <span className="console-step-label">하루 설계 · 신청 대행 완료</span>
           </p>
           <ul className="console-plan-items">
             <li>화 10:00 — 한옥공예 입문 (송파여성문화회관)</li>
-            <li>목 09:30 — AI 교실 · DailyFit 직접 운영</li>
+            <li>→ 복잡한 신청은 DailyFit이 대신 접수했어요</li>
           </ul>
         </div>
 

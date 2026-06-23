@@ -45,10 +45,10 @@ export function RetentionEngine() {
 
         <div className="mt-12 grid gap-4 md:grid-cols-2">
           <div className="rounded-2xl border border-line border-l-[3px] border-l-sage bg-white p-6">
-            <p className="text-base font-bold text-ink">가치가 먼저인 크레딧</p>
+            <p className="text-base font-bold text-ink">쓸수록 쌓이는 포인트</p>
             <p className="mt-1.5 text-[14.5px] leading-relaxed text-ink-soft">
-              충분한 웰컴 포인트로 시작해, 가치를 전달한 뒤에만 과금합니다. 돈이
-              빠지는 고통이 아니라, 받은 다음의 지불.
+              웰컴 포인트로 시작해 출석·추천으로 쌓입니다. 가치를 받은 다음의
+              지불 — 돈이 빠지는 고통이 아니라.
             </p>
           </div>
           <div className="rounded-2xl border border-line border-l-[3px] border-l-sage bg-white p-6">

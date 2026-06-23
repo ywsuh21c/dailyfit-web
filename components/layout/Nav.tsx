@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { companyNav, primaryNav, productCta, site } from '@/lib/site';
-import { BrandMark } from '@/components/brand/BrandMark';
+import Image from 'next/image';
 
 /**
  * Global nav — light, Option-B structure:
@@ -20,7 +20,14 @@ export function Nav() {
           className="flex min-h-tap items-center gap-2.5"
           aria-label={`${site.name} 홈`}
         >
-          <BrandMark idPrefix="nav-logo" className="h-8 w-8" />
+          <Image
+            src="/brand/dailyfit-logo.png"
+            alt=""
+            aria-hidden="true"
+            width={38}
+            height={38}
+            className="h-9 w-9 object-contain"
+          />
           <span className="text-[22px] font-extrabold tracking-tight text-ink">
             {site.name}
           </span>

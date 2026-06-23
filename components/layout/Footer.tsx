@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { footerNav, legalNav, productCta, site } from '@/lib/site';
-import { BrandMark } from '@/components/brand/BrandMark';
+import Image from 'next/image';
 
 export function Footer() {
   return (
@@ -9,7 +9,14 @@ export function Footer() {
         <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-[2fr_1fr_1fr_1fr]">
           <div>
             <Link href="/" className="flex items-center gap-2.5" aria-label={`${site.name} 홈`}>
-              <BrandMark idPrefix="footer-logo" className="h-8 w-8" />
+              <Image
+                src="/brand/dailyfit-logo.png"
+                alt=""
+                aria-hidden="true"
+                width={38}
+                height={38}
+                className="h-9 w-9 object-contain"
+              />
               <span className="text-[22px] font-extrabold tracking-tight text-ivory">
                 {site.name}
               </span>

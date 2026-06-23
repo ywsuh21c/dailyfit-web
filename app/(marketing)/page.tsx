@@ -63,9 +63,10 @@ export default function HomePage() {
             <p className="eyebrow-mono mt-5 normal-case tracking-[0.02em] text-ink-soft/70">
               We build AI agents for Korea&rsquo;s active senior generation.
             </p>
-            <p className="mt-7 max-w-[44ch] text-body text-ink-soft">
-              1,500만 명, 가장 빠르게 디지털로 옮겨오는 세대.
-              그들의 하루를 설계하는 에이전트 팀을 만듭니다.
+            <p className="mt-7 max-w-[46ch] text-body text-ink-soft">
+              850만 명, 가장 빠르게 디지털로 옮겨오는 한국 액티브 시니어. 대화
+              한 번으로 하루를 설계하고, 복잡한 신청까지 대신 처리하는 AI
+              에이전트를 만듭니다.
             </p>
             <div className="mt-10 flex flex-wrap items-center gap-4">
               <a
@@ -89,23 +90,23 @@ export default function HomePage() {
         <div className="relative border-t border-ink/10 bg-white/40">
           <dl className="mx-auto grid max-w-6xl grid-cols-2 px-5 lg:grid-cols-4">
             {[
-              [<CountUp key="m1" to={activeCatalogCount} />, '활성 활동 카탈로그'],
-              ['3', '에이전트 캐퍼빌리티 티어'],
-              ['음성 + 텍스트', '멀티모달 인터페이스'],
-              ['2026.06', '정식 출시'],
-            ].map(([value, label], i) => (
+              { value: <CountUp key="m1" to={activeCatalogCount} />, label: '활성 활동 카탈로그', mono: true },
+              { value: '신청까지', label: '대화하면 신청을 대신 처리', mono: false },
+              { value: '음성으로', label: '말하면 읽기 좋게 답해요', mono: false },
+              { value: '2026.06', label: '정식 출시', mono: true },
+            ].map((m, i) => (
               <div
-                key={label as string}
+                key={m.label}
                 className={`py-7 pr-6 ${i > 0 ? 'lg:border-l lg:border-ink/10 lg:pl-8' : ''} ${i % 2 === 1 ? 'border-l border-ink/10 pl-6 lg:pl-8' : ''}`}
               >
-                <dt className="sr-only">{label}</dt>
+                <dt className="sr-only">{m.label}</dt>
                 <dd
                   className="text-[26px] font-bold tracking-tight text-ink"
-                  style={{ fontFamily: 'var(--mono)' }}
+                  style={m.mono ? { fontFamily: 'var(--mono)' } : undefined}
                 >
-                  {value}
+                  {m.value}
                 </dd>
-                <dd className="mt-1 text-caption text-ink-soft">{label}</dd>
+                <dd className="mt-1 text-caption text-ink-soft">{m.label}</dd>
               </div>
             ))}
           </dl>
@@ -169,55 +170,36 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ──────────────────── MEET THE AGENTS ──────────────────── */}
+      {/* ─────────────── HOW IT WORKS — the single flow ─────────────── */}
+      {/* Replaces the stale 3-agent (Sijo/Minyo/Pansori) framing — that came
+          from the 6/4 pre-redesign note. Current BM: one assistant takes it
+          end-to-end, with 신청대행 (concierge) as the core value/moat (FD-004),
+          and 습관화 (gamification) as the retention hook (FD-010). */}
       <section id="agents" className="border-y border-line bg-ivory py-24 sm:py-32">
         <div className="mx-auto max-w-6xl px-5">
           <Reveal className="mx-auto max-w-[58ch] text-center">
-            <p className="eyebrow-mono text-sage">Meet the agents</p>
+            <p className="eyebrow-mono text-sage">How it works</p>
             <h2 className="mt-4 text-[34px] font-extrabold leading-[1.2] tracking-[-0.03em] text-ink sm:text-[42px]">
-              하나의 하루를 만드는
-              <br className="sm:hidden" /> 세 개의 에이전트
+              하나의 비서가, 끝까지.
             </h2>
             <p className="mt-5 text-body text-ink-soft">
-              이름은 한국 시가에서 왔습니다 — 시조에서 판소리로, 서사가
-              길어질수록 에이전트가 더 많은 하루를 맡습니다. 정식 출시 앱에는
-              최상위 에이전트가 기본 탑재됩니다.
+              여러 앱을 옮겨다닐 필요 없이 — 말 한마디면 찾고, 고르고, 가장
+              번거로운 신청까지 대신 처리하고, 다시 오게 만듭니다.
             </p>
           </Reveal>
-          <div className="mt-14 grid gap-5 md:grid-cols-3">
-            <AgentCard
-              name="SIJO"
-              koName="시조"
-              tier="Discovery"
-              title="탐색 에이전트"
-              level={1}
-              delay={0}
-            >
-              세 줄의 시처럼 짧고 정확하게. 관심사를 학습해 동네 밖, 평소
-              몰랐던 활동까지 발굴합니다.
-            </AgentCard>
-            <AgentCard
-              name="MINYO"
-              koName="민요"
-              tier="Planning · Reminders"
-              title="리마인더 에이전트"
-              level={2}
-              delay={120}
-            >
-              일상의 리듬을 챙기는 노래. &ldquo;내일 아침 9시에 신청하셔야
-              해요&rdquo; — 놓치기 쉬운 시점을 대신 기억합니다.
-            </AgentCard>
-            <AgentCard
-              name="PANSORI"
-              koName="판소리"
-              tier="Full autonomy"
-              title="슈퍼 에이전트"
-              level={3}
-              delay={240}
-            >
-              완창처럼, 하루 전체의 서사를 혼자 끝까지. 탐색·플래닝·신청까지
-              책임지는 풀 오토노미 에이전트입니다.
-            </AgentCard>
+          <div className="mt-14 grid gap-5 md:grid-cols-4">
+            <FlowCard n="01" tag="대화" title="말로 시작" delay={0}>
+              &ldquo;강남구에서 운동 배우고 싶어&rdquo; — 평소 말하듯 음성으로.
+            </FlowCard>
+            <FlowCard n="02" tag="큐레이션" title="딱 맞게 선별" delay={100}>
+              5,207개 활동에서 상황에 맞는 몇 개만 골라 보여줍니다.
+            </FlowCard>
+            <FlowCard n="03" tag="신청 대행" title="신청을 대신" core delay={200}>
+              가장 큰 벽인 정부·복지관 신청을 대신 접수합니다 — 핵심 가치.
+            </FlowCard>
+            <FlowCard n="04" tag="습관화" title="다시 오게" delay={300}>
+              출석하면 캐릭터가 자라고 레벨이 올라, 매일 돌아옵니다.
+            </FlowCard>
           </div>
         </div>
       </section>
@@ -272,17 +254,18 @@ export default function HomePage() {
             </h2>
           </Reveal>
           <div className="mt-14 grid gap-5 md:grid-cols-3">
-            <MoatCard k="01 · Curation" title="몰랐던 가치의 발굴" delay={0}>
-              이미 아는 활동은 검색으로 충분합니다. 평소 몰랐던 것, 동네 밖의
-              특색 — 지갑이 열리는 큐레이션은 발굴력에서 나옵니다.
+            <MoatCard k="01 · Concierge" title="신청을 대신 끝까지" delay={0}>
+              정보 검색은 네이버·무료 AI로 충분합니다. 진짜 벽은 신청 — 비표준
+              입력과 포털 엣지케이스를 운영으로 넘는 것이 흉내내기 어려운
+              해자입니다.
             </MoatCard>
-            <MoatCard k="02 · Memory" title="누적되는 개인화" delay={120}>
-              범용 챗봇은 매번 처음부터 시작합니다. DailyFit은 어제의 선택을
-              기억해, 쓸수록 더 잘 맞는 하루가 됩니다.
-            </MoatCard>
-            <MoatCard k="03 · Continuity" title="365일 공급" delay={240}>
+            <MoatCard k="02 · Continuity" title="365일 공급" delay={120}>
               공공 프로그램은 분기에 한 번 열립니다. 그 사이를 자체 운영
               활동으로 메워 하루도 비지 않게 합니다.
+            </MoatCard>
+            <MoatCard k="03 · Memory" title="누적되는 개인화" delay={240}>
+              범용 챗봇은 매번 처음부터 시작합니다. DailyFit은 어제의 선택을
+              기억해, 쓸수록 더 잘 맞는 하루가 됩니다.
             </MoatCard>
           </div>
           <Reveal className="mt-16 text-center" delay={150}>
@@ -407,10 +390,10 @@ export default function HomePage() {
             <TractionItem
               big={
                 <>
-                  <CountUp to={1500} />만
+                  <CountUp to={850} />만
                 </>
               }
-              label="한국 5060 세대 시장"
+              label="한국 액티브 시니어 (55–70)"
               delay={100}
             />
             <TractionItem big={<CountUp to={activeCatalogCount} />} label="활성 활동 카탈로그" delay={200} />
@@ -477,57 +460,46 @@ function ChatBubble({
   );
 }
 
-function AgentCard({
-  name,
-  koName,
-  tier,
+function FlowCard({
+  n,
+  tag,
   title,
-  level,
+  core,
   delay,
   children,
 }: {
-  name: string;
-  koName: string;
-  tier: string;
+  n: string;
+  tag: string;
   title: string;
-  level: 1 | 2 | 3;
+  core?: boolean;
   delay: number;
   children: React.ReactNode;
 }) {
   return (
     <Reveal delay={delay}>
-      <div className="agent-card flex h-full flex-col p-8">
+      <div
+        className={`flex h-full flex-col rounded-2xl bg-white p-7 ${
+          core
+            ? 'border border-t-[3px] border-sage border-t-sage shadow-[0_20px_44px_-26px_rgba(74,124,89,0.5)]'
+            : 'border border-line'
+        }`}
+      >
         <div className="flex items-center justify-between gap-3">
-          <span className="eyebrow-mono text-sage">
-            {name} <span className="font-sans font-bold tracking-normal text-ink-soft/70">{koName}</span>
-          </span>
-          <span className="rounded-md border border-sage/25 bg-sage/10 px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wider text-sage">
-            {tier}
+          <span className="eyebrow-mono text-sage">{n}</span>
+          <span
+            className={`rounded-md px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wider ${
+              core
+                ? 'bg-sage text-white'
+                : 'border border-sage/25 bg-sage/10 text-sage'
+            }`}
+          >
+            {tag}
           </span>
         </div>
-        <h3 className="mt-5 text-[22px] font-bold text-ink">{title}</h3>
-        <p className="mt-3 flex-1 text-[15.5px] leading-relaxed text-ink-soft">
+        <h3 className="mt-5 text-[20px] font-bold text-ink">{title}</h3>
+        <p className="mt-3 flex-1 text-[15px] leading-relaxed text-ink-soft">
           {children}
         </p>
-        <div
-          className="mt-6 flex items-center gap-2 border-t border-line pt-5"
-          aria-label={`자율성 단계 ${level} / 3`}
-        >
-          <span
-            className="text-[11px] font-semibold uppercase tracking-[0.14em] text-ink-soft/60"
-            style={{ fontFamily: 'var(--mono)' }}
-          >
-            autonomy
-          </span>
-          <span className="ml-auto flex gap-1.5" aria-hidden="true">
-            {[1, 2, 3].map((n) => (
-              <span
-                key={n}
-                className={`h-1.5 w-7 rounded-full ${n <= level ? 'bg-sage' : 'bg-line'}`}
-              />
-            ))}
-          </span>
-        </div>
       </div>
     </Reveal>
   );
