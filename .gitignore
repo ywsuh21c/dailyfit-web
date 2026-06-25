@@ -34,3 +34,6 @@ yarn-error.log*
 
 # design mockup reference (extracted from workspace git history — not source)
 /design-reference
+
+# internal handoff / ops notes — never commit (repo is public)
+HANDOFF*.md
