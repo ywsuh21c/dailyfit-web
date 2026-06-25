@@ -53,7 +53,7 @@ export default function AboutPage() {
           <FounderCard
             name="Youngwoo Suh"
             role="Founder · CEO"
-            bio="Boston University → Bain → IMM PE → PYLER → DailyFit. AI 에이전트 팀을 직접 운영하며 시니어의 하루를 제품으로 설계합니다. 팟캐스트 「있는 것들이 더해」."
+            bio="Boston University → Bain → PYLER → DailyFit. AI 에이전트 팀을 직접 운영하며 시니어의 하루를 제품으로 설계합니다. 팟캐스트 「있는 것들이 더해」."
           />
           <FounderCard
             name="김현진"

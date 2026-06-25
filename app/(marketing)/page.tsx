@@ -388,7 +388,7 @@ export default function HomePage() {
           {/* TODO(Michael): 창업자 사진 자산 + 현진 bio/사진 게재 동의 */}
           <div className="mx-auto mt-12 grid max-w-3xl gap-5 sm:grid-cols-2">
             <TeamCard name="Youngwoo Suh" role="Founder · CEO" delay={0}>
-              Bain → PE → PYLER. AI 에이전트 팀을 직접 운영. 팟캐스트 「있는
+              Bain → PYLER. AI 에이전트 팀을 직접 운영. 팟캐스트 「있는
               것들이 더해」.
             </TeamCard>
             <TeamCard name="김현진" role="Co-founder" delay={120}>
