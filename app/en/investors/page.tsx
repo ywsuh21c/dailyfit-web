@@ -22,7 +22,7 @@ export default function InvestorsEnPage() {
           Asia&apos;s fastest-growing digital-native cohort is already online.
         </h1>
         <p className="mt-6 max-w-prose text-body text-ivory/85">
-          South Korea&apos;s 14M-strong active seniors (55–70) already run their
+          South Korea&apos;s 15M-strong active seniors (55–70) already run their
           days on KakaoTalk. DailyFit layers an AI agent on top — designing a
           healthier, more engaged daily life, one conversation at a time.
         </p>
@@ -51,7 +51,7 @@ export default function InvestorsEnPage() {
             <p className="text-h3 font-semibold text-ink">Youngwoo (Michael) Suh</p>
             <p className="mt-1 text-base text-sage">Co-founder · CEO</p>
             <p className="mt-3 text-body text-ink-soft">
-              Boston University → Bain → IMM PE → PYLER (Corporate Development
+              Boston University → Bain → PYLER (Corporate Development
               Lead) → DailyFit.
             </p>
           </div>
