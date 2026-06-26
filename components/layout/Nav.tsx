@@ -65,6 +65,8 @@ export function Nav() {
 
         <Link
           href={productCta.href}
+          target="_blank"
+          rel="noopener noreferrer"
           className="flex min-h-tap items-center whitespace-nowrap rounded-lg bg-sage px-5 text-base font-semibold text-white transition-colors hover:bg-sage-dk active:scale-[0.98]"
         >
           {productCta.label} →

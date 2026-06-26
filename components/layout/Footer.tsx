@@ -55,6 +55,8 @@ export function Footer() {
               <li>
                 <Link
                   href={productCta.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="flex min-h-tap items-center text-base transition-colors hover:text-ivory"
                 >
                   {productCta.label} →
