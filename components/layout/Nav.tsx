@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { companyNav, primaryNav, productCta, site } from '@/lib/site';
+import { companyNav, externalLinkProps, primaryNav, productCta, site } from '@/lib/site';
 import { BrandMark } from '@/components/brand/BrandMark';
 
 /**
@@ -65,8 +65,7 @@ export function Nav() {
 
         <Link
           href={productCta.href}
-          target="_blank"
-          rel="noopener noreferrer"
+          {...externalLinkProps}
           className="flex min-h-tap items-center whitespace-nowrap rounded-lg bg-sage px-5 text-base font-semibold text-white transition-colors hover:bg-sage-dk active:scale-[0.98]"
         >
           {productCta.label} →

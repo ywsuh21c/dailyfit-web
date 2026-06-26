@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { activeCatalogCount, productAppUrl, site } from '@/lib/site';
+import { activeCatalogCount, externalLinkProps, productAppUrl, site } from '@/lib/site';
 import { AgentConsole } from '@/components/home/AgentConsole';
 import { Reveal } from '@/components/motion/Reveal';
 import { CountUp } from '@/components/motion/CountUp';
@@ -431,8 +431,7 @@ export default function HomePage() {
               </a>
               <Link
                 href={productAppUrl}
-                target="_blank"
-                rel="noopener noreferrer"
+                {...externalLinkProps}
                 className="inline-flex min-h-[56px] items-center rounded-xl border border-white/40 px-8 text-[17px] font-bold text-white transition-colors hover:border-white hover:bg-white/10 active:scale-[0.98]"
               >
                 제품 사용해보기 →

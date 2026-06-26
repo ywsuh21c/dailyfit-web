@@ -44,6 +44,13 @@ export const companyNav: NavItem[] = [
 // ad landing page, reached by direct URL, not from the company nav.
 export const productAppUrl = 'https://app.dailyfitai.app' as const;
 
+// Spread onto any <Link>/<a> that points at productAppUrl — opens the web app in
+// a new tab so the company site stays put. Single source for the new-tab policy.
+export const externalLinkProps = {
+  target: '_blank',
+  rel: 'noopener noreferrer',
+} as const;
+
 // Top-right product gateway — the ONLY senior-product entry on the company
 // site (Anthropic→Claude pattern). Label avoids "Try DailyFit" because the
 // company name doubles as the product name.

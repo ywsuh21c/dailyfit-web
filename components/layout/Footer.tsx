@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { footerNav, legalNav, productCta, site } from '@/lib/site';
+import { externalLinkProps, footerNav, legalNav, productCta, site } from '@/lib/site';
 import { BrandMark } from '@/components/brand/BrandMark';
 
 export function Footer() {
@@ -55,8 +55,7 @@ export function Footer() {
               <li>
                 <Link
                   href={productCta.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
+                  {...externalLinkProps}
                   className="flex min-h-tap items-center text-base transition-colors hover:text-ivory"
                 >
                   {productCta.label} →
