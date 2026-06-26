@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { Section, SectionHeader } from '@/components/ui/Section';
 import { ButtonLink } from '@/components/ui/Button';
+import { productAppUrl } from '@/lib/site';
 
 export const metadata: Metadata = {
   title: '기술',
@@ -135,7 +136,7 @@ export default function TechnologyPage() {
           lead="카피될 위험보다, 우리가 어떤 회사인지 시그널을 못 보내는 위험이 더 큽니다. 단, 시니어의 실제 일상 데이터는 절대 공개하지 않습니다."
         />
         <div className="mt-8 flex flex-wrap gap-4">
-          <ButtonLink href="/product" variant="primary" size="lg">
+          <ButtonLink href={productAppUrl} external variant="primary" size="lg">
             제품 사용해보기 →
           </ButtonLink>
           <ButtonLink href="/use-cases" variant="ghost" size="lg">
