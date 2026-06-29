@@ -27,18 +27,20 @@ import { CountUp } from '@/components/motion/CountUp';
 
 const mailto = `mailto:${site.contactEmail}`;
 
+// 실제 카탈로그 활동 (prod /api/activities 에서 확인된 실재 프로그램, 2026-06-29).
+// 가독성 위해 주최처 대괄호만 정리 — 프로그램 자체는 실재.
 const TICKER: Array<[string, string]> = [
-  ['클래스', '한옥공예 입문'],
-  ['자체 운영', 'AI 교실'],
-  ['동호회', '사진 동호회'],
-  ['클래스', '캘리그라피'],
-  ['운동', '실내 스트레칭'],
-  ['클래스', '목공 클래스'],
-  ['경험', '와인 시음회'],
-  ['클래스', '중식 요리'],
-  ['자체 운영', '러닝 크루'],
-  ['운동', '수영 강습'],
-  ['동호회', '탁구 동호회'],
+  ['클래스', '바리스타 취미반'],
+  ['클래스', '재봉교실 — 이지웨어 만들기'],
+  ['운동', '스타트 필라테스'],
+  ['전시', '신진미술인 전시 리뷰'],
+  ['클래스', '스마트폰으로 읽고 써봐요'],
+  ['운동', '관악산 숲길 플로깅'],
+  ['공연', '서울시 태권도 공연'],
+  ['클래스', '맛깔난 집밥 요리'],
+  ['운동', '몸살림교실 (초급)'],
+  ['클래스', '사진작가 입문'],
+  ['운동', '벨리댄스'],
 ];
 
 export default function HomePage() {
@@ -114,11 +116,11 @@ export default function HomePage() {
       </section>
 
       {/* ─────────────── LIVE ACTIVITY TICKER ─────────────── */}
-      <div className="border-b border-line bg-bg py-5" aria-label="활동 그래프에 인덱싱된 활동 예시">
+      <div className="border-b border-line bg-bg py-5" aria-label="지금 카탈로그에 등록된 실제 활동">
         <div className="mx-auto max-w-6xl px-5">
           <div className="mb-3 flex items-center gap-2.5">
             <span className="console-live-dot !bg-sage" aria-hidden="true" />
-            <span className="eyebrow-mono text-ink-soft/70">활동 그래프 — live</span>
+            <span className="eyebrow-mono text-ink-soft/70">활동 카탈로그 · 지금 등록된 실제 활동</span>
           </div>
         </div>
         <div className="marquee">
@@ -133,9 +135,33 @@ export default function HomePage() {
         </div>
       </div>
 
-      {/* ───────────────────── WHAT WE BUILD ───────────────────── */}
-      <section className="bg-bg py-24 sm:py-32">
-        <div className="mx-auto grid max-w-6xl items-center gap-14 px-5 lg:grid-cols-2">
+      {/* ────────── WHAT WE BUILD — ① 그래픽 단독(먼저) ────────── */}
+      {/* 영우 6/29: 2단 → 단독 섹션 2개로 분리, 그래픽(대화 데모)이 먼저. */}
+      <section className="bg-bg pt-24 pb-12 sm:pt-32 sm:pb-16">
+        <div className="mx-auto max-w-2xl px-5">
+          {/* TODO(Michael): 데모 비디오 입고 시 이 패널을 video로 교체 */}
+          <Reveal>
+            <div className="rounded-2xl border border-line bg-white p-7 shadow-[0_30px_70px_-40px_rgba(30,45,64,0.35)]">
+              <div className="flex flex-col gap-3">
+                <ChatBubble who="DailyFit">
+                  오늘 날씨도 좋은데, 가벼운 외출 어떠세요?
+                </ChatBubble>
+                <ChatBubble who="사용자" me>
+                  좋지, 뭐 있을까?
+                </ChatBubble>
+                <ChatBubble who="DailyFit">
+                  지난번 사진 활동을 즐기셨으니, 오늘은 &lsquo;이것만 알면 나도
+                  사진작가&rsquo; 클래스를 추천드려요. 신청은 제가 대신 할게요.
+                </ChatBubble>
+              </div>
+            </div>
+          </Reveal>
+        </div>
+      </section>
+
+      {/* ────────── WHAT WE BUILD — ② 카피 단독(다음) ────────── */}
+      <section className="bg-bg pb-24 sm:pb-32">
+        <div className="mx-auto max-w-3xl px-5 text-center">
           <Reveal>
             <p className="eyebrow-mono text-sage">What we build</p>
             <h2 className="mt-4 text-[34px] font-extrabold leading-[1.2] tracking-[-0.03em] text-ink sm:text-[42px]">
@@ -143,7 +169,7 @@ export default function HomePage() {
               <br />
               하루가 설계됩니다.
             </h2>
-            <p className="mt-6 max-w-[46ch] text-body text-ink-soft">
+            <p className="mx-auto mt-6 max-w-[46ch] text-body text-ink-soft">
               DailyFit은 시니어의 취미 활동과 일상을 설계하는 멀티 에이전트
               플랫폼입니다. 사용자는 평소처럼 말하고, 에이전트들이 협업해
               그날의 하루를 구성합니다.
@@ -151,21 +177,6 @@ export default function HomePage() {
             <p className="mt-4 text-body font-semibold text-ink">
               AI는 제안합니다. 결정은 언제나 사용자가 합니다.
             </p>
-          </Reveal>
-          {/* TODO(Michael): 데모 비디오 입고 시 이 패널을 video로 교체 */}
-          <Reveal delay={120}>
-            <div className="rounded-2xl border border-line bg-white p-7 shadow-[0_30px_70px_-40px_rgba(30,45,64,0.35)]">
-              <div className="flex flex-col gap-3">
-                <ChatBubble who="DailyFit">어제 저녁 산책은 어떠셨어요?</ChatBubble>
-                <ChatBubble who="사용자" me>
-                  무릎이 좀 뻐근했어
-                </ChatBubble>
-                <ChatBubble who="DailyFit">
-                  오늘은 가벼운 실내 스트레칭 15분, 오후엔 사진 동호회 모임이
-                  있어요. 이렇게 시작해볼까요?
-                </ChatBubble>
-              </div>
-            </div>
           </Reveal>
         </div>
       </section>
@@ -244,31 +255,12 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ──────────────────── WHY THIS IS HARD ─────────────────── */}
-      <section className="bg-bg py-24 sm:py-32">
+      {/* ──────────────────── BRAND TAGLINE ─────────────────── */}
+      {/* 영우 6/29: "흉내낼 수 없는 세 가지"(moat) 섹션 삭제 — 자사 해자를 홈에서
+          직접 광고하지 않음. 브랜드 태그라인만 슬림 밴드로 보존. */}
+      <section className="bg-bg py-20 sm:py-24">
         <div className="mx-auto max-w-6xl px-5">
-          <Reveal className="mx-auto max-w-[54ch] text-center">
-            <p className="eyebrow-mono text-sage">Why this is hard</p>
-            <h2 className="mt-4 text-[34px] font-extrabold leading-[1.2] tracking-[-0.03em] text-ink sm:text-[42px]">
-              흉내낼 수 없는 세 가지
-            </h2>
-          </Reveal>
-          <div className="mt-14 grid gap-5 md:grid-cols-3">
-            <MoatCard k="01 · Concierge" title="신청을 대신 끝까지" delay={0}>
-              정보 검색은 네이버·무료 AI로 충분합니다. 진짜 벽은 신청 — 비표준
-              입력과 포털 엣지케이스를 운영으로 넘는 것이 흉내내기 어려운
-              해자입니다.
-            </MoatCard>
-            <MoatCard k="02 · Continuity" title="365일 공급" delay={120}>
-              공공 프로그램은 분기에 한 번 열립니다. 그 사이를 자체 운영
-              활동으로 메워 하루도 비지 않게 합니다.
-            </MoatCard>
-            <MoatCard k="03 · Memory" title="누적되는 개인화" delay={240}>
-              범용 챗봇은 매번 처음부터 시작합니다. DailyFit은 어제의 선택을
-              기억해, 쓸수록 더 잘 맞는 하루가 됩니다.
-            </MoatCard>
-          </div>
-          <Reveal className="mt-16 text-center" delay={150}>
+          <Reveal className="text-center">
             <p className="text-[26px] font-extrabold tracking-[-0.02em] text-ink sm:text-[30px]">
               AI is the tool. The senior is the identity.
             </p>

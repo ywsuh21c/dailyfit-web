@@ -60,9 +60,10 @@ function LevelCard({ cat, level, pct }: { cat: CatKey; level: number; pct: numbe
   );
 }
 
+// 레벨 오름차순 — 카드가 '성장 progression'으로 읽히게 (영우 6/29: 임의 순서 버그 수정).
 const SAMPLE: Array<{ cat: CatKey; level: number; pct: number }> = [
-  { cat: 'health', level: 3, pct: 70 },
   { cat: 'hobby', level: 2, pct: 40 },
+  { cat: 'health', level: 3, pct: 70 },
   { cat: 'learn', level: 4, pct: 85 },
 ];
 

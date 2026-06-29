@@ -12,13 +12,13 @@ export function RetentionEngine() {
       <div className="mx-auto max-w-6xl px-5">
         <Reveal className="mx-auto max-w-[62ch] text-center">
           <Mascot className="char-float mx-auto mb-5 h-20 w-20 object-contain" />
-          <p className="eyebrow-mono text-sage">Retention engine</p>
+          <p className="eyebrow-mono text-sage">Habits</p>
           <h2 className="mt-4 text-[34px] font-extrabold leading-[1.2] tracking-[-0.03em] text-ink sm:text-[42px]">
-            다시 오게 만드는 건, 캐릭터입니다.
+            캐릭터와 함께, 매일이 이어집니다.
           </h2>
           <p className="mt-5 text-body text-ink-soft">
             활동에 참여할수록 캐릭터가 자라고 레벨이 오릅니다. 건강·취미·배움 세
-            갈래로 쌓이는 성취가 매일의 복귀를 만드는 — 겨루지 않는 리텐션 엔진.
+            갈래로 성취가 쌓여, 내일도 자연스럽게 이어집니다.
           </p>
           <p className="mt-3 text-caption text-ink-soft/70">
             캐릭터·레벨·출석은 앱에 실제 구현돼 작동합니다. 수치는 정식 출시로
@@ -34,9 +34,9 @@ export function RetentionEngine() {
           className="mt-12 rounded-3xl border border-line bg-white p-8 text-center sm:p-10"
           delay={120}
         >
-          <p className="text-[20px] font-extrabold text-ink">출석할수록, 캐릭터가 자랍니다</p>
+          <p className="text-[20px] font-extrabold text-ink">레벨이 오를수록, 캐릭터를 꾸밉니다</p>
           <p className="mt-2 text-body text-ink-soft">
-            시니어가 매일 돌아올 이유 — 눈에 보이는 성장.
+            출석으로 레벨이 오르면 캐릭터가 새 아이템으로 차려입어요 — 눈에 보이는 성장.
           </p>
           <div className="mt-8">
             <LevelUpStrip />

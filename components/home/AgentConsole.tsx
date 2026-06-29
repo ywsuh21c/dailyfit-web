@@ -90,7 +90,7 @@ export function AgentConsole() {
             <span className="console-step-label">하루 설계 · 신청 대행 완료</span>
           </p>
           <ul className="console-plan-items">
-            <li>화 10:00 — 한옥공예 입문 (송파여성문화회관)</li>
+            <li>화 10:00 — 바리스타 취미반</li>
             <li>→ 복잡한 신청은 DailyFit이 대신 접수했어요</li>
           </ul>
         </div>
