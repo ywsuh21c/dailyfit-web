@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { activeCatalogCount, site } from '@/lib/site';
+import { activeCatalogCount, externalLinkProps, productAppUrl, site } from '@/lib/site';
 import { AgentConsole } from '@/components/home/AgentConsole';
 import { RetentionEngine } from '@/components/gami/RetentionEngine';
 import { Reveal } from '@/components/motion/Reveal';
@@ -370,7 +370,7 @@ export default function HomePage() {
           {/* TODO(Michael): 창업자 사진 자산 + 현진 bio/사진 게재 동의 */}
           <div className="mx-auto mt-12 grid max-w-3xl gap-5 sm:grid-cols-2">
             <TeamCard name="Youngwoo Suh" role="Founder · CEO" delay={0}>
-              Bain → PE → PYLER. AI 에이전트 팀을 직접 운영. 팟캐스트 「있는
+              Bain → PYLER. AI 에이전트 팀을 직접 운영. 팟캐스트 「있는
               것들이 더해」.
             </TeamCard>
             <TeamCard name="김현진" role="Co-founder" delay={120}>
@@ -412,7 +412,8 @@ export default function HomePage() {
                 Talk to us
               </a>
               <Link
-                href="/product"
+                href={productAppUrl}
+                {...externalLinkProps}
                 className="inline-flex min-h-[56px] items-center rounded-xl border border-white/40 px-8 text-[17px] font-bold text-white transition-colors hover:border-white hover:bg-white/10 active:scale-[0.98]"
               >
                 제품 사용해보기 →

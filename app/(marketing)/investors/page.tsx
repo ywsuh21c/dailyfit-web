@@ -26,7 +26,7 @@ export default function InvestorsPage() {
           한국에서 가장 빠르게 늘어나는 인구는 디지털을 씁니다.
         </h1>
         <p className="mt-6 max-w-prose text-body text-ink-soft">
-          1,400만 명의 한국 시니어(55–70세)가 이미 카카오톡으로 하루를 운영합니다.
+          1,500만 명의 한국 시니어(55–70세)가 이미 카카오톡으로 하루를 운영합니다.
           DailyFit은 그 위에 AI 에이전트를 얹어 &ldquo;건강하게 오래 사는 일상&rdquo;을
           매일 설계합니다.
         </p>
@@ -71,7 +71,7 @@ export default function InvestorsPage() {
           <FounderCard
             name="서영우 (Michael Suh)"
             role="공동창업자 · CEO"
-            bio="Boston University → Bain → IMM PE → PYLER(Corporate Development Lead) → DailyFit. 전략·기업개발 백그라운드로 시니어 일상을 제품으로 설계합니다."
+            bio="Boston University → Bain → PYLER(Corporate Development Lead) → DailyFit. 전략·기업개발 백그라운드로 시니어 일상을 제품으로 설계합니다."
           />
           <FounderCard
             name="김현진"

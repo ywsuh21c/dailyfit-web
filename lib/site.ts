@@ -7,7 +7,7 @@ export const site = {
   name: 'DailyFit',
   domain: 'dailyfitai.app',
   url: 'https://dailyfitai.app',
-  contactEmail: 'team@dailyfitai.app',
+  contactEmail: 'dailyfitkorea@gmail.com',
   tagline: 'AI는 수단, 시니어가 정체성',
   description:
     '한국 액티브 시니어 세대를 위한 AI 에이전트 — 대화 한 번으로 하루를 설계합니다.',
@@ -37,10 +37,24 @@ export const companyNav: NavItem[] = [
   { href: '/investors', label: 'Investors' },
 ];
 
+// Live web app (react-native-web build) — every "제품 사용해보기" CTA across the
+// company site funnels here so visitors can try the product in-browser, no
+// install (Anthropic→Claude "Try Claude" pattern). app. subdomain of the
+// company domain. /product (senior marketing + store badges) stays the search-
+// ad landing page, reached by direct URL, not from the company nav.
+export const productAppUrl = 'https://app.dailyfitai.app' as const;
+
+// Spread onto any <Link>/<a> that points at productAppUrl — opens the web app in
+// a new tab so the company site stays put. Single source for the new-tab policy.
+export const externalLinkProps = {
+  target: '_blank',
+  rel: 'noopener noreferrer',
+} as const;
+
 // Top-right product gateway — the ONLY senior-product entry on the company
 // site (Anthropic→Claude pattern). Label avoids "Try DailyFit" because the
 // company name doubles as the product name.
-export const productCta = { href: '/product', label: '제품 사용해보기' } as const;
+export const productCta = { href: productAppUrl, label: '제품 사용해보기' } as const;
 
 export const footerNav: { heading: string; items: NavItem[] }[] = [
   {

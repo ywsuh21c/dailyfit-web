@@ -27,6 +27,16 @@ export default function PrivacyPage() {
           </a>
           로 보내주세요. 본인 동의 없는 외부 제공은 하지 않습니다.
         </p>
+
+        <div className="mt-12 border-t border-line pt-10">
+          <h2 className="text-h3 text-ink">문의·상담 내용 보관</h2>
+          <p className="mt-4 text-body leading-[1.75] text-ink-soft">
+            고객 문의(이메일·카카오톡 상담 등)와 음성 검색 데이터는 서비스 제공
+            목적으로만 이용하며, 목적을 달성하거나 관련 법령이 정한 기간이 지나면
+            지체 없이 파기합니다. 음성 데이터는 검색 결과 제공에 사용되며, 별도
+            동의 없이 제3자에게 제공하지 않습니다.
+          </p>
+        </div>
       </div>
     </section>
   );
