@@ -1,5 +1,6 @@
 import Link from 'next/link';
-import { activeCatalogCount, externalLinkProps, productAppUrl, site } from '@/lib/site';
+import { externalLinkProps, productAppUrl, site } from '@/lib/site';
+import { getCatalogCount, formatAsOf } from '@/lib/catalog-count';
 import { AgentConsole } from '@/components/home/AgentConsole';
 import { RetentionEngine } from '@/components/gami/RetentionEngine';
 import { Reveal } from '@/components/motion/Reveal';
@@ -43,7 +44,12 @@ const TICKER: Array<[string, string]> = [
   ['운동', '벨리댄스'],
 ];
 
-export default function HomePage() {
+export default async function HomePage() {
+  // 활성 카탈로그 수치 = 빌드 때 prod API에서 실제 count + 기준일 fetch
+  // (엔드포인트 미배포/실패 시 lib/site.ts activeCatalogCount 로 안전 폴백).
+  const { count: catalogCount, asOf: catalogAsOf } = await getCatalogCount();
+  const catalogAsOfLabel = formatAsOf(catalogAsOf);
+
   return (
     <>
       {/* ───────────────────────── HERO ───────────────────────── */}
@@ -85,14 +91,19 @@ export default function HomePage() {
               </a>
             </div>
           </div>
-          <AgentConsole />
+          <AgentConsole catalogCount={catalogCount} />
         </div>
 
         {/* metric strip */}
         <div className="relative border-t border-ink/10 bg-white/40">
           <dl className="mx-auto grid max-w-6xl grid-cols-2 px-5 lg:grid-cols-4">
             {[
-              { value: <CountUp key="m1" to={activeCatalogCount} />, label: '활성 활동 카탈로그', mono: true },
+              {
+                value: <CountUp key="m1" to={catalogCount} />,
+                label: '활성 활동 카탈로그',
+                note: `${catalogAsOfLabel} 기준`,
+                mono: true,
+              },
               { value: '신청까지', label: '대화하면 신청을 대신 처리', mono: false },
               { value: '음성으로', label: '말하면 읽기 좋게 답해요', mono: false },
               { value: '2026.06', label: '정식 출시', mono: true },
@@ -108,7 +119,10 @@ export default function HomePage() {
                 >
                   {m.value}
                 </dd>
-                <dd className="mt-1 text-caption text-ink-soft">{m.label}</dd>
+                <dd className="mt-1 text-caption text-ink-soft">
+                  {m.label}
+                  {m.note ? <span className="ml-1.5 text-ink-soft/55">· {m.note}</span> : null}
+                </dd>
               </div>
             ))}
           </dl>
@@ -388,7 +402,11 @@ export default function HomePage() {
               label="한국 액티브 시니어 (55–70)"
               delay={100}
             />
-            <TractionItem big={<CountUp to={activeCatalogCount} />} label="활성 활동 카탈로그" delay={200} />
+            <TractionItem
+              big={<CountUp to={catalogCount} />}
+              label={`활성 활동 카탈로그 · ${catalogAsOfLabel} 기준`}
+              delay={200}
+            />
           </div>
         </div>
       </section>
