@@ -14,9 +14,11 @@ export const site = {
 } as const;
 
 /**
- * Active activity catalog count — single source for every on-site mention
- * (home metric strip, traction, agent console). 수도권 트림(2026-06-11) 후
- * active 기준; 트림 원복 시 이 값만 갱신하면 사이트 전체가 따라온다.
+ * Active activity catalog count — FALLBACK only. The home page reads the live
+ * number from `getCatalogCount()` (lib/catalog-count.ts → backend
+ * `GET /api/activities/count`); this literal is used only when that endpoint is
+ * unreachable (env unset / not deployed / fetch fails) so the page never breaks.
+ * Keep it roughly current (hand-verified against prod 2026-06-29).
  */
 export const activeCatalogCount = 5207;
 

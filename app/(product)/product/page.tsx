@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { Reveal } from '@/components/motion/Reveal';
 import { StoreBadge } from '@/components/product/StoreBadge';
+import { HabitGamification } from '@/components/gami/HabitGamification';
 import { ButtonLink } from '@/components/ui/Button';
 import { storeLinks, site } from '@/lib/site';
 import { getHelp, type FaqItem } from '@/lib/help';
@@ -201,6 +202,10 @@ export default async function ProductPage() {
           </div>
         </div>
       </section>
+
+      {/* 5.5 habit / gamification — senior-facing (2nd person). Real characters
+          + levels + welcome points, mirrored from the in-app screens. */}
+      <HabitGamification />
 
       {/* 6. FAQ */}
       <section id="faq" className="border-y border-line bg-ivory py-20 sm:py-24">

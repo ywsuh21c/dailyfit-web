@@ -571,3 +571,47 @@
   border-radius: 12px;
   margin-top: 1.5rem;
 }
+
+/* ============================================================
+ * Gamification — real character system, mirrored from the app
+ * (apps/mobile assets/brand + LevelHome / WelcomePoints / AttendSuccess).
+ * The warm category palette (건강 blue · 취미 gold · 배움 purple) is
+ * intentional here — a colorful, friendly counterpoint to the austere
+ * company chrome, matching exactly what active seniors see in-app.
+ * CSS-only motion, prefers-reduced-motion safe.
+ * ============================================================ */
+
+/* category card gradients — mirror LevelHome GROUP_META */
+.cat-health { background-image: linear-gradient(135deg, #3e83c4, #2f6fb0); }
+.cat-hobby  { background-image: linear-gradient(135deg, #d9ae45, #c99a2e); }
+.cat-learn  { background-image: linear-gradient(135deg, #9576b4, #7e5e9e); }
+
+/* mascot / character gentle bob */
+.char-float {
+  animation: char-bob 4.6s ease-in-out infinite;
+  will-change: transform;
+}
+@keyframes char-bob {
+  0%, 100% { transform: translateY(0) rotate(-1.5deg); }
+  50% { transform: translateY(-9px) rotate(1.5deg); }
+}
+
+/* gold coin (welcome points) */
+.coin-gold {
+  background: radial-gradient(circle at 35% 30%, #e7c766, #b8923c 72%);
+  box-shadow: 0 6px 16px -6px rgba(184, 146, 60, 0.7);
+}
+
+/* sparkle twinkle (welcome points) */
+.sparkle-tw { animation: sparkle-tw 2.4s ease-in-out infinite; }
+@keyframes sparkle-tw {
+  0%, 100% { opacity: 0.35; transform: scale(0.85); }
+  50% { opacity: 1; transform: scale(1.1); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .char-float,
+  .sparkle-tw {
+    animation: none;
+  }
+}

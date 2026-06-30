@@ -13,25 +13,28 @@ import { activeCatalogCount } from '@/lib/site';
  * the keyframes are disabled under prefers-reduced-motion.
  *
  * Content notes:
- * - 카탈로그 수치는 lib/site.ts activeCatalogCount 단일 출처.
+ * - 카탈로그 수치는 홈 페이지가 getCatalogCount()로 받은 live count 를 prop 으로
+ *   주입(미배포/실패 시 lib/site.ts activeCatalogCount 폴백) — 메트릭과 동일 출처.
  * - 한옥공예/AI 교실 — LJS 인터뷰 특이취미 예시 + 자체공급 라이브 활동.
  * - 에이전트명은 홈 AgentCard·이 콘솔 tag·/technology Layer 2 세 곳에 존재
  *   — 네이밍 변경 시 세 곳 모두 갱신.
  */
 const CYCLE_MS = 15000;
 
-const STEPS = [
-  { tag: 'pansori', label: '의도 분석', body: '학습 · 새로운 것 · 다음 주 오전', delay: 'console-d2' },
+const makeSteps = (catalogCount: number) => [
+  { tag: '의도', label: '의도 분석', body: '학습 · 새로운 것 · 다음 주 오전', delay: 'console-d2' },
   { tag: 'memory', label: '리콜', body: '문정동 · 오전 선호 · 지난주: 스트레칭', delay: 'console-d3' },
   {
-    tag: 'sijo',
-    label: '활동 그래프 탐색',
-    body: `${activeCatalogCount.toLocaleString('ko-KR')}건 중 특색 활동 2건 선별`,
+    tag: '큐레이션',
+    label: '활동 큐레이션',
+    body: `${catalogCount.toLocaleString('ko-KR')}건 중 딱 맞는 활동 선별`,
     delay: 'console-d4',
   },
 ];
 
-export function AgentConsole() {
+export function AgentConsole({ catalogCount = activeCatalogCount }: { catalogCount?: number }) {
+  const steps = makeSteps(catalogCount);
+
   const [cycle, setCycle] = useState(0);
   const rootRef = useRef<HTMLDivElement>(null);
 
@@ -74,7 +77,7 @@ export function AgentConsole() {
           </span>
         </p>
 
-        {STEPS.map((s) => (
+        {steps.map((s) => (
           <p key={s.tag} className={`console-line console-step ${s.delay}`}>
             <span className="console-glyph" aria-hidden="true">◆</span>
             <span className="console-tag">{s.tag}</span>
@@ -87,11 +90,11 @@ export function AgentConsole() {
           <p className="console-plan-head">
             <span className="console-glyph console-glyph-done" aria-hidden="true">✓</span>
             <span className="console-tag">plan</span>
-            <span className="console-step-label">다음 주 하루 설계 완료</span>
+            <span className="console-step-label">하루 설계 · 신청 대행 완료</span>
           </p>
           <ul className="console-plan-items">
-            <li>화 10:00 — 한옥공예 입문 (송파여성문화회관)</li>
-            <li>목 09:30 — AI 교실 · DailyFit 직접 운영</li>
+            <li>화 10:00 — 바리스타 취미반</li>
+            <li>→ 복잡한 신청은 DailyFit이 대신 접수했어요</li>
           </ul>
         </div>
 
