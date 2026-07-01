@@ -9,13 +9,13 @@ export function Footer() {
         <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-[2fr_1fr_1fr_1fr]">
           <div>
             <Link href="/" className="flex items-center gap-2.5" aria-label={`${site.name} 홈`}>
-              <BrandMark idPrefix="footer-logo" className="h-8 w-8" />
+              <BrandMark className="h-8 w-8" />
               <span className="text-[22px] font-extrabold tracking-tight text-ivory">
                 {site.name}
               </span>
             </Link>
             <p className="mt-4 max-w-[30ch] text-base leading-relaxed">
-              Building AI agents for Korea&rsquo;s active senior generation.
+              Building AI agents for the active senior generation.
             </p>
           </div>
 

@@ -27,7 +27,7 @@ export default function InvestorsPage() {
         </h1>
         <p className="mt-6 max-w-prose text-body text-ink-soft">
           1,500만 명의 한국 시니어(55–70세)가 이미 카카오톡으로 하루를 운영합니다.
-          DailyFit은 그 위에 AI 에이전트를 얹어 &ldquo;건강하게 오래 사는 일상&rdquo;을
+          DailyFit은 그 위에 AI Agent를 얹어 &ldquo;건강하게 오래 사는 일상&rdquo;을
           매일 설계합니다.
         </p>
         <div className="mt-8">
@@ -56,7 +56,7 @@ export default function InvestorsPage() {
         <SectionHeader
           eyebrow="What we're building"
           title="무엇을 만들고 있나"
-          lead="DailyFit은 시니어가 매일을 의미 있게 설계하도록 돕는 AI 에이전트입니다. 카카오톡 위에서, 익숙한 대화로."
+          lead="DailyFit은 시니어가 매일을 의미 있게 설계하도록 돕는 AI Agent입니다. 카카오톡 위에서, 익숙한 대화로."
         />
         <div className="mt-8 rounded-xl border border-line bg-bg p-8 text-center text-ink-soft">
           {/* TODO(Web Designer dep #4 / PM dep #8): product glimpse 스크린샷 2–3장 */}

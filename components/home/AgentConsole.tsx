@@ -5,8 +5,8 @@ import { activeCatalogCount } from '@/lib/site';
 
 /**
  * Hero centerpiece — the agent runtime, visible. A live-feeling console
- * showing one real orchestration pass: utterance (typed live) → intent →
- * memory recall → curation over the activity graph → a designed day.
+ * showing one orchestration pass: utterance (typed live) → intent → memory
+ * recall → curation over the activity database → a designed day.
  *
  * Motion: CSS keyframes (globals.css `.console-*`); the whole sequence
  * replays every CYCLE_MS by remounting the body. Both the replay loop and
@@ -14,24 +14,65 @@ import { activeCatalogCount } from '@/lib/site';
  *
  * Content notes:
  * - 카탈로그 수치는 lib/site.ts activeCatalogCount 단일 출처.
- * - 한옥공예/AI 교실 — LJS 인터뷰 특이취미 예시 + 자체공급 라이브 활동.
- * - 에이전트명은 홈 AgentCard·이 콘솔 tag·/technology Layer 2 세 곳에 존재
- *   — 네이밍 변경 시 세 곳 모두 갱신.
+ * - 플랜 활동명은 라이브 카탈로그 실데이터(보태니컬 아트=평생학습 강좌,
+ *   AI·디지털 첫걸음 교실=DailyFit 자체 운영). 임의 예시 금지.
+ * - 콘솔 step tag 는 기능 라벨(intent·memory·search·plan). Agent 고유
+ *   네이밍(시조/판소리 등)은 보류 — Michael 2026-07-01.
+ * - `lang` prop: 'ko'(기본, 프리즈됨) / 'en'(영어 랜딩 /en). KO 렌더는 불변.
  */
 const CYCLE_MS = 15000;
 
-const STEPS = [
-  { tag: 'pansori', label: '의도 분석', body: '학습 · 새로운 것 · 다음 주 오전', delay: 'console-d2' },
-  { tag: 'memory', label: '리콜', body: '문정동 · 오전 선호 · 지난주: 스트레칭', delay: 'console-d3' },
-  {
-    tag: 'sijo',
-    label: '활동 그래프 탐색',
-    body: `${activeCatalogCount.toLocaleString('ko-KR')}건 중 특색 활동 2건 선별`,
-    delay: 'console-d4',
-  },
-];
+type ConsoleStep = { tag: string; label: string; body: string; delay: string };
+type ConsoleContent = {
+  aria: string;
+  utterance: string;
+  steps: ConsoleStep[];
+  planLabel: string;
+  planItems: string[];
+};
 
-export function AgentConsole() {
+const KO: ConsoleContent = {
+  aria: 'DailyFit Agent가 하루를 설계하는 과정 데모',
+  utterance: '다음 주엔 뭔가 새로운 걸 배워보고 싶은데',
+  steps: [
+    { tag: 'intent', label: '의도 분석', body: '학습 · 새로운 것 · 다음 주 오전', delay: 'console-d2' },
+    { tag: 'memory', label: '리콜', body: '문정동 · 오전 선호 · 지난주: 스트레칭', delay: 'console-d3' },
+    {
+      tag: 'search',
+      label: '활동 DB 검색',
+      body: `${activeCatalogCount.toLocaleString('ko-KR')}건 중 특색 활동 2건 선별`,
+      delay: 'console-d4',
+    },
+  ],
+  planLabel: '다음 주 하루 설계 완료',
+  planItems: [
+    '화 10:00 · 보태니컬 아트 · 평생학습 강좌',
+    '목 09:30 · AI·디지털 첫걸음 교실 · DailyFit 자체 운영',
+  ],
+};
+
+const EN: ConsoleContent = {
+  aria: 'Demo: a DailyFit Agent designing a day',
+  utterance: 'I’d like to learn something new next week',
+  steps: [
+    { tag: 'intent', label: 'Intent', body: 'learn · something new · next week, AM', delay: 'console-d2' },
+    { tag: 'memory', label: 'Recall', body: 'Munjeong-dong · prefers mornings · last week: stretching', delay: 'console-d3' },
+    {
+      tag: 'search',
+      label: 'Search activity DB',
+      body: `2 standout picks from ${activeCatalogCount.toLocaleString('en-US')}`,
+      delay: 'console-d4',
+    },
+  ],
+  planLabel: 'Next week: day designed',
+  planItems: [
+    'Tue 10:00 · Botanical Art · lifelong-learning class',
+    'Thu 09:30 · AI & Digital Basics · run by DailyFit',
+  ],
+};
+
+export function AgentConsole({ lang = 'ko' }: { lang?: 'ko' | 'en' }) {
+  const c = lang === 'en' ? EN : KO;
   const [cycle, setCycle] = useState(0);
   const rootRef = useRef<HTMLDivElement>(null);
 
@@ -57,7 +98,7 @@ export function AgentConsole() {
   }, []);
 
   return (
-    <div ref={rootRef} className="console" aria-label="DailyFit 에이전트가 하루를 설계하는 과정 데모">
+    <div ref={rootRef} className="console" aria-label={c.aria}>
       <div className="console-bar">
         <span className="console-title">dailyfit · agent runtime</span>
         <span className="console-live">
@@ -70,11 +111,11 @@ export function AgentConsole() {
         <p className="console-line console-user console-d1">
           <span className="console-prompt" aria-hidden="true">&gt;</span>
           <span className="console-type">
-            &ldquo;다음 주엔 뭔가 새로운 걸 배워보고 싶은데&rdquo;
+            &ldquo;{c.utterance}&rdquo;
           </span>
         </p>
 
-        {STEPS.map((s) => (
+        {c.steps.map((s) => (
           <p key={s.tag} className={`console-line console-step ${s.delay}`}>
             <span className="console-glyph" aria-hidden="true">◆</span>
             <span className="console-tag">{s.tag}</span>
@@ -87,11 +128,12 @@ export function AgentConsole() {
           <p className="console-plan-head">
             <span className="console-glyph console-glyph-done" aria-hidden="true">✓</span>
             <span className="console-tag">plan</span>
-            <span className="console-step-label">다음 주 하루 설계 완료</span>
+            <span className="console-step-label">{c.planLabel}</span>
           </p>
           <ul className="console-plan-items">
-            <li>화 10:00 — 한옥공예 입문 (송파여성문화회관)</li>
-            <li>목 09:30 — AI 교실 · DailyFit 직접 운영</li>
+            {c.planItems.map((item) => (
+              <li key={item}>{item}</li>
+            ))}
           </ul>
         </div>
 

@@ -35,7 +35,7 @@ export default function WritingPage() {
             우리는 만들면서 씁니다.
           </h1>
           <p className="mt-7 text-body text-ink-soft">
-            DailyFit을 만드는 동안 배운 것들을 정리해 공개합니다. AI 에이전트
+            DailyFit을 만드는 동안 배운 것들을 정리해 공개합니다. AI Agent
             팀으로 회사를 운영하는 방법, 한국 시니어 시장이라는 가설, 그리고{' '}
             <strong className="text-ink">잘 안 풀린 것들</strong>까지.
           </p>

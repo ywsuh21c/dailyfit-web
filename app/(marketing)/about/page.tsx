@@ -6,7 +6,7 @@ import { site } from '@/lib/site';
 
 export const metadata: Metadata = {
   title: '소개',
-  description: `${site.name} — ${site.tagline}. 한국 시니어를 위한 AI 에이전트를 만드는 팀.`,
+  description: `${site.name} — ${site.tagline}. 한국 시니어를 위한 AI Agent를 만드는 팀.`,
 };
 
 // /about — Option-B tone: "AI agent founder" 내러티브 (시니어 케어 founder
@@ -19,8 +19,8 @@ export default function AboutPage() {
         <p className="eyebrow-mono text-sage">About DailyFit</p>
         <h1 className="mt-3 max-w-3xl text-h1">{site.tagline}</h1>
         <p className="mt-6 max-w-prose text-body text-ink-soft">
-          DailyFit은 한국 액티브 시니어 세대를 위한 AI 에이전트를 만듭니다.
-          취미 활동과 일상을 설계하는 에이전트 팀 — 우리는 시니어를 유능한
+          DailyFit은 한국 액티브 시니어 세대를 위한 AI Agent를 만듭니다.
+          취미 활동과 일상을 설계하는 Agent 팀 — 우리는 시니어를 유능한
           성인으로 대하고, 기술이 아니라 더 활기찬 하루로 이야기를 시작합니다.
         </p>
       </Section>
@@ -36,8 +36,8 @@ export default function AboutPage() {
       <Section tone="light">
         <SectionHeader
           eyebrow="How we operate"
-          title="회사도 에이전트로 운영합니다"
-          lead="제품은 시니어의 하루를 설계하는 에이전트, 회사는 AI 에이전트 팀이 운영하는 조직 — 같은 구조입니다. 우리가 일하는 방식을 공개합니다."
+          title="회사도 Agent로 운영합니다"
+          lead="제품은 시니어의 하루를 설계하는 Agent, 회사는 AI Agent 팀이 운영하는 조직 — 같은 구조입니다. 우리가 일하는 방식을 공개합니다."
         />
         <div className="mt-8">
           <ButtonLink href="/how-we-work" variant="ghost" size="lg">
@@ -53,7 +53,7 @@ export default function AboutPage() {
           <FounderCard
             name="Youngwoo Suh"
             role="Founder · CEO"
-            bio="Boston University → Bain → PYLER → DailyFit. AI 에이전트 팀을 직접 운영하며 시니어의 하루를 제품으로 설계합니다. 팟캐스트 「있는 것들이 더해」."
+            bio="Boston University → Bain → PYLER → DailyFit. AI Agent 팀을 직접 운영하며 시니어의 하루를 제품으로 설계합니다. 팟캐스트 「있는 것들이 더해」."
           />
           <FounderCard
             name="김현진"

@@ -6,7 +6,7 @@ import { Reveal } from '@/components/motion/Reveal';
 export const metadata: Metadata = {
   title: 'Use cases',
   description:
-    'DailyFit의 에이전트가 실제로 쓰이는 곳 — 개인 시니어의 하루부터 기관 파트너의 운영까지.',
+    'DailyFit의 Agent가 실제로 쓰이는 곳 — 개인 시니어의 하루부터 기관 파트너의 운영까지.',
 };
 
 // /use-cases — Option-B 신규 페이지. Source: option-b-content-strategist-
@@ -29,7 +29,7 @@ export default function UseCasesPage() {
           </h1>
           <p className="mt-6 max-w-[58ch] text-body text-ink-soft">
             개인 시니어의 일상부터 복지관·동호회 같은 기관 파트너의 운영까지 —
-            DailyFit의 에이전트는 이미 여러 맥락에서 하루를 설계하고 있습니다.
+            DailyFit의 Agent는 이미 여러 맥락에서 하루를 설계하고 있습니다.
           </p>
           <p className="mt-3 max-w-[58ch] text-base text-ink-soft/80">
             각 카드는 신뢰도(Real · Probable · Aspirational)를 명시합니다. 진행
@@ -111,7 +111,7 @@ export default function UseCasesPage() {
               아직 진행 중이 아닌, 탐색 중인 방향
             </h2>
             <p className="mt-4 text-body text-ink-soft">
-              아래는 체결된 파트너십이 아닙니다. 에이전트가 닿을 수 있는
+              아래는 체결된 파트너십이 아닙니다. Agent가 닿을 수 있는
               가능성의 스케치 — 함께 검증할 파트너를 찾고 있습니다.
             </p>
           </Reveal>

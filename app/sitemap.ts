@@ -7,10 +7,11 @@ export default function sitemap(): MetadataRoute.Sitemap {
     '',
     '/about',
     '/technology',
-    '/use-cases',
+    // '/use-cases' — HELD 2026-07-01 (route unrouted until real interviews).
     '/how-we-work',
     '/writing',
     '/product',
+    '/en',
   ];
   const staticEntries: MetadataRoute.Sitemap = routes.map((path) => ({
     url: `${site.url}${path}`,

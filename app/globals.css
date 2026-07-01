@@ -50,6 +50,12 @@
     text-wrap: balance;
   }
 
+  /* Balance copy so short paragraphs read as even-length lines (≤2줄 균형).
+     `balance` self-limits to short blocks; long body copy wraps normally. */
+  p {
+    text-wrap: balance;
+  }
+
   /* Visible focus for keyboard users on every interactive element */
   a:focus-visible,
   button:focus-visible,
@@ -309,7 +315,9 @@
 
 /* --- mono eyebrow (section labels) --- */
 .eyebrow-mono {
-  font-family: var(--mono);
+  /* Brand font (Pretendard) — the monospace read as dated (Michael 2026-07-01).
+     Keep the uppercase + letter-spacing treatment, drop the mono face. */
+  font-family: inherit;
   font-size: 13px;
   font-weight: 600;
   letter-spacing: 0.16em;
@@ -343,7 +351,7 @@
   color: var(--color-ink-soft);
 }
 .chip .chip-tag {
-  font-family: var(--mono);
+  font-family: inherit;
   font-size: 11.5px;
   font-weight: 700;
   color: var(--color-sage);

@@ -6,7 +6,7 @@ import { productAppUrl } from '@/lib/site';
 export const metadata: Metadata = {
   title: '기술',
   description:
-    '한국 시니어의 일상을 한국어로, 시니어의 목소리로 누적하는 AI 에이전트 — DailyFit이 푸는 기술적 문제와 시스템 아키텍처.',
+    '한국 시니어의 일상을 한국어로, 시니어의 목소리로 누적하는 AI Agent — DailyFit이 푸는 기술적 문제와 시스템 아키텍처.',
 };
 
 // Source copy: cto-technology-page-scope.md (CTO, 2026-05-28).
@@ -85,17 +85,17 @@ export default function TechnologyPage() {
         <SectionHeader
           eyebrow="System architecture"
           title="프로덕션에서 동작하는 AI-native 시스템"
-          lead="4개 레이어, 12개 컴포넌트 — 음성·카카오·검색·매칭·외부 채널을 잇는 에이전트 구조."
+          lead="4개 레이어, 12개 컴포넌트 — 음성·카카오·검색·매칭·외부 채널을 잇는 Agent 구조."
         />
         <div className="mt-8 rounded-xl border border-line bg-white p-8 text-center text-ink-soft">
           {/* TODO(CTO M2): AI Agent Architecture Diagram (정적 PNG, 4-layer/12-component) */}
           아키텍처 다이어그램 입고 예정 — 4-layer · 12-component
         </div>
         <div className="mt-6 grid gap-4 text-base text-ink-soft sm:grid-cols-2">
-          <p>· Layer 1 — User Channel (음성 · 텍스트 · 카카오 로그인)</p>
-          <p>· Layer 2 — Agents (Pansori · Minyo · Sijo 오케스트레이션)</p>
-          <p>· Layer 3 — Data (프로필 · per-user 메모리 · 매칭)</p>
-          <p>· Layer 4 — External (활동 그래프 — 공공 API · 스크래핑 · 자체 공급)</p>
+          <p>· Layer 1 — User Channel (실시간 STT · 텍스트 · 카카오 로그인)</p>
+          <p>· Layer 2 — Agents (탐색 · 리마인더 · 신청대행 Agent 오케스트레이션)</p>
+          <p>· Layer 3 — Data (프로필 · per-user 메모리 · 검색·매칭)</p>
+          <p>· Layer 4 — External (활동 데이터베이스 — 공공 OpenAPI · 스크래퍼 · 자체 공급)</p>
         </div>
       </Section>
 
@@ -107,10 +107,35 @@ export default function TechnologyPage() {
           lead="표준적이되 의도된 선택 — 각 선택에는 한국 시니어 컨텍스트라는 이유가 있습니다."
         />
         <div className="mt-8 grid gap-4 sm:grid-cols-2">
-          <StackRow label="LLM" value="Anthropic Claude — 한국어 시니어 voice 적합도" />
-          <StackRow label="Backend" value="Python · FastAPI · Postgres" />
-          <StackRow label="Channel" value="네이티브 앱 + 카카오 로그인 — 익숙한 진입" />
-          <StackRow label="Voice" value="실시간 음성 스트리밍 + 텍스트 병행 입력" />
+          <StackRow label="LLM · Agents" value="Anthropic Claude — 의도 분석 · 큐레이션 · 신청대행" />
+          <StackRow label="Automation" value="Playwright — 외부 포털 신청 자동화" />
+          <StackRow label="Backend" value="Python · FastAPI · PostgreSQL" />
+          <StackRow label="Voice" value="WebSocket 실시간 스트리밍 STT + 텍스트 병행" />
+          <StackRow label="Client" value="React Native · Expo + 카카오 로그인" />
+          <StackRow label="Data" value="공공 OpenAPI + 스크래퍼 + 자체 공급 (idempotent upsert)" />
+        </div>
+      </Section>
+
+      {/* 5b. Defensibility — data moat (랜딩에서 이관 2026-07-01) */}
+      <Section tone="surface">
+        <SectionHeader
+          eyebrow="Defensibility"
+          title="DailyFit's Moat"
+          lead="진짜 해자는 데이터입니다 — 그리고 이 데이터는 우리만 쌓을 수 있습니다."
+        />
+        <div className="mt-8 grid gap-6 sm:grid-cols-3">
+          <MoatItem title="독점 음성 데이터">
+            빅테크도, 대기업도 갖지 못한 액티브 시니어의 날것 그대로의 ‘일상
+            대화’ 음성 — 우리의 가장 큰 해자입니다.
+          </MoatItem>
+          <MoatItem title="누적되는 개인화">
+            취향·이력·이동 패턴이 유저별로 쌓입니다. 쓸수록 더 잘 맞고, 범용
+            모델은 이 레이어를 복제할 수 없습니다.
+          </MoatItem>
+          <MoatItem title="데이터 플라이휠">
+            데이터가 쌓일수록 Agent가 똑똑해지고, 더 많이 쓰일수록 데이터가 더
+            쌓입니다. 시간이 갈수록 격차가 벌어집니다.
+          </MoatItem>
         </div>
       </Section>
 
@@ -118,11 +143,11 @@ export default function TechnologyPage() {
       <Section tone="surface">
         <SectionHeader
           eyebrow="Radically Transparent"
-          title="회사 자체가 AI 에이전트 팀입니다"
-          lead="DailyFit의 제품 = AI 에이전트가 시니어 일상을 함께 설계. DailyFit의 운영 = AI 에이전트가 회사를 함께 운영. 같은 구조(isomorphic)입니다."
+          title="회사 자체가 AI Agent 팀입니다"
+          lead="DailyFit의 제품 = AI Agent가 시니어 일상을 함께 설계. DailyFit의 운영 = AI Agent가 회사를 함께 운영. 같은 구조(isomorphic)입니다."
         />
         <p className="mt-6 max-w-prose text-body text-ink-soft">
-          Strategy · Finance · Product · Technology — 각 디비전을 AI 에이전트 팀이
+          Strategy · Finance · Product · Technology — 각 디비전을 AI Agent 팀이
           ADR로 문서화하고 함께 운영합니다. 시스템 프롬프트 원문과 실제 운영 데이터는
           공개하지 않습니다.
         </p>
@@ -137,11 +162,9 @@ export default function TechnologyPage() {
         />
         <div className="mt-8 flex flex-wrap gap-4">
           <ButtonLink href={productAppUrl} external variant="primary" size="lg">
-            제품 사용해보기 →
+            DailyFit 시작하기 →
           </ButtonLink>
-          <ButtonLink href="/use-cases" variant="ghost" size="lg">
-            Use cases →
-          </ButtonLink>
+          {/* Use cases → HELD 2026-07-01 (실 인터뷰 확보 전까지). */}
         </div>
       </Section>
     </>
@@ -153,6 +176,15 @@ function PrincipleCard({ title, body }: { title: string; body: string }) {
     <div className="rounded-xl border border-line bg-surface p-6">
       <p className="text-h3 font-semibold text-ink">{title}</p>
       <p className="mt-2 text-body text-ink-soft">{body}</p>
+    </div>
+  );
+}
+
+function MoatItem({ title, children }: { title: string; children: React.ReactNode }) {
+  return (
+    <div className="rounded-xl border border-line border-t-[3px] border-t-sage bg-white p-6">
+      <p className="text-h3 font-semibold text-ink">{title}</p>
+      <p className="mt-2 text-body text-ink-soft">{children}</p>
     </div>
   );
 }

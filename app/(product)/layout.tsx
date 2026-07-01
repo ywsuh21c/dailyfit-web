@@ -32,7 +32,7 @@ export default function ProductLayout({
             className="flex min-h-tap items-center gap-2.5"
             aria-label={`${site.name} 제품 홈`}
           >
-            <BrandMark idPrefix="product-logo" className="h-8 w-8" />
+            <BrandMark className="h-8 w-8" />
             <span className="text-[22px] font-extrabold tracking-tight text-ink">
               {site.name}
             </span>
@@ -74,7 +74,7 @@ export default function ProductLayout({
       <footer className="bg-navy-deep py-12 text-ivory/70">
         <div className="mx-auto flex max-w-6xl flex-col gap-6 px-5 sm:flex-row sm:items-center sm:justify-between">
           <div className="flex items-center gap-2.5">
-            <BrandMark idPrefix="product-footer-logo" className="h-7 w-7" />
+            <BrandMark className="h-7 w-7" />
             <span className="text-[19px] font-extrabold tracking-tight text-ivory">
               {site.name}
             </span>

@@ -20,7 +20,7 @@ export function Nav() {
           className="flex min-h-tap items-center gap-2.5"
           aria-label={`${site.name} 홈`}
         >
-          <BrandMark idPrefix="nav-logo" className="h-8 w-8" />
+          <BrandMark className="h-8 w-8" />
           <span className="text-[22px] font-extrabold tracking-tight text-ink">
             {site.name}
           </span>
@@ -63,13 +63,22 @@ export function Nav() {
           </li>
         </ul>
 
-        <Link
-          href={productCta.href}
-          {...externalLinkProps}
-          className="flex min-h-tap items-center whitespace-nowrap rounded-lg bg-sage px-5 text-base font-semibold text-white transition-colors hover:bg-sage-dk active:scale-[0.98]"
-        >
-          {productCta.label} →
-        </Link>
+        <div className="flex items-center gap-1.5">
+          <Link
+            href="/en"
+            className="flex min-h-tap items-center rounded-lg px-3 text-base font-semibold text-ink-soft transition-colors hover:bg-surface hover:text-ink"
+            aria-label="English version"
+          >
+            EN
+          </Link>
+          <Link
+            href={productCta.href}
+            {...externalLinkProps}
+            className="flex min-h-tap items-center whitespace-nowrap rounded-lg bg-sage px-5 text-base font-semibold text-white transition-colors hover:bg-sage-dk active:scale-[0.98]"
+          >
+            {productCta.label} →
+          </Link>
+        </div>
       </nav>
     </header>
   );
