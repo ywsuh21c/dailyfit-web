@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { externalLinkProps, productAppUrl, site } from '@/lib/site';
 import { getLiveActivities } from '@/lib/activities';
+import { getCatalogCount } from '@/lib/catalog-count';
 import { AgentConsole } from '@/components/home/AgentConsole';
 import { Reveal } from '@/components/motion/Reveal';
 
@@ -31,6 +32,7 @@ export const revalidate = 21600;
 
 export default async function HomePage() {
   const ticker = await getLiveActivities();
+  const { count: catalogCount } = await getCatalogCount();
   return (
     <>
       {/* ───────────────────────── HERO ───────────────────────── */}
@@ -153,7 +155,7 @@ export default async function HomePage() {
             </p>
           </Reveal>
           <Reveal className="mx-auto mt-12 max-w-2xl" delay={120}>
-            <AgentConsole />
+            <AgentConsole catalogCount={catalogCount} />
           </Reveal>
         </div>
       </section>

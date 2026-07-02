@@ -13,7 +13,8 @@ import { activeCatalogCount } from '@/lib/site';
  * the keyframes are disabled under prefers-reduced-motion.
  *
  * Content notes:
- * - 카탈로그 수치는 lib/site.ts activeCatalogCount 단일 출처.
+ * - 카탈로그 수치는 홈이 getCatalogCount() live count를 prop으로 주입
+ *   (미배포/실패 시 lib/site.ts activeCatalogCount 폴백) — 8a620f5 기능 보존.
  * - 플랜 활동명은 라이브 카탈로그 실데이터(보태니컬 아트=평생학습 강좌,
  *   AI·디지털 첫걸음 교실=DailyFit 자체 운영). 임의 예시 금지.
  * - 콘솔 step tag 는 기능 라벨(intent·memory·search·plan). Agent 고유
@@ -31,7 +32,7 @@ type ConsoleContent = {
   planItems: string[];
 };
 
-const KO: ConsoleContent = {
+const makeKO = (count: number): ConsoleContent => ({
   aria: 'DailyFit Agent가 하루를 설계하는 과정 데모',
   utterance: '다음 주엔 뭔가 새로운 걸 배워보고 싶은데',
   steps: [
@@ -40,7 +41,7 @@ const KO: ConsoleContent = {
     {
       tag: 'search',
       label: '활동 DB 검색',
-      body: `${activeCatalogCount.toLocaleString('ko-KR')}건 중 특색 활동 2건 선별`,
+      body: `${count.toLocaleString('ko-KR')}건 중 특색 활동 2건 선별`,
       delay: 'console-d4',
     },
   ],
@@ -49,9 +50,9 @@ const KO: ConsoleContent = {
     '화 10:00 · 보태니컬 아트 · 평생학습 강좌',
     '목 09:30 · AI·디지털 첫걸음 교실 · DailyFit 자체 운영',
   ],
-};
+});
 
-const EN: ConsoleContent = {
+const makeEN = (count: number): ConsoleContent => ({
   aria: 'Demo: a DailyFit Agent designing a day',
   utterance: 'I’d like to learn something new next week',
   steps: [
@@ -60,7 +61,7 @@ const EN: ConsoleContent = {
     {
       tag: 'search',
       label: 'Search activity DB',
-      body: `2 standout picks from ${activeCatalogCount.toLocaleString('en-US')}`,
+      body: `2 standout picks from ${count.toLocaleString('en-US')}`,
       delay: 'console-d4',
     },
   ],
@@ -69,10 +70,16 @@ const EN: ConsoleContent = {
     'Tue 10:00 · Botanical Art · lifelong-learning class',
     'Thu 09:30 · AI & Digital Basics · run by DailyFit',
   ],
-};
+});
 
-export function AgentConsole({ lang = 'ko' }: { lang?: 'ko' | 'en' }) {
-  const c = lang === 'en' ? EN : KO;
+export function AgentConsole({
+  lang = 'ko',
+  catalogCount = activeCatalogCount,
+}: {
+  lang?: 'ko' | 'en';
+  catalogCount?: number;
+}) {
+  const c = lang === 'en' ? makeEN(catalogCount) : makeKO(catalogCount);
   const [cycle, setCycle] = useState(0);
   const rootRef = useRef<HTMLDivElement>(null);
 
