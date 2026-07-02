@@ -189,7 +189,7 @@ export default async function ProductPage() {
               보여드립니다.
             </HelpCard>
             <HelpCard title="신청 날짜를 챙겨드려요" delay={100}>
-              &ldquo;내일 아침 9시 신청이에요&rdquo; — 놓치기 쉬운 시점을 미리
+              &ldquo;내일 아침 9시 신청이에요&rdquo;. 놓치기 쉬운 시점을 미리
               알려드립니다.
             </HelpCard>
             <HelpCard title="나를 기억해요" delay={200}>

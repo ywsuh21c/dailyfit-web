@@ -26,6 +26,7 @@ export type NavItem = { href: string; label: string };
 export const primaryNav: NavItem[] = [
   { href: '/', label: 'Product' },
   { href: '/technology', label: 'Technology' },
+  { href: '/research', label: 'Research' },
   // Use cases — HELD 2026-07-01 (Michael): 실제 인터뷰 확보 전까지 숨김. 인터뷰
   // 후 이 줄 + footerNav + app/(marketing)/_use-cases 폴더명 복구로 되살린다.
 ];
@@ -66,6 +67,7 @@ export const footerNav: { heading: string; items: NavItem[] }[] = [
     items: [
       { href: '/', label: 'Overview' },
       { href: '/technology', label: 'Technology' },
+      { href: '/research', label: 'Research' },
     ],
   },
   {

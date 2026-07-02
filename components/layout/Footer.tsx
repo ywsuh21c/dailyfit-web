@@ -20,7 +20,7 @@ export function Footer() {
           </div>
 
           {footerNav.map((col) => (
-            <nav key={col.heading} aria-label={`푸터 — ${col.heading}`}>
+            <nav key={col.heading} aria-label={`푸터 · ${col.heading}`}>
               <p className="text-caption font-bold uppercase tracking-wider text-ivory">
                 {col.heading}
               </p>
@@ -39,7 +39,7 @@ export function Footer() {
             </nav>
           ))}
 
-          <nav aria-label="푸터 — Contact">
+          <nav aria-label="푸터 · Contact">
             <p className="text-caption font-bold uppercase tracking-wider text-ivory">
               Contact
             </p>

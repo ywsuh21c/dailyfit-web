@@ -1,12 +1,15 @@
 import type { Metadata } from 'next';
 import { Section, SectionHeader } from '@/components/ui/Section';
 import { ButtonLink } from '@/components/ui/Button';
-import { site } from '@/lib/site';
+import { activeCatalogCount, site } from '@/lib/site';
+import { CountUp } from '@/components/motion/CountUp';
+import { FlowLine } from '@/components/motion/FlowLine';
+import { OrbitRings } from '@/components/motion/OrbitRings';
 
 export const metadata: Metadata = {
   title: 'Investors',
   description:
-    '한국의 액티브 시니어(55–70)를 위한 AI 일상 설계 플랫폼 — 우리가 무엇을, 왜 지금, 누가 만드는지.',
+    '액티브 시니어(55–70)를 위한 AI 일상 설계 플랫폼. 무엇을, 왜 지금, 누가 만드는지.',
   // Per plan decision D / IR Q24: keep out of top nav; indexing decision pending.
   robots: { index: false, follow: true },
 };
@@ -35,6 +38,17 @@ export default function InvestorsPage() {
             창업자에게 직접 연락하기 →
           </ButtonLink>
         </div>
+        <div className="mt-14 grid gap-4 sm:grid-cols-3">
+          <StatCard suffix="만 명" label="한국 55–70 액티브 시니어">
+            <CountUp to={1500} />
+          </StatCard>
+          <StatCard suffix="건" label="라이브 활동 데이터베이스">
+            <CountUp to={activeCatalogCount} />
+          </StatCard>
+          <StatCard suffix="티어" label="Agent 자율성 단계">
+            <CountUp to={3} duration={900} />
+          </StatCard>
+        </div>
       </Section>
 
       {/* 2. Why now */}
@@ -42,13 +56,22 @@ export default function InvestorsPage() {
         <SectionHeader
           eyebrow="Why now"
           title="왜 지금인가"
-          lead="한국 55–70세 액티브 시니어 시장이 지금 변곡점을 맞은 이유 — 디지털 친숙도, 인구 구조, 그리고 일상을 스스로 설계하려는 수요가 동시에 교차합니다."
+          lead="한국 55–70세 액티브 시니어 시장이 지금 변곡점을 맞은 이유: 디지털 친숙도, 인구 구조, 그리고 일상을 스스로 설계하려는 수요가 동시에 교차합니다."
         />
         <p className="mt-6 max-w-prose text-body text-ink-soft">
           {/* TODO(SA dependency #1): 시장 명제 1문장 + 2문단 lock 후 교체 */}
           액티브 시니어는 더 이상 돌봄의 대상이 아니라 자기 하루의 저자입니다.
           데이터 출처와 시장 규모 근거는 미팅에서 직접 공유드립니다.
         </p>
+        <div className="mt-12">
+          <OrbitRings
+            aria="시장 확장: 한국 1,500만 비치헤드에서 동아시아, 글로벌 시니어 시장으로"
+            coreTop="한국 1,500만"
+            coreBottom="비치헤드"
+            mid="동아시아"
+            outer="글로벌 시니어 시장"
+          />
+        </div>
       </Section>
 
       {/* 3. What we're building — product glimpse, no "how" */}
@@ -58,9 +81,19 @@ export default function InvestorsPage() {
           title="무엇을 만들고 있나"
           lead="DailyFit은 시니어가 매일을 의미 있게 설계하도록 돕는 AI Agent입니다. 카카오톡 위에서, 익숙한 대화로."
         />
-        <div className="mt-8 rounded-xl border border-line bg-bg p-8 text-center text-ink-soft">
-          {/* TODO(Web Designer dep #4 / PM dep #8): product glimpse 스크린샷 2–3장 */}
-          제품 화면 미리보기 — 베타 빌드 기준 캡처 입고 예정
+        <div className="mt-10">
+          <FlowLine />
+        </div>
+        <div className="mt-4 grid gap-4 sm:grid-cols-3">
+          <GlimpseStep n="1" title="말로 요청">
+            &ldquo;뭔가 새로운 걸 배우고 싶어&rdquo; 처럼, 평소 말투 그대로.
+          </GlimpseStep>
+          <GlimpseStep n="2" title="Agent가 설계">
+            의도를 읽고 활동을 탐색·큐레이션해 하루를 구성합니다.
+          </GlimpseStep>
+          <GlimpseStep n="3" title="신청까지 보조">
+            외부 포털 신청·접수까지 대신 처리하고, 마지막 확인만 사용자가.
+          </GlimpseStep>
         </div>
       </Section>
 
@@ -69,7 +102,7 @@ export default function InvestorsPage() {
         <SectionHeader eyebrow="Who's building it" title="누가 만드나" />
         <div className="mt-8 grid gap-6 sm:grid-cols-2">
           <FounderCard
-            name="서영우 (Michael Suh)"
+            name="서영우 (Youngwoo Suh)"
             role="공동창업자 · CEO"
             bio="Boston University → Bain → PYLER(Corporate Development Lead) → DailyFit. 전략·기업개발 백그라운드로 시니어 일상을 제품으로 설계합니다."
           />
@@ -91,9 +124,9 @@ export default function InvestorsPage() {
         />
         <ul className="mt-6 max-w-prose space-y-3 text-body text-ink">
           {/* TODO(D2/D3/D4): 팟캐스트·정부 프로그램·베타 코호트 수치 확정 후 교체 */}
-          <li>· 베타 출시 후 첫 코호트 측정 — 시니어 헬스앱 업계 평균 대비 리텐션 추적 중.</li>
+          <li>· 베타 출시 후 첫 코호트 측정: 시니어 헬스앱 업계 평균 대비 리텐션 추적 중.</li>
           <li>· 60+ 시니어 1:1 인터뷰 누적 · 매주 신규 베타 신청자 유입.</li>
-          <li>· 팟캐스트 "있는 것들이 더해" 운영 — 창업자 내러티브 자산.</li>
+          <li>· 팟캐스트 &ldquo;있는 것들이 더해&rdquo; 운영: 창업자 내러티브 자산.</li>
         </ul>
       </Section>
 
@@ -120,6 +153,44 @@ export default function InvestorsPage() {
         </div>
       </Section>
     </>
+  );
+}
+
+function StatCard({
+  suffix,
+  label,
+  children,
+}: {
+  suffix: string;
+  label: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <div className="rounded-xl border border-line bg-surface p-6 text-center">
+      <p className="text-[34px] font-extrabold tracking-tight text-sage">
+        {children}
+        <span className="ml-1 text-[20px] font-bold text-ink">{suffix}</span>
+      </p>
+      <p className="mt-1 text-[13.5px] font-semibold text-ink-soft">{label}</p>
+    </div>
+  );
+}
+
+function GlimpseStep({
+  n,
+  title,
+  children,
+}: {
+  n: string;
+  title: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <div className="rounded-xl border border-line bg-bg p-6">
+      <span className="eyebrow-mono text-sage">Step {n}</span>
+      <p className="mt-3 text-h3 font-semibold text-ink">{title}</p>
+      <p className="mt-2 text-body text-ink-soft">{children}</p>
+    </div>
   );
 }
 

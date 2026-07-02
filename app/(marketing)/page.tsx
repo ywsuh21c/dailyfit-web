@@ -114,14 +114,26 @@ export default async function HomePage() {
           <Reveal delay={120}>
             <div className="rounded-2xl border border-line bg-white p-7 shadow-[0_30px_70px_-40px_rgba(30,45,64,0.35)]">
               <div className="flex flex-col gap-3">
-                <ChatBubble who="DailyFit">어제 저녁 산책은 어떠셨어요?</ChatBubble>
-                <ChatBubble who="사용자" me>
-                  무릎이 좀 뻐근했어
-                </ChatBubble>
-                <ChatBubble who="DailyFit">
-                  오늘은 가벼운 스트레칭 15분, 오후엔 근처에서 열리는
-                  독서토론회가 있어요. 이렇게 시작해볼까요?
-                </ChatBubble>
+                <Reveal delay={150}>
+                  <div className="flex flex-col">
+                    <ChatBubble who="DailyFit">어제 저녁 산책은 어떠셨어요?</ChatBubble>
+                  </div>
+                </Reveal>
+                <Reveal delay={420}>
+                  <div className="flex flex-col">
+                    <ChatBubble who="사용자" me>
+                      무릎이 좀 뻐근했어
+                    </ChatBubble>
+                  </div>
+                </Reveal>
+                <Reveal delay={700}>
+                  <div className="flex flex-col">
+                    <ChatBubble who="DailyFit">
+                      오늘은 가벼운 스트레칭 15분, 오후엔 근처에서 열리는
+                      독서토론회가 있어요. 이렇게 시작해볼까요?
+                    </ChatBubble>
+                  </div>
+                </Reveal>
               </div>
             </div>
           </Reveal>
@@ -226,8 +238,18 @@ export default async function HomePage() {
           비공개 자리에서만 노출(랜딩 미표기). */}
 
       {/* ─────────────────────── FINAL CTA ─────────────────────── */}
-      <section className="bg-gradient-to-b from-sage to-sage-dk py-28 text-center text-white sm:py-36">
-        <div className="mx-auto max-w-6xl px-5">
+      <section className="relative overflow-hidden bg-gradient-to-b from-sage to-sage-dk py-28 text-center text-white sm:py-36">
+        <svg
+          viewBox="0 0 1200 600"
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-0 h-full w-full opacity-30"
+          preserveAspectRatio="xMidYMid slice"
+        >
+          <circle cx="600" cy="300" r="260" fill="none" stroke="#FFFFFF" strokeWidth="1.5" className="ripple-ring" />
+          <circle cx="600" cy="300" r="260" fill="none" stroke="#FFFFFF" strokeWidth="1.5" className="ripple-ring ripple-d1" />
+          <circle cx="600" cy="300" r="260" fill="none" stroke="#FFFFFF" strokeWidth="1.5" className="ripple-ring ripple-d2" />
+        </svg>
+        <div className="relative mx-auto max-w-6xl px-5">
           <Reveal>
             <p className="eyebrow-mono text-white/70">Agent-as-a-Service</p>
             <h2 className="mx-auto mt-5 max-w-[18ch] text-[36px] font-extrabold leading-[1.18] tracking-[-0.03em] sm:text-[46px]">
@@ -319,7 +341,8 @@ function AgentCard({
             {[1, 2, 3].map((n) => (
               <span
                 key={n}
-                className={`h-1.5 w-7 rounded-full ${n <= level ? 'bg-sage' : 'bg-line'}`}
+                className={`h-1.5 w-7 rounded-full ${n <= level ? 'agent-bar bg-sage' : 'bg-line'}`}
+                style={n <= level ? { transitionDelay: `${300 + n * 140}ms` } : undefined}
               />
             ))}
           </span>

@@ -1,11 +1,12 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { getAllPosts } from '@/lib/writing';
+import { Reveal } from '@/components/motion/Reveal';
 
 export const metadata: Metadata = {
   title: 'Writing',
   description:
-    '우리는 만들면서 씁니다 — DailyFit을 만드는 동안 배운 것, 틀린 것, 그리고 그 사고 과정.',
+    '우리는 만들면서 씁니다. DailyFit을 만드는 동안 배운 것, 틀린 것, 그리고 그 사고 과정.',
 };
 
 // /writing — Option-B 의무 페이지 (thought leadership = 핵심 acquisition lever).
@@ -29,14 +30,27 @@ export default function WritingPage() {
       {/* manifesto hero */}
       <section className="hero-field relative overflow-hidden">
         <div className="hero-grid pointer-events-none absolute inset-0" aria-hidden="true" />
+        <div className="aurora aurora-1" aria-hidden="true" />
         <div className="relative mx-auto max-w-3xl px-5 pb-16 pt-20 lg:pt-24">
+          <Reveal>
           <p className="eyebrow-mono text-sage">Writing</p>
           <h1 className="mt-5 text-[38px] font-extrabold leading-[1.18] tracking-[-0.03em] text-ink sm:text-[48px]">
             우리는 만들면서 씁니다.
           </h1>
+          <svg viewBox="0 0 360 14" aria-hidden="true" className="mt-3 h-[14px] w-[min(360px,80%)]">
+            <path
+              className="draw-short"
+              d="M 4 9 C 70 4, 150 12, 220 7 C 280 3, 330 9, 356 6"
+              fill="none"
+              stroke="#4A7C59"
+              strokeOpacity="0.6"
+              strokeWidth="2.5"
+              strokeLinecap="round"
+            />
+          </svg>
           <p className="mt-7 text-body text-ink-soft">
             DailyFit을 만드는 동안 배운 것들을 정리해 공개합니다. AI Agent
-            팀으로 회사를 운영하는 방법, 한국 시니어 시장이라는 가설, 그리고{' '}
+            팀으로 회사를 운영하는 방법, 액티브 시니어 시장이라는 가설, 그리고{' '}
             <strong className="text-ink">잘 안 풀린 것들</strong>까지.
           </p>
           <p className="mt-4 text-body text-ink-soft">
@@ -47,8 +61,9 @@ export default function WritingPage() {
             부릅니다.
           </p>
           <p className="mt-6 text-base font-semibold text-ink">
-            — Youngwoo Suh, Founder · DailyFit
+            Youngwoo Suh, Founder · DailyFit
           </p>
+          </Reveal>
         </div>
       </section>
 
@@ -62,9 +77,10 @@ export default function WritingPage() {
             </span>
           </div>
           <div className="divide-y divide-line">
-            {posts.map((p) =>
+            {posts.map((p, i) =>
               p.published ? (
-                <Link key={p.slug} href={`/writing/${p.slug}`} className="group block py-9">
+                <Reveal key={p.slug} delay={Math.min(i * 90, 360)}>
+                <Link href={`/writing/${p.slug}`} className="group block py-9 transition-transform duration-300 hover:translate-x-1.5">
                   <div className="flex items-center gap-3">
                     <span className="eyebrow-mono text-sage">{p.category}</span>
                     <span className="text-caption text-ink-soft">{formatDate(p.date)}</span>
@@ -79,8 +95,10 @@ export default function WritingPage() {
                     읽기 →
                   </span>
                 </Link>
+                </Reveal>
               ) : (
-                <article key={p.slug} className="py-9">
+                <Reveal key={p.slug} delay={Math.min(i * 90, 360)}>
+                <article className="py-9">
                   <div className="flex items-center gap-3">
                     <span className="eyebrow-mono text-sage">{p.category}</span>
                     <span className="rounded-md bg-sage/10 px-2.5 py-1 text-[11px] font-bold uppercase tracking-wider text-sage">
@@ -94,6 +112,7 @@ export default function WritingPage() {
                     {p.summary}
                   </p>
                 </article>
+                </Reveal>
               ),
             )}
           </div>
@@ -103,23 +122,33 @@ export default function WritingPage() {
       {/* podcast teaser */}
       <section className="border-t border-line bg-surface py-16 sm:py-20">
         <div className="mx-auto max-w-3xl px-5">
+          <Reveal>
           <div className="flex flex-col gap-6 rounded-2xl border border-line bg-white p-8 sm:flex-row sm:items-center">
             <div
-              className="h-[88px] w-[88px] flex-shrink-0 rounded-2xl bg-gradient-to-br from-navy to-navy-deep"
+              className="flex h-[88px] w-[88px] flex-shrink-0 items-end justify-center gap-[5px] rounded-2xl bg-gradient-to-br from-navy to-navy-deep px-4 pb-5"
               aria-hidden="true"
-            />
+            >
+              {[34, 52, 26, 46, 30].map((h, i) => (
+                <span
+                  key={i}
+                  className="eq-bar w-[6px] rounded-full bg-sage-lt"
+                  style={{ height: h, animationDelay: `${i * 0.16}s` }}
+                />
+              ))}
+            </div>
             <div>
               <p className="eyebrow-mono text-sage">Founder&rsquo;s podcast</p>
               <h2 className="mt-2 text-[22px] font-bold text-ink">
                 「있는 것들이 더해」
               </h2>
               <p className="mt-2 text-[15.5px] leading-relaxed text-ink-soft">
-                글보다 말이 편한 날의 기록 — 창업자의 사고 과정을 목소리로
+                글보다 말이 편한 날의 기록. 창업자의 사고 과정을 목소리로
                 남깁니다.
                 {/* TODO(Michael): 팟캐스트 링크 연결 */}
               </p>
             </div>
           </div>
+          </Reveal>
         </div>
       </section>
     </>

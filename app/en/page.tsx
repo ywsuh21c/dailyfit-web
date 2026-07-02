@@ -62,10 +62,19 @@ export default function EnHomePage() {
               </a>
             </div>
           </div>
-          <p className="max-w-[38ch] text-[19px] leading-relaxed text-ink-soft sm:text-[22px]">
-            Smartphone-native and growing faster than any generation before.
-            Active seniors are learning, meeting, and exploring. We design their
-            day.
+          <p className="max-w-[42ch] text-[19px] leading-relaxed text-ink-soft sm:text-[22px]">
+            Active seniors are smartphone-native and growing faster than any
+            generation before.
+            <br />
+            <br />
+            The second half of their lives has just begun.
+            <br />
+            <br />
+            They&rsquo;re eager to learn, proactive to meet, and ambitious to
+            explore.
+            <br />
+            <br />
+            DailyFit designs their day.
           </p>
         </div>
       </section>
@@ -76,14 +85,18 @@ export default function EnHomePage() {
           <Reveal>
             <p className="eyebrow-mono text-sage">The problem</p>
             <h2 className="mt-4 text-[34px] font-extrabold leading-[1.2] tracking-[-0.03em] text-ink sm:text-[46px]">
-              The time and curiosity are there.
+              All the time in the world.
               <br />
-              Finding what to do isn&rsquo;t.
+              The only question: where to begin.
             </h2>
-            <p className="mx-auto mt-6 max-w-[52ch] text-body text-ink-soft">
-              Classes, people to meet, places to go. The information is
-              scattered across dozens of agencies and portals. Hard to find, and
-              harder to sign up for.
+            <p className="mx-auto mt-6 max-w-[72ch] text-body text-ink-soft">
+              There&rsquo;s no shortage of classes, gatherings, and places to explore.
+              <br />
+              But they&rsquo;re spread across countless government sites and local programs.
+              <br />
+              Finding those programs is hard enough.
+              <br />
+              Applying for them is even harder.
             </p>
           </Reveal>
         </div>
@@ -91,35 +104,48 @@ export default function EnHomePage() {
 
       {/* ─────────────────── WHAT WE BUILD (solution) ─────────────── */}
       <section className="bg-surface py-24 sm:py-32">
-        <div className="mx-auto grid max-w-6xl items-center gap-14 px-5 lg:grid-cols-2">
+        <div className="mx-auto grid max-w-6xl items-center gap-14 px-5 lg:grid-cols-[1.2fr_0.8fr]">
           <Reveal>
             <p className="eyebrow-mono text-sage">Solution: What we built</p>
-            <h2 className="mt-4 text-[34px] font-extrabold leading-[1.2] tracking-[-0.03em] text-ink sm:text-[42px]">
-              One conversation
+            <h2 className="mt-4 text-[32px] font-extrabold leading-[1.2] tracking-[-0.03em] text-ink sm:text-[40px]">
+              One conversation with our agent.
               <br />
-              designs the day.
+              We design their day.
             </h2>
-            <p className="mt-6 max-w-[46ch] text-body text-ink-soft">
-              A multi-agent platform for hobbies and daily life.
+            <p className="mt-6 max-w-[64ch] text-body text-ink-soft">
+              A multi-agent platform for hobbies and everyday life.
               <br />
-              Just talk as you normally would, and the agents collaborate to
-              compose your day.
+              Users just talk as always, and the agents compose the day.
             </p>
             <p className="mt-4 text-body font-semibold text-ink">
-              AI proposes. You always decide.
+              The agent proposes what to do.
+              <br />
+              User decides the final call.
             </p>
           </Reveal>
           <Reveal delay={120}>
             <div className="rounded-2xl border border-line bg-white p-7 shadow-[0_30px_70px_-40px_rgba(30,45,64,0.35)]">
               <div className="flex flex-col gap-3">
-                <ChatBubble who="DailyFit">How was your evening walk?</ChatBubble>
-                <ChatBubble who="You" me>
-                  My knee was a little stiff.
-                </ChatBubble>
-                <ChatBubble who="DailyFit">
-                  Then a light 15-minute stretch this morning, and a book club
-                  nearby this afternoon. Shall we start there?
-                </ChatBubble>
+                <Reveal delay={150}>
+                  <div className="flex flex-col">
+                    <ChatBubble who="DailyFit">How was your evening walk?</ChatBubble>
+                  </div>
+                </Reveal>
+                <Reveal delay={420}>
+                  <div className="flex flex-col">
+                    <ChatBubble who="You" me>
+                      My knee was a little stiff.
+                    </ChatBubble>
+                  </div>
+                </Reveal>
+                <Reveal delay={700}>
+                  <div className="flex flex-col">
+                    <ChatBubble who="DailyFit">
+                      Then a light 15-minute stretch this morning, and a book club
+                      nearby this afternoon. Shall we start there?
+                    </ChatBubble>
+                  </div>
+                </Reveal>
               </div>
             </div>
           </Reveal>
@@ -132,12 +158,12 @@ export default function EnHomePage() {
           <Reveal className="text-center">
             <p className="eyebrow-mono text-sage">How our agent works</p>
             <h2 className="mt-4 text-[34px] font-extrabold leading-[1.2] tracking-[-0.03em] text-ink sm:text-[44px]">
-              How an Agent designs your day
+              How an Agent designs the day
             </h2>
             <p className="mx-auto mt-5 max-w-4xl text-body text-ink-soft">
-              It reads your words as intent, recalls what it knows, and picks from
-              an activity database built on public and partner APIs, to complete
-              your day.
+              Our agent reads the user&rsquo;s words as intent, recalls what it
+              knows, and picks from an activity database built on public and
+              partner APIs, to complete the day.
             </p>
           </Reveal>
           <Reveal className="mx-auto mt-12 max-w-2xl" delay={120}>
@@ -172,36 +198,48 @@ export default function EnHomePage() {
           <Reveal className="mx-auto max-w-3xl text-center">
             <p className="eyebrow-mono text-sage">Meet the agents</p>
             <h2 className="mt-4 text-[34px] font-extrabold leading-[1.2] tracking-[-0.03em] text-ink sm:text-[42px]">
-              Three Agents that design your day
+              Three Agents that design the day
             </h2>
             <p className="mt-5 text-body text-ink-soft">
-              Discovery · reminders · auto-apply. The wider the scope, the
-              higher-tier the Agent.
+              Discovery · Reminder · Auto-apply
+              <br />
+              The wider the scope, the higher-tier the Agent.
               <br />
               The launch app ships with the top-tier Agent built in.
             </p>
           </Reveal>
           <div className="mt-14 grid gap-5 md:grid-cols-3">
             <AgentCard tier="Discovery" title="Discovery Agent" level={1} delay={0}>
-              Learns your interests and finds activities beyond your neighborhood,
-              the ones you&rsquo;d never have found.
+              Learns the user&rsquo;s interests and finds activities beyond the
+              neighborhood, the ones they&rsquo;d never discover on their own.
             </AgentCard>
             <AgentCard tier="Planning · Reminders" title="Reminder Agent" level={2} delay={120}>
               &ldquo;You need to sign up by 9am tomorrow&rdquo;
               <br />
-              It tracks the easy-to-miss deadlines and schedules for you.
+              It tracks the easy-to-miss deadlines and handles the scheduling.
             </AgentCard>
             <AgentCard tier="Auto-apply" title="Auto-apply Agent" level={3} delay={240}>
-              Handles the tedious parts: sign-ups, forms, registration. The Agent
-              walks the steps; you just confirm the last one.
+              Handles the tedious parts: sign-ups, forms, registration.
+              <br />
+              Our agent walks the steps; the user just confirms the last one.
             </AgentCard>
           </div>
         </div>
       </section>
 
       {/* ─────────────────────── FINAL CTA ─────────────────────── */}
-      <section className="bg-gradient-to-b from-sage to-sage-dk py-28 text-center text-white sm:py-36">
-        <div className="mx-auto max-w-6xl px-5">
+      <section className="relative overflow-hidden bg-gradient-to-b from-sage to-sage-dk py-28 text-center text-white sm:py-36">
+        <svg
+          viewBox="0 0 1200 600"
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-0 h-full w-full opacity-30"
+          preserveAspectRatio="xMidYMid slice"
+        >
+          <circle cx="600" cy="300" r="260" fill="none" stroke="#FFFFFF" strokeWidth="1.5" className="ripple-ring" />
+          <circle cx="600" cy="300" r="260" fill="none" stroke="#FFFFFF" strokeWidth="1.5" className="ripple-ring ripple-d1" />
+          <circle cx="600" cy="300" r="260" fill="none" stroke="#FFFFFF" strokeWidth="1.5" className="ripple-ring ripple-d2" />
+        </svg>
+        <div className="relative mx-auto max-w-6xl px-5">
           <Reveal>
             <p className="eyebrow-mono text-white/70">Agent-as-a-Service</p>
             <h2 className="mx-auto mt-5 max-w-[20ch] text-[36px] font-extrabold leading-[1.18] tracking-[-0.03em] sm:text-[46px]">
@@ -219,7 +257,7 @@ export default function EnHomePage() {
                 {...externalLinkProps}
                 className="inline-flex min-h-[56px] items-center rounded-xl border border-white/40 px-8 text-[17px] font-bold text-white transition-colors hover:border-white hover:bg-white/10 active:scale-[0.98]"
               >
-                Start DailyFit →
+                Try DailyFit →
               </a>
             </div>
           </Reveal>
@@ -282,13 +320,14 @@ function AgentCard({
           aria-label={`autonomy level ${level} of 3`}
         >
           <span className="text-[11px] font-semibold uppercase tracking-[0.14em] text-ink-soft/60">
-            autonomy
+            Level of Autonomy
           </span>
           <span className="ml-auto flex gap-1.5" aria-hidden="true">
             {[1, 2, 3].map((n) => (
               <span
                 key={n}
-                className={`h-1.5 w-7 rounded-full ${n <= level ? 'bg-sage' : 'bg-line'}`}
+                className={`h-1.5 w-7 rounded-full ${n <= level ? 'agent-bar bg-sage' : 'bg-line'}`}
+                style={n <= level ? { transitionDelay: `${300 + n * 140}ms` } : undefined}
               />
             ))}
           </span>

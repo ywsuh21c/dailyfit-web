@@ -19,6 +19,12 @@ export default function EnLayout({ children }: { children: React.ReactNode }) {
           </Link>
           <div className="flex items-center gap-1.5">
             <Link
+              href="/en/research"
+              className="flex min-h-tap items-center rounded-lg px-3 text-base font-medium text-ink-soft transition-colors hover:bg-surface hover:text-ink"
+            >
+              Research
+            </Link>
+            <Link
               href="/"
               className="flex min-h-tap items-center rounded-lg px-3 text-base font-semibold text-ink-soft transition-colors hover:bg-surface hover:text-ink"
             >
@@ -29,7 +35,7 @@ export default function EnLayout({ children }: { children: React.ReactNode }) {
               {...externalLinkProps}
               className="flex min-h-tap items-center whitespace-nowrap rounded-lg bg-sage px-5 text-base font-semibold text-white transition-colors hover:bg-sage-dk active:scale-[0.98]"
             >
-              Start DailyFit →
+              Try DailyFit →
             </Link>
           </div>
         </nav>
@@ -43,7 +49,7 @@ export default function EnLayout({ children }: { children: React.ReactNode }) {
             <BrandMark className="h-8 w-8" />
             <span className="text-[22px] font-extrabold tracking-tight text-ivory">{site.name}</span>
           </Link>
-          <p className="mt-4 max-w-[34ch] text-base leading-relaxed">
+          <p className="mt-4 max-w-[56ch] text-base leading-relaxed">
             Building AI agents for the active senior generation.
           </p>
           <div className="mt-8 flex flex-col gap-3 border-t border-ivory/10 pt-6 text-caption sm:flex-row sm:items-center sm:justify-between">

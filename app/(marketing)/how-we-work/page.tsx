@@ -2,11 +2,12 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { site } from '@/lib/site';
 import { Reveal } from '@/components/motion/Reveal';
+import { OrgOrbit } from '@/components/motion/OrgOrbit';
 
 export const metadata: Metadata = {
   title: 'How we work',
   description:
-    'AI-네이티브하게, 컨설팅처럼 체계적으로 — DailyFit이 Agent 팀으로 일하는 방식.',
+    'AI-네이티브하게, 컨설팅처럼 체계적으로. DailyFit이 Agent 팀으로 일하는 방식.',
 };
 
 // /how-we-work — recruiting layer. HANDOFF §2: UNPROVEN bet — 실제 오픈
@@ -87,20 +88,27 @@ export default function HowWeWorkPage() {
             </p>
           </Reveal>
           <Reveal delay={120}>
-            <div className="flex flex-col gap-3.5">
-              <WorkItem title="실행은 Agent가 분담">
-                전략·리서치·제품·디자인 실행을 역할별 Agent가 병렬로
-                처리합니다.
-              </WorkItem>
-              <WorkItem title="판단과 방향은 사람이">
-                고객을 만나고, 가설을 세우고, 마지막 결정을 내리는 일은 사람의
-                몫입니다.
-              </WorkItem>
-              <WorkItem title="모든 산출물은 기록으로">
-                결정·실패·교훈이 문서로 남아 다음 Agent의 컨텍스트가
-                됩니다.
-              </WorkItem>
-            </div>
+            <OrgOrbit />
+          </Reveal>
+        </div>
+        <div className="mx-auto mt-14 grid max-w-6xl gap-3.5 px-5 md:grid-cols-3">
+          <Reveal delay={0}>
+            <WorkItem title="실행은 Agent가 분담">
+              전략·리서치·제품·디자인 실행을 역할별 Agent가 병렬로
+              처리합니다.
+            </WorkItem>
+          </Reveal>
+          <Reveal delay={100}>
+            <WorkItem title="판단과 방향은 사람이">
+              고객을 만나고, 가설을 세우고, 마지막 결정을 내리는 일은 사람의
+              몫입니다.
+            </WorkItem>
+          </Reveal>
+          <Reveal delay={200}>
+            <WorkItem title="모든 산출물은 기록으로">
+              결정·실패·교훈이 문서로 남아 다음 Agent의 컨텍스트가
+              됩니다.
+            </WorkItem>
           </Reveal>
         </div>
       </section>
@@ -114,7 +122,7 @@ export default function HowWeWorkPage() {
               공식 채용 공고는 아직 없습니다.
             </h2>
             <p className="mx-auto mt-5 max-w-[50ch] text-body text-ink-soft">
-              그래도 이 방식이 끌린다면 — Agent와 함께 일하는 회사를 먼저
+              그래도 이 방식이 끌린다면, Agent와 함께 일하는 회사를 먼저
               경험해 보고 싶다면, 미리 연락 주세요. 다음 채용은 여기서
               시작됩니다.
             </p>
