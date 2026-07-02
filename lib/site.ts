@@ -10,7 +10,7 @@ export const site = {
   contactEmail: 'dailyfitkorea@gmail.com',
   tagline: 'AI는 수단, 시니어가 정체성',
   description:
-    '한국 액티브 시니어 세대를 위한 AI 에이전트 — 대화 한 번으로 하루를 설계합니다.',
+    '액티브 시니어 세대를 위한 AI Agent. 대화 한 번으로 하루를 설계합니다.',
 } as const;
 
 /**
@@ -28,7 +28,9 @@ export type NavItem = { href: string; label: string };
 export const primaryNav: NavItem[] = [
   { href: '/', label: 'Product' },
   { href: '/technology', label: 'Technology' },
-  { href: '/use-cases', label: 'Use cases' },
+  { href: '/research', label: 'Research' },
+  // Use cases — HELD 2026-07-01 (Michael): 실제 인터뷰 확보 전까지 숨김. 인터뷰
+  // 후 이 줄 + footerNav + app/(marketing)/_use-cases 폴더명 복구로 되살린다.
 ];
 
 // Company sub-nav (dropdown under "Company").
@@ -54,22 +56,29 @@ export const externalLinkProps = {
 } as const;
 
 // Top-right product gateway — the ONLY senior-product entry on the company
-// site (Anthropic→Claude pattern). Label avoids "Try DailyFit" because the
-// company name doubles as the product name.
-export const productCta = { href: productAppUrl, label: '제품 사용해보기' } as const;
+// site (Anthropic→Claude pattern). Label carries the brand name per Michael
+// 2026-07-01 ("DailyFit 시작하기" — friendlier + brand-forward).
+export const productCta = { href: productAppUrl, label: 'DailyFit 시작하기' } as const;
 
+// Footer columns — grouped by intent so the sections read clearly (Michael
+// 2026-07-01): Product = what it is, Company = who we are. Contact lives in its
+// own column in Footer.tsx. "How we work" stays in the nav Company dropdown.
 export const footerNav: { heading: string; items: NavItem[] }[] = [
   {
     heading: 'Product',
     items: [
-      { href: '/', label: 'Product' },
+      { href: '/', label: 'Overview' },
       { href: '/technology', label: 'Technology' },
-      { href: '/use-cases', label: 'Use cases' },
+      { href: '/research', label: 'Research' },
     ],
   },
   {
     heading: 'Company',
-    items: companyNav,
+    items: [
+      { href: '/about', label: 'About' },
+      { href: '/writing', label: 'Writing' },
+      { href: '/investors', label: 'Investors' },
+    ],
   },
 ];
 

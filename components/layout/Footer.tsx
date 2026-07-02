@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { externalLinkProps, footerNav, legalNav, productCta, site } from '@/lib/site';
-import Image from 'next/image';
+import { BrandMark } from '@/components/brand/BrandMark';
 
 export function Footer() {
   return (
@@ -9,25 +9,18 @@ export function Footer() {
         <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-[2fr_1fr_1fr_1fr]">
           <div>
             <Link href="/" className="flex items-center gap-2.5" aria-label={`${site.name} 홈`}>
-              <Image
-                src="/brand/dailyfit-logo.png"
-                alt=""
-                aria-hidden="true"
-                width={38}
-                height={38}
-                className="h-9 w-9 object-contain"
-              />
+              <BrandMark className="h-8 w-8" />
               <span className="text-[22px] font-extrabold tracking-tight text-ivory">
                 {site.name}
               </span>
             </Link>
             <p className="mt-4 max-w-[30ch] text-base leading-relaxed">
-              Building AI agents for Korea&rsquo;s active senior generation.
+              Building AI agents for the active senior generation.
             </p>
           </div>
 
           {footerNav.map((col) => (
-            <nav key={col.heading} aria-label={`푸터 — ${col.heading}`}>
+            <nav key={col.heading} aria-label={`푸터 · ${col.heading}`}>
               <p className="text-caption font-bold uppercase tracking-wider text-ivory">
                 {col.heading}
               </p>
@@ -46,7 +39,7 @@ export function Footer() {
             </nav>
           ))}
 
-          <nav aria-label="푸터 — Contact">
+          <nav aria-label="푸터 · Contact">
             <p className="text-caption font-bold uppercase tracking-wider text-ivory">
               Contact
             </p>

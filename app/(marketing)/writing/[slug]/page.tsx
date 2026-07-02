@@ -58,7 +58,7 @@ export default async function WritingPostPage({
           <h1 className="mt-4 text-[34px] font-extrabold leading-[1.2] tracking-[-0.03em] text-ink sm:text-[44px]">
             {post.title}
           </h1>
-          <p className="mt-6 text-base font-semibold text-ink">— {post.author}</p>
+          <p className="mt-6 text-base font-semibold text-ink">{post.author}</p>
         </div>
       </header>
 

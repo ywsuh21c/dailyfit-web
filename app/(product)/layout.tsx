@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { site } from '@/lib/site';
-import Image from 'next/image';
+import { BrandMark } from '@/components/brand/BrandMark';
 
 // Product (customer) chrome — the other side of the bridge. Single audience:
 // seniors (2nd-person OK here). Company nav/footer intentionally absent;
@@ -32,7 +32,7 @@ export default function ProductLayout({
             className="flex min-h-tap items-center gap-2.5"
             aria-label={`${site.name} 제품 홈`}
           >
-            <Image src="/brand/dailyfit-logo.png" alt="" aria-hidden width={38} height={38} className="h-9 w-9 object-contain" />
+            <BrandMark className="h-8 w-8" />
             <span className="text-[22px] font-extrabold tracking-tight text-ink">
               {site.name}
             </span>
@@ -74,7 +74,7 @@ export default function ProductLayout({
       <footer className="bg-navy-deep py-12 text-ivory/70">
         <div className="mx-auto flex max-w-6xl flex-col gap-6 px-5 sm:flex-row sm:items-center sm:justify-between">
           <div className="flex items-center gap-2.5">
-            <Image src="/brand/dailyfit-logo.png" alt="" aria-hidden width={32} height={32} className="h-8 w-8 object-contain" />
+            <BrandMark className="h-7 w-7" />
             <span className="text-[19px] font-extrabold tracking-tight text-ivory">
               {site.name}
             </span>

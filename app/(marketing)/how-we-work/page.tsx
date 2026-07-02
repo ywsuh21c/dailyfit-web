@@ -2,11 +2,12 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { site } from '@/lib/site';
 import { Reveal } from '@/components/motion/Reveal';
+import { OrgOrbit } from '@/components/motion/OrgOrbit';
 
 export const metadata: Metadata = {
   title: 'How we work',
   description:
-    'AI-네이티브하게, 컨설팅처럼 체계적으로 — DailyFit이 에이전트 팀으로 일하는 방식.',
+    'AI-네이티브하게, 컨설팅처럼 체계적으로. DailyFit이 Agent 팀으로 일하는 방식.',
 };
 
 // /how-we-work — recruiting layer. HANDOFF §2: UNPROVEN bet — 실제 오픈
@@ -48,8 +49,8 @@ export default function HowWeWorkPage() {
             </p>
           </Reveal>
           <div className="mt-12 grid gap-5 sm:grid-cols-2">
-            <PrincipleCard k="01 · AI-native" title="사람은 판단, 에이전트는 실행" delay={0}>
-              전략·리서치·제품·디자인의 실행을 역할별 AI 에이전트가 맡습니다.
+            <PrincipleCard k="01 · AI-native" title="사람은 판단, Agent는 실행" delay={0}>
+              전략·리서치·제품·디자인의 실행을 역할별 AI Agent가 맡습니다.
               사람은 방향을 세우고, 마지막 판단을 내립니다.
             </PrincipleCard>
             <PrincipleCard k="02 · Transparency" title="Radically Transparent" delay={100}>
@@ -57,7 +58,7 @@ export default function HowWeWorkPage() {
               틀렸는지 기록으로 남깁니다.
             </PrincipleCard>
             <PrincipleCard k="03 · Compounding" title="모든 판단을 자산으로" delay={200}>
-              회의록·결정·교훈이 에이전트의 컨텍스트로 누적됩니다. 오늘의
+              회의록·결정·교훈이 Agent의 컨텍스트로 누적됩니다. 오늘의
               판단이 내일의 판단을 더 빠르고 정확하게 만듭니다.
             </PrincipleCard>
             <PrincipleCard k="04 · Speed" title="작지만 빠른 팀" delay={300}>
@@ -76,10 +77,10 @@ export default function HowWeWorkPage() {
             <h2 className="mt-4 text-[30px] font-extrabold leading-[1.2] tracking-[-0.03em] text-ink sm:text-[36px]">
               사람은 방향을 정하고,
               <br />
-              에이전트가 실행합니다.
+              Agent가 실행합니다.
             </h2>
             <p className="mt-6 max-w-[46ch] text-body text-ink-soft">
-              DailyFit은 AI 에이전트 팀을 직접 운영하는 회사입니다. 두 명의
+              DailyFit은 AI Agent 팀을 직접 운영하는 회사입니다. 두 명의
               팀이 큰 조직의 속도와 체계를 동시에 내는 이유입니다.
             </p>
             <p className="mt-4 max-w-[46ch] text-body font-semibold text-ink">
@@ -87,20 +88,27 @@ export default function HowWeWorkPage() {
             </p>
           </Reveal>
           <Reveal delay={120}>
-            <div className="flex flex-col gap-3.5">
-              <WorkItem title="실행은 에이전트가 분담">
-                전략·리서치·제품·디자인 실행을 역할별 에이전트가 병렬로
-                처리합니다.
-              </WorkItem>
-              <WorkItem title="판단과 방향은 사람이">
-                고객을 만나고, 가설을 세우고, 마지막 결정을 내리는 일은 사람의
-                몫입니다.
-              </WorkItem>
-              <WorkItem title="모든 산출물은 기록으로">
-                결정·실패·교훈이 문서로 남아 다음 에이전트의 컨텍스트가
-                됩니다.
-              </WorkItem>
-            </div>
+            <OrgOrbit />
+          </Reveal>
+        </div>
+        <div className="mx-auto mt-14 grid max-w-6xl gap-3.5 px-5 md:grid-cols-3">
+          <Reveal delay={0}>
+            <WorkItem title="실행은 Agent가 분담">
+              전략·리서치·제품·디자인 실행을 역할별 Agent가 병렬로
+              처리합니다.
+            </WorkItem>
+          </Reveal>
+          <Reveal delay={100}>
+            <WorkItem title="판단과 방향은 사람이">
+              고객을 만나고, 가설을 세우고, 마지막 결정을 내리는 일은 사람의
+              몫입니다.
+            </WorkItem>
+          </Reveal>
+          <Reveal delay={200}>
+            <WorkItem title="모든 산출물은 기록으로">
+              결정·실패·교훈이 문서로 남아 다음 Agent의 컨텍스트가
+              됩니다.
+            </WorkItem>
           </Reveal>
         </div>
       </section>
@@ -114,7 +122,7 @@ export default function HowWeWorkPage() {
               공식 채용 공고는 아직 없습니다.
             </h2>
             <p className="mx-auto mt-5 max-w-[50ch] text-body text-ink-soft">
-              그래도 이 방식이 끌린다면 — 에이전트와 함께 일하는 회사를 먼저
+              그래도 이 방식이 끌린다면, Agent와 함께 일하는 회사를 먼저
               경험해 보고 싶다면, 미리 연락 주세요. 다음 채용은 여기서
               시작됩니다.
             </p>
