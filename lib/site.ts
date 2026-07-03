@@ -43,10 +43,12 @@ export const companyNav: NavItem[] = [
 
 // Live web app (react-native-web build) — every "제품 사용해보기" CTA across the
 // company site funnels here so visitors can try the product in-browser, no
-// install (Anthropic→Claude "Try Claude" pattern). app. subdomain of the
-// company domain. /product (senior marketing + store badges) stays the search-
-// ad landing page, reached by direct URL, not from the company nav.
-export const productAppUrl = 'https://app.dailyfitai.app' as const;
+// install (Anthropic→Claude "Try Claude" pattern). my. subdomain of the
+// company domain (2026-07-03: renamed from app. — was redundant with the
+// homepage's own "dailyfitai.app", and "my." reads as "your day, designed").
+// /product (senior marketing + store badges) stays the search-ad landing
+// page, reached by direct URL, not from the company nav.
+export const productAppUrl = 'https://my.dailyfitai.app' as const;
 
 // Spread onto any <Link>/<a> that points at productAppUrl — opens the web app in
 // a new tab so the company site stays put. Single source for the new-tab policy.
