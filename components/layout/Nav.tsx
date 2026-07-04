@@ -21,7 +21,10 @@ export function Nav() {
           aria-label={`${site.name} 홈`}
         >
           <BrandMark className="h-8 w-8" />
-          <span className="text-[22px] font-extrabold tracking-tight text-ink">
+          {/* 390px대에서 nav(브랜드+EN+CTA)가 뷰포트를 넘어 body 전체가 우측
+              클리핑되던 프리-이그지스팅 오버플로우 — sm 미만은 마스코트가
+              브랜드를 대신한다 (desktop 불변). */}
+          <span className="hidden text-[22px] font-extrabold tracking-tight text-ink sm:inline">
             {site.name}
           </span>
         </Link>
