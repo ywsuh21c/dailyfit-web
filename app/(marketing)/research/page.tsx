@@ -37,9 +37,9 @@ export default function ResearchPage() {
             <h1 className="mt-6 text-[42px] font-extrabold leading-[1.12] tracking-[-0.035em] text-ink sm:text-[54px]">
               <span className="text-sage">Self-accelerating Agentic AI.</span>
               <br />
-              우리가 푸는
+              우리가 풀
               <br />
-              Next Problem.
+              다음 문제.
             </h1>
             <p className="mt-8 max-w-[54ch] text-[17px] leading-relaxed text-ink-soft sm:text-[19px]">
               과학은 가설과 실험의 반복으로 전진합니다.
