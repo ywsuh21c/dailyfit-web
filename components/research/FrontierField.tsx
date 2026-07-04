@@ -5,7 +5,8 @@
  * (frontier). Ripple waves expand continuously from the center: the expansion
  * itself, drawn. Pure SVG + CSS (globals.css `.ripple-*`); no client JS.
  */
-const ringLabel = { font: '600 12.5px Pretendard, sans-serif', letterSpacing: '0.1em' } as const;
+const ringLabel = { fontWeight: 600, fontSize: 12.5, letterSpacing: '0.1em' } as const;
+const coreLabel = { fontWeight: 700, fontSize: 13, letterSpacing: '0.02em' } as const;
 
 export function FrontierField({ lang = 'ko' }: { lang?: 'ko' | 'en' }) {
   const L =
@@ -22,7 +23,7 @@ export function FrontierField({ lang = 'ko' }: { lang?: 'ko' | 'en' }) {
           coreTop: '취미 찾아주기',
           coreBottom: '오늘의 DailyFit',
           mid: '일자리 찾아주기',
-          outer: '기회를 만들어내기',
+          outer: '기회 창출',
         };
 
   return (
@@ -41,7 +42,7 @@ export function FrontierField({ lang = 'ko' }: { lang?: 'ko' | 'en' }) {
         <circle cx="280" cy="170" r="150" fill="none" stroke="#4A7C59" strokeWidth="1.5" className="ripple-ring ripple-d2" />
 
         {/* domain orbits */}
-        <circle cx="280" cy="170" r="52" fill="url(#frontier-core)" stroke="#4A7C59" strokeOpacity="0.5" strokeWidth="1.5" />
+        <circle cx="280" cy="170" r="64" fill="url(#frontier-core)" stroke="#4A7C59" strokeOpacity="0.5" strokeWidth="1.5" />
         <circle cx="280" cy="170" r="100" fill="none" stroke="#4A7C59" strokeOpacity="0.3" strokeWidth="1.2" strokeDasharray="1 0" />
         <circle cx="280" cy="170" r="150" fill="none" stroke="#4A7C59" strokeOpacity="0.22" strokeWidth="1.2" strokeDasharray="4 6" />
 
@@ -53,10 +54,10 @@ export function FrontierField({ lang = 'ko' }: { lang?: 'ko' | 'en' }) {
         <circle cx="280" cy="20" r="4" fill="none" stroke="#4A7C59" strokeWidth="2" strokeDasharray="2 2" />
 
         {/* labels — core inside (two lines), others pinned to their orbit */}
-        <text x="280" y="166" textAnchor="middle" className="fill-ink" style={ringLabel}>
+        <text x="280" y="164" textAnchor="middle" className="fill-ink" style={coreLabel}>
           {L.coreTop}
         </text>
-        <text x="280" y="184" textAnchor="middle" className="fill-ink-soft" style={{ font: '600 10.5px Pretendard, sans-serif', letterSpacing: '0.08em' }}>
+        <text x="280" y="186" textAnchor="middle" className="fill-ink-soft" style={{ fontWeight: 600, fontSize: 11, letterSpacing: '0.04em' }}>
           {L.coreBottom}
         </text>
         <g>

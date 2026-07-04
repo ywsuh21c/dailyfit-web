@@ -36,7 +36,7 @@ export function SectionHeader({
 }: {
   eyebrow?: string;
   title: string;
-  lead?: string;
+  lead?: React.ReactNode;
   invert?: boolean;
 }) {
   return (

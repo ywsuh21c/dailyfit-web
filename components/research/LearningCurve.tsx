@@ -74,10 +74,10 @@ export function LearningCurve({ lang = 'ko' }: { lang?: 'ko' | 'en' }) {
         {/* axes */}
         <line x1="64" y1="20" x2="64" y2="300" stroke="#1E2D40" strokeOpacity="0.25" />
         <line x1="64" y1="300" x2="600" y2="300" stroke="#1E2D40" strokeOpacity="0.25" />
-        <text x="600" y="326" textAnchor="end" className="fill-ink-soft" style={{ font: '600 12px Pretendard, sans-serif', letterSpacing: '0.12em', textTransform: 'uppercase' }}>
+        <text x="600" y="326" textAnchor="end" className="fill-ink-soft" style={{ fontWeight: 600, fontSize: 12, letterSpacing: '0.12em', textTransform: 'uppercase' }}>
           {L.x}
         </text>
-        <text x="52" y="24" textAnchor="end" className="fill-ink-soft" style={{ font: '600 12px Pretendard, sans-serif', letterSpacing: '0.12em', textTransform: 'uppercase' }}>
+        <text x="72" y="28" textAnchor="start" className="fill-ink-soft" style={{ fontWeight: 600, fontSize: 12, letterSpacing: '0.12em', textTransform: 'uppercase' }}>
           {L.y}
         </text>
 
@@ -102,7 +102,7 @@ export function LearningCurve({ lang = 'ko' }: { lang?: 'ko' | 'en' }) {
         <g className="curve-pt curve-pt-1">
           <circle cx="180" cy="286" r="5" fill="#1E2D40" fillOpacity="0.45" />
           <line x1="180" y1="278" x2="180" y2="248" stroke="#1E2D40" strokeOpacity="0.2" />
-          <text x="180" y="236" textAnchor="middle" className="fill-ink-soft" style={{ font: '600 13px Pretendard, sans-serif' }}>
+          <text x="180" y="236" textAnchor="middle" className="fill-ink-soft" style={{ fontWeight: 600, fontSize: 13 }}>
             {L.p1}
           </text>
         </g>
@@ -112,7 +112,7 @@ export function LearningCurve({ lang = 'ko' }: { lang?: 'ko' | 'en' }) {
           <circle cx="420" cy="220" r="22" fill="url(#curve-glow)" />
           <circle cx="420" cy="220" r="6" fill="#4A7C59" />
           <line x1="420" y1="208" x2="420" y2="168" stroke="#4A7C59" strokeOpacity="0.3" />
-          <text x="420" y="156" textAnchor="middle" className="fill-ink" style={{ font: '700 14px Pretendard, sans-serif' }}>
+          <text x="420" y="156" textAnchor="middle" className="fill-ink" style={{ fontWeight: 700, fontSize: 14 }}>
             {L.p2}
           </text>
         </g>
@@ -120,7 +120,7 @@ export function LearningCurve({ lang = 'ko' }: { lang?: 'ko' | 'en' }) {
         {/* ③ evolves ahead — beyond the frame */}
         <g className="curve-pt curve-pt-3">
           <circle cx="584" cy="40" r="6" fill="none" stroke="#4A7C59" strokeWidth="2" strokeDasharray="3 3" />
-          <text x="574" y="26" textAnchor="end" className="fill-sage" style={{ font: '700 14px Pretendard, sans-serif' }}>
+          <text x="574" y="26" textAnchor="end" className="fill-sage" style={{ fontWeight: 700, fontSize: 14 }}>
             {L.p3}
           </text>
         </g>

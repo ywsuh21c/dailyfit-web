@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
-import { externalLinkProps, productAppUrl, site } from '@/lib/site';
+import Link from 'next/link';
+import { externalLinkProps, productAppUrl } from '@/lib/site';
 import { AgentConsole } from '@/components/home/AgentConsole';
 import { Reveal } from '@/components/motion/Reveal';
 
@@ -12,8 +13,6 @@ export const metadata: Metadata = {
   description:
     'We build AI agents for the active senior generation. One conversation designs the day: discovery, reminders, and auto-apply.',
 };
-
-const mailto = `mailto:${site.contactEmail}`;
 
 // Static, English-labeled sample of real catalog activities (the live database
 // is Korean-first; this page renders representative examples in English).
@@ -48,12 +47,12 @@ export default function EnHomePage() {
               for active seniors.
             </h1>
             <div className="mt-10 flex flex-wrap items-center gap-4">
-              <a
-                href={mailto}
+              <Link
+                href="/contact"
                 className="inline-flex min-h-[56px] items-center rounded-xl bg-sage px-8 text-[17px] font-bold text-white transition-colors hover:bg-sage-dk active:scale-[0.98]"
               >
                 Talk to us
-              </a>
+              </Link>
               <a
                 href="#runtime"
                 className="inline-flex min-h-[56px] items-center rounded-xl border border-ink/15 bg-white/50 px-8 text-[17px] font-bold text-ink transition-colors hover:border-sage hover:text-sage active:scale-[0.98]"
@@ -246,12 +245,12 @@ export default function EnHomePage() {
               Building the next AI for active seniors.
             </h2>
             <div className="mt-10 flex flex-wrap justify-center gap-4">
-              <a
-                href={mailto}
+              <Link
+                href="/contact"
                 className="inline-flex min-h-[56px] items-center rounded-xl bg-white px-8 text-[17px] font-bold text-sage-dk transition-colors hover:bg-ivory active:scale-[0.98]"
               >
                 Talk to us
-              </a>
+              </Link>
               <a
                 href={productAppUrl}
                 {...externalLinkProps}

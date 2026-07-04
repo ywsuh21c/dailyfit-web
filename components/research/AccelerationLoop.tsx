@@ -140,9 +140,9 @@ export function AccelerationLoop({ lang = 'ko' }: { lang?: 'ko' | 'en' }) {
       : 'Self-acceleration · 스스로 배우고, 스스로 나아지는 Agent';
 
   return (
-    <div ref={rootRef} className="mx-auto w-full max-w-[440px]">
+    <div ref={rootRef} className="mx-auto w-full max-w-[500px]">
       <svg
-        viewBox="0 0 420 420"
+        viewBox="-60 0 540 420"
         role="img"
         aria-label={
           lang === 'en'
@@ -202,7 +202,7 @@ export function AccelerationLoop({ lang = 'ko' }: { lang?: 'ko' | 'en' }) {
                 dominantBaseline="middle"
                 className="fill-ink-soft"
                 style={{
-                  font: '600 11.5px Pretendard, sans-serif',
+                  fontWeight: 600, fontSize: 11.5,
                   letterSpacing: '0.14em',
                   textTransform: 'uppercase',
                 }}
@@ -239,7 +239,7 @@ export function AccelerationLoop({ lang = 'ko' }: { lang?: 'ko' | 'en' }) {
           y={CY - 8}
           textAnchor="middle"
           className="fill-ink"
-          style={{ font: '800 30px Pretendard, sans-serif', letterSpacing: '-0.02em' }}
+          style={{ fontWeight: 800, fontSize: 30, letterSpacing: '-0.02em' }}
         >
           cycle 1
         </text>
@@ -250,7 +250,7 @@ export function AccelerationLoop({ lang = 'ko' }: { lang?: 'ko' | 'en' }) {
           textAnchor="middle"
           className="fill-sage"
           style={{
-            font: '600 13px Pretendard, sans-serif',
+            fontWeight: 600, fontSize: 13,
             letterSpacing: '0.14em',
           }}
         >

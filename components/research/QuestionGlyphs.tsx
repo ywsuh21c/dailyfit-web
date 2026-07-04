@@ -4,7 +4,9 @@
  * All motion disabled under prefers-reduced-motion.
  */
 
-const label = { font: '600 10px Pretendard, sans-serif', letterSpacing: '0.1em' } as const;
+// Split attrs (not the `font:` shorthand) so the label inherits the loaded
+// Pretendard face instead of falling back to a system font.
+const label = { fontWeight: 600, fontSize: 10, letterSpacing: '0.1em' } as const;
 
 /** Learning cadence — two rhythms: always-on stream vs. fixed check-ins. */
 export function CadenceGlyph() {

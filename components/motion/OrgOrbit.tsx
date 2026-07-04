@@ -72,10 +72,10 @@ export function OrgOrbit() {
 
         {/* human core */}
         <circle cx={CX} cy={CY} r={58} fill="url(#org-core)" stroke="#4A7C59" strokeOpacity="0.45" strokeWidth="1.5" />
-        <text x={CX} y={CY - 8} textAnchor="middle" className="fill-ink" style={{ font: '800 15px Pretendard, sans-serif' }}>
+        <text x={CX} y={CY - 8} textAnchor="middle" className="fill-ink" style={{ fontWeight: 800, fontSize: 15 }}>
           사람
         </text>
-        <text x={CX} y={CY + 12} textAnchor="middle" className="fill-ink-soft" style={{ font: '600 11px Pretendard, sans-serif', letterSpacing: '0.06em' }}>
+        <text x={CX} y={CY + 12} textAnchor="middle" className="fill-ink-soft" style={{ fontWeight: 600, fontSize: 11, letterSpacing: '0.06em' }}>
           방향 · 최종 판단
         </text>
 
@@ -92,7 +92,7 @@ export function OrgOrbit() {
                 y={lp.y - 2}
                 textAnchor="middle"
                 className="fill-ink"
-                style={{ font: '700 13px Pretendard, sans-serif' }}
+                style={{ fontWeight: 700, fontSize: 13 }}
               >
                 {a.label}
               </text>
@@ -101,7 +101,7 @@ export function OrgOrbit() {
                 y={lp.y + 14}
                 textAnchor="middle"
                 className="fill-ink-soft"
-                style={{ font: '600 10px Pretendard, sans-serif', letterSpacing: '0.1em', textTransform: 'uppercase' }}
+                style={{ fontWeight: 600, fontSize: 10, letterSpacing: '0.1em', textTransform: 'uppercase' }}
               >
                 agent
               </text>
@@ -109,7 +109,7 @@ export function OrgOrbit() {
           );
         })}
 
-        <text x={CX} y={430} textAnchor="middle" className="fill-ink-soft" style={{ font: '600 11.5px Pretendard, sans-serif', letterSpacing: '0.12em' }}>
+        <text x={CX} y={430} textAnchor="middle" className="fill-ink-soft" style={{ fontWeight: 600, fontSize: 11.5, letterSpacing: '0.12em' }}>
           실행은 Agent가 · 판단은 사람이
         </text>
       </svg>

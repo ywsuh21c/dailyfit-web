@@ -3,17 +3,42 @@
 import { useEffect, useRef, useState } from 'react';
 
 /**
- * About-page visual — the founder journey as a rising path that draws itself
- * on scroll (same `.curve-draw` / `.curve-pt` CSS as the research
- * LearningCurve). Boston University → Bain → PYLER → DailyFit; the current
- * chapter glows. Reduced-motion renders it fully drawn.
+ * About-page visual — BOTH founders' journeys, drawn as two paths that first
+ * cross at Bain (where they met) and reconverge at DailyFit (Michael
+ * 2026-07-04: the story is the two careers building up to this company, not
+ * one founder's line). Same `.curve-draw` / `.curve-pt` CSS as the research
+ * LearningCurve; reduced-motion renders it fully drawn.
+ *
+ * Careers (verified sources: D.DAY application draft · business cards):
+ * 서영우 Boston University → Bain → PYLER → DailyFit
+ * 김현진 고려대학교 → Bain → UVA MBA → DailyFit
  */
-const STOPS = [
-  { x: 70, y: 240, label: 'Boston University', sub: '경영학', cls: 'curve-pt-1' },
-  { x: 240, y: 210, label: 'Bain & Company', sub: '전략 컨설팅', cls: 'curve-pt-1' },
-  { x: 410, y: 160, label: 'PYLER', sub: 'Corporate Development', cls: 'curve-pt-2' },
-  { x: 570, y: 78, label: 'DailyFit', sub: 'Founder · CEO', cls: 'curve-pt-3' },
-] as const;
+
+const SAGE = '#4A7C59';
+const NAVY = '#1E2D40';
+
+type Stop = {
+  x: number;
+  y: number;
+  label: string;
+  sub: string;
+  cls: string;
+};
+
+// Youngwoo's path (sage) — bottom-left start.
+const YW_STOPS: Stop[] = [
+  { x: 74, y: 240, label: 'Boston University', sub: '경영학', cls: 'curve-pt-1' },
+  { x: 412, y: 152, label: 'PYLER', sub: 'Corporate Development', cls: 'curve-pt-2' },
+];
+
+// Hyunjin's path (navy) — top-left start.
+const HJ_STOPS: Stop[] = [
+  { x: 74, y: 118, label: '고려대학교', sub: '경영학', cls: 'curve-pt-1' },
+  { x: 412, y: 226, label: 'UVA', sub: 'MBA', cls: 'curve-pt-2' },
+];
+
+// Both founders' stops share one marker layer — combine once, not per render.
+const ALL_STOPS: Stop[] = [...YW_STOPS, ...HJ_STOPS];
 
 export function JourneyPath() {
   const ref = useRef<HTMLDivElement>(null);
@@ -36,11 +61,11 @@ export function JourneyPath() {
   }, []);
 
   return (
-    <div ref={ref} className={`mx-auto w-full max-w-[640px] ${on ? 'curve-on' : ''}`}>
+    <div ref={ref} className={`mx-auto w-full max-w-[680px] ${on ? 'curve-on' : ''}`}>
       <svg
-        viewBox="0 0 640 300"
+        viewBox="0 0 660 320"
         role="img"
-        aria-label="창업자 여정: Boston University에서 Bain, PYLER를 거쳐 DailyFit까지"
+        aria-label="두 창업자의 여정: 서영우는 Boston University와 Bain, PYLER를 거치고, 김현진은 고려대학교와 Bain, UVA MBA를 거쳐 DailyFit에서 다시 만난 모습"
         className="h-auto w-full"
       >
         <defs>
@@ -50,52 +75,88 @@ export function JourneyPath() {
           </radialGradient>
         </defs>
 
-        {/* the path draws itself */}
+        {/* Youngwoo: BU → Bain → PYLER → DailyFit */}
         <path
           className="curve-draw"
-          d="M 70 240 C 150 232, 180 218, 240 210 C 320 200, 360 185, 410 160 C 480 126, 520 105, 570 78"
+          d="M 74 240 C 140 230, 190 200, 248 184 C 320 165, 360 162, 412 152 C 478 139, 528 112, 576 84"
           fill="none"
-          stroke="#4A7C59"
-          strokeOpacity="0.5"
+          stroke={SAGE}
+          strokeOpacity="0.55"
+          strokeWidth="2.5"
+          strokeLinecap="round"
+          strokeDasharray="1 0"
+        />
+        {/* Hyunjin: 고려대 → Bain → UVA → DailyFit */}
+        <path
+          className="curve-draw"
+          d="M 74 118 C 140 128, 192 166, 248 184 C 316 206, 362 228, 412 226 C 476 223, 530 130, 576 84"
+          fill="none"
+          stroke={NAVY}
+          strokeOpacity="0.4"
           strokeWidth="2.5"
           strokeLinecap="round"
           strokeDasharray="1 0"
         />
 
-        {STOPS.map((s, i) => {
-          const last = i === STOPS.length - 1;
-          return (
-            <g key={s.label} className={`curve-pt ${s.cls}`}>
-              {last ? <circle cx={s.x} cy={s.y} r={24} fill="url(#journey-glow)" /> : null}
-              <circle
-                cx={s.x}
-                cy={s.y}
-                r={last ? 6.5 : 5}
-                fill={last ? '#4A7C59' : '#F5F0E8'}
-                stroke="#4A7C59"
-                strokeWidth={last ? 0 : 2}
-              />
-              <text
-                x={s.x}
-                y={s.y - 20}
-                textAnchor="middle"
-                className={last ? 'fill-sage' : 'fill-ink'}
-                style={{ font: `${last ? 800 : 700} 14px Pretendard, sans-serif` }}
-              >
-                {s.label}
-              </text>
-              <text
-                x={s.x}
-                y={s.y + 26}
-                textAnchor="middle"
-                className="fill-ink-soft"
-                style={{ font: '600 11px Pretendard, sans-serif', letterSpacing: '0.06em' }}
-              >
-                {s.sub}
-              </text>
-            </g>
-          );
-        })}
+        {/* individual stops */}
+        {ALL_STOPS.map((s) => (
+          <g key={s.label} className={`curve-pt ${s.cls}`}>
+            <circle cx={s.x} cy={s.y} r={5} fill="#F5F0E8" stroke={SAGE} strokeWidth={2} />
+            <text
+              x={s.x}
+              y={s.y - 18}
+              textAnchor="middle"
+              className="fill-ink"
+              style={{ fontWeight: 700, fontSize: 14 }}
+            >
+              {s.label}
+            </text>
+            <text
+              x={s.x}
+              y={s.y + 24}
+              textAnchor="middle"
+              className="fill-ink-soft"
+              style={{ fontWeight: 600, fontSize: 11, letterSpacing: '0.06em' }}
+            >
+              {s.sub}
+            </text>
+          </g>
+        ))}
+
+        {/* Bain — where the two paths first cross */}
+        <g className="curve-pt curve-pt-1">
+          <circle cx={248} cy={184} r={6} fill="#F5F0E8" stroke={SAGE} strokeWidth={2.5} />
+          <text x={248} y={158} textAnchor="middle" className="fill-ink" style={{ fontWeight: 700, fontSize: 14 }}>
+            Bain &amp; Company
+          </text>
+          <text x={248} y={212} textAnchor="middle" className="fill-ink-soft" style={{ fontWeight: 600, fontSize: 11, letterSpacing: '0.06em' }}>
+            여기서 처음 만났습니다
+          </text>
+        </g>
+
+        {/* DailyFit — where they reconverge */}
+        <g className="curve-pt curve-pt-3">
+          <circle cx={576} cy={84} r={24} fill="url(#journey-glow)" />
+          <circle cx={576} cy={84} r={6.5} fill={SAGE} />
+          <text x={576} y={58} textAnchor="middle" className="fill-sage" style={{ fontWeight: 800, fontSize: 15 }}>
+            DailyFit
+          </text>
+          <text x={576} y={116} textAnchor="middle" className="fill-ink-soft" style={{ fontWeight: 600, fontSize: 11, letterSpacing: '0.06em' }}>
+            Co-founders
+          </text>
+        </g>
+
+        {/* legend */}
+        <g aria-hidden="true">
+          <circle cx={78} cy={296} r={4} fill={SAGE} />
+          <text x={90} y={300} className="fill-ink-soft" style={{ fontWeight: 600, fontSize: 11.5 }}>
+            서영우
+          </text>
+          <circle cx={152} cy={296} r={4} fill={NAVY} fillOpacity={0.55} />
+          <text x={164} y={300} className="fill-ink-soft" style={{ fontWeight: 600, fontSize: 11.5 }}>
+            김현진
+          </text>
+        </g>
       </svg>
     </div>
   );

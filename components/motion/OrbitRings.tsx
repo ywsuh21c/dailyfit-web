@@ -4,8 +4,9 @@
  * expanding outward. Used for domain/market/moat expansion metaphors.
  * Pure SVG + CSS (globals.css `.ripple-*`); server component.
  */
-const ringLabel = { font: '600 12.5px Pretendard, sans-serif', letterSpacing: '0.1em' } as const;
-const subLabel = { font: '600 10.5px Pretendard, sans-serif', letterSpacing: '0.08em' } as const;
+const ringLabel = { fontWeight: 600, fontSize: 12.5, letterSpacing: '0.1em' } as const;
+const coreLabel = { fontWeight: 700, fontSize: 13, letterSpacing: '0.02em' } as const;
+const subLabel = { fontWeight: 600, fontSize: 11, letterSpacing: '0.04em' } as const;
 
 export function OrbitRings({
   aria,
@@ -36,7 +37,7 @@ export function OrbitRings({
         <circle cx="280" cy="170" r="150" fill="none" stroke="#4A7C59" strokeWidth="1.5" className="ripple-ring ripple-d2" />
 
         {/* orbits */}
-        <circle cx="280" cy="170" r="52" fill="url(#orbit-core)" stroke="#4A7C59" strokeOpacity="0.5" strokeWidth="1.5" />
+        <circle cx="280" cy="170" r="64" fill="url(#orbit-core)" stroke="#4A7C59" strokeOpacity="0.5" strokeWidth="1.5" />
         <circle cx="280" cy="170" r="100" fill="none" stroke="#4A7C59" strokeOpacity="0.3" strokeWidth="1.2" />
         <circle cx="280" cy="170" r="150" fill="none" stroke="#4A7C59" strokeOpacity="0.22" strokeWidth="1.2" strokeDasharray="4 6" />
 
@@ -48,15 +49,15 @@ export function OrbitRings({
         {/* labels */}
         {coreBottom ? (
           <>
-            <text x="280" y="166" textAnchor="middle" className="fill-ink" style={ringLabel}>
+            <text x="280" y="164" textAnchor="middle" className="fill-ink" style={coreLabel}>
               {coreTop}
             </text>
-            <text x="280" y="184" textAnchor="middle" className="fill-ink-soft" style={subLabel}>
+            <text x="280" y="186" textAnchor="middle" className="fill-ink-soft" style={subLabel}>
               {coreBottom}
             </text>
           </>
         ) : (
-          <text x="280" y="174" textAnchor="middle" className="fill-ink" style={ringLabel}>
+          <text x="280" y="174" textAnchor="middle" className="fill-ink" style={coreLabel}>
             {coreTop}
           </text>
         )}
