@@ -35,14 +35,14 @@ const pt = (deg: number, r: number = R) => {
 
 export function MethodPipeline({ lang = 'ko' }: { lang?: 'ko' | 'en' }) {
   const steps = lang === 'en' ? EN : KO;
-  const center = lang === 'en' ? ['the flywheel', 'faster every turn'] : ['the flywheel', '한 바퀴마다 빨라집니다'];
+  const center = lang === 'en' ? ['the flywheel', 'faster every turn'] : ['the flywheel', '반복할수록 빨라집니다'];
 
   return (
     <div>
       {/* ── flywheel ── */}
-      <div className="mx-auto w-full max-w-[520px]">
+      <div className="mx-auto w-full max-w-[600px]">
         <svg
-          viewBox="0 0 520 480"
+          viewBox="-70 0 660 480"
           role="img"
           aria-label={
             lang === 'en'
@@ -94,13 +94,13 @@ export function MethodPipeline({ lang = 'ko' }: { lang?: 'ko' | 'en' }) {
             return (
               <g key={s.num}>
                 <circle cx={p.x} cy={p.y} r={17} fill="#F5F0E8" stroke="#4A7C59" strokeOpacity="0.5" strokeWidth="1.5" />
-                <text x={p.x} y={p.y + 1} textAnchor="middle" dominantBaseline="middle" className="fill-sage" style={{ font: '800 12px Pretendard, sans-serif' }}>
+                <text x={p.x} y={p.y + 1} textAnchor="middle" dominantBaseline="middle" className="fill-sage" style={{ fontWeight: 800, fontSize: 12 }}>
                   {s.num}
                 </text>
-                <text x={lp.x} y={lp.y - 6} textAnchor={anchor} className="fill-ink" style={{ font: '700 15px Pretendard, sans-serif' }}>
+                <text x={lp.x} y={lp.y - 6} textAnchor={anchor} className="fill-ink" style={{ fontWeight: 700, fontSize: 15 }}>
                   {s.title}
                 </text>
-                <text x={lp.x} y={lp.y + 12} textAnchor={anchor} className="fill-ink-soft" style={{ font: '600 10.5px Pretendard, sans-serif', letterSpacing: '0.12em', textTransform: 'uppercase' }}>
+                <text x={lp.x} y={lp.y + 12} textAnchor={anchor} className="fill-ink-soft" style={{ fontWeight: 600, fontSize: 10.5, letterSpacing: '0.12em', textTransform: 'uppercase' }}>
                   {s.tag}
                 </text>
               </g>
@@ -109,10 +109,10 @@ export function MethodPipeline({ lang = 'ko' }: { lang?: 'ko' | 'en' }) {
 
           {/* hub */}
           <circle cx={CX} cy={CY} r={58} fill="#4A7C59" fillOpacity="0.06" />
-          <text x={CX} y={CY - 6} textAnchor="middle" className="fill-sage" style={{ font: '600 11px Pretendard, sans-serif', letterSpacing: '0.16em', textTransform: 'uppercase' }}>
+          <text x={CX} y={CY - 6} textAnchor="middle" className="fill-sage" style={{ fontWeight: 600, fontSize: 11, letterSpacing: '0.16em', textTransform: 'uppercase' }}>
             {center[0]}
           </text>
-          <text x={CX} y={CY + 14} textAnchor="middle" className="fill-ink" style={{ font: '700 13.5px Pretendard, sans-serif' }}>
+          <text x={CX} y={CY + 14} textAnchor="middle" className="fill-ink" style={{ fontWeight: 700, fontSize: 13.5 }}>
             {center[1]}
           </text>
         </svg>

@@ -89,7 +89,7 @@ export function JourneyPath() {
                 y={s.y + 26}
                 textAnchor="middle"
                 className="fill-ink-soft"
-                style={{ font: '600 11px Pretendard, sans-serif', letterSpacing: '0.06em' }}
+                style={{ fontWeight: 600, fontSize: 11, letterSpacing: '0.06em' }}
               >
                 {s.sub}
               </text>

@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
-import { site } from '@/lib/site';
+import Link from 'next/link';
 import { Reveal } from '@/components/motion/Reveal';
+import { Principles } from '@/components/research/Principles';
 import { AccelerationLoop } from '@/components/research/AccelerationLoop';
 import { LearningCurve } from '@/components/research/LearningCurve';
 import { ResearchConsole } from '@/components/research/ResearchConsole';
@@ -21,8 +22,6 @@ export const metadata: Metadata = {
     'DailyFit의 핵심 리서치 주제, self-accelerating AI. 지시받기 전에 스스로 진화하는 Agent를 실제 서비스 환경에서 연구합니다.',
 };
 
-const mailto = `mailto:${site.contactEmail}`;
-
 export default function ResearchPage() {
   return (
     <>
@@ -38,32 +37,33 @@ export default function ResearchPage() {
             <h1 className="mt-6 text-[42px] font-extrabold leading-[1.12] tracking-[-0.035em] text-ink sm:text-[54px]">
               <span className="text-sage">Self-accelerating Agentic AI.</span>
               <br />
-              우리가 풀고자 하는 Next Problem입니다.
+              우리가 풀고자 하는
+              <br />
+              Next Problem입니다.
             </h1>
             <p className="mt-8 max-w-[54ch] text-[17px] leading-relaxed text-ink-soft sm:text-[19px]">
-              과학은 가설과 실험의 반복으로 전진합니다.
+              과학은 가설과 실험의 반복으로 전진합니다. 이제 AI가 그 사이클을
+              스스로 돌리기 시작했습니다.
               <br />
               <br />
-              이제 AI가 그 사이클을 스스로 돌리기 시작했습니다.
+              진보의 속도를 정하는 것은 더 이상 기계가 아닙니다. 이제는 인간이
+              Bottleneck입니다.
               <br />
               <br />
-              진보가 사람의 속도를 넘어서는 순간입니다.
-              <br />
-              <br />
-              DailyFit은 그 순간을 앞당기고 있습니다.
+              DailyFit은 그 다음을 연구합니다.
             </p>
             <div className="mt-10 flex flex-wrap items-center gap-4">
-              <a
-                href={mailto}
+              <Link
+                href="/contact"
                 className="inline-flex min-h-[56px] items-center rounded-xl bg-sage px-8 text-[17px] font-bold text-white transition-colors hover:bg-sage-dk active:scale-[0.98]"
               >
                 Talk to us
-              </a>
+              </Link>
               <a
                 href="#frontiers"
                 className="inline-flex min-h-[56px] items-center rounded-xl border border-ink/15 bg-white/50 px-8 text-[17px] font-bold text-ink transition-colors hover:border-sage hover:text-sage active:scale-[0.98]"
               >
-                리서치 프런티어 ↓
+                Research Frontier ↓
               </a>
             </div>
           </div>
@@ -77,9 +77,9 @@ export default function ResearchPage() {
           <Reveal>
             <p className="eyebrow-mono text-sage">An AI-native company</p>
             <h2 className="mt-4 text-[34px] font-extrabold leading-[1.2] tracking-[-0.03em] text-ink sm:text-[46px]">
-              제품 회사이자,
+              Agent-as-a-Service 회사이자,
               <br />
-              AI 리서치 회사입니다.
+              AI Research Lab입니다.
             </h2>
             <p className="mx-auto mt-6 max-w-[72ch] text-body text-ink-soft">
               다음 시대의 소프트웨어는 스스로 일하는 Agent입니다.
@@ -91,20 +91,7 @@ export default function ResearchPage() {
           </Reveal>
         </div>
         <div className="mx-auto mt-16 max-w-6xl px-5">
-          <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-            <PrincipleCard num="P1" tag="Production-first" title="실전 우선" delay={0}>
-              벤치마크가 아니라 라이브 서비스에서 검증합니다.
-            </PrincipleCard>
-            <PrincipleCard num="P2" tag="ROI-gated" title="비용 게이트" delay={80}>
-              모든 학습 루프는 자신의 비용을 스스로 증명해야 합니다.
-            </PrincipleCard>
-            <PrincipleCard num="P3" tag="User sovereignty" title="사용자 결정권" delay={160}>
-              Agent는 제안하고, 결정은 언제나 사용자가 합니다.
-            </PrincipleCard>
-            <PrincipleCard num="P4" tag="Safe failure" title="안전한 실패" delay={240}>
-              모든 개입은 기록되고, 즉시 되돌릴 수 있습니다.
-            </PrincipleCard>
-          </div>
+          <Principles />
         </div>
       </section>
 
@@ -213,7 +200,9 @@ export default function ResearchPage() {
             >
               과한 학습은 흐름을 교란하고 잘못된 방향을 강화합니다.
               <br />
-              최적의 빈도가 존재한다고 가정하고, 그 지점을 찾습니다.
+              최적의 빈도가 존재한다고 가정하고,
+              <br />
+              그 지점이 어디인지를 찾습니다.
             </QuestionCard>
             <QuestionCard
               tag="Cost vs. value"
@@ -240,7 +229,7 @@ export default function ResearchPage() {
       <section id="frontiers" className="bg-surface py-24 sm:py-32">
         <div className="mx-auto max-w-6xl px-5">
           <Reveal className="mx-auto max-w-3xl text-center">
-            <p className="eyebrow-mono text-sage">Research frontiers</p>
+            <p className="eyebrow-mono text-sage">Research frontier</p>
             <h2 className="mt-4 text-[34px] font-extrabold leading-[1.2] tracking-[-0.03em] text-ink sm:text-[46px]">
               하나의 원리가,
               <br />
@@ -267,7 +256,9 @@ export default function ResearchPage() {
             >
               하루를 설계하던 원리가 일자리 기회를 찾는 데 그대로 적용됩니다.
               <br />
-              개인의 삶부터 직업의 삶까지, 같은 Agent가 받칩니다.
+              개인의 삶부터 직업의 삶까지,
+              <br />
+              같은 Agent가 지원합니다.
             </QuestionCard>
             <QuestionCard
               tag="Self-creating"
@@ -281,8 +272,6 @@ export default function ResearchPage() {
             </QuestionCard>
             <OpenSlotCard tag="In preparation" title="다음 주제들을 준비하고 있습니다" delay={240}>
               장기 로드맵 위에 다음 리서치들이 이미 줄 서 있습니다.
-              <br />
-              공개는 검증을 마친 순서대로입니다.
             </OpenSlotCard>
           </div>
         </div>
@@ -297,12 +286,12 @@ export default function ResearchPage() {
               다음 10년의 AI를 함께 만들 사람.
             </h2>
             <div className="mt-10 flex flex-wrap justify-center gap-4">
-              <a
-                href={mailto}
+              <Link
+                href="/contact"
                 className="inline-flex min-h-[56px] items-center rounded-xl bg-white px-8 text-[17px] font-bold text-sage-dk transition-colors hover:bg-ivory active:scale-[0.98]"
               >
                 Talk to us
-              </a>
+              </Link>
             </div>
           </Reveal>
         </div>
@@ -349,36 +338,6 @@ function QuestionCard({
             ))}
           </div>
         ) : null}
-      </div>
-    </Reveal>
-  );
-}
-
-/** Research principle — compact numbered card for the principles strip. */
-function PrincipleCard({
-  num,
-  tag,
-  title,
-  delay,
-  children,
-}: {
-  num: string;
-  tag: string;
-  title: string;
-  delay: number;
-  children: React.ReactNode;
-}) {
-  return (
-    <Reveal delay={delay}>
-      <div className="flex h-full flex-col rounded-2xl border border-line bg-white p-6">
-        <div className="flex items-baseline gap-2.5">
-          <span className="text-[22px] font-extrabold tracking-tight text-sage">{num}</span>
-          <span className="text-[11px] font-semibold uppercase tracking-[0.14em] text-ink-soft/60">
-            {tag}
-          </span>
-        </div>
-        <h3 className="mt-3 text-[17px] font-bold text-ink">{title}</h3>
-        <p className="mt-2 text-[14px] leading-relaxed text-ink-soft">{children}</p>
       </div>
     </Reveal>
   );
