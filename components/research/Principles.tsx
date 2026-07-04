@@ -121,20 +121,22 @@ const EN: Principle[] = [
     glyph: <LiveGlyph />,
     body: (
       <>
-        Our lab is a live service running every day, not a paper benchmark.
-        An improvement that does not survive production is not an improvement.
+        Value is proven by real-world performance, not a paper benchmark.
+        <br />
+        An improvement that doesn&rsquo;t help in a user&rsquo;s day is not an improvement.
       </>
     ),
   },
   {
     num: 'P2',
     tag: 'ROI-gated',
-    title: 'Every loop pays for itself',
+    title: 'Value must prove itself',
     glyph: <RoiGlyph />,
     body: (
       <>
-        Learning costs tokens and time. A learning loop that cannot prove its
-        value exceeds its cost gets switched off.
+        Not every round of learning leads to a better outcome.
+        <br />
+        An improvement that doesn&rsquo;t create real value stops itself.
       </>
     ),
   },
@@ -146,7 +148,9 @@ const EN: Principle[] = [
     body: (
       <>
         However autonomous the Agent becomes, the go/no-go on execution always
-        stays with the user. A design principle, not a technical limit.
+        stays with the user.
+        <br />
+        A design principle, not a technical limit.
       </>
     ),
   },
@@ -157,8 +161,9 @@ const EN: Principle[] = [
     glyph: <UndoGlyph />,
     body: (
       <>
-        Every intervention is logged and instantly reversible. Only a
-        structure that fails safely lets us experiment boldly.
+        Every intervention is logged and instantly reversible.
+        <br />
+        Only a structure that fails safely lets us experiment boldly.
       </>
     ),
   },
