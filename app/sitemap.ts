@@ -9,6 +9,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     '/technology',
     // '/use-cases' — HELD 2026-07-01 (route unrouted until real interviews).
     '/how-we-work',
+    '/contact',
     '/writing',
     '/product',
     '/en',

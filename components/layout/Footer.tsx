@@ -7,14 +7,16 @@ export function Footer() {
     <footer className="bg-navy-deep text-ivory/70">
       <div className="mx-auto max-w-6xl px-5 py-16">
         <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-[2fr_1fr_1fr_1fr]">
-          <div>
+          <div className="sm:col-span-2 lg:col-span-1">
             <Link href="/" className="flex items-center gap-2.5" aria-label={`${site.name} 홈`}>
               <BrandMark className="h-8 w-8" />
               <span className="text-[22px] font-extrabold tracking-tight text-ivory">
                 {site.name}
               </span>
             </Link>
-            <p className="mt-4 max-w-[30ch] text-base leading-relaxed">
+            {/* One line, always (Michael 2026-07-04) — sizes step down so the
+                sentence never wraps even at 320px viewports. */}
+            <p className="mt-4 whitespace-nowrap text-[12.5px] leading-relaxed min-[400px]:text-[14px] sm:text-base">
               Building AI agents for the active senior generation.
             </p>
           </div>

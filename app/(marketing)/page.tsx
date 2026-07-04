@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { externalLinkProps, productAppUrl, site } from '@/lib/site';
+import { externalLinkProps, productAppUrl } from '@/lib/site';
 import { getLiveActivities } from '@/lib/activities';
 import { getCatalogCount } from '@/lib/catalog-count';
 import { AgentConsole } from '@/components/home/AgentConsole';
@@ -30,8 +30,6 @@ import { Reveal } from '@/components/motion/Reveal';
 // - TODO(Michael): 정식 출시일 확정(6월 말 예정) — metric strip · traction.
 // - TODO(Michael): 제품 데모 비디오 자산 입고 시 what-we-build 우측 패널을
 //   <video autoplay muted loop playsinline> 로 교체 (public/media/demo.mp4).
-
-const mailto = `mailto:${site.contactEmail}`;
 
 // Floating data motes inside the runtime stage — deterministic positions
 // (no Math.random: server/client markup must match). Pure decoration.
@@ -95,12 +93,12 @@ export default async function HomePage() {
               <span className="mt-2 block">전 세계에서 가장 빠르게 커지는 세대의 하루를 설계합니다.</span>
             </p>
             <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
-              <a
-                href={mailto}
+              <Link
+                href="/contact"
                 className="hx-glow-cta inline-flex min-h-[56px] items-center rounded-xl bg-sage px-8 text-[17px] font-bold text-white transition-colors hover:bg-sage-dk active:scale-[0.98]"
               >
                 Talk to us
-              </a>
+              </Link>
               <a
                 href="#runtime"
                 className="inline-flex min-h-[56px] items-center rounded-xl border border-ivory/25 bg-white/5 px-8 text-[17px] font-bold text-ivory transition-colors hover:border-sage-lt hover:text-sage-lt active:scale-[0.98]"
@@ -132,7 +130,9 @@ export default async function HomePage() {
               무엇을 할지 찾는 게 어려울 뿐입니다.
             </h2>
             <p className="mx-auto mt-7 max-w-3xl text-body text-ink-soft">
-              배울 곳, 만날 사람, 나들이 갈 곳. 정보는 수십 개 기관과 포털에 흩어져 있습니다.
+              배울 곳, 만날 사람, 나들이 갈 곳.
+              <br />
+              정보는 수십 개 기관과 포털에 흩어져 있습니다.
               <br />
               찾기도 어렵고, 신청은 더 복잡합니다.
             </p>
@@ -261,8 +261,6 @@ export default async function HomePage() {
             </h2>
             <p className="mt-6 text-body text-ink-soft">
               탐색 · 리마인드 · 신청대행. 맡는 범위가 넓어질수록 상위 Agent로 이어집니다.
-              <br />
-              정식 출시 앱에는 최상위 Agent가 기본 탑재됩니다.
             </p>
           </Reveal>
           <div className="mt-14 grid gap-5 md:grid-cols-3">
@@ -293,6 +291,7 @@ export default async function HomePage() {
               delay={240}
             >
               회원가입·신청서·접수처럼 번거로운 과정을 사용자 대신 처리합니다.
+              <br />
               복잡한 절차는 Agent가 밟고, 사용자는 마지막 확인만 하면 됩니다.
             </AgentCard>
           </div>
@@ -337,12 +336,12 @@ export default async function HomePage() {
                 Building the next AI for active seniors.
               </p>
               <div className="mt-10 flex flex-wrap justify-center gap-4">
-                <a
-                  href={mailto}
+                <Link
+                  href="/contact"
                   className="hx-glow-cta inline-flex min-h-[56px] items-center rounded-xl bg-sage px-8 text-[17px] font-bold text-white transition-colors hover:bg-sage-dk active:scale-[0.98]"
                 >
                   Talk to us
-                </a>
+                </Link>
                 <Link
                   href={productAppUrl}
                   {...externalLinkProps}
@@ -418,7 +417,7 @@ function AgentCard({
           aria-label={`자율성 단계 ${level} / 3`}
         >
           <span className="text-[11px] font-semibold uppercase tracking-[0.14em] text-ink-soft/60">
-            autonomy
+            level of autonomy
           </span>
           <span className="ml-auto flex gap-1.5" aria-hidden="true">
             {[1, 2, 3].map((n) => (

@@ -67,9 +67,9 @@ export const productCta = { href: productAppUrl, label: 'DailyFit 시작하기' 
 // own column in Footer.tsx. "How we work" stays in the nav Company dropdown.
 export const footerNav: { heading: string; items: NavItem[] }[] = [
   {
-    heading: 'Product',
+    heading: 'DailyFit',
     items: [
-      { href: '/', label: 'Overview' },
+      { href: '/', label: 'Product' },
       { href: '/technology', label: 'Technology' },
       { href: '/research', label: 'Research' },
     ],
