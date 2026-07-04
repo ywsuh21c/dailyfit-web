@@ -8,10 +8,17 @@ import { Reveal } from '@/components/motion/Reveal';
 // Home (/) — Option-B company site, full-launch version (locked 2026-06-11).
 // Audience: VC · press · AI-savvy visitors. Zero senior 2nd-person CTAs;
 // seniors appear as 3rd-person evidence only (HARD RULE §3).
-// Visual language: agent-runtime on a LIGHT field (Michael 2026-06-11:
-// brighter, more motion). Dark survives only in the console + footer.
 //
-// Verified content sources:
+// Art direction "Runtime & Daylight" (2026-07-04): the page opens inside the
+// agent runtime — a monumental dark navy stage with the LIVE console as the
+// hero centerpiece — then scrolls out into daylight (the warm light field
+// where the designed day lives). Dark = the machine working; light = the
+// life it produces ("AI는 수단, 시니어가 정체성" encoded visually). The final
+// CTA returns to the runtime stage as a bookend. Body sections stay
+// light-first (Michael 2026-06-11); dark is reserved for the two stages.
+// All hx-* styles are namespaced in globals.css — /en keeps the legacy hero.
+//
+// Verified content sources (copy is FROZEN — presentation-layer only):
 // - 카탈로그 수치: lib/site.ts activeCatalogCount 단일 출처 (수도권 트림
 //   2026-06-11 후 active 기준; 트림 원복 시 그 상수만 갱신).
 // - Agent 3티어·취미 포지셔닝·메모리 moat·텍스트 병행:
@@ -26,6 +33,23 @@ import { Reveal } from '@/components/motion/Reveal';
 
 const mailto = `mailto:${site.contactEmail}`;
 
+// Floating data motes inside the runtime stage — deterministic positions
+// (no Math.random: server/client markup must match). Pure decoration.
+const MOTES: Array<{ left: string; top: string; size: number; dur: string; delay: string }> = [
+  { left: '6%', top: '72%', size: 3, dur: '13s', delay: '0s' },
+  { left: '11%', top: '34%', size: 2, dur: '17s', delay: '1.8s' },
+  { left: '19%', top: '58%', size: 2, dur: '15s', delay: '4.2s' },
+  { left: '27%', top: '20%', size: 3, dur: '19s', delay: '2.6s' },
+  { left: '38%', top: '80%', size: 2, dur: '14s', delay: '6.1s' },
+  { left: '47%', top: '14%', size: 2, dur: '18s', delay: '0.9s' },
+  { left: '56%', top: '66%', size: 3, dur: '16s', delay: '3.4s' },
+  { left: '64%', top: '28%', size: 2, dur: '13.5s', delay: '5.2s' },
+  { left: '73%', top: '75%', size: 2, dur: '17.5s', delay: '1.2s' },
+  { left: '81%', top: '40%', size: 3, dur: '15.5s', delay: '7.4s' },
+  { left: '89%', top: '62%', size: 2, dur: '14.5s', delay: '2.1s' },
+  { left: '94%', top: '22%', size: 2, dur: '18.5s', delay: '4.8s' },
+];
+
 // 활동 그래프는 라이브 카탈로그에서 자동으로 끌어온다 (lib/activities). 최대
 // 6h 마다 재검증(ISR); 나머지 페이지는 정적. 임의 예시 하드코딩 금지.
 export const revalidate = 21600;
@@ -35,55 +59,79 @@ export default async function HomePage() {
   const { count: catalogCount } = await getCatalogCount();
   return (
     <>
-      {/* ───────────────────────── HERO ───────────────────────── */}
-      <section className="hero-field relative overflow-hidden">
-        <div className="hero-grid pointer-events-none absolute inset-0" aria-hidden="true" />
-        <div className="aurora aurora-1" aria-hidden="true" />
-        <div className="aurora aurora-2" aria-hidden="true" />
+      {/* ─────────────── HERO — the runtime stage ─────────────── */}
+      <section className="px-3 pt-3 sm:px-5 sm:pt-4">
+        <div className="hx-stage mx-auto max-w-[1400px] rounded-[24px] sm:rounded-[32px]">
+          <div className="hx-stage-grid" aria-hidden="true" />
+          <div className="hx-aurora hx-aurora-a" aria-hidden="true" />
+          <div className="hx-aurora hx-aurora-b" aria-hidden="true" />
+          <div aria-hidden="true">
+            {MOTES.map((m, i) => (
+              <span
+                key={i}
+                className="hx-mote"
+                style={{
+                  left: m.left,
+                  top: m.top,
+                  width: m.size,
+                  height: m.size,
+                  ['--dur' as string]: m.dur,
+                  ['--delay' as string]: m.delay,
+                }}
+              />
+            ))}
+          </div>
+          <div className="hx-grain" aria-hidden="true" />
 
-        {/* Clean, spacious hero (Anthropic-style): headline + one short lead.
-            인포그래픽(콘솔)·지표스트립은 아래 독립 섹션/트랙션으로 분리. */}
-        <div className="relative mx-auto grid max-w-6xl items-center gap-10 px-5 pb-28 pt-24 lg:grid-cols-[1.15fr_0.85fr] lg:gap-16 lg:pb-40 lg:pt-36">
-          <div>
-            <p className="eyebrow-mono text-sage">Agent-as-a-Service</p>
-            <h1 className="mt-6 text-[42px] font-extrabold leading-[1.08] tracking-[-0.035em] text-ink sm:text-[60px]">
+          <div className="relative mx-auto flex max-w-5xl flex-col items-center px-5 pb-20 pt-16 text-center sm:px-10 sm:pb-24 sm:pt-24">
+            <p className="hx-chip-live">Agent-as-a-Service</p>
+            <h1 className="mt-8 text-[30px] font-extrabold leading-[1.1] tracking-[-0.04em] text-ivory min-[430px]:text-[34px] sm:text-[60px] sm:leading-[1.08] lg:text-[72px]">
               액티브 시니어를 위한
               <br />
-              <span className="text-sage">AI Agent</span>를 만듭니다.
+              <span className="hx-glow-text">AI Agent</span>를 만듭니다.
             </h1>
-            <div className="mt-10 flex flex-wrap items-center gap-4">
+            <p className="mt-7 max-w-[44ch] text-[18px] leading-relaxed text-ivory/70 sm:text-[21px]">
+              <span className="block">스마트폰으로 배우고, 만나고, 즐기기 시작한 액티브 시니어.</span>
+              <span className="mt-2 block">전 세계에서 가장 빠르게 커지는 세대의 하루를 설계합니다.</span>
+            </p>
+            <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
               <a
                 href={mailto}
-                className="inline-flex min-h-[56px] items-center rounded-xl bg-sage px-8 text-[17px] font-bold text-white transition-colors hover:bg-sage-dk active:scale-[0.98]"
+                className="hx-glow-cta inline-flex min-h-[56px] items-center rounded-xl bg-sage px-8 text-[17px] font-bold text-white transition-colors hover:bg-sage-dk active:scale-[0.98]"
               >
                 Talk to us
               </a>
               <a
                 href="#runtime"
-                className="inline-flex min-h-[56px] items-center rounded-xl border border-ink/15 bg-white/50 px-8 text-[17px] font-bold text-ink transition-colors hover:border-sage hover:text-sage active:scale-[0.98]"
+                className="inline-flex min-h-[56px] items-center rounded-xl border border-ivory/25 bg-white/5 px-8 text-[17px] font-bold text-ivory transition-colors hover:border-sage-lt hover:text-sage-lt active:scale-[0.98]"
               >
                 작동 방식 보기 ↓
               </a>
             </div>
+
+            {/* The runtime, visible — the product working, front and center. */}
+            <div className="relative mt-16 w-full max-w-2xl sm:mt-20">
+              <div className="hx-console-halo" aria-hidden="true" />
+              <div className="hx-console-tilt">
+                <AgentConsole catalogCount={catalogCount} />
+              </div>
+            </div>
           </div>
-          <p className="max-w-[38ch] text-[19px] leading-relaxed text-ink-soft sm:text-[22px]">
-            <span className="block">스마트폰으로 배우고, 만나고, 즐기기 시작한 액티브 시니어.</span>
-            <span className="mt-3 block">전 세계에서 가장 빠르게 커지는 세대의 하루를 설계합니다.</span>
-          </p>
+          <div className="hx-horizon" aria-hidden="true" />
         </div>
       </section>
 
       {/* ─────────────────────── PROBLEM ─────────────────────── */}
-      <section className="bg-bg py-24 sm:py-32">
+      <section className="bg-bg py-28 sm:py-40">
         <div className="mx-auto max-w-5xl px-5 text-center">
           <Reveal>
-            <p className="eyebrow-mono text-sage">The problem</p>
-            <h2 className="mt-4 text-[28px] font-extrabold leading-[1.2] tracking-[-0.03em] text-ink sm:text-[38px]">
+            <p className="hx-eyebrow eyebrow-mono text-sage">The problem</p>
+            <h2 className="mt-6 text-[30px] font-extrabold leading-[1.18] tracking-[-0.035em] text-ink sm:text-[42px]">
               액티브 시니어들은 시간도, 호기심도 있습니다.
               <br />
               무엇을 할지 찾는 게 어려울 뿐입니다.
             </h2>
-            <p className="mx-auto mt-6 max-w-3xl text-body text-ink-soft">
+            <p className="mx-auto mt-7 max-w-3xl text-body text-ink-soft">
               배울 곳, 만날 사람, 나들이 갈 곳. 정보는 수십 개 기관과 포털에 흩어져 있습니다.
               <br />
               찾기도 어렵고, 신청은 더 복잡합니다.
@@ -92,30 +140,35 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* ─────────────────── WHAT WE BUILD (solution) ─────────────── */}
+      {/* ─────────────── WHAT WE BUILD (solution) ─────────────── */}
       <section className="bg-surface py-24 sm:py-32">
         <div className="mx-auto grid max-w-6xl items-center gap-14 px-5 lg:grid-cols-2">
           <Reveal>
             <p className="eyebrow-mono text-sage">Solution: What we built</p>
-            <h2 className="mt-4 text-[34px] font-extrabold leading-[1.2] tracking-[-0.03em] text-ink sm:text-[42px]">
+            <h2 className="mt-5 text-[34px] font-extrabold leading-[1.15] tracking-[-0.035em] text-ink sm:text-[46px]">
               대화 한 번으로,
               <br />
               하루가 설계됩니다.
             </h2>
-            <p className="mt-6 max-w-[46ch] text-body text-ink-soft">
+            <p className="mt-7 max-w-[46ch] text-body text-ink-soft">
               취미와 일상을 설계하는 멀티 Agent 플랫폼.
               <br />
               평소처럼 말하면 Agent들이 협업해 그날의 하루를 구성합니다.
             </p>
-            <p className="mt-4 text-body font-semibold text-ink">
+            <p className="hx-pull mt-8 text-[19px] font-semibold leading-relaxed text-ink">
               <span className="block">AI는 제안합니다.</span>
               <span className="mt-2 block">결정은 언제나 사용자가 합니다.</span>
             </p>
           </Reveal>
           {/* TODO(Michael): 데모 비디오 입고 시 이 패널을 video로 교체 */}
           <Reveal delay={120}>
-            <div className="rounded-2xl border border-line bg-white p-7 shadow-[0_30px_70px_-40px_rgba(30,45,64,0.35)]">
-              <div className="flex flex-col gap-3">
+            <div className="hx-window">
+              <div className="hx-window-bar" aria-hidden="true">
+                <span className="hx-window-dot" style={{ background: '#E5E1D8' }} />
+                <span className="hx-window-dot" style={{ background: '#D9D4C9' }} />
+                <span className="hx-window-dot" style={{ background: '#8FBF9F' }} />
+              </div>
+              <div className="flex flex-col gap-3 p-7">
                 <Reveal delay={150}>
                   <div className="flex flex-col">
                     <ChatBubble who="DailyFit">어제 저녁 산책은 어떠셨어요?</ChatBubble>
@@ -142,28 +195,46 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* ───────────── AGENT RUNTIME — 인포그래픽 독립 섹션 ───────────── */}
-      <section id="runtime" className="bg-bg py-24 sm:py-32">
+      {/* ───────────── AGENT RUNTIME — 오케스트레이션 파이프라인 ───────────── */}
+      <section id="runtime" className="bg-bg pt-24 sm:pt-32">
         <div className="mx-auto max-w-6xl px-5">
           <Reveal className="text-center">
-            <p className="eyebrow-mono text-sage">How our agent works</p>
-            <h2 className="mt-4 text-[34px] font-extrabold leading-[1.2] tracking-[-0.03em] text-ink sm:text-[44px]">
+            <p className="hx-eyebrow eyebrow-mono text-sage">How our agent works</p>
+            <h2 className="mt-6 text-[30px] font-extrabold leading-[1.18] tracking-[-0.035em] text-ink sm:text-[44px]">
               Agent가 하루를 설계하는 과정
             </h2>
-            <p className="mx-auto mt-5 max-w-6xl text-body text-ink-soft">
+            <p className="mx-auto mt-6 max-w-6xl text-body text-ink-soft">
               말 한마디 안에 있는 의도를 읽고, 과거 기억을 떠올리고, 공공·제휴 API로 모은 활동 Database에서 최적 활동을 추천해 하루를 설계합니다.
             </p>
           </Reveal>
-          <Reveal className="mx-auto mt-12 max-w-2xl" delay={120}>
-            <AgentConsole catalogCount={catalogCount} />
+          {/* Orchestration pipeline — 히어로 콘솔의 시스템 어휘(intent·memory·
+              search·plan)를 그대로 시각화한 장식 그래픽. 신규 카피 아님. */}
+          <Reveal className="mt-14" delay={120}>
+            <div className="hx-runtime-board mx-auto max-w-4xl">
+              <div className="hx-stage-grid" aria-hidden="true" />
+              <div className="hx-grain" aria-hidden="true" />
+              <div className="hx-flow relative" aria-hidden="true">
+                <span className="hx-flow-node hx-flow-node-user">&gt;</span>
+                <span className="hx-flow-edge" />
+                <span className="hx-flow-node">intent</span>
+                <span className="hx-flow-edge" />
+                <span className="hx-flow-node">memory</span>
+                <span className="hx-flow-edge" />
+                <span className="hx-flow-node">search</span>
+                <span className="hx-flow-edge" />
+                <span className="hx-flow-node hx-flow-node-done">✓ plan</span>
+              </div>
+            </div>
+            {/* 파이프라인이 아래 라이브 DB 스트림(티커)으로 흘러든다 */}
+            <div className="hx-flow-drop" aria-hidden="true" />
           </Reveal>
         </div>
       </section>
 
       {/* ─────────────── LIVE ACTIVITY TICKER ─────────────── */}
-      <div className="border-y border-line bg-bg py-5" aria-label="활동 데이터베이스에 적재된 활동 예시">
+      <div className="hx-ticker border-y border-line bg-bg py-5" aria-label="활동 데이터베이스에 적재된 활동 예시">
         <div className="mx-auto max-w-6xl px-5">
-          <div className="mb-3 flex items-center gap-2.5">
+          <div className="mb-3 flex items-center justify-center gap-2.5">
             <span className="console-live-dot !bg-sage" aria-hidden="true" />
             <span className="eyebrow-mono text-ink-soft/70">활동 데이터베이스 · live</span>
           </div>
@@ -181,14 +252,14 @@ export default async function HomePage() {
       </div>
 
       {/* ──────────────────── MEET THE AGENTS ──────────────────── */}
-      <section id="agents" className="border-y border-line bg-ivory py-24 sm:py-32">
+      <section id="agents" className="hx-agents border-b border-line py-24 sm:py-32">
         <div className="mx-auto max-w-6xl px-5">
           <Reveal className="mx-auto max-w-3xl text-center">
-            <p className="eyebrow-mono text-sage">Meet the agents</p>
-            <h2 className="mt-4 text-[34px] font-extrabold leading-[1.2] tracking-[-0.03em] text-ink sm:text-[42px]">
+            <p className="hx-eyebrow eyebrow-mono text-sage">Meet the agents</p>
+            <h2 className="mt-6 text-[30px] font-extrabold leading-[1.18] tracking-[-0.035em] text-ink sm:text-[42px]">
               하루를 설계해주는 세 명의 Agent
             </h2>
-            <p className="mt-5 text-body text-ink-soft">
+            <p className="mt-6 text-body text-ink-soft">
               탐색 · 리마인드 · 신청대행. 맡는 범위가 넓어질수록 상위 Agent로 이어집니다.
               <br />
               정식 출시 앱에는 최상위 Agent가 기본 탑재됩니다.
@@ -239,43 +310,49 @@ export default async function HomePage() {
           일하는 방식은 /how-we-work 상세 페이지에서 설명. Traction 수치는
           비공개 자리에서만 노출(랜딩 미표기). */}
 
-      {/* ─────────────────────── FINAL CTA ─────────────────────── */}
-      <section className="relative overflow-hidden bg-gradient-to-b from-sage to-sage-dk py-28 text-center text-white sm:py-36">
-        <svg
-          viewBox="0 0 1200 600"
-          aria-hidden="true"
-          className="pointer-events-none absolute inset-0 h-full w-full opacity-30"
-          preserveAspectRatio="xMidYMid slice"
-        >
-          <circle cx="600" cy="300" r="260" fill="none" stroke="#FFFFFF" strokeWidth="1.5" className="ripple-ring" />
-          <circle cx="600" cy="300" r="260" fill="none" stroke="#FFFFFF" strokeWidth="1.5" className="ripple-ring ripple-d1" />
-          <circle cx="600" cy="300" r="260" fill="none" stroke="#FFFFFF" strokeWidth="1.5" className="ripple-ring ripple-d2" />
-        </svg>
-        <div className="relative mx-auto max-w-6xl px-5">
-          <Reveal>
-            <p className="eyebrow-mono text-white/70">Agent-as-a-Service</p>
-            <h2 className="mx-auto mt-5 max-w-[18ch] text-[36px] font-extrabold leading-[1.18] tracking-[-0.03em] sm:text-[46px]">
-              액티브 시니어를 위한 차세대 AI를 만듭니다.
-            </h2>
-            <p className="mt-4 text-base text-white/70">
-              Building the next AI for active seniors.
-            </p>
-            <div className="mt-10 flex flex-wrap justify-center gap-4">
-              <a
-                href={mailto}
-                className="inline-flex min-h-[56px] items-center rounded-xl bg-white px-8 text-[17px] font-bold text-sage-dk transition-colors hover:bg-ivory active:scale-[0.98]"
-              >
-                Talk to us
-              </a>
-              <Link
-                href={productAppUrl}
-                {...externalLinkProps}
-                className="inline-flex min-h-[56px] items-center rounded-xl border border-white/40 px-8 text-[17px] font-bold text-white transition-colors hover:border-white hover:bg-white/10 active:scale-[0.98]"
-              >
-                DailyFit 시작하기 →
-              </Link>
-            </div>
-          </Reveal>
+      {/* ────────── FINAL CTA — return to the runtime (bookend) ────────── */}
+      <section className="px-3 py-20 sm:px-5 sm:py-24">
+        <div className="hx-stage mx-auto max-w-[1400px] rounded-[24px] py-24 text-center sm:rounded-[32px] sm:py-32">
+          <div className="hx-stage-grid" aria-hidden="true" />
+          <div className="hx-aurora hx-aurora-a" aria-hidden="true" />
+          <div className="hx-aurora hx-aurora-b" aria-hidden="true" />
+          <div className="hx-grain" aria-hidden="true" />
+          <svg
+            viewBox="0 0 1200 600"
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-0 h-full w-full opacity-40"
+            preserveAspectRatio="xMidYMid slice"
+          >
+            <circle cx="600" cy="300" r="260" fill="none" stroke="#8FBF9F" strokeWidth="1.5" className="ripple-ring" />
+            <circle cx="600" cy="300" r="260" fill="none" stroke="#8FBF9F" strokeWidth="1.5" className="ripple-ring ripple-d1" />
+            <circle cx="600" cy="300" r="260" fill="none" stroke="#8FBF9F" strokeWidth="1.5" className="ripple-ring ripple-d2" />
+          </svg>
+          <div className="relative mx-auto max-w-6xl px-5">
+            <Reveal>
+              <p className="eyebrow-mono text-sage-lt/80">Agent-as-a-Service</p>
+              <h2 className="mx-auto mt-6 max-w-[18ch] text-[34px] font-extrabold leading-[1.16] tracking-[-0.035em] text-ivory sm:text-[46px]">
+                액티브 시니어를 위한 차세대 AI를 만듭니다.
+              </h2>
+              <p className="mt-5 text-base text-ivory/60">
+                Building the next AI for active seniors.
+              </p>
+              <div className="mt-10 flex flex-wrap justify-center gap-4">
+                <a
+                  href={mailto}
+                  className="hx-glow-cta inline-flex min-h-[56px] items-center rounded-xl bg-sage px-8 text-[17px] font-bold text-white transition-colors hover:bg-sage-dk active:scale-[0.98]"
+                >
+                  Talk to us
+                </a>
+                <Link
+                  href={productAppUrl}
+                  {...externalLinkProps}
+                  className="inline-flex min-h-[56px] items-center rounded-xl border border-ivory/25 bg-white/5 px-8 text-[17px] font-bold text-ivory transition-colors hover:border-sage-lt hover:text-sage-lt active:scale-[0.98]"
+                >
+                  DailyFit 시작하기 →
+                </Link>
+              </div>
+            </Reveal>
+          </div>
         </div>
       </section>
     </>
@@ -324,16 +401,20 @@ function AgentCard({
 }) {
   return (
     <Reveal delay={delay}>
-      <div className="agent-card flex h-full flex-col p-8">
-        <span className="self-start rounded-md border border-sage/25 bg-sage/10 px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wider text-sage">
+      <div className={`hx-agent-card ${level === 3 ? 'hx-agent-crown' : ''}`}>
+        {/* tier watermark — `level` 데이터의 시각화 (카피 아님) */}
+        <span className="hx-agent-num" aria-hidden="true">
+          {String(level).padStart(2, '0')}
+        </span>
+        <span className="relative self-start rounded-md border border-sage/25 bg-sage/10 px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wider text-sage">
           {tier}
         </span>
-        <h3 className="mt-5 text-[22px] font-bold text-ink">{title}</h3>
-        <p className="mt-3 flex-1 text-[14px] leading-relaxed text-ink-soft">
+        <h3 className="relative mt-5 text-[22px] font-bold text-ink">{title}</h3>
+        <p className="relative mt-3 flex-1 text-[14px] leading-relaxed text-ink-soft">
           {children}
         </p>
         <div
-          className="mt-6 flex items-center gap-2 border-t border-line pt-5"
+          className="relative mt-6 flex items-center gap-2 border-t border-line pt-5"
           aria-label={`자율성 단계 ${level} / 3`}
         >
           <span className="text-[11px] font-semibold uppercase tracking-[0.14em] text-ink-soft/60">
@@ -343,7 +424,11 @@ function AgentCard({
             {[1, 2, 3].map((n) => (
               <span
                 key={n}
-                className={`h-1.5 w-7 rounded-full ${n <= level ? 'agent-bar bg-sage' : 'bg-line'}`}
+                className={`h-2 w-8 rounded-full ${
+                  n <= level
+                    ? 'agent-bar bg-sage shadow-[0_0_10px_rgba(74,124,89,0.45)]'
+                    : 'bg-line'
+                }`}
                 style={n <= level ? { transitionDelay: `${300 + n * 140}ms` } : undefined}
               />
             ))}
@@ -353,5 +438,3 @@ function AgentCard({
     </Reveal>
   );
 }
-
-
