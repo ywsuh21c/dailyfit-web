@@ -137,7 +137,7 @@ export function AccelerationLoop({ lang = 'ko' }: { lang?: 'ko' | 'en' }) {
   const caption =
     lang === 'en'
       ? 'Self-acceleration · an Agent that learns and improves on its own'
-      : 'Self-acceleration · 스스로 배우고, 스스로 나아지는 Agent';
+      : 'Self-acceleration · 스스로 배우고, 스스로 개선하는 Agent';
 
   return (
     <div ref={rootRef} className="mx-auto w-full max-w-[500px]">
@@ -200,10 +200,10 @@ export function AccelerationLoop({ lang = 'ko' }: { lang?: 'ko' | 'en' }) {
                 y={lp.y}
                 textAnchor="middle"
                 dominantBaseline="middle"
-                className="fill-ink-soft"
+                className="fill-ink"
                 style={{
-                  fontWeight: 600, fontSize: 11.5,
-                  letterSpacing: '0.14em',
+                  fontWeight: 700, fontSize: 12.5,
+                  letterSpacing: '0.12em',
                   textTransform: 'uppercase',
                 }}
               >

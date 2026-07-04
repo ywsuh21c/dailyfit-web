@@ -46,7 +46,7 @@ export function LearningCurve({ lang = 'ko' }: { lang?: 'ko' | 'en' }) {
           y: 'capability',
           p1: '개선을 지시받던 단계',
           p2: '스스로 배우는 단계',
-          p3: '앞서 진화하는 단계',
+          p3: '알아서 진화하는 단계',
         };
 
   return (

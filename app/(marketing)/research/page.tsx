@@ -37,9 +37,7 @@ export default function ResearchPage() {
             <h1 className="mt-6 text-[42px] font-extrabold leading-[1.12] tracking-[-0.035em] text-ink sm:text-[54px]">
               <span className="text-sage">Self-accelerating Agentic AI.</span>
               <br />
-              우리가 풀
-              <br />
-              다음 문제.
+              우리가 풀 다음 문제.
             </h1>
             <p className="mt-8 max-w-[54ch] text-[17px] leading-relaxed text-ink-soft sm:text-[19px]">
               과학은 가설과 실험의 반복으로 전진합니다.
@@ -77,7 +75,7 @@ export default function ResearchPage() {
       <section className="bg-bg py-24 sm:py-32">
         <div className="mx-auto max-w-3xl px-5 text-center">
           <Reveal>
-            <p className="eyebrow-mono text-sage">An AI-native company</p>
+            <p className="eyebrow-mono text-sage">AI-native company</p>
             <h2 className="mt-4 text-[34px] font-extrabold leading-[1.2] tracking-[-0.03em] text-ink sm:text-[46px]">
               Agent-as-a-Service 회사이자,
               <br />
