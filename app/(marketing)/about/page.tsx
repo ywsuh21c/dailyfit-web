@@ -24,9 +24,13 @@ export default function AboutPage() {
           <p className="eyebrow-mono text-sage">About DailyFit</p>
           <h1 className="mt-5 max-w-3xl text-h1">{site.tagline}</h1>
           <p className="mt-6 max-w-prose text-body text-ink-soft">
-            DailyFit은 액티브 시니어 세대를 위한 AI Agent를 만듭니다. 취미와
-            일상을 설계하는 Agent 팀입니다. 우리는 시니어를 유능한 성인으로
-            대하고, 기술이 아니라 더 활기찬 하루로 이야기를 시작합니다.
+            DailyFit은 액티브 시니어 세대를 위한 AI Agent를 만듭니다.
+            <br />
+            취미와 일상을 설계하는 Agent 팀입니다.
+            <br />
+            우리는 시니어를 그 누구보다 매력적인 세그먼트라고 보고,
+            <br />
+            기술이 아니라 더 활기찬 하루로 이야기를 시작합니다.
           </p>
         </div>
       </section>
@@ -43,7 +47,13 @@ export default function AboutPage() {
         <SectionHeader
           eyebrow="How we operate"
           title="회사도 Agent로 운영합니다"
-          lead="제품은 시니어의 하루를 설계하는 Agent, 회사는 AI Agent 팀이 운영하는 조직. 같은 구조입니다. 우리가 일하는 방식을 공개합니다."
+          lead={
+            <>
+              제품은 시니어의 하루를 설계하는 Agent, 회사는 AI Agent 팀이 운영하는 조직.
+              <br />
+              우리가 일하는 방식을 공개합니다.
+            </>
+          }
         />
         <div className="mt-8">
           <ButtonLink href="/how-we-work" variant="ghost" size="lg">
@@ -60,14 +70,14 @@ export default function AboutPage() {
         </Reveal>
         <div className="mt-12 grid gap-6 sm:grid-cols-2">
           <FounderCard
-            name="Youngwoo Suh"
-            role="Founder · CEO"
-            bio="Boston University → Bain → PYLER → DailyFit. AI Agent 팀을 직접 운영하며 시니어의 하루를 제품으로 설계합니다. 팟캐스트 「있는 것들이 더해」."
+            name="Youngwoo Michael Suh"
+            role="Co-founder · CEO"
+            bio="Boston University → Bain → PYLER → DailyFit. AI Agent 팀을 직접 운영하며 시니어의 하루를 AaaS로 설계합니다."
           />
           <FounderCard
-            name="김현진"
-            role="Co-founder"
-            bio="제품·기술 총괄. DailyFit의 하루를 코드로 만듭니다."
+            name="Hyunjin Jake Kim"
+            role="Co-founder · Head of Strategy"
+            bio="고려대학교 → Bain → UVA MBA → DailyFit. 전략과 글로벌 확장을 담당하며 시니어의 하루를 함께 설계합니다."
           />
         </div>
         <p className="mt-8 max-w-prose text-body text-ink-soft">
@@ -75,7 +85,7 @@ export default function AboutPage() {
           <Link href={`mailto:${site.contactEmail}`} className="font-semibold text-sage underline-offset-4 hover:underline">
             {site.contactEmail}
           </Link>
-          . 창업자가 직접 읽고 답합니다.
+          로 보내주세요. 저희가 직접 읽고 답합니다.
         </p>
       </Section>
     </>

@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
-import { site } from '@/lib/site';
+import Link from 'next/link';
 import { Reveal } from '@/components/motion/Reveal';
+import { Principles } from '@/components/research/Principles';
 import { AccelerationLoop } from '@/components/research/AccelerationLoop';
 import { LearningCurve } from '@/components/research/LearningCurve';
 import { ResearchConsole } from '@/components/research/ResearchConsole';
@@ -20,8 +21,6 @@ export const metadata: Metadata = {
     'Self-accelerating AI is the core research theme at DailyFit: an Agent that evolves before it is told to, studied in a live service environment.',
 };
 
-const mailto = `mailto:${site.contactEmail}`;
-
 export default function EnResearchPage() {
   return (
     <>
@@ -40,29 +39,28 @@ export default function EnResearchPage() {
               The next problem we choose to solve.
             </h1>
             <p className="mt-8 max-w-[54ch] text-[17px] leading-relaxed text-ink-soft sm:text-[19px]">
-              Science advances by hypothesis and experiment.
+              Science advances by hypothesis and experiment. AI is
+              starting to run that cycle on its own.
               <br />
               <br />
-              AI is starting to run that cycle on its own.
+              The pace of progress is no longer set by machines. Humans are
+              the bottleneck now.
               <br />
               <br />
-              That is when progress outgrows human speed.
-              <br />
-              <br />
-              DailyFit is bringing that moment closer.
+              DailyFit studies what comes next.
             </p>
             <div className="mt-10 flex flex-wrap items-center gap-4">
-              <a
-                href={mailto}
+              <Link
+                href="/contact"
                 className="inline-flex min-h-[56px] items-center rounded-xl bg-sage px-8 text-[17px] font-bold text-white transition-colors hover:bg-sage-dk active:scale-[0.98]"
               >
                 Talk to us
-              </a>
+              </Link>
               <a
                 href="#frontiers"
                 className="inline-flex min-h-[56px] items-center rounded-xl border border-ink/15 bg-white/50 px-8 text-[17px] font-bold text-ink transition-colors hover:border-sage hover:text-sage active:scale-[0.98]"
               >
-                Research frontiers ↓
+                Research frontier ↓
               </a>
             </div>
           </div>
@@ -76,9 +74,9 @@ export default function EnResearchPage() {
           <Reveal>
             <p className="eyebrow-mono text-sage">An AI-native company</p>
             <h2 className="mt-4 text-[34px] font-extrabold leading-[1.2] tracking-[-0.03em] text-ink sm:text-[46px]">
-              A product company.
+              An Agent-as-a-Service company.
               <br />
-              And an AI research company.
+              And an AI Research Lab.
             </h2>
             <p className="mx-auto mt-6 max-w-[72ch] text-body text-ink-soft">
               The next era of software is the Agent that works on its own.
@@ -90,20 +88,7 @@ export default function EnResearchPage() {
           </Reveal>
         </div>
         <div className="mx-auto mt-16 max-w-6xl px-5">
-          <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-            <PrincipleCard num="P1" tag="Production-first" title="Proven live" delay={0}>
-              Validated in a live service, not on a benchmark.
-            </PrincipleCard>
-            <PrincipleCard num="P2" tag="ROI-gated" title="Loops pay rent" delay={80}>
-              Every learning loop must prove its own cost.
-            </PrincipleCard>
-            <PrincipleCard num="P3" tag="User sovereignty" title="Users decide" delay={160}>
-              The Agent proposes; the user always makes the call.
-            </PrincipleCard>
-            <PrincipleCard num="P4" tag="Safe failure" title="Reversible" delay={240}>
-              Every intervention is logged and instantly reversible.
-            </PrincipleCard>
-          </div>
+          <Principles lang="en" />
         </div>
       </section>
 
@@ -243,7 +228,7 @@ export default function EnResearchPage() {
       <section id="frontiers" className="bg-surface py-24 sm:py-32">
         <div className="mx-auto max-w-6xl px-5">
           <Reveal className="mx-auto max-w-3xl text-center">
-            <p className="eyebrow-mono text-sage">Research frontiers</p>
+            <p className="eyebrow-mono text-sage">Research frontier</p>
             <h2 className="mt-4 text-[34px] font-extrabold leading-[1.2] tracking-[-0.03em] text-ink sm:text-[46px]">
               One principle,
               <br />
@@ -302,12 +287,12 @@ export default function EnResearchPage() {
               The next decade of AI, built together.
             </h2>
             <div className="mt-10 flex flex-wrap justify-center gap-4">
-              <a
-                href={mailto}
+              <Link
+                href="/contact"
                 className="inline-flex min-h-[56px] items-center rounded-xl bg-white px-8 text-[17px] font-bold text-sage-dk transition-colors hover:bg-ivory active:scale-[0.98]"
               >
                 Talk to us
-              </a>
+              </Link>
             </div>
           </Reveal>
         </div>
@@ -354,36 +339,6 @@ function QuestionCard({
             ))}
           </div>
         ) : null}
-      </div>
-    </Reveal>
-  );
-}
-
-/** Research principle — compact numbered card for the principles strip. */
-function PrincipleCard({
-  num,
-  tag,
-  title,
-  delay,
-  children,
-}: {
-  num: string;
-  tag: string;
-  title: string;
-  delay: number;
-  children: React.ReactNode;
-}) {
-  return (
-    <Reveal delay={delay}>
-      <div className="flex h-full flex-col rounded-2xl border border-line bg-white p-6">
-        <div className="flex items-baseline gap-2.5">
-          <span className="text-[22px] font-extrabold tracking-tight text-sage">{num}</span>
-          <span className="text-[11px] font-semibold uppercase tracking-[0.14em] text-ink-soft/60">
-            {tag}
-          </span>
-        </div>
-        <h3 className="mt-3 text-[17px] font-bold text-ink">{title}</h3>
-        <p className="mt-2 text-[14px] leading-relaxed text-ink-soft">{children}</p>
       </div>
     </Reveal>
   );
