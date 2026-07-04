@@ -37,17 +37,19 @@ export default function ResearchPage() {
             <h1 className="mt-6 text-[42px] font-extrabold leading-[1.12] tracking-[-0.035em] text-ink sm:text-[54px]">
               <span className="text-sage">Self-accelerating Agentic AI.</span>
               <br />
-              우리가 풀고자 하는
+              우리가 푸는
               <br />
-              Next Problem입니다.
+              Next Problem.
             </h1>
             <p className="mt-8 max-w-[54ch] text-[17px] leading-relaxed text-ink-soft sm:text-[19px]">
-              과학은 가설과 실험의 반복으로 전진합니다. 이제 AI가 그 사이클을
-              스스로 돌리기 시작했습니다.
+              과학은 가설과 실험의 반복으로 전진합니다.
+              <br />
+              이제 AI가 그 사이클을 스스로 돌리기 시작했습니다.
               <br />
               <br />
-              진보의 속도를 정하는 것은 더 이상 기계가 아닙니다. 이제는 인간이
-              Bottleneck입니다.
+              진보의 속도를 정하는 것은 더 이상 기계가 아닙니다.
+              <br />
+              이제는 인간이 Bottleneck입니다.
               <br />
               <br />
               DailyFit은 그 다음을 연구합니다.
@@ -110,9 +112,12 @@ export default function ResearchPage() {
               <br />
               그 학습은 다음 반복에 스스로 적용됩니다.
               <br />
+              <br />
               목표는 하나입니다.
               <br />
-              사람이 개선을 지시하기 전에, Agent가 이미 더 나아져 있는 것.
+              <strong className="font-bold text-ink">
+                사람이 개선을 지시하기 전에, Agent가 이미 더 나아져 있는 것.
+              </strong>
             </p>
             <div className="mt-10">
               <LoopContrast />
