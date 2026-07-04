@@ -305,11 +305,11 @@ function DefenseLayers() {
         })}
         {/* the PII core */}
         <g>
-          <rect x={148} y={148} width={124} height={64} rx={12} fill="#1E2D40" />
+          <rect x={128} y={148} width={164} height={64} rx={12} fill="#1E2D40" />
           <text x={210} y={175} textAnchor="middle" className="fill-ivory" style={{ fontWeight: 700, fontSize: 13.5 }}>
             개인정보 코어
           </text>
-          <text x={210} y={196} textAnchor="middle" className="fill-sage-lt" style={{ fontWeight: 600, fontSize: 10.5, letterSpacing: '0.1em' }}>
+          <text x={210} y={196} textAnchor="middle" className="fill-sage-lt" style={{ fontWeight: 600, fontSize: 10, letterSpacing: '0.06em' }}>
             ISOLATED · ENCRYPTED
           </text>
         </g>
