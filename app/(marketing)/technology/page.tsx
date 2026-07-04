@@ -267,18 +267,14 @@ function SecurityCard({ title, children }: { title: string; children: React.Reac
  * deliberately generic layers, not our real topology.
  */
 function DefenseLayers() {
-  const layers = [
-    { label: '네트워크 · 접근 제어', inset: 0 },
-    { label: '애플리케이션 경계', inset: 1 },
-    { label: '데이터 암호화', inset: 2 },
-  ];
+  const layers = ['네트워크 · 접근 제어', '애플리케이션 경계', '데이터 암호화'];
   return (
     <div className="mx-auto w-full max-w-[420px]">
       <svg viewBox="0 0 420 340" role="img" aria-label="다층 방어 구조: 네트워크, 애플리케이션, 암호화 경계 안쪽에 개인정보 코어가 놓인 모습" className="h-auto w-full">
-        {layers.map((l, i) => {
+        {layers.map((label, i) => {
           const inset = i * 44;
           return (
-            <g key={l.label}>
+            <g key={label}>
               <rect
                 x={16 + inset}
                 y={16 + inset}
@@ -298,7 +294,7 @@ function DefenseLayers() {
                 className="fill-sage"
                 style={{ fontWeight: 600, fontSize: 11.5, letterSpacing: '0.1em' }}
               >
-                {l.label}
+                {label}
               </text>
             </g>
           );

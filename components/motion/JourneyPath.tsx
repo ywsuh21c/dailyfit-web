@@ -37,6 +37,9 @@ const HJ_STOPS: Stop[] = [
   { x: 412, y: 226, label: 'UVA', sub: 'MBA', cls: 'curve-pt-2' },
 ];
 
+// Both founders' stops share one marker layer — combine once, not per render.
+const ALL_STOPS: Stop[] = [...YW_STOPS, ...HJ_STOPS];
+
 export function JourneyPath() {
   const ref = useRef<HTMLDivElement>(null);
   const [on, setOn] = useState(false);
@@ -96,7 +99,7 @@ export function JourneyPath() {
         />
 
         {/* individual stops */}
-        {[...YW_STOPS, ...HJ_STOPS].map((s) => (
+        {ALL_STOPS.map((s) => (
           <g key={s.label} className={`curve-pt ${s.cls}`}>
             <circle cx={s.x} cy={s.y} r={5} fill="#F5F0E8" stroke={SAGE} strokeWidth={2} />
             <text

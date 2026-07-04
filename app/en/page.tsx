@@ -14,7 +14,6 @@ export const metadata: Metadata = {
     'We build AI agents for the active senior generation. One conversation designs the day: discovery, reminders, and auto-apply.',
 };
 
-
 // Static, English-labeled sample of real catalog activities (the live database
 // is Korean-first; this page renders representative examples in English).
 const TICKER: Array<[string, string]> = [

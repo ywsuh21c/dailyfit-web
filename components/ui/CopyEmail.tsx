@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 /**
  * Contact-page email row — the address, huge and copyable. mailto is kept as a
@@ -11,6 +11,11 @@ import { useRef, useState } from 'react';
 export function CopyEmail({ email }: { email: string }) {
   const [copied, setCopied] = useState(false);
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  // Clear a pending reset timer if we unmount mid-window (nav away within 2s).
+  useEffect(() => () => {
+    if (timer.current) clearTimeout(timer.current);
+  }, []);
 
   const copy = async () => {
     try {
