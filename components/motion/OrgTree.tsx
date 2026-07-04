@@ -20,6 +20,10 @@ const DIVISIONS: Array<{ name: string; agents: string[] }> = [
   { name: 'Marketing', agents: ['Web', 'Brand', 'Content'] },
 ];
 
+// Time-boxed workers under 1. Agents/Intern Team — real agents, not a division,
+// so the "6 divisions" count holds while the roster totals 15+.
+const INTERNS = ['Gov Aid', 'BD Research'];
+
 /** Vertical animated connector between tree levels. */
 function Drop({ tall }: { tall?: boolean }) {
   return (
@@ -80,6 +84,24 @@ export function OrgTree() {
                 </div>
               </div>
             ))}
+          </div>
+
+          {/* interns — real workers under 1. Agents/Intern Team, shown apart
+              from the six divisions so the roster count matches the stat line */}
+          <div className="mt-3 flex w-full flex-col items-center gap-2 rounded-xl border border-ivory/12 bg-white/[0.02] p-4 sm:flex-row sm:justify-center">
+            <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-sage-lt">
+              Intern Team
+            </p>
+            <div className="flex flex-wrap justify-center gap-1.5">
+              {INTERNS.map((a) => (
+                <span
+                  key={a}
+                  className="rounded-md border border-ivory/15 bg-navy/60 px-2 py-1 text-[11.5px] font-medium text-ivory/80"
+                >
+                  {a}
+                </span>
+              ))}
+            </div>
           </div>
 
           {/* the stat line that carries the claim */}
