@@ -37,9 +37,7 @@ export default function ResearchPage() {
             <h1 className="mt-6 text-[42px] font-extrabold leading-[1.12] tracking-[-0.035em] text-ink sm:text-[54px]">
               <span className="text-sage">Self-accelerating Agentic AI.</span>
               <br />
-              우리가 풀
-              <br />
-              다음 문제.
+              우리가 풀 다음 문제.
             </h1>
             <p className="mt-8 max-w-[54ch] text-[17px] leading-relaxed text-ink-soft sm:text-[19px]">
               과학은 가설과 실험의 반복으로 전진합니다.
@@ -77,7 +75,7 @@ export default function ResearchPage() {
       <section className="bg-bg py-24 sm:py-32">
         <div className="mx-auto max-w-3xl px-5 text-center">
           <Reveal>
-            <p className="eyebrow-mono text-sage">An AI-native company</p>
+            <p className="eyebrow-mono text-sage">AI-native company</p>
             <h2 className="mt-4 text-[34px] font-extrabold leading-[1.2] tracking-[-0.03em] text-ink sm:text-[46px]">
               Agent-as-a-Service 회사이자,
               <br />
@@ -149,15 +147,15 @@ export default function ResearchPage() {
         </div>
       </section>
 
-      {/* ─────────────── A LIVING LAB (제품 = 실험장) ─────────────── */}
+      {/* ─────────────── PROVEN IN PRODUCTION (실전이 곧 검증) ─────────────── */}
       <section className="bg-bg py-24 sm:py-32">
         <div className="mx-auto grid max-w-6xl items-center gap-14 px-5 lg:grid-cols-[1fr_1fr]">
           <Reveal>
-            <p className="eyebrow-mono text-sage">Why DailyFit is the testbed</p>
+            <p className="eyebrow-mono text-sage">Proven in production</p>
             <h2 className="mt-4 text-[34px] font-extrabold leading-[1.2] tracking-[-0.03em] text-ink sm:text-[42px]">
               매일 돌아가는 실전이
               <br />
-              가장 좋은 실험실입니다.
+              가장 정직한 검증입니다.
             </h2>
             <p className="mt-6 max-w-[60ch] text-body text-ink-soft">
               신청대행 Agent는 매일 실제 포털과 양식, 절차에 부딪힙니다.

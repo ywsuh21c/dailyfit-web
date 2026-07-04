@@ -36,7 +36,7 @@ export default function EnResearchPage() {
             <h1 className="mt-6 text-[42px] font-extrabold leading-[1.12] tracking-[-0.035em] text-ink sm:text-[54px]">
               <span className="text-sage">Self-accelerating Agentic AI.</span>
               <br />
-              The next problem we choose to solve.
+              The next problem we solve.
             </h1>
             <p className="mt-8 max-w-[54ch] text-[17px] leading-relaxed text-ink-soft sm:text-[19px]">
               Science advances by hypothesis and experiment. AI is
@@ -72,7 +72,7 @@ export default function EnResearchPage() {
       <section className="bg-bg py-24 sm:py-32">
         <div className="mx-auto max-w-3xl px-5 text-center">
           <Reveal>
-            <p className="eyebrow-mono text-sage">An AI-native company</p>
+            <p className="eyebrow-mono text-sage">AI-native company</p>
             <h2 className="mt-4 text-[34px] font-extrabold leading-[1.2] tracking-[-0.03em] text-ink sm:text-[46px]">
               An Agent-as-a-Service company.
               <br />
@@ -143,15 +143,15 @@ export default function EnResearchPage() {
         </div>
       </section>
 
-      {/* ─────────────── A LIVING LAB ─────────────── */}
+      {/* ─────────────── PROVEN IN PRODUCTION ─────────────── */}
       <section className="bg-bg py-24 sm:py-32">
         <div className="mx-auto grid max-w-6xl items-center gap-14 px-5 lg:grid-cols-[1fr_1fr]">
           <Reveal>
-            <p className="eyebrow-mono text-sage">Why DailyFit is the testbed</p>
+            <p className="eyebrow-mono text-sage">Proven in production</p>
             <h2 className="mt-4 text-[34px] font-extrabold leading-[1.2] tracking-[-0.03em] text-ink sm:text-[42px]">
               A real service, running daily,
               <br />
-              is the best laboratory.
+              is the most honest proof.
             </h2>
             <p className="mt-6 max-w-[60ch] text-body text-ink-soft">
               The Auto-apply Agent collides with real portals, forms, and

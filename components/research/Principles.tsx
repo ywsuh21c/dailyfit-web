@@ -65,23 +65,22 @@ const KO: Principle[] = [
     glyph: <LiveGlyph />,
     body: (
       <>
-        논문 속 벤치마크가 아니라,
+        개선의 가치는 논문 속 벤치마크가 아니라 실제 성과로 증명됩니다.
         <br />
-        매일 돌아가는 라이브 서비스가 우리의 실험실입니다.
-        <br />
-        실전에서 통하지 않는 개선은 개선이 아닙니다.
+        사용자의 하루에서 통하지 않는 개선은 개선이 아닙니다.
       </>
     ),
   },
   {
     num: 'P2',
     tag: 'ROI-gated',
-    title: '비용을 스스로 증명해야 합니다',
+    title: '가치를 스스로 증명해야 합니다',
     glyph: <RoiGlyph />,
     body: (
       <>
-        학습에는 토큰과 시간이 듭니다. 개선 가치가 비용보다 크다는 것을
-        증명하지 못하는 학습 루프는 멈춥니다.
+        모든 학습이 더 나은 결과로 이어지는 건 아닙니다.
+        <br />
+        실질적인 가치를 만들지 못하는 개선은 스스로 멈춥니다.
       </>
     ),
   },
@@ -93,7 +92,9 @@ const KO: Principle[] = [
     body: (
       <>
         Agent의 자율성이 아무리 높아져도, 실행의 Go/No-go는 언제나
-        사용자에게 있습니다. 이것은 기술 한계가 아니라 설계 원칙입니다.
+        사용자에게 있습니다.
+        <br />
+        기술 한계가 아니라 설계 원칙입니다.
       </>
     ),
   },
@@ -104,8 +105,9 @@ const KO: Principle[] = [
     glyph: <UndoGlyph />,
     body: (
       <>
-        모든 개입은 기록되고, 즉시 되돌릴 수 있습니다. 안전하게 실패할 수
-        있는 구조라야 과감하게 실험할 수 있습니다.
+        모든 개입은 기록되고, 즉시 되돌릴 수 있습니다.
+        <br />
+        안전하게 실패할 수 있는 구조여야 과감하게 실험할 수 있습니다.
       </>
     ),
   },
@@ -119,20 +121,22 @@ const EN: Principle[] = [
     glyph: <LiveGlyph />,
     body: (
       <>
-        Our lab is a live service running every day, not a paper benchmark.
-        An improvement that does not survive production is not an improvement.
+        Value is proven by real-world performance, not a paper benchmark.
+        <br />
+        An improvement that doesn&rsquo;t help in a user&rsquo;s day is not an improvement.
       </>
     ),
   },
   {
     num: 'P2',
     tag: 'ROI-gated',
-    title: 'Every loop pays for itself',
+    title: 'Value must prove itself',
     glyph: <RoiGlyph />,
     body: (
       <>
-        Learning costs tokens and time. A learning loop that cannot prove its
-        value exceeds its cost gets switched off.
+        Not every round of learning leads to a better outcome.
+        <br />
+        An improvement that doesn&rsquo;t create real value stops itself.
       </>
     ),
   },
@@ -144,7 +148,9 @@ const EN: Principle[] = [
     body: (
       <>
         However autonomous the Agent becomes, the go/no-go on execution always
-        stays with the user. A design principle, not a technical limit.
+        stays with the user.
+        <br />
+        A design principle, not a technical limit.
       </>
     ),
   },
@@ -155,8 +161,9 @@ const EN: Principle[] = [
     glyph: <UndoGlyph />,
     body: (
       <>
-        Every intervention is logged and instantly reversible. Only a
-        structure that fails safely lets us experiment boldly.
+        Every intervention is logged and instantly reversible.
+        <br />
+        Only a structure that fails safely lets us experiment boldly.
       </>
     ),
   },

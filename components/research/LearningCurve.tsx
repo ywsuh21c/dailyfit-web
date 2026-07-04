@@ -7,7 +7,7 @@ import { useEffect, useRef, useState } from 'react';
  *
  * Capability vs. iterations. The curve bends upward without human pushes:
  * three marked points tell the story (told to improve → learns on its own →
- * evolves ahead). Draw-on-scroll via IntersectionObserver adding `.curve-on`
+ * evolves unprompted). Draw-on-scroll via IntersectionObserver adding `.curve-on`
  * (CSS in globals.css); prefers-reduced-motion renders it fully drawn.
  */
 export function LearningCurve({ lang = 'ko' }: { lang?: 'ko' | 'en' }) {
@@ -38,7 +38,7 @@ export function LearningCurve({ lang = 'ko' }: { lang?: 'ko' | 'en' }) {
           y: 'capability',
           p1: 'told to improve',
           p2: 'learns on its own',
-          p3: 'evolves ahead',
+          p3: 'evolves unprompted',
         }
       : {
           aria: '반복 횟수에 따라 스스로 꺾여 올라가는 역량 곡선',
@@ -46,7 +46,7 @@ export function LearningCurve({ lang = 'ko' }: { lang?: 'ko' | 'en' }) {
           y: 'capability',
           p1: '개선을 지시받던 단계',
           p2: '스스로 배우는 단계',
-          p3: '앞서 진화하는 단계',
+          p3: '알아서 진화하는 단계',
         };
 
   return (
@@ -117,7 +117,7 @@ export function LearningCurve({ lang = 'ko' }: { lang?: 'ko' | 'en' }) {
           </text>
         </g>
 
-        {/* ③ evolves ahead — beyond the frame */}
+        {/* ③ evolves unprompted — drawn beyond the frame */}
         <g className="curve-pt curve-pt-3">
           <circle cx="584" cy="40" r="6" fill="none" stroke="#4A7C59" strokeWidth="2" strokeDasharray="3 3" />
           <text x="574" y="26" textAnchor="end" className="fill-sage" style={{ fontWeight: 700, fontSize: 14 }}>
