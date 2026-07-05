@@ -37,3 +37,6 @@ yarn-error.log*
 
 # internal handoff / ops notes — never commit (repo is public)
 HANDOFF*.md
+
+# local scratch (auto-mode logs etc.)
+.tmp/
