@@ -28,14 +28,16 @@ type Stop = {
   label: string;
   sub: string;
   cls: string;
-  /** which side of the dot the label stack sits on */
-  side: 'above' | 'below';
+  /** which side of the dot the label stack sits on. 'below-right' hangs the
+   *  stack start-anchored to the dot's lower right — used where a centered
+   *  below-label would sit in the incoming curve's band (Fudan). */
+  side: 'above' | 'below' | 'below-right';
 };
 
 // Youngwoo's lane (sage) — starts lower, labels below the line.
 const YW_STOPS: Stop[] = [
   { x: 72, y: 288, label: 'Boston University', sub: '경영학', cls: 'curve-pt-1', side: 'below' },
-  { x: 185, y: 246, label: 'Fudan University', sub: '금융학 석사', cls: 'curve-pt-1', side: 'below' },
+  { x: 185, y: 246, label: 'Fudan University', sub: '금융학 석사', cls: 'curve-pt-1', side: 'below-right' },
   { x: 470, y: 152, label: 'PYLER', sub: 'Corporate Development', cls: 'curve-pt-2', side: 'below' },
 ];
 
@@ -49,7 +51,7 @@ const HJ_STOPS: Stop[] = [
 // English mirror — same coords/cls/side, translated subs only.
 const YW_STOPS_EN: Stop[] = [
   { x: 72, y: 288, label: 'Boston University', sub: 'Business', cls: 'curve-pt-1', side: 'below' },
-  { x: 185, y: 246, label: 'Fudan University', sub: 'MS in Finance', cls: 'curve-pt-1', side: 'below' },
+  { x: 185, y: 246, label: 'Fudan University', sub: 'MS in Finance', cls: 'curve-pt-1', side: 'below-right' },
   { x: 470, y: 152, label: 'PYLER', sub: 'Corporate Development', cls: 'curve-pt-2', side: 'below' },
 ];
 
@@ -144,18 +146,18 @@ export function JourneyPath({ lang = 'ko' }: { lang?: Lang }) {
           <g key={s.label} className={`curve-pt ${s.cls}`}>
             <circle cx={s.x} cy={s.y} r={5} fill="#F5F0E8" stroke={s.side === 'above' ? NAVY : SAGE} strokeOpacity={s.side === 'above' ? 0.55 : 1} strokeWidth={2} />
             <text
-              x={s.x}
+              x={s.side === 'below-right' ? s.x + 14 : s.x}
               y={s.side === 'above' ? s.y - 30 : s.y + 24}
-              textAnchor="middle"
+              textAnchor={s.side === 'below-right' ? 'start' : 'middle'}
               className="fill-ink"
               style={{ fontWeight: 700, fontSize: 14 }}
             >
               {s.label}
             </text>
             <text
-              x={s.x}
+              x={s.side === 'below-right' ? s.x + 14 : s.x}
               y={s.side === 'above' ? s.y - 14 : s.y + 40}
-              textAnchor="middle"
+              textAnchor={s.side === 'below-right' ? 'start' : 'middle'}
               className="fill-ink-soft"
               style={{ fontWeight: 600, fontSize: 11, letterSpacing: '0.06em' }}
             >
@@ -170,7 +172,7 @@ export function JourneyPath({ lang = 'ko' }: { lang?: Lang }) {
           <text x={320} y={172} textAnchor="middle" className="fill-ink" style={{ fontWeight: 700, fontSize: 14 }}>
             Bain &amp; Company
           </text>
-          <text x={320} y={226} textAnchor="middle" className="fill-ink-soft" style={{ fontWeight: 600, fontSize: 11, letterSpacing: '0.06em' }}>
+          <text x={320} y={231} textAnchor="middle" className="fill-ink-soft" style={{ fontWeight: 600, fontSize: 11, letterSpacing: '0.06em' }}>
             {copy.bainMet}
           </text>
         </g>

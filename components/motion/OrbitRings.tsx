@@ -26,8 +26,10 @@ export function OrbitRings({
   outer: string;
 }) {
   return (
-    <div className="mx-auto w-full max-w-[560px]">
-      <svg viewBox="0 0 560 340" role="img" aria-label={aria} className="h-auto w-full">
+    <div className="mx-auto w-full max-w-[600px]">
+      {/* 600-wide canvas: the EN mid label ("proprietary voice layer") runs to
+          x≈590 and was hard-clipped by the old 560 viewBox. */}
+      <svg viewBox="0 0 600 340" role="img" aria-label={aria} className="h-auto w-full">
         <defs>
           <radialGradient id="orbit-core">
             <stop offset="0%" stopColor="#8FBF9F" stopOpacity="0.9" />
@@ -40,9 +42,10 @@ export function OrbitRings({
         <circle cx="280" cy="170" r="150" fill="none" stroke="#4A7C59" strokeWidth="1.5" className="ripple-ring ripple-d1" />
         <circle cx="280" cy="170" r="150" fill="none" stroke="#4A7C59" strokeWidth="1.5" className="ripple-ring ripple-d2" />
 
-        {/* orbits — core is wide enough for its two-line label; the old center
+        {/* orbits — core is wide enough for its two-line label in BOTH locales
+            (EN "per-user daily-life data" ≈163px needs r≥84); the old center
             dot sat right on the text, so the label carries the center now */}
-        <circle cx="280" cy="170" r="78" fill="url(#orbit-core)" stroke="#4A7C59" strokeOpacity="0.5" strokeWidth="1.5" />
+        <circle cx="280" cy="170" r="84" fill="url(#orbit-core)" stroke="#4A7C59" strokeOpacity="0.5" strokeWidth="1.5" />
         <circle cx="280" cy="170" r="112" fill="none" stroke="#4A7C59" strokeOpacity="0.3" strokeWidth="1.2" />
         <circle cx="280" cy="170" r="150" fill="none" stroke="#4A7C59" strokeOpacity="0.22" strokeWidth="1.2" strokeDasharray="4 6" />
 
@@ -66,8 +69,10 @@ export function OrbitRings({
           </text>
         )}
         <g>
-          <line x1="386" y1="164" x2="420" y2="140" stroke="#4A7C59" strokeOpacity="0.35" />
-          <text x="426" y="136" className="fill-ink" style={ringLabel}>
+          {/* leader starts AT the mid-orbit marker (392,170) and runs outward,
+              tracking the r=112 orbit (was tuned for the old r=100 ring) */}
+          <line x1="398" y1="164" x2="424" y2="142" stroke="#4A7C59" strokeOpacity="0.35" />
+          <text x="430" y="138" className="fill-ink" style={ringLabel}>
             {mid}
           </text>
         </g>

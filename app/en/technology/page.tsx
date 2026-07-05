@@ -47,7 +47,7 @@ export default function EnTechnologyPage() {
         </div>
       </Section>
 
-      {/* 2. How the agent works — real chat demo + the ethics of autonomy */}
+      {/* 2. How the agent works — real chat demo + the go/no-go principle */}
       <Section tone="surface">
         <SectionHeader
           eyebrow="How it works"

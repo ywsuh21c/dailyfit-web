@@ -49,7 +49,7 @@ export default function TechnologyPage() {
         </div>
       </Section>
 
-      {/* 2. How the agent works — real chat demo + the ethics of autonomy */}
+      {/* 2. How the agent works — real chat demo + the go/no-go principle */}
       <Section tone="surface">
         <SectionHeader
           eyebrow="작동 방식"
@@ -192,7 +192,7 @@ export default function TechnologyPage() {
           <MoatItem title="Raw Conversation Insight">
             액티브 시니어의 날것 그대로의 &lsquo;일상 대화&rsquo;.
             <br />
-            우리의 가장 큰 해자입니다.
+            저희의 가장 큰 해자입니다.
           </MoatItem>
           <MoatItem title="Increasing Personalization">
             취향·이력·이동 패턴이 유저별로 쌓입니다.
