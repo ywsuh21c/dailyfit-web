@@ -20,6 +20,18 @@ export default function GetPage() {
   useEffect(() => {
     const qs = window.location.search; // includes leading '?' or ''
     if (qs) setIosHref(IOS_URL + qs);
+    // 광고 클릭 계측 — utm(또는 gclid) 있는 방문=광고 유입 도착만 백엔드 /l/ 에
+    // fire-and-forget 비콘 → ad_click 이벤트로 /admin/data/ads 에 집계. 이 페이지는
+    // 랜딩(자동 이동 없음)이라 리다이렉트가 아니라 로드 시점에 1회 기록. no-cors GET
+    // 이라 CORS 설정 불필요, keepalive 로 이탈해도 완주. 실패는 무시(광고 UX 무영향).
+    try {
+      const p = new URLSearchParams(qs);
+      if (p.get('utm_source') || p.get('gclid')) {
+        fetch('https://api.dailyfitai.app/l/get' + qs, { mode: 'no-cors', keepalive: true });
+      }
+    } catch {
+      /* 계측 실패 무시 */
+    }
   }, []);
 
   return (
