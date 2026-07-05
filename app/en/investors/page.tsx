@@ -57,7 +57,7 @@ export default function InvestorsEnPage() {
           <StatCard suffix="M" label="Korean active seniors (55–70)">
             <CountUp to={15} duration={1100} />
           </StatCard>
-          <StatCard suffix="" label="live activities in the database">
+          <StatCard suffix="" label="programs & activities in our live DB">
             <CountUp to={activeCatalogCount} />
           </StatCard>
           <StatCard suffix="" label="Agent autonomy tiers">
@@ -99,9 +99,9 @@ export default function InvestorsEnPage() {
           </div>
           <div className="rounded-xl border border-line bg-bg p-6">
             <p className="text-h3 font-semibold text-ink">Hyunjin Kim</p>
-            <p className="mt-1 text-base text-sage">Co-founder</p>
+            <p className="mt-1 text-base text-sage">Co-founder · Head of Strategy</p>
             <p className="mt-3 text-body text-ink-soft">
-              Product & engineering partner.
+              Korea University → EY-Parthenon → Bain → UVA MBA → DailyFit.
             </p>
           </div>
         </div>

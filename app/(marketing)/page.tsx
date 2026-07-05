@@ -257,10 +257,10 @@ export default async function HomePage() {
           <Reveal className="mx-auto max-w-3xl text-center">
             <p className="hx-eyebrow eyebrow-mono text-sage">Meet the agents</p>
             <h2 className="mt-6 text-[30px] font-extrabold leading-[1.18] tracking-[-0.035em] text-ink sm:text-[42px]">
-              하루를 설계해주는 세 명의 Agent
+              하루를 대신 움직이는 세 명의 Agent
             </h2>
             <p className="mt-6 text-body text-ink-soft">
-              탐색 · 리마인드 · 신청대행. 맡는 범위가 넓어질수록 상위 Agent로 이어집니다.
+              탐색 · 리마인드 · 신청대행. 각 Agent가 맡은 일을 실제로 처리하고, 맡는 범위가 넓어질수록 상위 Agent로 이어집니다.
             </p>
           </Reveal>
           <div className="mt-14 grid gap-5 md:grid-cols-3">

@@ -42,7 +42,7 @@ export default function InvestorsPage() {
           <StatCard suffix="만 명" label="한국 55–70 액티브 시니어">
             <CountUp to={1500} />
           </StatCard>
-          <StatCard suffix="건" label="라이브 활동 데이터베이스">
+          <StatCard suffix="건" label="보유 프로그램·활동 DB (실시간)">
             <CountUp to={activeCatalogCount} />
           </StatCard>
           <StatCard suffix="티어" label="Agent 자율성 단계">
@@ -107,10 +107,9 @@ export default function InvestorsPage() {
             bio="Boston University → Fudan University → Bain → PYLER(Corporate Development Lead) → DailyFit. 전략·기업개발 백그라운드로 시니어 일상을 제품으로 설계합니다."
           />
           <FounderCard
-            name="김현진"
-            role="공동창업자"
-            bio="제품·기술 파트너. 솔로 파운더 우려를 선제적으로 해소하는 2인 창업 팀입니다."
-            // TODO(IR scope §2): 현진 사진/풀 bio 본인 동의 필요
+            name="김현진 (Hyunjin Kim)"
+            role="공동창업자 · Head of Strategy"
+            bio="고려대학교 → EY-Parthenon → Bain → UVA MBA → DailyFit. 전략·글로벌 확장 백그라운드로 시니어의 하루를 함께 설계합니다."
           />
         </div>
       </Section>
@@ -123,10 +122,9 @@ export default function InvestorsPage() {
           lead="정확한 수치와 코호트 곡선은 미팅에서 공유드립니다."
         />
         <ul className="mt-6 max-w-prose space-y-3 text-body text-ink">
-          {/* TODO(D2/D3/D4): 팟캐스트·정부 프로그램·베타 코호트 수치 확정 후 교체 */}
+          {/* TODO(D2/D3/D4): 정부 프로그램·베타 코호트 수치 확정 후 교체 */}
           <li>· 베타 출시 후 첫 코호트 측정: 시니어 헬스앱 업계 평균 대비 리텐션 추적 중.</li>
           <li>· 60+ 시니어 1:1 인터뷰 누적 · 매주 신규 베타 신청자 유입.</li>
-          <li>· 팟캐스트 &ldquo;있는 것들이 더해&rdquo; 운영: 창업자 내러티브 자산.</li>
         </ul>
       </Section>
 

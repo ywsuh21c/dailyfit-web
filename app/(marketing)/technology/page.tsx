@@ -155,7 +155,7 @@ export default function TechnologyPage() {
         />
         <div className="mt-8 flex flex-col">
           <LayerRow tag="Layer 1 · User Channel">
-            실시간 STT · 텍스트 · 카카오 로그인
+            실시간 음성 인식(STT, Speech-to-Text) · 텍스트 · 카카오 로그인
           </LayerRow>
           <FlowLine vertical />
           <LayerRow tag="Layer 2 · Agents">

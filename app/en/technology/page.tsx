@@ -147,7 +147,7 @@ export default function EnTechnologyPage() {
         />
         <div className="mt-8 flex flex-col">
           <LayerRow tag="Layer 1 · User Channel">
-            Real-time STT · text · Kakao login
+            Real-time speech-to-text (STT) · text · Kakao login
           </LayerRow>
           <FlowLine vertical />
           <LayerRow tag="Layer 2 · Agents">
