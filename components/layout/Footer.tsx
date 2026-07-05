@@ -1,14 +1,30 @@
 import Link from 'next/link';
 import { externalLinkProps, footerNav, legalNav, productCta, site } from '@/lib/site';
+import { localizeHref, type Locale } from '@/lib/i18n';
 import { BrandMark } from '@/components/brand/BrandMark';
 
-export function Footer() {
+// English labels for the two legal links (Korean by default in lib/site.ts).
+const LEGAL_EN: Record<string, string> = {
+  '/terms': 'Terms of Service',
+  '/privacy': 'Privacy Policy',
+};
+
+export function Footer({ locale = 'ko' }: { locale?: Locale }) {
+  const ariaHome = locale === 'en' ? `${site.name} home` : `${site.name} 홈`;
+  const footerAria = (heading: string) =>
+    locale === 'en' ? `Footer · ${heading}` : `푸터 · ${heading}`;
+  const ctaLabel = locale === 'en' ? 'Try DailyFit' : productCta.label;
+
   return (
     <footer className="bg-navy-deep text-ivory/70">
       <div className="mx-auto max-w-6xl px-5 py-16">
         <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-[2fr_1fr_1fr_1fr]">
           <div className="sm:col-span-2 lg:col-span-1">
-            <Link href="/" className="flex items-center gap-2.5" aria-label={`${site.name} 홈`}>
+            <Link
+              href={localizeHref('/', locale)}
+              className="flex items-center gap-2.5"
+              aria-label={ariaHome}
+            >
               <BrandMark className="h-8 w-8" />
               <span className="text-[22px] font-extrabold tracking-tight text-ivory">
                 {site.name}
@@ -22,7 +38,7 @@ export function Footer() {
           </div>
 
           {footerNav.map((col) => (
-            <nav key={col.heading} aria-label={`푸터 · ${col.heading}`}>
+            <nav key={col.heading} aria-label={footerAria(col.heading)}>
               <p className="text-caption font-bold uppercase tracking-wider text-ivory">
                 {col.heading}
               </p>
@@ -30,7 +46,7 @@ export function Footer() {
                 {col.items.map((item) => (
                   <li key={item.href}>
                     <Link
-                      href={item.href}
+                      href={localizeHref(item.href, locale)}
                       className="flex min-h-tap items-center text-base transition-colors hover:text-ivory"
                     >
                       {item.label}
@@ -41,7 +57,7 @@ export function Footer() {
             </nav>
           ))}
 
-          <nav aria-label="푸터 · Contact">
+          <nav aria-label={footerAria('Contact')}>
             <p className="text-caption font-bold uppercase tracking-wider text-ivory">
               Contact
             </p>
@@ -60,7 +76,7 @@ export function Footer() {
                   {...externalLinkProps}
                   className="flex min-h-tap items-center text-base transition-colors hover:text-ivory"
                 >
-                  {productCta.label} →
+                  {ctaLabel} →
                 </Link>
               </li>
             </ul>
@@ -72,8 +88,11 @@ export function Footer() {
           <ul className="flex flex-wrap gap-x-5 gap-y-1">
             {legalNav.map((item) => (
               <li key={item.href}>
-                <Link href={item.href} className="transition-colors hover:text-ivory">
-                  {item.label}
+                <Link
+                  href={localizeHref(item.href, locale)}
+                  className="transition-colors hover:text-ivory"
+                >
+                  {locale === 'en' ? LEGAL_EN[item.href] ?? item.label : item.label}
                 </Link>
               </li>
             ))}
