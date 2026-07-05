@@ -1,21 +1,41 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { externalLinkProps, productAppUrl } from '@/lib/site';
+import { externalLinkProps, productAppUrl, site } from '@/lib/site';
+import { getCatalogCount } from '@/lib/catalog-count';
 import { AgentConsole } from '@/components/home/AgentConsole';
 import { Reveal } from '@/components/motion/Reveal';
 
-// English landing (/en). Mirror of the frozen Korean root ("/"), translated.
-// The Korean root is ALWAYS the default; this page is reached only by the
-// explicit language toggle. No locale-based redirect anywhere.
+// English landing (/en) — mirror of the Korean root ("/"), same "Runtime &
+// Daylight" art direction (hx-* stage → daylight body), translated. The Korean
+// root is ALWAYS the default; this page is reached only by the language toggle.
+// Audience: VC · press · AI-savvy visitors (3rd person), same as the KO home.
 
 export const metadata: Metadata = {
   title: 'DailyFit · AI Agents for active seniors',
   description:
-    'We build AI agents for the active senior generation. One conversation designs the day: discovery, reminders, and auto-apply.',
+    'We build AI Agents for the active senior generation. One conversation designs the day: discovery, reminders, and auto-apply.',
 };
 
+// Floating data motes inside the runtime stage — deterministic positions
+// (no Math.random: server/client markup must match). Pure decoration.
+const MOTES: Array<{ left: string; top: string; size: number; dur: string; delay: string }> = [
+  { left: '6%', top: '72%', size: 3, dur: '13s', delay: '0s' },
+  { left: '11%', top: '34%', size: 2, dur: '17s', delay: '1.8s' },
+  { left: '19%', top: '58%', size: 2, dur: '15s', delay: '4.2s' },
+  { left: '27%', top: '20%', size: 3, dur: '19s', delay: '2.6s' },
+  { left: '38%', top: '80%', size: 2, dur: '14s', delay: '6.1s' },
+  { left: '47%', top: '14%', size: 2, dur: '18s', delay: '0.9s' },
+  { left: '56%', top: '66%', size: 3, dur: '16s', delay: '3.4s' },
+  { left: '64%', top: '28%', size: 2, dur: '13.5s', delay: '5.2s' },
+  { left: '73%', top: '75%', size: 2, dur: '17.5s', delay: '1.2s' },
+  { left: '81%', top: '40%', size: 3, dur: '15.5s', delay: '7.4s' },
+  { left: '89%', top: '62%', size: 2, dur: '14.5s', delay: '2.1s' },
+  { left: '94%', top: '22%', size: 2, dur: '18.5s', delay: '4.8s' },
+];
+
 // Static, English-labeled sample of real catalog activities (the live database
-// is Korean-first; this page renders representative examples in English).
+// is Korean-first; this mirrors the KO home's live ticker with representative
+// English examples so the marquee reads for an English audience).
 const TICKER: Array<[string, string]> = [
   ['In-house', 'Senior Running Club'],
   ['In-house', 'Hangang Cycling'],
@@ -29,119 +49,140 @@ const TICKER: Array<[string, string]> = [
   ['In-house', 'ChatGPT 101'],
 ];
 
-export default function EnHomePage() {
+export const revalidate = 21600;
+
+export default async function EnHomePage() {
+  const { count: catalogCount } = await getCatalogCount();
   return (
     <>
-      {/* ───────────────────────── HERO ───────────────────────── */}
-      <section className="hero-field relative overflow-hidden">
-        <div className="hero-grid pointer-events-none absolute inset-0" aria-hidden="true" />
-        <div className="aurora aurora-1" aria-hidden="true" />
-        <div className="aurora aurora-2" aria-hidden="true" />
+      {/* ─────────────── HERO — the runtime stage ─────────────── */}
+      <section className="px-3 pt-3 sm:px-5 sm:pt-4">
+        <div className="hx-stage mx-auto max-w-[1400px] rounded-[24px] sm:rounded-[32px]">
+          <div className="hx-stage-grid" aria-hidden="true" />
+          <div className="hx-aurora hx-aurora-a" aria-hidden="true" />
+          <div className="hx-aurora hx-aurora-b" aria-hidden="true" />
+          <div aria-hidden="true">
+            {MOTES.map((m, i) => (
+              <span
+                key={i}
+                className="hx-mote"
+                style={{
+                  left: m.left,
+                  top: m.top,
+                  width: m.size,
+                  height: m.size,
+                  ['--dur' as string]: m.dur,
+                  ['--delay' as string]: m.delay,
+                }}
+              />
+            ))}
+          </div>
+          <div className="hx-grain" aria-hidden="true" />
 
-        <div className="relative mx-auto grid max-w-6xl items-center gap-10 px-5 pb-28 pt-24 lg:grid-cols-[1.15fr_0.85fr] lg:gap-16 lg:pb-40 lg:pt-36">
-          <div>
-            <p className="eyebrow-mono text-sage">Agent-as-a-Service</p>
-            <h1 className="mt-6 text-[42px] font-extrabold leading-[1.08] tracking-[-0.035em] text-ink sm:text-[60px]">
-              <span className="text-sage">AI Agents</span>
+          <div className="relative mx-auto flex max-w-5xl flex-col items-center px-5 pb-20 pt-16 text-center sm:px-10 sm:pb-24 sm:pt-24">
+            <p className="hx-chip-live">Agent-as-a-Service</p>
+            <h1 className="mt-8 text-[30px] font-extrabold leading-[1.1] tracking-[-0.04em] text-ivory min-[430px]:text-[34px] sm:text-[60px] sm:leading-[1.08] lg:text-[72px]">
+              <span className="hx-glow-text">AI Agents</span>
               <br />
               for active seniors.
             </h1>
-            <div className="mt-10 flex flex-wrap items-center gap-4">
+            <p className="mt-7 max-w-[46ch] text-[18px] leading-relaxed text-ivory/70 sm:text-[21px]">
+              <span className="block">Active seniors are learning, meeting, and enjoying life on their smartphones.</span>
+              <span className="mt-2 block">We design the day for the fastest-growing generation in the world.</span>
+            </p>
+            <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
               <Link
-                href="/contact"
-                className="inline-flex min-h-[56px] items-center rounded-xl bg-sage px-8 text-[17px] font-bold text-white transition-colors hover:bg-sage-dk active:scale-[0.98]"
+                href="/en/contact"
+                className="hx-glow-cta inline-flex min-h-[56px] items-center rounded-xl bg-sage px-8 text-[17px] font-bold text-white transition-colors hover:bg-sage-dk active:scale-[0.98]"
               >
                 Talk to us
               </Link>
               <a
                 href="#runtime"
-                className="inline-flex min-h-[56px] items-center rounded-xl border border-ink/15 bg-white/50 px-8 text-[17px] font-bold text-ink transition-colors hover:border-sage hover:text-sage active:scale-[0.98]"
+                className="inline-flex min-h-[56px] items-center rounded-xl border border-ivory/25 bg-white/5 px-8 text-[17px] font-bold text-ivory transition-colors hover:border-sage-lt hover:text-sage-lt active:scale-[0.98]"
               >
                 See how it works ↓
               </a>
             </div>
+
+            {/* The runtime, visible — the product working, front and center. */}
+            <div className="relative mt-16 w-full max-w-2xl sm:mt-20">
+              <div className="hx-console-halo" aria-hidden="true" />
+              <div className="hx-console-tilt">
+                <AgentConsole lang="en" catalogCount={catalogCount} />
+              </div>
+            </div>
           </div>
-          <p className="max-w-[42ch] text-[19px] leading-relaxed text-ink-soft sm:text-[22px]">
-            Active seniors are smartphone-native and growing faster than any
-            generation before.
-            <br />
-            <br />
-            The second half of their lives has just begun.
-            <br />
-            <br />
-            They&rsquo;re eager to learn, proactive to meet, and ambitious to
-            explore.
-            <br />
-            <br />
-            DailyFit designs their day.
-          </p>
+          <div className="hx-horizon" aria-hidden="true" />
         </div>
       </section>
 
       {/* ─────────────────────── PROBLEM ─────────────────────── */}
-      <section className="bg-bg py-24 sm:py-32">
-        <div className="mx-auto max-w-3xl px-5 text-center">
+      <section className="bg-bg py-28 sm:py-40">
+        <div className="mx-auto max-w-5xl px-5 text-center">
           <Reveal>
-            <p className="eyebrow-mono text-sage">The problem</p>
-            <h2 className="mt-4 text-[34px] font-extrabold leading-[1.2] tracking-[-0.03em] text-ink sm:text-[46px]">
-              All the time in the world.
+            <p className="hx-eyebrow eyebrow-mono text-sage">The problem</p>
+            <h2 className="mt-6 text-[30px] font-extrabold leading-[1.18] tracking-[-0.035em] text-ink sm:text-[42px]">
+              Active seniors have the time and the curiosity.
               <br />
-              The only question: where to begin.
+              Finding what to do is the hard part.
             </h2>
-            <p className="mx-auto mt-6 max-w-[72ch] text-body text-ink-soft">
-              There&rsquo;s no shortage of classes, gatherings, and places to explore.
+            <p className="mx-auto mt-7 max-w-3xl text-body text-ink-soft">
+              Places to learn, people to meet, outings to take.
               <br />
-              But they&rsquo;re spread across countless government sites and local programs.
+              The information is scattered across dozens of agencies and portals.
               <br />
-              Finding those programs is hard enough.
-              <br />
-              Applying for them is even harder.
+              Hard to find, and harder to sign up for.
             </p>
           </Reveal>
         </div>
       </section>
 
-      {/* ─────────────────── WHAT WE BUILD (solution) ─────────────── */}
+      {/* ─────────────── WHAT WE BUILD (solution) ─────────────── */}
       <section className="bg-surface py-24 sm:py-32">
-        <div className="mx-auto grid max-w-6xl items-center gap-14 px-5 lg:grid-cols-[1.2fr_0.8fr]">
+        <div className="mx-auto grid max-w-6xl items-center gap-14 px-5 lg:grid-cols-2">
           <Reveal>
             <p className="eyebrow-mono text-sage">Solution: What we built</p>
-            <h2 className="mt-4 text-[32px] font-extrabold leading-[1.2] tracking-[-0.03em] text-ink sm:text-[40px]">
-              One conversation with our agent.
+            <h2 className="mt-5 text-[34px] font-extrabold leading-[1.15] tracking-[-0.035em] text-ink sm:text-[46px]">
+              One conversation
               <br />
-              We design their day.
+              designs the day.
             </h2>
-            <p className="mt-6 max-w-[64ch] text-body text-ink-soft">
-              A multi-agent platform for hobbies and everyday life.
+            <p className="mt-7 max-w-[46ch] text-body text-ink-soft">
+              A multi-Agent platform that designs hobbies and daily life.
               <br />
-              Users just talk as always, and the agents compose the day.
+              Speak as you normally would, and the Agents collaborate to compose the day.
             </p>
-            <p className="mt-4 text-body font-semibold text-ink">
-              The agent proposes what to do.
-              <br />
-              User decides the final call.
+            <p className="hx-pull mt-8 text-[19px] font-semibold leading-relaxed text-ink">
+              <span className="block">AI proposes.</span>
+              <span className="mt-2 block">The user always decides.</span>
             </p>
           </Reveal>
           <Reveal delay={120}>
-            <div className="rounded-2xl border border-line bg-white p-7 shadow-[0_30px_70px_-40px_rgba(30,45,64,0.35)]">
-              <div className="flex flex-col gap-3">
+            <div className="hx-window">
+              <div className="hx-window-bar" aria-hidden="true">
+                <span className="hx-window-dot" style={{ background: '#E5E1D8' }} />
+                <span className="hx-window-dot" style={{ background: '#D9D4C9' }} />
+                <span className="hx-window-dot" style={{ background: '#8FBF9F' }} />
+              </div>
+              <div className="flex flex-col gap-3 p-7">
                 <Reveal delay={150}>
                   <div className="flex flex-col">
-                    <ChatBubble who="DailyFit">How was your evening walk?</ChatBubble>
+                    <ChatBubble who="DailyFit">How was your evening walk yesterday?</ChatBubble>
                   </div>
                 </Reveal>
                 <Reveal delay={420}>
                   <div className="flex flex-col">
                     <ChatBubble who="You" me>
-                      My knee was a little stiff.
+                      My knee felt a little stiff.
                     </ChatBubble>
                   </div>
                 </Reveal>
                 <Reveal delay={700}>
                   <div className="flex flex-col">
                     <ChatBubble who="DailyFit">
-                      Then a light 15-minute stretch this morning, and a book club
-                      nearby this afternoon. Shall we start there?
+                      Today, 15 minutes of light stretching, and this afternoon
+                      there&rsquo;s a book club nearby. Shall we start there?
                     </ChatBubble>
                   </div>
                 </Reveal>
@@ -151,32 +192,45 @@ export default function EnHomePage() {
         </div>
       </section>
 
-      {/* ───────────── AGENT RUNTIME — infographic section ───────────── */}
-      <section id="runtime" className="bg-bg py-24 sm:py-32">
-        <div className="mx-auto max-w-5xl px-5">
+      {/* ───────────── AGENT RUNTIME — orchestration pipeline ───────────── */}
+      <section id="runtime" className="bg-bg pt-24 sm:pt-32">
+        <div className="mx-auto max-w-6xl px-5">
           <Reveal className="text-center">
-            <p className="eyebrow-mono text-sage">How our agent works</p>
-            <h2 className="mt-4 text-[34px] font-extrabold leading-[1.2] tracking-[-0.03em] text-ink sm:text-[44px]">
+            <p className="hx-eyebrow eyebrow-mono text-sage">How our agent works</p>
+            <h2 className="mt-6 text-[30px] font-extrabold leading-[1.18] tracking-[-0.035em] text-ink sm:text-[44px]">
               How an Agent designs the day
             </h2>
-            <p className="mx-auto mt-5 max-w-4xl text-body text-ink-soft">
-              Our agent reads the user&rsquo;s words as intent, recalls what it
-              knows, and picks from an activity database built on public and
-              partner APIs, to complete the day.
+            <p className="mx-auto mt-6 max-w-6xl text-body text-ink-soft">
+              It reads the intent inside a single sentence, recalls past memory, and designs the day by picking the best activities from an activity Database gathered through public and partner APIs.
             </p>
           </Reveal>
-          <Reveal className="mx-auto mt-12 max-w-2xl" delay={120}>
-            <AgentConsole lang="en" />
+          <Reveal className="mt-14" delay={120}>
+            <div className="hx-runtime-board mx-auto max-w-4xl">
+              <div className="hx-stage-grid" aria-hidden="true" />
+              <div className="hx-grain" aria-hidden="true" />
+              <div className="hx-flow relative" aria-hidden="true">
+                <span className="hx-flow-node hx-flow-node-user">&gt;</span>
+                <span className="hx-flow-edge" />
+                <span className="hx-flow-node">intent</span>
+                <span className="hx-flow-edge" />
+                <span className="hx-flow-node">memory</span>
+                <span className="hx-flow-edge" />
+                <span className="hx-flow-node">search</span>
+                <span className="hx-flow-edge" />
+                <span className="hx-flow-node hx-flow-node-done">✓ plan</span>
+              </div>
+            </div>
+            <div className="hx-flow-drop" aria-hidden="true" />
           </Reveal>
         </div>
       </section>
 
       {/* ─────────────── LIVE ACTIVITY TICKER ─────────────── */}
-      <div className="border-y border-line bg-bg py-5" aria-label="Examples from the activity database">
+      <div className="hx-ticker border-y border-line bg-bg py-5" aria-label="Sample activities in the activity database">
         <div className="mx-auto max-w-6xl px-5">
-          <div className="mb-3 flex items-center gap-2.5">
+          <div className="mb-3 flex items-center justify-center gap-2.5">
             <span className="console-live-dot !bg-sage" aria-hidden="true" />
-            <span className="eyebrow-mono text-ink-soft/70">Activity database · live</span>
+            <span className="eyebrow-mono text-ink-soft/70">activity database · live</span>
           </div>
         </div>
         <div className="marquee">
@@ -192,74 +246,77 @@ export default function EnHomePage() {
       </div>
 
       {/* ──────────────────── MEET THE AGENTS ──────────────────── */}
-      <section id="agents" className="border-y border-line bg-ivory py-24 sm:py-32">
+      <section id="agents" className="hx-agents border-b border-line py-24 sm:py-32">
         <div className="mx-auto max-w-6xl px-5">
           <Reveal className="mx-auto max-w-3xl text-center">
-            <p className="eyebrow-mono text-sage">Meet the agents</p>
-            <h2 className="mt-4 text-[34px] font-extrabold leading-[1.2] tracking-[-0.03em] text-ink sm:text-[42px]">
+            <p className="hx-eyebrow eyebrow-mono text-sage">Meet the agents</p>
+            <h2 className="mt-6 text-[30px] font-extrabold leading-[1.18] tracking-[-0.035em] text-ink sm:text-[42px]">
               Three Agents that design the day
             </h2>
-            <p className="mt-5 text-body text-ink-soft">
-              Discovery · Reminder · Auto-apply
-              <br />
-              The wider the scope, the higher-tier the Agent.
-              <br />
-              The launch app ships with the top-tier Agent built in.
+            <p className="mt-6 text-body text-ink-soft">
+              Discovery · Reminders · Auto-apply. The wider the scope, the higher-tier the Agent.
             </p>
           </Reveal>
           <div className="mt-14 grid gap-5 md:grid-cols-3">
             <AgentCard tier="Discovery" title="Discovery Agent" level={1} delay={0}>
-              Learns the user&rsquo;s interests and finds activities beyond the
-              neighborhood, the ones they&rsquo;d never discover on their own.
+              Learns your interests and finds activities beyond your neighborhood,
+              <br />
+              the ones you&rsquo;d never have discovered.
             </AgentCard>
             <AgentCard tier="Planning · Reminders" title="Reminder Agent" level={2} delay={120}>
-              &ldquo;You need to sign up by 9am tomorrow&rdquo;
+              &ldquo;You need to sign up by 9 AM tomorrow.&rdquo;
               <br />
-              It tracks the easy-to-miss deadlines and handles the scheduling.
+              It tracks the easy-to-miss deadlines and schedules for you.
             </AgentCard>
             <AgentCard tier="Auto-apply" title="Auto-apply Agent" level={3} delay={240}>
-              Handles the tedious parts: sign-ups, forms, registration.
+              Handles the tedious parts like sign-ups, forms, and registration on your behalf.
               <br />
-              Our agent walks the steps; the user just confirms the last one.
+              The Agent walks the complex steps; you just confirm the last one.
             </AgentCard>
           </div>
         </div>
       </section>
 
-      {/* ─────────────────────── FINAL CTA ─────────────────────── */}
-      <section className="relative overflow-hidden bg-gradient-to-b from-sage to-sage-dk py-28 text-center text-white sm:py-36">
-        <svg
-          viewBox="0 0 1200 600"
-          aria-hidden="true"
-          className="pointer-events-none absolute inset-0 h-full w-full opacity-30"
-          preserveAspectRatio="xMidYMid slice"
-        >
-          <circle cx="600" cy="300" r="260" fill="none" stroke="#FFFFFF" strokeWidth="1.5" className="ripple-ring" />
-          <circle cx="600" cy="300" r="260" fill="none" stroke="#FFFFFF" strokeWidth="1.5" className="ripple-ring ripple-d1" />
-          <circle cx="600" cy="300" r="260" fill="none" stroke="#FFFFFF" strokeWidth="1.5" className="ripple-ring ripple-d2" />
-        </svg>
-        <div className="relative mx-auto max-w-6xl px-5">
-          <Reveal>
-            <p className="eyebrow-mono text-white/70">Agent-as-a-Service</p>
-            <h2 className="mx-auto mt-5 max-w-[20ch] text-[36px] font-extrabold leading-[1.18] tracking-[-0.03em] sm:text-[46px]">
-              Building the next AI for active seniors.
-            </h2>
-            <div className="mt-10 flex flex-wrap justify-center gap-4">
-              <Link
-                href="/contact"
-                className="inline-flex min-h-[56px] items-center rounded-xl bg-white px-8 text-[17px] font-bold text-sage-dk transition-colors hover:bg-ivory active:scale-[0.98]"
-              >
-                Talk to us
-              </Link>
-              <a
-                href={productAppUrl}
-                {...externalLinkProps}
-                className="inline-flex min-h-[56px] items-center rounded-xl border border-white/40 px-8 text-[17px] font-bold text-white transition-colors hover:border-white hover:bg-white/10 active:scale-[0.98]"
-              >
-                Try DailyFit →
-              </a>
-            </div>
-          </Reveal>
+      {/* ────────── FINAL CTA — return to the runtime (bookend) ────────── */}
+      <section className="px-3 py-20 sm:px-5 sm:py-24">
+        <div className="hx-stage mx-auto max-w-[1400px] rounded-[24px] py-24 text-center sm:rounded-[32px] sm:py-32">
+          <div className="hx-stage-grid" aria-hidden="true" />
+          <div className="hx-aurora hx-aurora-a" aria-hidden="true" />
+          <div className="hx-aurora hx-aurora-b" aria-hidden="true" />
+          <div className="hx-grain" aria-hidden="true" />
+          <svg
+            viewBox="0 0 1200 600"
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-0 h-full w-full opacity-40"
+            preserveAspectRatio="xMidYMid slice"
+          >
+            <circle cx="600" cy="300" r="260" fill="none" stroke="#8FBF9F" strokeWidth="1.5" className="ripple-ring" />
+            <circle cx="600" cy="300" r="260" fill="none" stroke="#8FBF9F" strokeWidth="1.5" className="ripple-ring ripple-d1" />
+            <circle cx="600" cy="300" r="260" fill="none" stroke="#8FBF9F" strokeWidth="1.5" className="ripple-ring ripple-d2" />
+          </svg>
+          <div className="relative mx-auto max-w-6xl px-5">
+            <Reveal>
+              <p className="eyebrow-mono text-sage-lt/80">Agent-as-a-Service</p>
+              <h2 className="mx-auto mt-6 max-w-[20ch] text-[34px] font-extrabold leading-[1.16] tracking-[-0.035em] text-ivory sm:text-[46px]">
+                Building the next AI for active seniors.
+              </h2>
+              <div className="mt-10 flex flex-wrap justify-center gap-4">
+                <Link
+                  href="/en/contact"
+                  className="hx-glow-cta inline-flex min-h-[56px] items-center rounded-xl bg-sage px-8 text-[17px] font-bold text-white transition-colors hover:bg-sage-dk active:scale-[0.98]"
+                >
+                  Talk to us
+                </Link>
+                <Link
+                  href={productAppUrl}
+                  {...externalLinkProps}
+                  className="inline-flex min-h-[56px] items-center rounded-xl border border-ivory/25 bg-white/5 px-8 text-[17px] font-bold text-ivory transition-colors hover:border-sage-lt hover:text-sage-lt active:scale-[0.98]"
+                >
+                  Try DailyFit →
+                </Link>
+              </div>
+            </Reveal>
+          </div>
         </div>
       </section>
     </>
@@ -308,24 +365,33 @@ function AgentCard({
 }) {
   return (
     <Reveal delay={delay}>
-      <div className="agent-card flex h-full flex-col p-8">
-        <span className="self-start rounded-md border border-sage/25 bg-sage/10 px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wider text-sage">
+      <div className={`hx-agent-card ${level === 3 ? 'hx-agent-crown' : ''}`}>
+        <span className="hx-agent-num" aria-hidden="true">
+          {String(level).padStart(2, '0')}
+        </span>
+        <span className="relative self-start rounded-md border border-sage/25 bg-sage/10 px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wider text-sage">
           {tier}
         </span>
-        <h3 className="mt-5 text-[22px] font-bold text-ink">{title}</h3>
-        <p className="mt-3 flex-1 text-[15.5px] leading-relaxed text-ink-soft">{children}</p>
+        <h3 className="relative mt-5 text-[22px] font-bold text-ink">{title}</h3>
+        <p className="relative mt-3 flex-1 text-[14px] leading-relaxed text-ink-soft">
+          {children}
+        </p>
         <div
-          className="mt-6 flex items-center gap-2 border-t border-line pt-5"
-          aria-label={`autonomy level ${level} of 3`}
+          className="relative mt-6 flex items-center gap-2 border-t border-line pt-5"
+          aria-label={`Autonomy level ${level} of 3`}
         >
           <span className="text-[11px] font-semibold uppercase tracking-[0.14em] text-ink-soft/60">
-            Level of Autonomy
+            autonomy
           </span>
           <span className="ml-auto flex gap-1.5" aria-hidden="true">
             {[1, 2, 3].map((n) => (
               <span
                 key={n}
-                className={`h-1.5 w-7 rounded-full ${n <= level ? 'agent-bar bg-sage' : 'bg-line'}`}
+                className={`h-2 w-8 rounded-full ${
+                  n <= level
+                    ? 'agent-bar bg-sage shadow-[0_0_10px_rgba(74,124,89,0.45)]'
+                    : 'bg-line'
+                }`}
                 style={n <= level ? { transitionDelay: `${300 + n * 140}ms` } : undefined}
               />
             ))}
