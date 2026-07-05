@@ -111,7 +111,8 @@ export function OrgTree({ lang = 'ko' }: { lang?: 'ko' | 'en' }) {
 
           {/* the stat line that carries the claim */}
           <p className="eyebrow-mono mt-8 text-center !text-[11.5px] text-ivory/50">
-            2 humans · 1 orchestrator · 15+ agents · 6 divisions
+            2 humans · 1 orchestrator · 15+ agents · 6 divisions ·{' '}
+            <span className="text-sage-lt">More to come!</span>
           </p>
         </div>
       </div>

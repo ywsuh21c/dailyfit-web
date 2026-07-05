@@ -34,7 +34,7 @@ export default function TechnologyPage() {
             <br />
             느린 말, 사투리, 어제의 맥락까지.
             <br />
-            우리는 시니어가 실제로 쓰는 말투와 일상의 맥락을 매일 누적합니다.
+            저희는 시니어가 실제로 쓰는 말투와 일상의 맥락을 매일 누적합니다.
           </p>
           <ul className="space-y-2">
             <li>· 일상 맥락: &ldquo;어제 무릎이 아팠다&rdquo;가 오늘의 제안을 바꿉니다.</li>
@@ -49,7 +49,7 @@ export default function TechnologyPage() {
         </div>
       </Section>
 
-      {/* 2. How the agent works — real chat demo + the ethics of autonomy */}
+      {/* 2. How the agent works — real chat demo + the go/no-go principle */}
       <Section tone="surface">
         <SectionHeader
           eyebrow="작동 방식"
@@ -63,17 +63,13 @@ export default function TechnologyPage() {
             here we state the reasoning behind it (Michael 2026-07-04). */}
         <div className="mx-auto mt-12 max-w-prose rounded-2xl border border-line border-l-[3px] border-l-sage bg-white p-8">
           <p className="text-h3 font-semibold text-ink">
-            자율성이 높아질수록, 마지막 결정은 더 단단히 사용자의 것이어야 합니다.
+            마지막 결정은 언제나 사용자의 몫입니다.
           </p>
           <p className="mt-4 text-body text-ink-soft">
             신청대행처럼 Agent가 깊이 개입할수록, 그 결과는 사용자의 실제
-            하루에 닿습니다. 그래서 우리는 기술적으로 자동화할 수 있는
+            하루에 닿습니다. 그래서 저희는 기술적으로 자동화할 수 있는
             영역에서도 실행 직전의 Go/No-go 판단만은 언제나 사용자에게
             남겨두도록 설계했습니다.
-          </p>
-          <p className="mt-4 text-body text-ink-soft">
-            기술이 부족해서가 아닙니다. 자기 하루의 주인은 자기 자신이어야
-            한다는, 우리의 윤리적 결정입니다.
           </p>
         </div>
       </Section>
@@ -98,7 +94,7 @@ export default function TechnologyPage() {
               <>
                 무엇을 쓰는지 먼저 알리고,
                 <br />
-                사용자가 허락한 범위에서만 동작합니다.
+                사용자가 허락한 범위에서만 작동합니다.
               </>
             }
           />
@@ -119,9 +115,9 @@ export default function TechnologyPage() {
           title="개인정보는 여러 겹의 방어 아래에 있습니다"
           lead={
             <>
-              구체적인 보안 구조는 공개하지 않습니다. 그것까지가 보안입니다.
+              보안의 세부 구조는 신중하게 다룹니다.
               <br />
-              다만 어떤 원칙으로 지키는지는 공개합니다.
+              대신, 저희가 지키는 원칙은 투명하게 공개합니다.
             </>
           }
         />
@@ -146,7 +142,7 @@ export default function TechnologyPage() {
           </div>
         </div>
         <p className="mt-8 max-w-prose text-body text-ink-soft/80">
-          이 모든 장치는 개인정보보호법(PIPA) 기준 위에서 동작합니다.
+          이 모든 장치는 개인정보보호법(PIPA) 기준 위에서 작동합니다.
         </p>
       </Section>
 
@@ -181,7 +177,7 @@ export default function TechnologyPage() {
         <SectionHeader
           eyebrow="Defensibility"
           title="DailyFit's Moat"
-          lead="진짜 해자는 데이터입니다. 그리고 이 데이터는 우리만 쌓을 수 있습니다."
+          lead="쓸수록 사용자를 더 깊이 이해하게 됩니다. 이 이해의 깊이가 저희의 해자입니다."
         />
         <div className="mt-10">
           <OrbitRings
@@ -196,7 +192,7 @@ export default function TechnologyPage() {
           <MoatItem title="Raw Conversation Insight">
             액티브 시니어의 날것 그대로의 &lsquo;일상 대화&rsquo;.
             <br />
-            우리의 가장 큰 해자입니다.
+            저희의 가장 큰 해자입니다.
           </MoatItem>
           <MoatItem title="Increasing Personalization">
             취향·이력·이동 패턴이 유저별로 쌓입니다.

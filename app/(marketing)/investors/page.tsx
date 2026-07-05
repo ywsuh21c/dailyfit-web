@@ -104,7 +104,7 @@ export default function InvestorsPage() {
           <FounderCard
             name="서영우 (Youngwoo Suh)"
             role="공동창업자 · CEO"
-            bio="Boston University → Bain → PYLER(Corporate Development Lead) → DailyFit. 전략·기업개발 백그라운드로 시니어 일상을 제품으로 설계합니다."
+            bio="Boston University → Fudan University → Bain → PYLER(Corporate Development Lead) → DailyFit. 전략·기업개발 백그라운드로 시니어 일상을 제품으로 설계합니다."
           />
           <FounderCard
             name="김현진"

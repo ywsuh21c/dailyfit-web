@@ -202,9 +202,12 @@ export function AccelerationLoop({ lang = 'ko' }: { lang?: 'ko' | 'en' }) {
                 dominantBaseline="middle"
                 className="fill-ink"
                 style={{
-                  fontWeight: 700, fontSize: 12.5,
-                  letterSpacing: '0.12em',
+                  fontWeight: 800, fontSize: 15,
+                  letterSpacing: '0.1em',
                   textTransform: 'uppercase',
+                  // ivory halo lifts labels off the grid/aurora backdrop —
+                  // contrast alone wasn't enough (Michael 2026-07-05 r3)
+                  stroke: '#F7F4EC', strokeWidth: 6, paintOrder: 'stroke',
                 }}
               >
                 {n.label}

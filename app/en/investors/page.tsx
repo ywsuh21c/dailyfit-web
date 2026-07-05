@@ -93,7 +93,7 @@ export default function InvestorsEnPage() {
             <p className="text-h3 font-semibold text-ink">Youngwoo Suh</p>
             <p className="mt-1 text-base text-sage">Co-founder · CEO</p>
             <p className="mt-3 text-body text-ink-soft">
-              Boston University → Bain → PYLER (Corporate Development
+              Boston University → Fudan University → Bain → PYLER (Corporate Development
               Lead) → DailyFit.
             </p>
           </div>

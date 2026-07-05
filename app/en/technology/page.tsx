@@ -47,7 +47,7 @@ export default function EnTechnologyPage() {
         </div>
       </Section>
 
-      {/* 2. How the agent works — real chat demo + the ethics of autonomy */}
+      {/* 2. How the agent works — real chat demo + the go/no-go principle */}
       <Section tone="surface">
         <SectionHeader
           eyebrow="How it works"
@@ -61,13 +61,10 @@ export default function EnTechnologyPage() {
             here we state the reasoning behind it. */}
         <div className="mx-auto mt-12 max-w-prose rounded-2xl border border-line border-l-[3px] border-l-sage bg-white p-8">
           <p className="text-h3 font-semibold text-ink">
-            The higher the autonomy, the more firmly the final decision must belong to the user.
+            The final call always belongs to the user.
           </p>
           <p className="mt-4 text-body text-ink-soft">
             The deeper an Agent gets involved, as it does when applying on someone’s behalf, the more directly the outcome touches the user’s actual day. That is why, even in areas we could technically automate, we designed the go/no-go call right before execution to always stay with the user.
-          </p>
-          <p className="mt-4 text-body text-ink-soft">
-            Not because the technology falls short. It is our ethical decision that the owner of a day should be the person living it.
           </p>
         </div>
       </Section>
@@ -113,9 +110,9 @@ export default function EnTechnologyPage() {
           title="Personal data sits under several layers of defense"
           lead={
             <>
-              We do not disclose the specifics of our security structure. That secrecy is itself part of the security.
+              We handle the details of our security architecture with care.
               <br />
-              What we do share is the principles by which we protect it.
+              What we share openly are the principles we hold ourselves to.
             </>
           }
         />
@@ -172,7 +169,7 @@ export default function EnTechnologyPage() {
         <SectionHeader
           eyebrow="Defensibility"
           title="DailyFit's Moat"
-          lead="The real moat is the data. And this data is data only we can accumulate."
+          lead="The more it is used, the more deeply it understands each user. That depth of understanding is our moat."
         />
         <div className="mt-10">
           <OrbitRings

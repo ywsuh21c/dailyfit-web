@@ -64,6 +64,30 @@ export default function AboutPage() {
 
       <Section tone="surface">
         <SectionHeader eyebrow="팀" title="부모님의 하루에서 시작했습니다" />
+        {/* 창업 백스토리 — 모두의창업 지원서 Q2 내러티브의 웹 압축본
+            (어머니 퇴직 → "내 하루를 짜줄 서비스" 한 마디 → DailyFit). */}
+        <Reveal>
+          <div className="mt-8 max-w-prose space-y-4 text-body text-ink-soft">
+            <p>
+              2025년 초, 창업자 서영우의 어머니가 30년 넘게 다니던 직장에서
+              퇴직하셨습니다. 하루아침에 오전 9시 출근이 사라졌고, 삶을
+              지탱하던 일정도 함께 사라졌습니다. 골프도 여행도 좋지만 매일일
+              수는 없었습니다. 남은 날들은 &lsquo;오늘 뭐 하지&rsquo;라는
+              막막함으로 시작됐습니다.
+            </p>
+            <p className="border-l-[3px] border-sage pl-5 text-[19px] font-semibold leading-relaxed text-ink">
+              &ldquo;내 하루를 나 대신 짜줄 서비스가 있다면,
+              <br />
+              돈이 얼마든 바로 낼 거야.&rdquo;
+            </p>
+            <p>
+              찾아봤지만 그런 서비스는 없었습니다. 겨우 찾은 프로그램은 신청
+              절차가 복잡해 중도에 포기하게 됐습니다. 어머니의 친구들도, 그
+              주변도 같은 이야기를 했습니다. 그 한 마디가 DailyFit의
+              출발점입니다.
+            </p>
+          </div>
+        </Reveal>
         {/* TODO(Michael): 창업자 사진 + 현진 풀 bio 게재 동의 */}
         <Reveal className="mt-12">
           <JourneyPath />
@@ -72,12 +96,12 @@ export default function AboutPage() {
           <FounderCard
             name="Youngwoo Michael Suh"
             role="Co-founder · CEO"
-            bio="Boston University → Bain → PYLER → DailyFit. AI Agent 팀을 직접 운영하며 시니어의 하루를 AaaS로 설계합니다."
+            bio="Boston University → Fudan University → Bain → PYLER → DailyFit. AI Agent 팀을 직접 운영하며 시니어의 하루를 AaaS로 설계합니다."
           />
           <FounderCard
             name="Hyunjin Jake Kim"
             role="Co-founder · Head of Strategy"
-            bio="고려대학교 → Bain → UVA MBA → DailyFit. 전략과 글로벌 확장을 담당하며 시니어의 하루를 함께 설계합니다."
+            bio="고려대학교 → EY-Parthenon → Bain → UVA MBA → DailyFit. 전략과 글로벌 확장을 담당하며 시니어의 하루를 함께 설계합니다."
           />
         </div>
         <p className="mt-8 max-w-prose text-body text-ink-soft">
