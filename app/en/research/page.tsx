@@ -51,7 +51,7 @@ export default function EnResearchPage() {
             </p>
             <div className="mt-10 flex flex-wrap items-center gap-4">
               <Link
-                href="/contact"
+                href="/en/contact"
                 className="inline-flex min-h-[56px] items-center rounded-xl bg-sage px-8 text-[17px] font-bold text-white transition-colors hover:bg-sage-dk active:scale-[0.98]"
               >
                 Talk to us
@@ -288,7 +288,7 @@ export default function EnResearchPage() {
             </h2>
             <div className="mt-10 flex flex-wrap justify-center gap-4">
               <Link
-                href="/contact"
+                href="/en/contact"
                 className="inline-flex min-h-[56px] items-center rounded-xl bg-white px-8 text-[17px] font-bold text-sage-dk transition-colors hover:bg-ivory active:scale-[0.98]"
               >
                 Talk to us

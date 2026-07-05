@@ -20,13 +20,31 @@ const pt = (deg: number, r: number = R) => {
   return { x: CX + r * Math.cos(rad), y: CY + r * Math.sin(rad) };
 };
 
-export function OrgOrbit() {
+const COPY = {
+  ko: {
+    ariaLabel:
+      '운영 구조: 중심의 사람이 방향과 판단을, 궤도의 네 Agent(전략·제품·기술·재무)가 실행을 맡는 모습',
+    core: '사람',
+    coreSub: '방향 · 최종 판단',
+    footer: '실행은 Agent가 · 판단은 사람이',
+  },
+  en: {
+    ariaLabel:
+      'Operating model: humans at the center set direction and make the final call, while four orbiting Agents (Strategy, Product, Technology, Finance) handle execution',
+    core: 'Humans',
+    coreSub: 'Direction · final say',
+    footer: 'Agents execute · humans decide',
+  },
+} as const;
+
+export function OrgOrbit({ lang = 'ko' }: { lang?: 'ko' | 'en' }) {
+  const t = COPY[lang];
   return (
     <div className="mx-auto w-full max-w-[500px]">
       <svg
         viewBox="0 0 500 440"
         role="img"
-        aria-label="운영 구조: 중심의 사람이 방향과 판단을, 궤도의 네 Agent(전략·제품·기술·재무)가 실행을 맡는 모습"
+        aria-label={t.ariaLabel}
         className="h-auto w-full"
       >
         <defs>
@@ -73,10 +91,10 @@ export function OrgOrbit() {
         {/* human core */}
         <circle cx={CX} cy={CY} r={58} fill="url(#org-core)" stroke="#4A7C59" strokeOpacity="0.45" strokeWidth="1.5" />
         <text x={CX} y={CY - 8} textAnchor="middle" className="fill-ink" style={{ fontWeight: 800, fontSize: 15 }}>
-          사람
+          {t.core}
         </text>
         <text x={CX} y={CY + 12} textAnchor="middle" className="fill-ink-soft" style={{ fontWeight: 600, fontSize: 11, letterSpacing: '0.06em' }}>
-          방향 · 최종 판단
+          {t.coreSub}
         </text>
 
         {/* agent nodes */}
@@ -110,7 +128,7 @@ export function OrgOrbit() {
         })}
 
         <text x={CX} y={430} textAnchor="middle" className="fill-ink-soft" style={{ fontWeight: 600, fontSize: 11.5, letterSpacing: '0.12em' }}>
-          실행은 Agent가 · 판단은 사람이
+          {t.footer}
         </text>
       </svg>
     </div>

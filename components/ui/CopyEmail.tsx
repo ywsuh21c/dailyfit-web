@@ -8,9 +8,20 @@ import { useEffect, useRef, useState } from 'react';
  * does nothing (the exact bug that killed the old "Talk to us" buttons), so
  * copy-to-clipboard is the primary action and always works.
  */
-export function CopyEmail({ email }: { email: string }) {
+export function CopyEmail({
+  email,
+  lang = 'ko',
+}: {
+  email: string;
+  lang?: 'ko' | 'en';
+}) {
   const [copied, setCopied] = useState(false);
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const labels =
+    lang === 'en'
+      ? { copy: 'Copy email address', copied: 'Copied ✓', mail: 'Open in mail app' }
+      : { copy: '이메일 주소 복사', copied: '복사했습니다 ✓', mail: '메일 앱으로 쓰기' };
 
   // Clear a pending reset timer if we unmount mid-window (nav away within 2s).
   useEffect(() => () => {
@@ -46,13 +57,13 @@ export function CopyEmail({ email }: { email: string }) {
           onClick={copy}
           className="inline-flex min-h-[56px] items-center rounded-xl bg-sage px-8 text-[17px] font-bold text-white transition-colors hover:bg-sage-dk active:scale-[0.98]"
         >
-          {copied ? '복사했습니다 ✓' : '이메일 주소 복사'}
+          {copied ? labels.copied : labels.copy}
         </button>
         <a
           href={`mailto:${email}`}
           className="inline-flex min-h-[56px] items-center rounded-xl border border-ink/15 bg-white/60 px-8 text-[17px] font-bold text-ink transition-colors hover:border-sage hover:text-sage active:scale-[0.98]"
         >
-          메일 앱으로 쓰기
+          {labels.mail}
         </a>
       </div>
     </div>

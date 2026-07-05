@@ -38,7 +38,12 @@ function Drop({ tall }: { tall?: boolean }) {
   );
 }
 
-export function OrgTree() {
+export function OrgTree({ lang = 'ko' }: { lang?: 'ko' | 'en' }) {
+  const en = lang === 'en';
+  const humansLabel = en ? 'Youngwoo Michael Suh · Hyunjin Jake Kim' : '서영우 · 김현진';
+  const orchestratorDesc = en
+    ? 'Routes every request to the right Agent'
+    : '모든 요청을 읽고 담당 Agent에게 라우팅';
   return (
     <Reveal>
       <div className="hx-runtime-board relative mx-auto max-w-4xl overflow-hidden rounded-[24px] px-5 py-10 sm:px-10 sm:py-12">
@@ -49,7 +54,7 @@ export function OrgTree() {
           {/* humans — direction and final say */}
           <div className="flex items-center gap-2.5 rounded-xl border border-sage-lt/40 bg-sage/20 px-6 py-3.5">
             <span className="console-live-dot !bg-sage-lt" aria-hidden="true" />
-            <span className="text-[15px] font-bold text-ivory">서영우 · 김현진</span>
+            <span className="text-[15px] font-bold text-ivory">{humansLabel}</span>
             <span className="hidden text-[11px] font-semibold uppercase tracking-[0.14em] text-ivory/60 sm:inline">
               Humans · direction, final say
             </span>
@@ -60,7 +65,7 @@ export function OrgTree() {
           {/* the orchestrator — routes every task */}
           <div className="rounded-xl border border-ivory/20 bg-white/5 px-6 py-3">
             <span className="eyebrow-mono !text-[11px] text-sage-lt">Orchestrator</span>
-            <span className="ml-3 text-[13px] text-ivory/70">모든 요청을 읽고 담당 Agent에게 라우팅</span>
+            <span className="ml-3 text-[13px] text-ivory/70">{orchestratorDesc}</span>
           </div>
 
           <Drop tall />

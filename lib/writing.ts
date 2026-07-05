@@ -31,7 +31,14 @@ export type WritingMeta = {
 
 export type WritingPost = WritingMeta & { body: string };
 
+export type Locale = 'ko' | 'en';
+
 const CONTENT_DIR = path.join(process.cwd(), 'content', 'writing');
+
+/** KO reads content/writing/; EN reads content/writing/en/. */
+function contentDir(locale: Locale): string {
+  return locale === 'en' ? path.join(CONTENT_DIR, 'en') : CONTENT_DIR;
+}
 
 function toDateString(v: unknown): string | null {
   if (!v) return null;
@@ -40,10 +47,11 @@ function toDateString(v: unknown): string | null {
   return String(v).slice(0, 10);
 }
 
-function readAll(): WritingPost[] {
+function readAll(locale: Locale): WritingPost[] {
+  const dir = contentDir(locale);
   let files: string[];
   try {
-    files = fs.readdirSync(CONTENT_DIR);
+    files = fs.readdirSync(dir);
   } catch {
     return []; // content dir not present yet → no posts, no crash
   }
@@ -52,7 +60,7 @@ function readAll(): WritingPost[] {
     .filter((f) => f.endsWith('.md') && !f.startsWith('_') && !f.startsWith('.'))
     .map((file) => {
       const slug = file.replace(/\.md$/, '');
-      const raw = fs.readFileSync(path.join(CONTENT_DIR, file), 'utf8');
+      const raw = fs.readFileSync(path.join(dir, file), 'utf8');
       const { data, content } = matter(raw);
       const published = data.published === true;
       return {
@@ -76,20 +84,20 @@ function byRecency(a: WritingPost, b: WritingPost): number {
 }
 
 /** All posts (published + drafts), meta only — for the /writing list. */
-export function getAllPosts(): WritingMeta[] {
-  return readAll()
+export function getAllPosts(locale: Locale = 'ko'): WritingMeta[] {
+  return readAll(locale)
     .sort(byRecency)
     .map(({ body: _body, ...meta }) => meta);
 }
 
 /** Published posts only — for static params / sitemap. */
-export function getPublishedPosts(): WritingMeta[] {
-  return getAllPosts().filter((p) => p.published);
+export function getPublishedPosts(locale: Locale = 'ko'): WritingMeta[] {
+  return getAllPosts(locale).filter((p) => p.published);
 }
 
 /** Full post incl. body. Returns null for missing OR unpublished slugs. */
-export function getPostBySlug(slug: string): WritingPost | null {
-  const post = readAll().find((p) => p.slug === slug);
+export function getPostBySlug(slug: string, locale: Locale = 'ko'): WritingPost | null {
+  const post = readAll(locale).find((p) => p.slug === slug);
   if (!post || !post.published) return null;
   return post;
 }

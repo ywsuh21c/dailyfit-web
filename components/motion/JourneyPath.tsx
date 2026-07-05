@@ -17,6 +17,8 @@ import { useEffect, useRef, useState } from 'react';
 const SAGE = '#4A7C59';
 const NAVY = '#1E2D40';
 
+type Lang = 'ko' | 'en';
+
 type Stop = {
   x: number;
   y: number;
@@ -37,10 +39,42 @@ const HJ_STOPS: Stop[] = [
   { x: 412, y: 226, label: 'UVA', sub: 'MBA', cls: 'curve-pt-2' },
 ];
 
+// English mirror — same coords/cls, translated label+sub only.
+const YW_STOPS_EN: Stop[] = [
+  { x: 74, y: 240, label: 'Boston University', sub: 'Business', cls: 'curve-pt-1' },
+  { x: 412, y: 152, label: 'PYLER', sub: 'Corporate Development', cls: 'curve-pt-2' },
+];
+
+const HJ_STOPS_EN: Stop[] = [
+  { x: 74, y: 118, label: 'Korea University', sub: 'Business', cls: 'curve-pt-1' },
+  { x: 412, y: 226, label: 'UVA', sub: 'MBA', cls: 'curve-pt-2' },
+];
+
 // Both founders' stops share one marker layer — combine once, not per render.
 const ALL_STOPS: Stop[] = [...YW_STOPS, ...HJ_STOPS];
+const ALL_STOPS_EN: Stop[] = [...YW_STOPS_EN, ...HJ_STOPS_EN];
 
-export function JourneyPath() {
+// Language-specific copy for the fixed nodes/legend.
+const COPY = {
+  ko: {
+    ariaLabel:
+      '두 창업자의 여정: 서영우는 Boston University와 Bain, PYLER를 거치고, 김현진은 고려대학교와 Bain, UVA MBA를 거쳐 DailyFit에서 다시 만난 모습',
+    bainMet: '여기서 처음 만났습니다',
+    legendYw: '서영우',
+    legendHj: '김현진',
+  },
+  en: {
+    ariaLabel:
+      "The two founders' journeys: Youngwoo through Boston University, Bain, and PYLER; Hyunjin through Korea University, Bain, and UVA MBA, reconverging at DailyFit",
+    bainMet: 'Where they first met',
+    legendYw: 'Youngwoo',
+    legendHj: 'Hyunjin',
+  },
+} as const;
+
+export function JourneyPath({ lang = 'ko' }: { lang?: Lang }) {
+  const stops = lang === 'en' ? ALL_STOPS_EN : ALL_STOPS;
+  const copy = lang === 'en' ? COPY.en : COPY.ko;
   const ref = useRef<HTMLDivElement>(null);
   const [on, setOn] = useState(false);
 
@@ -65,7 +99,7 @@ export function JourneyPath() {
       <svg
         viewBox="0 0 660 320"
         role="img"
-        aria-label="두 창업자의 여정: 서영우는 Boston University와 Bain, PYLER를 거치고, 김현진은 고려대학교와 Bain, UVA MBA를 거쳐 DailyFit에서 다시 만난 모습"
+        aria-label={copy.ariaLabel}
         className="h-auto w-full"
       >
         <defs>
@@ -99,7 +133,7 @@ export function JourneyPath() {
         />
 
         {/* individual stops */}
-        {ALL_STOPS.map((s) => (
+        {stops.map((s) => (
           <g key={s.label} className={`curve-pt ${s.cls}`}>
             <circle cx={s.x} cy={s.y} r={5} fill="#F5F0E8" stroke={SAGE} strokeWidth={2} />
             <text
@@ -130,7 +164,7 @@ export function JourneyPath() {
             Bain &amp; Company
           </text>
           <text x={248} y={212} textAnchor="middle" className="fill-ink-soft" style={{ fontWeight: 600, fontSize: 11, letterSpacing: '0.06em' }}>
-            여기서 처음 만났습니다
+            {copy.bainMet}
           </text>
         </g>
 
@@ -150,11 +184,11 @@ export function JourneyPath() {
         <g aria-hidden="true">
           <circle cx={78} cy={296} r={4} fill={SAGE} />
           <text x={90} y={300} className="fill-ink-soft" style={{ fontWeight: 600, fontSize: 11.5 }}>
-            서영우
+            {copy.legendYw}
           </text>
           <circle cx={152} cy={296} r={4} fill={NAVY} fillOpacity={0.55} />
           <text x={164} y={300} className="fill-ink-soft" style={{ fontWeight: 600, fontSize: 11.5 }}>
-            김현진
+            {copy.legendHj}
           </text>
         </g>
       </svg>
