@@ -29,12 +29,12 @@ export default function ContactPage() {
         <div className="relative mx-auto max-w-3xl px-5 pb-20 pt-24 text-center lg:pt-28">
           <p className="eyebrow-mono text-sage">Talk to us</p>
           <h1 className="mt-5 text-[36px] font-extrabold leading-[1.15] tracking-[-0.03em] text-ink sm:text-[48px]">
-            저희에게 바로 닿는 길은
+            저희의 문은
             <br />
-            하나면 충분합니다.
+            언제나 열려 있습니다.
           </h1>
           <p className="mx-auto mt-6 max-w-[44ch] text-body text-ink-soft">
-            아래 주소로 보내주세요. 저희가 직접 읽고 답합니다.
+            어떤 이야기든 환영합니다. 아래 주소로 보내주시면 저희가 직접 읽고 답합니다.
           </p>
           <div className="mt-12">
             <CopyEmail email={site.contactEmail} />

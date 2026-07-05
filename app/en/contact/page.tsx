@@ -30,12 +30,12 @@ export default function ContactPage() {
         <div className="relative mx-auto max-w-3xl px-5 pb-20 pt-24 text-center lg:pt-28">
           <p className="eyebrow-mono text-sage">Talk to us</p>
           <h1 className="mt-5 text-[36px] font-extrabold leading-[1.15] tracking-[-0.03em] text-ink sm:text-[48px]">
-            One line reaches
+            Our door is
             <br />
-            us directly.
+            always open.
           </h1>
           <p className="mx-auto mt-6 max-w-[44ch] text-body text-ink-soft">
-            Write to the address below. We read and reply personally.
+            Whatever you want to talk about, we&rsquo;re glad to hear it. Write to the address below and we read and reply personally.
           </p>
           <div className="mt-12">
             <CopyEmail email={site.contactEmail} lang="en" />

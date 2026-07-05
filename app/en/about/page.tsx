@@ -67,6 +67,31 @@ export default function EnAboutPage() {
 
       <Section tone="surface">
         <SectionHeader eyebrow="Team" title="It started with our parents' day" />
+        {/* Founding backstory — web condensation of the origin narrative
+            (mother's retirement → "a service that plans my day" → DailyFit). */}
+        <Reveal>
+          <div className="mt-8 max-w-prose space-y-4 text-body text-ink-soft">
+            <p>
+              In early 2025, founder Youngwoo&rsquo;s mother retired from the
+              job she had held for more than thirty years. The 9 AM commute
+              disappeared overnight, and with it the schedule that had held
+              her days together. Golf and travel are wonderful, but they
+              cannot fill every day. The rest began with the same blank
+              question: what do I do today?
+            </p>
+            <p className="border-l-[3px] border-sage pl-5 text-[19px] font-semibold leading-relaxed text-ink">
+              &ldquo;If there were a service that planned my day for me,
+              <br />
+              I would pay for it on the spot.&rdquo;
+            </p>
+            <p>
+              We looked. It did not exist. The programs she did find were so
+              complicated to sign up for that she gave up halfway. Her
+              friends, and their friends, told the same story. That one
+              sentence became the starting point of DailyFit.
+            </p>
+          </div>
+        </Reveal>
         {/* TODO(Michael): founder photos + Hyunjin full-bio publication consent */}
         <Reveal className="mt-12">
           <JourneyPath lang="en" />
@@ -75,12 +100,12 @@ export default function EnAboutPage() {
           <FounderCard
             name="Youngwoo Michael Suh"
             role="Co-founder · CEO"
-            bio="Boston University → Bain → PYLER → DailyFit. Runs the AI Agent team directly and designs the senior's day as AaaS."
+            bio="Boston University → Fudan University → Bain → PYLER → DailyFit. Runs the AI Agent team directly and designs the senior's day as AaaS."
           />
           <FounderCard
             name="Hyunjin Jake Kim"
             role="Co-founder · Head of Strategy"
-            bio="Korea University → Bain → UVA MBA → DailyFit. Leads strategy and global expansion, designing the senior's day alongside the team."
+            bio="Korea University → EY-Parthenon → Bain → UVA MBA → DailyFit. Leads strategy and global expansion, designing the senior's day alongside the team."
           />
         </div>
         <p className="mt-8 max-w-prose text-body text-ink-soft">
