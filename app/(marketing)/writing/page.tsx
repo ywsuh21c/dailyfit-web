@@ -13,7 +13,7 @@ export const metadata: Metadata = {
 // 콘텐츠 출처: content/writing/*.md → lib/writing.ts (swap seam). 저자=영우·현진
 // GitHub 커밋. 비기술 저자 합류 시 lib/writing.ts 3개 함수만 Sanity로 교체.
 // 정직성: published:false 글은 발행일 없이 "곧 공개" 티저로만 — 가짜 날짜 금지.
-// TODO(Michael): 팟캐스트 링크 + 공개 가능 수치 (HANDOFF §7 콘텐츠 펜딩).
+// TODO(Michael): 공개 가능 수치 (HANDOFF §7 콘텐츠 펜딩).
 
 function formatDate(iso: string | null): string {
   if (!iso) return '';
@@ -116,39 +116,6 @@ export default function WritingPage() {
               ),
             )}
           </div>
-        </div>
-      </section>
-
-      {/* podcast teaser */}
-      <section className="border-t border-line bg-surface py-16 sm:py-20">
-        <div className="mx-auto max-w-3xl px-5">
-          <Reveal>
-          <div className="flex flex-col gap-6 rounded-2xl border border-line bg-white p-8 sm:flex-row sm:items-center">
-            <div
-              className="flex h-[88px] w-[88px] flex-shrink-0 items-end justify-center gap-[5px] rounded-2xl bg-gradient-to-br from-navy to-navy-deep px-4 pb-5"
-              aria-hidden="true"
-            >
-              {[34, 52, 26, 46, 30].map((h, i) => (
-                <span
-                  key={i}
-                  className="eq-bar w-[6px] rounded-full bg-sage-lt"
-                  style={{ height: h, animationDelay: `${i * 0.16}s` }}
-                />
-              ))}
-            </div>
-            <div>
-              <p className="eyebrow-mono text-sage">Founder&rsquo;s podcast</p>
-              <h2 className="mt-2 text-[22px] font-bold text-ink">
-                「있는 것들이 더해」
-              </h2>
-              <p className="mt-2 text-[15.5px] leading-relaxed text-ink-soft">
-                글보다 말이 편한 날의 기록. 창업자의 사고 과정을 목소리로
-                남깁니다.
-                {/* TODO(Michael): 팟캐스트 링크 연결 */}
-              </p>
-            </div>
-          </div>
-          </Reveal>
         </div>
       </section>
     </>

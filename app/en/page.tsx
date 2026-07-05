@@ -251,10 +251,10 @@ export default async function EnHomePage() {
           <Reveal className="mx-auto max-w-3xl text-center">
             <p className="hx-eyebrow eyebrow-mono text-sage">Meet the agents</p>
             <h2 className="mt-6 text-[30px] font-extrabold leading-[1.18] tracking-[-0.035em] text-ink sm:text-[42px]">
-              Three Agents that design the day
+              Three Agents that act on your behalf
             </h2>
             <p className="mt-6 text-body text-ink-soft">
-              Discovery · Reminders · Auto-apply. The wider the scope, the higher-tier the Agent.
+              Discovery · Reminders · Auto-apply. Each Agent does the actual work, and the wider the scope, the higher-tier the Agent.
             </p>
           </Reveal>
           <div className="mt-14 grid gap-5 md:grid-cols-3">

@@ -15,7 +15,7 @@ export const metadata: Metadata = {
 // non-technical author joins, swap only the 3 lib/writing.ts functions to Sanity.
 // Honesty rule: published:false posts render as "Coming soon" teasers with no
 // publish date, never a fabricated one.
-// TODO(Michael): podcast link + shareable numbers (HANDOFF §7 content pending).
+// TODO(Michael): shareable numbers (HANDOFF §7 content pending).
 
 function formatDate(iso: string | null): string {
   if (!iso) return '';
@@ -118,39 +118,6 @@ export default function WritingPage() {
               ),
             )}
           </div>
-        </div>
-      </section>
-
-      {/* podcast teaser */}
-      <section className="border-t border-line bg-surface py-16 sm:py-20">
-        <div className="mx-auto max-w-3xl px-5">
-          <Reveal>
-          <div className="flex flex-col gap-6 rounded-2xl border border-line bg-white p-8 sm:flex-row sm:items-center">
-            <div
-              className="flex h-[88px] w-[88px] flex-shrink-0 items-end justify-center gap-[5px] rounded-2xl bg-gradient-to-br from-navy to-navy-deep px-4 pb-5"
-              aria-hidden="true"
-            >
-              {[34, 52, 26, 46, 30].map((h, i) => (
-                <span
-                  key={i}
-                  className="eq-bar w-[6px] rounded-full bg-sage-lt"
-                  style={{ height: h, animationDelay: `${i * 0.16}s` }}
-                />
-              ))}
-            </div>
-            <div>
-              <p className="eyebrow-mono text-sage">Founder&rsquo;s podcast</p>
-              <h2 className="mt-2 text-[22px] font-bold text-ink">
-                「있는 것들이 더해」 (What We Already Have)
-              </h2>
-              <p className="mt-2 text-[15.5px] leading-relaxed text-ink-soft">
-                A record for the days when talking comes easier than writing. The
-                founder&rsquo;s thinking, left behind in voice.
-                {/* TODO(Michael): connect podcast link */}
-              </p>
-            </div>
-          </div>
-          </Reveal>
         </div>
       </section>
     </>

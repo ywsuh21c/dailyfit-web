@@ -692,16 +692,6 @@
 .reveal.in .agent-bar {
   transform: scaleX(1);
 }
-/* 오디오 이퀄라이저 바 (팟캐스트 카드) */
-.eq-bar {
-  transform-origin: bottom;
-  animation: eq 1.15s ease-in-out infinite;
-}
-@keyframes eq {
-  0%, 100% { transform: scaleY(0.3); }
-  50% { transform: scaleY(1); }
-}
-
 @media (prefers-reduced-motion: reduce) {
   .curve-draw,
   .draw-short {
@@ -711,9 +701,6 @@
   .agent-bar {
     transform: none;
     transition: none;
-  }
-  .eq-bar {
-    animation: none;
   }
 }
 

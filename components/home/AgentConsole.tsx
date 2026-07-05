@@ -41,7 +41,7 @@ const makeKO = (count: number): ConsoleContent => ({
     {
       tag: 'search',
       label: '활동 DB 검색',
-      body: `${count.toLocaleString('ko-KR')}건 중 특색 활동 2건 선별`,
+      body: `보유 활동 ${count.toLocaleString('ko-KR')}건 중 특색 2건 선별`,
       delay: 'console-d4',
     },
   ],
@@ -61,7 +61,7 @@ const makeEN = (count: number): ConsoleContent => ({
     {
       tag: 'search',
       label: 'Search activity DB',
-      body: `2 standout picks from ${count.toLocaleString('en-US')}`,
+      body: `2 standout picks from ${count.toLocaleString('en-US')} activities in our DB`,
       delay: 'console-d4',
     },
   ],
