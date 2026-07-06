@@ -86,9 +86,9 @@ export default function InvestorsEnPage() {
         />
         <div className="mt-12">
           <OrbitRings
-            aria="Market expansion: from the 15M Korean beachhead to East Asia and the global senior market"
+            aria="Market expansion: from Korea's 15M first market to East Asia and the global senior market"
             coreTop="Korea · 15M"
-            coreBottom="beachhead"
+            coreBottom="first market"
             mid="East Asia"
             outer="global senior market"
           />

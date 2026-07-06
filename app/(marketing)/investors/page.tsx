@@ -76,9 +76,9 @@ export default function InvestorsPage() {
         </p>
         <div className="mt-12">
           <OrbitRings
-            aria="시장 확장: 한국 1,500만 비치헤드에서 동아시아, 글로벌 시니어 시장으로"
+            aria="시장 확장: 한국 1,500만 첫 시장에서 동아시아, 글로벌 시니어 시장으로"
             coreTop="한국 1,500만"
-            coreBottom="비치헤드"
+            coreBottom="첫 시장"
             mid="동아시아"
             outer="글로벌 시니어 시장"
           />
