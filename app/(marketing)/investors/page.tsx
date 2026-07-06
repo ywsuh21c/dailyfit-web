@@ -4,7 +4,7 @@ import { ButtonLink } from '@/components/ui/Button';
 import { activeCatalogCount } from '@/lib/site';
 import { CountUp } from '@/components/motion/CountUp';
 import { FlowLine } from '@/components/motion/FlowLine';
-import { OrbitRings } from '@/components/motion/OrbitRings';
+import { MarketExpansion } from '@/components/motion/MarketExpansion';
 
 export const metadata: Metadata = {
   title: 'Investors',
@@ -75,13 +75,7 @@ export default function InvestorsPage() {
           액티브 시니어는 더 이상 돌봄의 대상이 아니라 자기 하루의 저자입니다.
         </p>
         <div className="mt-12">
-          <OrbitRings
-            aria="시장 확장: 한국 1,500만 비치헤드에서 동아시아, 글로벌 시니어 시장으로"
-            coreTop="한국 1,500만"
-            coreBottom="비치헤드"
-            mid="동아시아"
-            outer="글로벌 시니어 시장"
-          />
+          <MarketExpansion />
         </div>
       </Section>
 

@@ -3,7 +3,7 @@ import { Section, SectionHeader } from '@/components/ui/Section';
 import { ButtonLink } from '@/components/ui/Button';
 import { activeCatalogCount } from '@/lib/site';
 import { CountUp } from '@/components/motion/CountUp';
-import { OrbitRings } from '@/components/motion/OrbitRings';
+import { MarketExpansion } from '@/components/motion/MarketExpansion';
 
 export const metadata: Metadata = {
   title: 'Investors (EN)',
@@ -85,13 +85,7 @@ export default function InvestorsEnPage() {
           }
         />
         <div className="mt-12">
-          <OrbitRings
-            aria="Market expansion: from the 15M Korean beachhead to East Asia and the global senior market"
-            coreTop="Korea · 15M"
-            coreBottom="beachhead"
-            mid="East Asia"
-            outer="global senior market"
-          />
+          <MarketExpansion lang="en" />
         </div>
       </Section>
 
