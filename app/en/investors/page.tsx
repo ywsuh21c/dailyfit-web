@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { Section, SectionHeader } from '@/components/ui/Section';
 import { ButtonLink } from '@/components/ui/Button';
-import { activeCatalogCount, site } from '@/lib/site';
+import { activeCatalogCount } from '@/lib/site';
 import { CountUp } from '@/components/motion/CountUp';
 import { OrbitRings } from '@/components/motion/OrbitRings';
 
@@ -70,7 +70,19 @@ export default function InvestorsEnPage() {
         <SectionHeader
           eyebrow="Why now"
           title="A market at an inflection point"
-          lead="Active seniors are no longer subjects of care. They are the authors of their own days. The structural shift in demographics, digital fluency, and demand is happening now."
+          lead={
+            <>
+              Active seniors are no longer subjects of care; they are the authors
+              of their own days. Three forces cross at once.
+              <br />
+              <br />
+              <strong className="text-ink">Digital fluency</strong>
+              <br />
+              <strong className="text-ink">Demographic shift</strong>
+              <br />
+              <strong className="text-ink">Demand to design their own day</strong>
+            </>
+          }
         />
         <div className="mt-12">
           <OrbitRings
@@ -83,30 +95,6 @@ export default function InvestorsEnPage() {
         </div>
       </Section>
 
-      <Section tone="surface">
-        <SectionHeader
-          eyebrow="Who's building it"
-          title="The team"
-        />
-        <div className="mt-8 grid gap-6 sm:grid-cols-2">
-          <div className="rounded-xl border border-line bg-bg p-6">
-            <p className="text-h3 font-semibold text-ink">Youngwoo Suh</p>
-            <p className="mt-1 text-base text-sage">Co-founder · CEO</p>
-            <p className="mt-3 text-body text-ink-soft">
-              Boston University → Fudan University → Bain → PYLER (Corporate Development
-              Lead) → DailyFit.
-            </p>
-          </div>
-          <div className="rounded-xl border border-line bg-bg p-6">
-            <p className="text-h3 font-semibold text-ink">Hyunjin Kim</p>
-            <p className="mt-1 text-base text-sage">Co-founder · Head of Strategy</p>
-            <p className="mt-3 text-body text-ink-soft">
-              Korea University → EY-Parthenon → Bain → UVA MBA → DailyFit.
-            </p>
-          </div>
-        </div>
-      </Section>
-
       <Section tone="dark" id="contact">
         <SectionHeader
           invert
@@ -115,13 +103,8 @@ export default function InvestorsEnPage() {
           lead="Reach the founder directly. The fastest, most accurate conversation."
         />
         <div className="mt-8">
-          <ButtonLink
-            href={`mailto:${site.contactEmail}`}
-            variant="primary"
-            size="lg"
-            external
-          >
-            Email the founder
+          <ButtonLink href="/en/contact" variant="primary" size="lg">
+            Talk to us →
           </ButtonLink>
         </div>
       </Section>

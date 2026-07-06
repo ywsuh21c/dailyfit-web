@@ -35,7 +35,7 @@ export default function WritingPage() {
           <Reveal>
           <p className="eyebrow-mono text-sage">Writing</p>
           <h1 className="mt-5 text-[38px] font-extrabold leading-[1.18] tracking-[-0.03em] text-ink sm:text-[48px]">
-            우리는 만들면서 씁니다.
+            저희는 만들면서 씁니다.
           </h1>
           <svg viewBox="0 0 360 14" aria-hidden="true" className="mt-3 h-[14px] w-[min(360px,80%)]">
             <path
@@ -49,19 +49,24 @@ export default function WritingPage() {
             />
           </svg>
           <p className="mt-7 text-body text-ink-soft">
-            DailyFit을 만드는 동안 배운 것들을 정리해 공개합니다. AI Agent
-            팀으로 회사를 운영하는 방법, 액티브 시니어 시장이라는 가설, 그리고{' '}
+            DailyFit을 만드는 동안 배운 것들을 정리해 공개합니다.
+            <br />
+            AI Agent 팀으로 회사를 운영하는 방법, 액티브 시니어 시장이라는
+            가설, 그리고{' '}
             <strong className="text-ink">잘 안 풀린 것들</strong>까지.
           </p>
           <p className="mt-4 text-body text-ink-soft">
             완성된 결론보다, 결론에 닿기까지의 사고 과정을 남기려 합니다.
-            우리가 무엇을 믿고, 무엇을 틀렸는지 공개하는 것이 더 나은 회사를
-            만든다고 보기 때문입니다. 우리는 이것을{' '}
+            <br />
+            저희가 무엇을 믿고, 무엇을 틀렸는지 공개하는 것이 더 나은 회사를
+            만든다고 보기 때문입니다.
+            <br />
+            저희는 이것을{' '}
             <strong className="text-ink">Radically Transparent</strong>라고
             부릅니다.
           </p>
           <p className="mt-6 text-base font-semibold text-ink">
-            Youngwoo Suh, Founder · DailyFit
+            Youngwoo Michael Suh, Co-founder · DailyFit
           </p>
           </Reveal>
         </div>

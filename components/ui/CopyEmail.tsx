@@ -3,10 +3,10 @@
 import { useEffect, useRef, useState } from 'react';
 
 /**
- * Contact-page email row — the address, huge and copyable. mailto is kept as a
- * secondary affordance only: on machines without a mail client it silently
- * does nothing (the exact bug that killed the old "Talk to us" buttons), so
- * copy-to-clipboard is the primary action and always works.
+ * Contact-page email row — the address, huge and copyable. Copy-to-clipboard is
+ * the only action: a mailto: link silently no-ops on machines without a mail
+ * client (the exact bug that killed the old "Talk to us" buttons), so we don't
+ * offer one.
  */
 export function CopyEmail({
   email,
@@ -20,8 +20,8 @@ export function CopyEmail({
 
   const labels =
     lang === 'en'
-      ? { copy: 'Copy email address', copied: 'Copied ✓', mail: 'Open in mail app' }
-      : { copy: '이메일 주소 복사', copied: '복사했습니다 ✓', mail: '메일 앱으로 쓰기' };
+      ? { copy: 'Copy email address', copied: 'Copied ✓' }
+      : { copy: '이메일 주소 복사', copied: '복사했습니다 ✓' };
 
   // Clear a pending reset timer if we unmount mid-window (nav away within 2s).
   useEffect(() => () => {
@@ -59,12 +59,6 @@ export function CopyEmail({
         >
           {copied ? labels.copied : labels.copy}
         </button>
-        <a
-          href={`mailto:${email}`}
-          className="inline-flex min-h-[56px] items-center rounded-xl border border-ink/15 bg-white/60 px-8 text-[17px] font-bold text-ink transition-colors hover:border-sage hover:text-sage active:scale-[0.98]"
-        >
-          {labels.mail}
-        </a>
       </div>
     </div>
   );
