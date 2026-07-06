@@ -28,9 +28,9 @@ export default function AboutPage() {
             <br />
             취미와 일상을 설계하는 Agent 팀입니다.
             <br />
-            우리는 시니어를 그 누구보다 매력적인 세그먼트라고 보고,
+            우리는 시니어를 그 누구보다 매력적인 세그먼트라고 봅니다.
             <br />
-            기술이 아니라 더 활기찬 하루로 이야기를 시작합니다.
+            그래서 기술보다 먼저, 더 활기찬 하루를 이야기합니다.
           </p>
         </div>
       </section>
@@ -71,20 +71,23 @@ export default function AboutPage() {
             <p>
               2025년 초, 창업자 서영우의 어머니가 30년 넘게 다니던 직장에서
               퇴직하셨습니다. 하루아침에 오전 9시 출근이 사라졌고, 삶을
-              지탱하던 일정도 함께 사라졌습니다. 골프도 여행도 좋지만 매일일
-              수는 없었습니다. 남은 날들은 &lsquo;오늘 뭐 하지&rsquo;라는
-              막막함으로 시작됐습니다.
+              지탱하던 일정도 함께 사라졌습니다.
+              <br />
+              골프도 여행도 좋지만 매일일 수는 없었습니다.
+              <br />
+              &lsquo;오늘 뭐 하지&rsquo;라는 막막함으로 하루가 시작됐습니다.
             </p>
             <p className="border-l-[3px] border-sage pl-5 text-[19px] font-semibold leading-relaxed text-ink">
-              &ldquo;내 하루를 나 대신 짜줄 서비스가 있다면,
+              &ldquo;너가 맨날 일할 때 쓰는 &lsquo;에이전트&rsquo;...
               <br />
-              돈이 얼마든 바로 낼 거야.&rdquo;
+              내 하루를 나 대신 계획해줄 친구 만들어줘!&rdquo;
             </p>
             <p>
-              찾아봤지만 그런 서비스는 없었습니다. 겨우 찾은 프로그램은 신청
-              절차가 복잡해 중도에 포기하게 됐습니다. 어머니의 친구들도, 그
-              주변도 같은 이야기를 했습니다. 그 한 마디가 DailyFit의
-              출발점입니다.
+              아들이 일할 때 AI Agent를 쓰는 걸 어머니도 보셨습니다. 하지만
+              정작 당신의 하루를 대신 챙겨줄 Agent는 어디에도 없었습니다. 겨우
+              찾은 프로그램은 신청 절차가 복잡해 중도에 포기하게 됐습니다.
+              어머니의 친구들도, 그 주변도 같은 이야기를 했습니다. 그 한
+              마디가 DailyFit의 출발점입니다.
             </p>
           </div>
         </Reveal>
@@ -101,7 +104,7 @@ export default function AboutPage() {
           <FounderCard
             name="Hyunjin Jake Kim"
             role="Co-founder · Head of Strategy"
-            bio="고려대학교 → EY-Parthenon → Bain → UVA MBA → DailyFit. 전략과 글로벌 확장을 담당하며 시니어의 하루를 함께 설계합니다."
+            bio="고려대학교 → EY-Parthenon → Bain → University of Virginia MBA → DailyFit. 전략과 글로벌 확장을 이끌며 시니어의 하루를 함께 설계합니다."
           />
         </div>
         <p className="mt-8 max-w-prose text-body text-ink-soft">

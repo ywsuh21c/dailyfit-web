@@ -6,7 +6,7 @@ import { OrgOrbit } from '@/components/motion/OrgOrbit';
 export const metadata: Metadata = {
   title: 'How we work',
   description:
-    'AI-native, with the rigor of consulting. How DailyFit works as a team of Agents.',
+    'AI-Native. How DailyFit works as a team of Agents.',
 };
 
 // /en/how-we-work — English mirror of app/(marketing)/how-we-work.
@@ -23,13 +23,9 @@ export default function EnHowWeWorkPage() {
         <div className="relative mx-auto max-w-6xl px-5 pb-16 pt-20 lg:pt-24">
           <p className="eyebrow-mono text-sage">How we work</p>
           <h1 className="mt-5 max-w-[20ch] text-[38px] font-extrabold leading-[1.18] tracking-[-0.03em] text-ink sm:text-[48px]">
-            AI-native.
-            <br />
-            With the rigor of consulting.
+            AI-Native.
           </h1>
           <p className="mt-6 max-w-[64ch] text-body text-ink-soft">
-            We move as fast as a startup, but every decision compounds into an asset for the next one.
-            <br />
             Here is how we actually work.
           </p>
         </div>
@@ -126,9 +122,7 @@ export default function EnHowWeWorkPage() {
             <p className="mx-auto mt-5 max-w-[50ch] text-body text-ink-soft">
               Still, if this way of working draws you in,
               <br />
-              if you want to experience a company that works alongside Agents first,
-              <br />
-              reach out in advance.
+              if you want to experience a company that works alongside Agents first, reach out in advance.
               <br />
               Our next hire starts here.
             </p>

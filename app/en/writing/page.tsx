@@ -51,19 +51,24 @@ export default function WritingPage() {
             />
           </svg>
           <p className="mt-7 text-body text-ink-soft">
-            We publish what we learn while building DailyFit. How we run a company
-            as a team of AI Agents, our hypothesis about the active senior market,
-            and even{' '}
+            We publish what we learn while building DailyFit.
+            <br />
+            How we run a company as a team of AI Agents, our hypothesis about the
+            active senior market, and even{' '}
             <strong className="text-ink">the things that did not work out</strong>.
           </p>
           <p className="mt-4 text-body text-ink-soft">
             More than finished conclusions, we want to leave behind the thinking
-            that leads to them. We believe that being open about what we believe
-            and where we were wrong builds a better company. We call this{' '}
+            that leads to them.
+            <br />
+            We believe that being open about what we believe and where we were
+            wrong builds a better company.
+            <br />
+            We call this{' '}
             <strong className="text-ink">Radically Transparent</strong>.
           </p>
           <p className="mt-6 text-base font-semibold text-ink">
-            Youngwoo Suh, Founder · DailyFit
+            Youngwoo Michael Suh, Co-founder · DailyFit
           </p>
           </Reveal>
         </div>

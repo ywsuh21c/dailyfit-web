@@ -35,7 +35,9 @@ export default function ContactPage() {
             always open.
           </h1>
           <p className="mx-auto mt-6 max-w-[44ch] text-body text-ink-soft">
-            Whatever you want to talk about, we&rsquo;re glad to hear it. Write to the address below and we read and reply personally.
+            Whatever you want to talk about, we&rsquo;re glad to hear it.
+            <br />
+            Write to the address below and we read and reply personally.
           </p>
           <div className="mt-12">
             <CopyEmail email={site.contactEmail} lang="en" />

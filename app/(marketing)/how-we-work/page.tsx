@@ -6,7 +6,7 @@ import { OrgOrbit } from '@/components/motion/OrgOrbit';
 export const metadata: Metadata = {
   title: 'How we work',
   description:
-    'AI-네이티브하게, 컨설팅처럼 체계적으로. DailyFit이 Agent 팀으로 일하는 방식.',
+    'AI-Native. DailyFit이 Agent 팀으로 일하는 방식.',
 };
 
 // /how-we-work — recruiting layer. HANDOFF §2: UNPROVEN bet — 실제 오픈
@@ -22,13 +22,9 @@ export default function HowWeWorkPage() {
         <div className="relative mx-auto max-w-6xl px-5 pb-16 pt-20 lg:pt-24">
           <p className="eyebrow-mono text-sage">How we work</p>
           <h1 className="mt-5 max-w-[20ch] text-[38px] font-extrabold leading-[1.18] tracking-[-0.03em] text-ink sm:text-[48px]">
-            AI-네이티브하게.
-            <br />
-            컨설팅처럼 체계적으로.
+            AI-Native.
           </h1>
           <p className="mt-6 max-w-[64ch] text-body text-ink-soft">
-            스타트업처럼 빠르게 움직이지만, 모든 판단은 다음 판단의 자산으로 쌓입니다.
-            <br />
             우리가 실제로 일하는 방식을 공개합니다.
           </p>
         </div>
@@ -126,9 +122,7 @@ export default function HowWeWorkPage() {
             <p className="mx-auto mt-5 max-w-[50ch] text-body text-ink-soft">
               그래도 이 방식이 끌린다면,
               <br />
-              Agent와 함께 일하는 회사를 먼저 경험해 보고 싶다면,
-              <br />
-              미리 연락 주세요.
+              Agent와 함께 일하는 회사를 먼저 경험해 보고 싶다면, 미리 연락 주세요.
               <br />
               다음 채용은 여기서 시작됩니다.
             </p>

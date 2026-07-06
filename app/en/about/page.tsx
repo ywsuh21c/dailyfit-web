@@ -31,9 +31,9 @@ export default function EnAboutPage() {
             <br />
             A team of Agents that designs hobbies and daily life.
             <br />
-            We see seniors as one of the most compelling segments anywhere,
+            We see seniors as one of the most compelling segments anywhere.
             <br />
-            and we begin the story with a more vibrant day, not with technology.
+            So before technology, we talk about a more vibrant day.
           </p>
         </div>
       </section>
@@ -75,18 +75,21 @@ export default function EnAboutPage() {
               In early 2025, founder Youngwoo&rsquo;s mother retired from the
               job she had held for more than thirty years. The 9 AM commute
               disappeared overnight, and with it the schedule that had held
-              her days together. Golf and travel are wonderful, but they
-              cannot fill every day. The rest began with the same blank
-              question: what do I do today?
+              her days together.
+              <br />
+              Golf and travel are wonderful, but they cannot fill every day.
+              <br />
+              Each day began with the same blank question: what do I do today?
             </p>
             <p className="border-l-[3px] border-sage pl-5 text-[19px] font-semibold leading-relaxed text-ink">
-              &ldquo;If there were a service that planned my day for me,
+              &ldquo;You use an &lsquo;agent&rsquo; at work every day...
               <br />
-              I would pay for it on the spot.&rdquo;
+              build me one that plans my day for me!&rdquo;
             </p>
             <p>
-              We looked. It did not exist. The programs she did find were so
-              complicated to sign up for that she gave up halfway. Her
+              She had watched her son use AI Agents at work. Yet no Agent
+              existed to look after her own day. The programs she did find were
+              so complicated to sign up for that she gave up halfway. Her
               friends, and their friends, told the same story. That one
               sentence became the starting point of DailyFit.
             </p>
@@ -105,7 +108,7 @@ export default function EnAboutPage() {
           <FounderCard
             name="Hyunjin Jake Kim"
             role="Co-founder · Head of Strategy"
-            bio="Korea University → EY-Parthenon → Bain → UVA MBA → DailyFit. Leads strategy and global expansion, designing the senior's day alongside the team."
+            bio="Korea University → EY-Parthenon → Bain → University of Virginia MBA → DailyFit. Leads strategy and global expansion, designing the senior's day alongside the team."
           />
         </div>
         <p className="mt-8 max-w-prose text-body text-ink-soft">
