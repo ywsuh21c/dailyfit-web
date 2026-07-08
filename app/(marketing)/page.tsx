@@ -25,7 +25,8 @@ import { Reveal } from '@/components/motion/Reveal';
 //   Critical Docs 260604-V2 Alignment-Co-founder Note (DECIDED #1~#10).
 //   Agent 고유 네이밍(시조/민요/판소리)은 보류 — Michael 2026-07-01.
 //   현재 Agent는 기능명(탐색·리마인더·슈퍼)으로만 표기.
-// - 1,500만 시장: approved 2026-05-31 mockup (option-b-v2-company-site.html).
+// - 시장 수치: 1,500만(구 mockup)은 미검증으로 폐기 — 2026-07-09부터 캐논은
+//   1,300만(행안부 주민등록 인구통계 2026.6, 55~70세 13,014,756명). 복원 금지.
 // - 티커 활동명: LJS 인터뷰 특이취미 + 자체공급 라이브 활동 (전부 문서 출처).
 // - TODO(Michael): 정식 출시일 확정(6월 말 예정) — metric strip · traction.
 // - TODO(Michael): 제품 데모 비디오 자산 입고 시 what-we-build 우측 패널을
@@ -90,7 +91,7 @@ export default async function HomePage() {
             </h1>
             <p className="mt-7 max-w-[44ch] text-[18px] leading-relaxed text-ivory/70 sm:text-[21px]">
               <span className="block">스마트폰으로 배우고, 만나고, 즐기기 시작한 액티브 시니어.</span>
-              <span className="mt-2 block">전 세계에서 가장 빠르게 커지는 세대의 하루를 설계합니다.</span>
+              <span className="mt-2 block">전 세계에서 가장 빠르게 늘어나는 세대의 하루를 설계합니다.</span>
             </p>
             <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
               <Link

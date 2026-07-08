@@ -244,7 +244,9 @@ export default function ResearchPage() {
               같은 원리가 취미를 넘어 일자리로, 개인의 삶을 넘어 직업의 삶으로
               확장됩니다.
               <br />
-              그리고 기회를 찾아주는 것을 넘어, 만들어내는 단계로 나아갑니다.
+              기회를 찾아주는 것을 넘어, 만들어내는 단계로 나아갑니다.
+              <br />
+              그리고 제안을 넘어, 매일의 대화로 깊어집니다.
             </p>
           </Reveal>
           <Reveal className="mt-14" delay={120}>
@@ -273,7 +275,19 @@ export default function ResearchPage() {
               <br />
               활동과 일자리를 Agent가 스스로 만들어내는 단계를 연구합니다.
             </QuestionCard>
-            <OpenSlotCard tag="In preparation" title="다음 주제들을 준비하고 있습니다" delay={240}>
+            <QuestionCard
+              tag="Personalized conversation"
+              title="대행에서 대화까지"
+              delay={240}
+              keywords={['contextual memory', 'proactive check-in', 'conversational planning']}
+            >
+              &ldquo;어제 잠을 설쳤어&rdquo; 한마디를 기억해 먼저 안부를 묻고,
+              <br />
+              그날의 하루를 함께 다시 설계합니다.
+              <br />
+              제안과 대행을 넘어, 매일을 잇는 대화형 동반자를 연구합니다.
+            </QuestionCard>
+            <OpenSlotCard tag="In preparation" title="다음 주제들을 준비하고 있습니다" delay={360}>
               장기 로드맵 위에 다음 리서치들이 이미 줄 서 있습니다.
             </OpenSlotCard>
           </div>

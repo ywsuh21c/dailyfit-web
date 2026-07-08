@@ -44,9 +44,10 @@ export default function InvestorsEnPage() {
           Asia&apos;s fastest-growing digital-native cohort is already online.
         </h1>
         <p className="mt-6 max-w-prose text-body text-ivory/85">
-          South Korea&apos;s 15M-strong active seniors (55–70) already run their
+          South Korea&apos;s 13M-strong active seniors (55–70) already run their
           days on KakaoTalk. DailyFit layers an AI Agent on top, designing a
-          healthier, more engaged daily life, one conversation at a time.
+          longer, healthier daily life full of fun and meaning, one
+          conversation at a time.
         </p>
         <div className="mt-8">
           <ButtonLink href="#contact" variant="primary" size="lg">
@@ -55,7 +56,7 @@ export default function InvestorsEnPage() {
         </div>
         <div className="mt-14 grid gap-4 sm:grid-cols-3">
           <StatCard suffix="M" label="Korean active seniors (55–70)">
-            <CountUp to={15} duration={1100} />
+            <CountUp to={13} duration={1100} />
           </StatCard>
           <StatCard suffix="" label="programs & activities in our live DB">
             <CountUp to={activeCatalogCount} />
@@ -64,6 +65,10 @@ export default function InvestorsEnPage() {
             <CountUp to={3} duration={900} />
           </StatCard>
         </div>
+        <p className="mt-3 text-[12.5px] text-ink-soft/70">
+          Population source: MOIS Resident Registration statistics, June 2026
+          (ages 55–70: 13,014,756)
+        </p>
       </Section>
 
       <Section tone="light">
@@ -86,8 +91,8 @@ export default function InvestorsEnPage() {
         />
         <div className="mt-12">
           <OrbitRings
-            aria="Market expansion: from Korea's 15M first market to East Asia and the global senior market"
-            coreTop="Korea · 15M"
+            aria="Market expansion: from Korea's 13M first market to East Asia and the global senior market"
+            coreTop="Korea · 13M"
             coreBottom="first market"
             mid="East Asia"
             outer="global senior market"

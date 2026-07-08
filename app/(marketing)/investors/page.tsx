@@ -29,9 +29,9 @@ export default function InvestorsPage() {
           한국에서 가장 빠르게 늘어나는 인구는 디지털을 씁니다.
         </h1>
         <p className="mt-6 max-w-prose text-body text-ink-soft">
-          1,500만 명의 한국 시니어(55–70세)가 이미 카카오톡으로 하루를 운영합니다.
-          DailyFit은 그 위에 AI Agent를 얹어 &ldquo;건강하게 오래 사는 일상&rdquo;을
-          매일 설계합니다.
+          1,300만 명의 한국 시니어(55–70세)가 이미 카카오톡으로 하루를 운영합니다.
+          DailyFit은 그 위에 AI Agent를 얹어 &ldquo;건강하게 오래 재미나게
+          의미있게 사는 일상&rdquo;을 매일 설계합니다.
         </p>
         <div className="mt-8">
           <ButtonLink href="#contact" variant="primary" size="lg">
@@ -40,7 +40,7 @@ export default function InvestorsPage() {
         </div>
         <div className="mt-14 grid gap-4 sm:grid-cols-3">
           <StatCard suffix="만 명" label="한국 55–70 액티브 시니어">
-            <CountUp to={1500} />
+            <CountUp to={1300} />
           </StatCard>
           <StatCard suffix="건" label="보유 프로그램·활동 DB (실시간)">
             <CountUp to={activeCatalogCount} />
@@ -49,6 +49,10 @@ export default function InvestorsPage() {
             <CountUp to={3} duration={900} />
           </StatCard>
         </div>
+        <p className="mt-3 text-[12.5px] text-ink-soft/70">
+          인구 수치 출처: 행정안전부 주민등록 인구통계, 2026년 6월 기준(55~70세
+          13,014,756명)
+        </p>
       </Section>
 
       {/* 2. Why now */}
@@ -76,8 +80,8 @@ export default function InvestorsPage() {
         </p>
         <div className="mt-12">
           <OrbitRings
-            aria="시장 확장: 한국 1,500만 첫 시장에서 동아시아, 글로벌 시니어 시장으로"
-            coreTop="한국 1,500만"
+            aria="시장 확장: 한국 1,300만 첫 시장에서 동아시아, 글로벌 시니어 시장으로"
+            coreTop="한국 1,300만"
             coreBottom="첫 시장"
             mid="동아시아"
             outer="글로벌 시니어 시장"

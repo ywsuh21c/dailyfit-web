@@ -240,7 +240,10 @@ export default function EnResearchPage() {
               The same principle extends beyond hobbies into jobs, beyond
               personal life into professional life.
               <br />
-              And beyond finding opportunities, into creating them.
+              Beyond finding opportunities, into creating them.
+              <br />
+              And beyond suggestions, into a conversation that deepens every
+              day.
             </p>
           </Reveal>
           <Reveal className="mt-14" delay={120}>
@@ -269,7 +272,19 @@ export default function EnResearchPage() {
               We study the stage where the Agent creates activities and jobs on
               its own.
             </QuestionCard>
-            <OpenSlotCard tag="In preparation" title="The next topics are in preparation" delay={240}>
+            <QuestionCard
+              tag="Personalized conversation"
+              title="From delegation to conversation"
+              delay={240}
+              keywords={['contextual memory', 'proactive check-in', 'conversational planning']}
+            >
+              The Agent remembers &ldquo;I slept badly last night,&rdquo; checks
+              in first, and redesigns that day together.
+              <br />
+              Beyond suggestions and delegation, we study a conversational
+              companion that carries every day forward.
+            </QuestionCard>
+            <OpenSlotCard tag="In preparation" title="The next topics are in preparation" delay={360}>
               More research is already lined up on the long-term roadmap.
               <br />
               Each goes public once it clears validation.
