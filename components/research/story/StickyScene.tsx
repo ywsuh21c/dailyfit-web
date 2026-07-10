@@ -74,9 +74,11 @@ export function StickyScene({
             ref={(n) => {
               refs.current[i] = n;
             }}
-            className={`rs-step flex min-h-[58vh] items-center py-8 lg:min-h-[76vh] ${
-              active === i ? 'on' : ''
-            }`}
+            className={`rs-step flex items-center py-8 ${
+              i === steps.length - 1
+                ? 'min-h-[44vh] lg:min-h-[52vh]'
+                : 'min-h-[58vh] lg:min-h-[76vh]'
+            } ${active === i ? 'on' : ''}`}
           >
             <div>
               <p className="rs-step-idx">{s.kicker}</p>

@@ -189,6 +189,15 @@ export default function ResearchPage() {
         </div>
       </section>
 
+      {/* ─────────── INTERLUDE 2 — 방법론에서 실전으로 ─────────── */}
+      <Interlude
+        heightVh={170}
+        lines={[
+          [{ t: '이' }, { t: '루프는' }, { t: '개념도가' }, { t: '아닙니다.' }],
+          [{ t: '매일,' }, { t: '실제', em: true }, { t: '서비스에서', em: true }, { t: '돌아갑니다.' }],
+        ]}
+      />
+
       {/* ─────────────── CH 04 · 실전 검증 ─────────────── */}
       <section id="production" className="bg-bg py-24 sm:py-32">
         <div className="mx-auto grid max-w-6xl items-center gap-14 px-5 lg:grid-cols-[1fr_1fr]">

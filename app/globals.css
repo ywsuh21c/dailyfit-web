@@ -996,15 +996,21 @@
 /* --- chapter head watermark number --- */
 .rs-ch-num {
   position: absolute;
-  top: -34px;
+  top: -20px;
   right: 0;
-  font-size: 150px;
+  font-size: 92px;
   font-weight: 800;
   letter-spacing: -0.05em;
   line-height: 1;
   color: rgba(74, 124, 89, 0.08);
   user-select: none;
   pointer-events: none;
+}
+@media (min-width: 640px) {
+  .rs-ch-num {
+    top: -34px;
+    font-size: 150px;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

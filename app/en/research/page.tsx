@@ -190,6 +190,24 @@ export default function EnResearchPage() {
         </div>
       </section>
 
+      {/* ─────────── INTERLUDE 2 — from method to production ─────────── */}
+      <Interlude
+        heightVh={170}
+        lines={[
+          [{ t: 'This' }, { t: 'loop' }, { t: 'is' }, { t: 'not' }, { t: 'a' }, { t: 'concept.' }],
+          [
+            { t: 'It' },
+            { t: 'runs' },
+            { t: 'every' },
+            { t: 'day,' },
+            { t: 'in' },
+            { t: 'a' },
+            { t: 'live', em: true },
+            { t: 'service.', em: true },
+          ],
+        ]}
+      />
+
       {/* ─────────────── CH 04 · PRODUCTION ─────────────── */}
       <section id="production" className="bg-bg py-24 sm:py-32">
         <div className="mx-auto grid max-w-6xl items-center gap-14 px-5 lg:grid-cols-[1fr_1fr]">
