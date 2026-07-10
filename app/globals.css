@@ -865,6 +865,24 @@
   text-shadow: 0 0 26px rgba(143, 191, 159, 0.45);
 }
 
+/* --- hero load-in stagger (pure CSS — no JS dependency) --- */
+.rs-hero-item {
+  opacity: 0;
+  transform: translateY(18px);
+  animation: rs-hero-in 0.9s cubic-bezier(0.2, 0.6, 0.2, 1) forwards;
+}
+.rs-hero-d1 { animation-delay: 0.08s; }
+.rs-hero-d2 { animation-delay: 0.2s; }
+.rs-hero-d3 { animation-delay: 0.34s; }
+.rs-hero-d4 { animation-delay: 0.48s; }
+.rs-hero-d5 { animation-delay: 0.55s; }
+@keyframes rs-hero-in {
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
 /* --- scroll cue (hero bottom) --- */
 .rs-cue {
   display: inline-flex;
@@ -1016,6 +1034,11 @@
 @media (prefers-reduced-motion: reduce) {
   .rs-progress-fill {
     transform: scaleX(0);
+  }
+  .rs-hero-item {
+    opacity: 1;
+    transform: none;
+    animation: none;
   }
   .rs-stage-glow-a,
   .rs-stage-glow-b,

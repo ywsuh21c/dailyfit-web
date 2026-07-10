@@ -53,18 +53,18 @@ export default function ResearchPage() {
         <div className="relative mx-auto flex min-h-[calc(100svh-72px)] max-w-6xl flex-col justify-center px-5 pb-24 pt-16 lg:pb-28">
           <div className="grid items-center gap-14 lg:grid-cols-[1fr_0.9fr] lg:gap-16">
             <div>
-              <p className="eyebrow-mono text-sage">Research at DailyFit</p>
-              <h1 className="mt-6 text-[42px] font-extrabold leading-[1.12] tracking-[-0.035em] text-ink sm:text-[54px]">
+              <p className="rs-hero-item eyebrow-mono text-sage">Research at DailyFit</p>
+              <h1 className="rs-hero-item rs-hero-d1 mt-6 text-[42px] font-extrabold leading-[1.12] tracking-[-0.035em] text-ink sm:text-[54px]">
                 <span className="text-sage">Self-accelerating Agentic AI.</span>
                 <br />
                 우리가 풀 다음 문제.
               </h1>
-              <p className="mt-8 max-w-[54ch] text-[17px] leading-relaxed text-ink-soft sm:text-[19px]">
+              <p className="rs-hero-item rs-hero-d2 mt-8 max-w-[54ch] text-[17px] leading-relaxed text-ink-soft sm:text-[19px]">
                 과학은 가설과 실험의 반복으로 전진합니다.
                 <br />
                 이제 AI가 그 사이클을 스스로 돌리기 시작했습니다.
               </p>
-              <div className="mt-10 flex flex-wrap items-center gap-4">
+              <div className="rs-hero-item rs-hero-d3 mt-10 flex flex-wrap items-center gap-4">
                 <Link
                   href="/contact"
                   className="inline-flex min-h-[56px] items-center rounded-xl bg-sage px-8 text-[17px] font-bold text-white transition-colors hover:bg-sage-dk active:scale-[0.98]"
@@ -79,7 +79,9 @@ export default function ResearchPage() {
                 </a>
               </div>
             </div>
-            <AccelerationLoop />
+            <div className="rs-hero-item rs-hero-d4">
+              <AccelerationLoop />
+            </div>
           </div>
 
           {/* scroll cue */}
@@ -163,6 +165,9 @@ export default function ResearchPage() {
             </Reveal>
             <Reveal className="mt-14" delay={120}>
               <LearningCurve />
+              <p className="eyebrow-mono mt-4 text-center text-ink-soft/70">
+                우리가 만들려는 곡선 · 지시 없이 꺾여 올라가는 역량
+              </p>
             </Reveal>
           </div>
         </div>
