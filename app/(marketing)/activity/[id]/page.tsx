@@ -7,6 +7,20 @@ import { StoreBadge } from '@/components/product/StoreBadge';
 // /activity/[id] — 링크 공유 착지 페이지 (앱 미설치자도 브라우저로 열림).
 // 외부 API fetch → 동적 렌더(ISR 5분). 카톡 카드 og 는 generateMetadata 가 제공.
 
+// 카톡 미리보기 카드용 이미지.
+//
+// 백엔드는 og_image_url 로 `${site}/og/scene/{scene_key}.png` 를 주는데, 그 씬별 OG 에셋은
+// 아직 웹에 없다(2026-07-14 실측: /og/scene/dance.png → 404). 죽은 이미지를 og:image 로
+// 내보내면 카카오가 이미지를 못 받아 카드에 그림이 안 뜬다 → 실존하는 브랜드 OG 로 폴백해
+// 최소한 DailyFit 카드가 보이게 한다. 씬별 에셋이 추가되면 og_image_url 이 자동으로 쓰인다.
+const BRAND_OG = `${site.url}/opengraph-image.png`;
+const OG_SCENE_ASSETS_READY = false; // 씬별 OG 에셋 배포 시 true (그 전엔 브랜드 OG 폴백)
+
+function ogImageFor(activity: { og_image_url: string | null }): string {
+  if (OG_SCENE_ASSETS_READY && activity.og_image_url) return activity.og_image_url;
+  return BRAND_OG;
+}
+
 export async function generateMetadata({
   params,
 }: {
@@ -17,6 +31,7 @@ export async function generateMetadata({
   if (!activity) return { title: '활동 · DailyFit' };
   const description =
     activity.summary ?? `${activity.neighborhood ?? ''} ${activity.is_free ? '무료' : ''} 활동`.trim();
+  const ogImage = ogImageFor(activity);
   return {
     title: `${activity.title} · DailyFit`,
     description,
@@ -26,11 +41,14 @@ export async function generateMetadata({
       description,
       url: activity.share_url,
       siteName: site.name,
-      ...(activity.og_image_url
-        ? { images: [{ url: activity.og_image_url, width: 1200, height: 630 }] }
-        : {}),
+      images: [{ url: ogImage, width: 1200, height: 630 }],
     },
-    twitter: { card: 'summary_large_image', title: activity.title, description },
+    twitter: {
+      card: 'summary_large_image',
+      title: activity.title,
+      description,
+      images: [ogImage],
+    },
   };
 }
 
