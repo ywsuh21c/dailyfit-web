@@ -250,8 +250,8 @@ export default function AiClassEventPage() {
             </li>
             <li className="rounded-2xl bg-white px-6 py-5">
               <p className="text-[18px] leading-[1.8] text-ink">
-                회차당 정원은 12명이에요. 소규모라 궁금한 건 그 자리에서 물어볼
-                수 있어요.
+                소규모 반으로 진행해요. 궁금한 건 그 자리에서 바로 물어볼 수
+                있어요.
               </p>
             </li>
           </ul>
@@ -266,9 +266,17 @@ export default function AiClassEventPage() {
       {/* 문자·전화 폴백 — 웹 가입 개통 전 안전망. 접힘 섹션으로 강등(삭제 금지) */}
       <section className="border-t border-line bg-bg py-10">
         <div className="mx-auto max-w-3xl px-5">
-          <details className="rounded-2xl border border-line bg-white px-6 py-2">
-            <summary className="flex min-h-tap cursor-pointer list-none items-center text-[18px] font-bold text-ink">
+          <details className="group rounded-2xl border border-line bg-white px-6 py-2">
+            {/* 하우스 <details> 패턴(product FAQ)과 동일 — 열림 인디케이터(+)
+                없이는 Chrome/Android에서 접힘 여부를 알 수 없다(시니어 발견성). */}
+            <summary className="flex min-h-tap cursor-pointer list-none items-center justify-between gap-4 text-[18px] font-bold text-ink [&::-webkit-details-marker]:hidden">
               문자·전화로 신청하셔도 돼요
+              <span
+                className="text-sage transition-transform group-open:rotate-45"
+                aria-hidden="true"
+              >
+                +
+              </span>
             </summary>
             <div className="pb-5 pt-2">
               <p className="text-[18px] leading-[1.8] text-ink-soft">
