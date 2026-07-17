@@ -24,7 +24,7 @@ type ClassDay = {
   intro: string; // 한 줄 소개 — 운영 카드 "오늘 배우는 것"에서 발췌
   photo: string; // public/event/ 웹 최적화본(960px webp)
   photoAlt: string;
-  times: [string, string]; // [오전, 오후] — 목요일만 오후 4시
+  times: [string, string]; // [오전, 오후]
   afternoonNote: string | null;
 };
 
@@ -59,16 +59,7 @@ const WEEK: ClassDay[] = [
     times: ['오전 9시', '오후 3시'],
     afternoonNote: null,
   },
-  {
-    dow: '목',
-    date: '7월 23일',
-    title: 'AI와 함께 하는 노후 자금 계획',
-    intro: 'AI에게 한 달 생활비 정리표를 만들게 해봐요.',
-    photo: '/event/photo-L4-money.webp',
-    photoAlt: '노후 자금 계획을 정리한 표',
-    times: ['오전 9시', '오후 4시'],
-    afternoonNote: '목요일은 오후 4시에 해요',
-  },
+  // 목요일(7/23) 노후자금 — 2026-07-17 취소 (안드 출시일과 겹침). 시간표에서 제외.
   {
     dow: '금',
     date: '7월 24일',
@@ -81,9 +72,9 @@ const WEEK: ClassDay[] = [
   },
 ];
 
-const PAGE_TITLE = '이번 주 무료 줌 수업 — 매일 30분, 시간표에서 골라보세요';
+const PAGE_TITLE = '이번 주 무료 줌 수업 — 하루 30분, 시간표에서 골라보세요';
 const PAGE_DESCRIPTION =
-  '7월 20일(월)부터 24일(금)까지, 매일 오전 9시와 오후 3시(목요일만 오후 4시)에 줌으로 만나요. 무료이고, 원하는 요일과 시간에 체크만 하면 신청돼요.';
+  '7월 20일(월)~24일(금), 월·화·수·금 오전 9시와 오후 3시에 줌으로 만나요. 무료이고, 원하는 요일과 시간에 체크만 하면 신청돼요.';
 
 export const metadata: Metadata = {
   title: PAGE_TITLE,
@@ -141,12 +132,12 @@ export default function AiClassEventPage() {
           <h1 className="mt-4 text-[32px] font-extrabold leading-[1.25] tracking-[-0.03em] text-ink sm:text-[42px]">
             이번 주 무료 줌 수업
             <br />
-            매일 30분, 시간표에서 골라보세요
+            하루 30분, 시간표에서 골라보세요
           </h1>
           <p className="mt-6 text-[19px] leading-[1.7] text-ink-soft">
-            7월 20일(월)~24일(금) · 매일 오전 9시·오후 3시
+            7월 20일(월)~24일(금) · 월·화·수·금
             <br />
-            (목요일만 오후 4시) · 줌(Zoom) 온라인 · 무료
+            오전 9시·오후 3시 · 줌(Zoom) 온라인 · 무료
           </p>
 
           {/* 신청 방법 안내 — 페이지에서 가장 먼저 읽혀야 하는 문장 */}
