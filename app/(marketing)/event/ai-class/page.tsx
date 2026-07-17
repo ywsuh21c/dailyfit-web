@@ -8,9 +8,9 @@ import { site } from '@/lib/site';
 // 누르면 RN웹(my.dailyfitai.app)의 시간표 신청 화면(/class-picker)으로 보낸다 —
 // 거기서 로그인(카카오 가입)을 거쳐 신청한다. 비회원 신청 금지.
 // dailyfit:// 딥링크·스토어 배지는 여전히 넣지 않는다(수신자 전원 앱 미보유,
-// 무반응 막다른 길 방지). 문자·전화 신청은 최하단 접힘 섹션으로 강등(폴백 유지).
-
-const PHONE = '01049017898';
+// 무반응 막다른 길 방지).
+// 2026-07-17 현진 확정: 문자·전화 신청 폴백 섹션 삭제 — 신청은 전부 웹(class-picker)
+// 으로만 받는다(문자 답장 접수 폐지, KPI 측정 단일화).
 
 // RN웹 신규 신청 화면 — 라우트명 /class-picker 는 병렬 트랙과 고정 합의됨.
 // UTM은 문자 캠페인(class-w1) 귀속용.
@@ -260,46 +260,6 @@ export default function AiClassEventPage() {
           <div className="mx-auto mt-8 max-w-xl">
             <ApplyCta />
           </div>
-        </div>
-      </section>
-
-      {/* 문자·전화 폴백 — 웹 가입 개통 전 안전망. 접힘 섹션으로 강등(삭제 금지) */}
-      <section className="border-t border-line bg-bg py-10">
-        <div className="mx-auto max-w-3xl px-5">
-          <details className="group rounded-2xl border border-line bg-white px-6 py-2">
-            {/* 하우스 <details> 패턴(product FAQ)과 동일 — 열림 인디케이터(+)
-                없이는 Chrome/Android에서 접힘 여부를 알 수 없다(시니어 발견성). */}
-            <summary className="flex min-h-tap cursor-pointer list-none items-center justify-between gap-4 text-[18px] font-bold text-ink [&::-webkit-details-marker]:hidden">
-              문자·전화로 신청하셔도 돼요
-              <span
-                className="text-sage transition-transform group-open:rotate-45"
-                aria-hidden="true"
-              >
-                +
-              </span>
-            </summary>
-            <div className="pb-5 pt-2">
-              <p className="text-[18px] leading-[1.8] text-ink-soft">
-                앱 신청이 어려우시면 문자나 전화로 신청하셔도 돼요. 문자에는
-                원하는 요일과 시간을 함께 적어 보내주세요. 예를 들면 &ldquo;신청
-                월요일 오전 9시&rdquo; 이렇게요.
-              </p>
-              <div className="mt-4 flex flex-col gap-3 sm:flex-row">
-                <a
-                  href={`sms:${PHONE}?body=${encodeURIComponent('신청 ')}`}
-                  className="inline-flex min-h-tap flex-1 items-center justify-center rounded-xl border-2 border-sage px-6 text-[18px] font-bold text-sage transition-colors hover:bg-sage/10 active:scale-[0.98]"
-                >
-                  문자로 신청
-                </a>
-                <a
-                  href={`tel:${PHONE}`}
-                  className="inline-flex min-h-tap flex-1 items-center justify-center rounded-xl border-2 border-sage px-6 text-[18px] font-bold text-sage transition-colors hover:bg-sage/10 active:scale-[0.98]"
-                >
-                  전화로 신청
-                </a>
-              </div>
-            </div>
-          </details>
         </div>
       </section>
 
