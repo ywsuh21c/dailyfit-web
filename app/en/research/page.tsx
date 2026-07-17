@@ -6,14 +6,22 @@ import { AccelerationLoop } from '@/components/research/AccelerationLoop';
 import { LearningCurve } from '@/components/research/LearningCurve';
 import { ResearchConsole } from '@/components/research/ResearchConsole';
 import { FrontierField } from '@/components/research/FrontierField';
-import { MethodPipeline } from '@/components/research/MethodPipeline';
 import { LoopContrast } from '@/components/research/LoopContrast';
 import { CadenceGlyph, GoldenGlyph, CostGlyph } from '@/components/research/QuestionGlyphs';
+import { ChapterRail } from '@/components/research/story/ChapterRail';
+import { Interlude } from '@/components/research/story/Interlude';
+import { EvolutionScene } from '@/components/research/story/EvolutionScene';
+import { MethodScene } from '@/components/research/story/MethodScene';
 
 // Research (/en/research) — English mirror of the Korean /research page.
 // Declares the core research theme (self-accelerating agentic AI) and the
 // 10-to-20-year vision. Audience: AI researchers we want to recruit, VC,
 // press (third person). Keep copy in sync with app/(marketing)/research.
+//
+// 2026-07-10 scrollytelling rebuild — Anthropic-institute essay grammar:
+// full-viewport hero → word-illuminated interlude (dark) → six chapters
+// (01 lab · 02 thesis [sticky scene] · 03 method [flywheel scene] ·
+// 04 production · 05 questions · 06 frontier) → dark-stage CTA bookend.
 
 export const metadata: Metadata = {
   title: 'Research · DailyFit',
@@ -21,58 +29,87 @@ export const metadata: Metadata = {
     'Self-accelerating AI is the core research theme at DailyFit: an Agent that evolves before it is told to, studied in a live service environment.',
 };
 
+const CHAPTERS = [
+  { id: 'lab', num: '01', label: 'Lab' },
+  { id: 'thesis', num: '02', label: 'Thesis' },
+  { id: 'method', num: '03', label: 'Method' },
+  { id: 'production', num: '04', label: 'Production' },
+  { id: 'questions', num: '05', label: 'Questions' },
+  { id: 'frontiers', num: '06', label: 'Frontier' },
+];
+
 export default function EnResearchPage() {
   return (
     <>
+      <ChapterRail chapters={CHAPTERS} />
+
       {/* ───────────────────────── HERO ───────────────────────── */}
       <section className="hero-field relative overflow-hidden">
         <div className="hero-grid pointer-events-none absolute inset-0" aria-hidden="true" />
         <div className="aurora aurora-1" aria-hidden="true" />
         <div className="aurora aurora-2" aria-hidden="true" />
 
-        <div className="relative mx-auto grid max-w-6xl items-center gap-14 px-5 pb-24 pt-24 lg:grid-cols-[1fr_0.9fr] lg:gap-16 lg:pb-32 lg:pt-32">
-          <div>
-            <p className="eyebrow-mono text-sage">Research at DailyFit</p>
-            <h1 className="mt-6 text-[42px] font-extrabold leading-[1.12] tracking-[-0.035em] text-ink sm:text-[54px]">
-              <span className="text-sage">Self-accelerating Agentic AI.</span>
-              <br />
-              The next problem we solve.
-            </h1>
-            <p className="mt-8 max-w-[54ch] text-[17px] leading-relaxed text-ink-soft sm:text-[19px]">
-              Science advances by hypothesis and experiment. AI is
-              starting to run that cycle on its own.
-              <br />
-              <br />
-              The pace of progress is no longer set by machines. Humans are
-              the bottleneck now.
-              <br />
-              <br />
-              DailyFit studies what comes next.
-            </p>
-            <div className="mt-10 flex flex-wrap items-center gap-4">
-              <Link
-                href="/en/contact"
-                className="inline-flex min-h-[56px] items-center rounded-xl bg-sage px-8 text-[17px] font-bold text-white transition-colors hover:bg-sage-dk active:scale-[0.98]"
-              >
-                Talk to us
-              </Link>
-              <a
-                href="#frontiers"
-                className="inline-flex min-h-[56px] items-center rounded-xl border border-ink/15 bg-white/50 px-8 text-[17px] font-bold text-ink transition-colors hover:border-sage hover:text-sage active:scale-[0.98]"
-              >
-                Research frontier ↓
-              </a>
+        <div className="relative mx-auto flex min-h-[calc(100svh-72px)] max-w-6xl flex-col justify-center px-5 pb-24 pt-16 lg:pb-28">
+          <div className="grid items-center gap-14 lg:grid-cols-[1fr_0.9fr] lg:gap-16">
+            <div>
+              <p className="rs-hero-item eyebrow-mono text-sage">Research at DailyFit</p>
+              <h1 className="rs-hero-item rs-hero-d1 mt-6 text-[42px] font-extrabold leading-[1.12] tracking-[-0.035em] text-ink sm:text-[54px]">
+                <span className="text-sage">Self-accelerating Agentic AI.</span>
+                <br />
+                The next problem we solve.
+              </h1>
+              <p className="rs-hero-item rs-hero-d2 mt-8 max-w-[54ch] text-[17px] leading-relaxed text-ink-soft sm:text-[19px]">
+                Science advances by hypothesis and experiment.
+                <br />
+                AI is starting to run that cycle on its own.
+              </p>
+              <div className="rs-hero-item rs-hero-d3 mt-10 flex flex-wrap items-center gap-4">
+                <Link
+                  href="/en/contact"
+                  className="inline-flex min-h-[56px] items-center rounded-xl bg-sage px-8 text-[17px] font-bold text-white transition-colors hover:bg-sage-dk active:scale-[0.98]"
+                >
+                  Talk to us
+                </Link>
+                <a
+                  href="#frontiers"
+                  className="inline-flex min-h-[56px] items-center rounded-xl border border-ink/15 bg-white/50 px-8 text-[17px] font-bold text-ink transition-colors hover:border-sage hover:text-sage active:scale-[0.98]"
+                >
+                  Research frontier ↓
+                </a>
+              </div>
+            </div>
+            <div className="rs-hero-item rs-hero-d4">
+              <AccelerationLoop lang="en" />
             </div>
           </div>
-          <AccelerationLoop lang="en" />
+
+          {/* scroll cue */}
+          <div className="pointer-events-none absolute bottom-7 left-1/2 -translate-x-1/2" aria-hidden="true">
+            <span className="rs-cue">
+              <span className="eyebrow-mono text-[11px] text-ink-soft/60">Scroll</span>
+              <span className="rs-cue-line" />
+            </span>
+          </div>
         </div>
       </section>
 
-      {/* ─────────────── WHY WE RESEARCH ─────────────── */}
-      <section className="bg-bg py-24 sm:py-32">
+      {/* ─────────── INTERLUDE — the manifesto, word by word ─────────── */}
+      <Interlude
+        eyebrow="Why this, why now"
+        lines={[
+          [{ t: 'The' }, { t: 'pace' }, { t: 'of' }, { t: 'progress' }],
+          [{ t: 'is' }, { t: 'no' }, { t: 'longer' }, { t: 'set' }, { t: 'by' }, { t: 'machines.' }],
+          [{ t: 'Humans', em: true }, { t: 'are' }, { t: 'the' }, { t: 'bottleneck', em: true }, { t: 'now.' }],
+          [{ t: 'DailyFit' }, { t: 'studies' }, { t: 'what' }, { t: 'comes' }, { t: 'next.' }],
+        ]}
+      />
+
+      {/* ─────────────── CH 01 · LAB ─────────────── */}
+      <section id="lab" className="bg-bg py-24 sm:py-32">
         <div className="mx-auto max-w-3xl px-5 text-center">
-          <Reveal>
-            <p className="eyebrow-mono text-sage">AI-native company</p>
+          <Reveal className="relative">
+            <span className="rs-ch-num" aria-hidden="true">01</span>
+            <p className="eyebrow-mono text-sage">Chapter 01 · AI-native company</p>
             <h2 className="mt-4 text-[34px] font-extrabold leading-[1.2] tracking-[-0.03em] text-ink sm:text-[46px]">
               An Agent-as-a-Service company.
               <br />
@@ -92,42 +129,57 @@ export default function EnResearchPage() {
         </div>
       </section>
 
-      {/* ─────────────── THE THESIS ─────────────── */}
+      {/* ─────────────── CH 02 · THESIS (sticky scene) ─────────────── */}
       <section id="thesis" className="bg-surface py-24 sm:py-32">
-        <div className="mx-auto max-w-3xl px-5 text-center">
-          <Reveal>
-            <p className="eyebrow-mono text-sage">Core research theme</p>
+        <div className="mx-auto max-w-6xl px-5">
+          <Reveal className="relative mx-auto max-w-3xl text-center">
+            <span className="rs-ch-num" aria-hidden="true">02</span>
+            <p className="eyebrow-mono text-sage">Chapter 02 · Core research theme</p>
             <h2 className="mt-4 text-[34px] font-extrabold leading-[1.2] tracking-[-0.03em] text-ink sm:text-[46px]">
               An Agent that evolves
               <br />
               before it&rsquo;s told to.
             </h2>
             <p className="mx-auto mt-6 max-w-[72ch] text-body text-ink-soft">
-              The Agent repeats the same procedures every day and recognizes the
-              patterns in its obstacles.
-              <br />
-              That learning is applied to the next repetition, by the Agent
-              itself.
-              <br />
-              The goal is a single state.
-              <br />
-              Before anyone asks for an improvement, the Agent is already better.
+              Follow the loop through the three stages where it leaves human
+              hands.
             </p>
-            <div className="mt-10">
-              <LoopContrast lang="en" />
-            </div>
           </Reveal>
-          <Reveal className="mt-14" delay={120}>
-            <LearningCurve lang="en" />
-          </Reveal>
+
+          <div className="mt-10">
+            <EvolutionScene lang="en" />
+          </div>
+
+          <div className="mx-auto mt-8 max-w-3xl text-center">
+            <Reveal>
+              <p className="text-body text-ink-soft">
+                The goal is a single state.
+                <br />
+                <strong className="font-bold text-ink">
+                  Before anyone asks for an improvement, the Agent is already
+                  better.
+                </strong>
+              </p>
+              <div className="mt-10">
+                <LoopContrast lang="en" />
+              </div>
+            </Reveal>
+            <Reveal className="mt-14" delay={120}>
+              <LearningCurve lang="en" />
+              <p className="eyebrow-mono mt-4 text-center text-ink-soft/70">
+                the curve we are building &middot; capability that bends upward, unprompted
+              </p>
+            </Reveal>
+          </div>
         </div>
       </section>
 
-      {/* ─────────────── THE METHOD ─────────────── */}
-      <section className="border-y border-line bg-ivory py-24 sm:py-32">
+      {/* ─────────────── CH 03 · METHOD (flywheel scene) ─────────────── */}
+      <section id="method" className="border-y border-line bg-ivory py-24 sm:py-32">
         <div className="mx-auto max-w-6xl px-5">
-          <Reveal className="mx-auto max-w-3xl text-center">
-            <p className="eyebrow-mono text-sage">The method</p>
+          <Reveal className="relative mx-auto max-w-3xl text-center">
+            <span className="rs-ch-num" aria-hidden="true">03</span>
+            <p className="eyebrow-mono text-sage">Chapter 03 · The method</p>
             <h2 className="mt-4 text-[34px] font-extrabold leading-[1.2] tracking-[-0.03em] text-ink sm:text-[42px]">
               Acceleration is built in five stages.
             </h2>
@@ -137,17 +189,35 @@ export default function EnResearchPage() {
               Every stage is logged, measured, and gated.
             </p>
           </Reveal>
-          <Reveal className="mt-14" delay={120}>
-            <MethodPipeline lang="en" />
-          </Reveal>
+          <div className="mt-10">
+            <MethodScene lang="en" />
+          </div>
         </div>
       </section>
 
-      {/* ─────────────── PROVEN IN PRODUCTION ─────────────── */}
-      <section className="bg-bg py-24 sm:py-32">
+      {/* ─────────── INTERLUDE 2 — from method to production ─────────── */}
+      <Interlude
+        heightVh={170}
+        lines={[
+          [{ t: 'This' }, { t: 'loop' }, { t: 'is' }, { t: 'not' }, { t: 'a' }, { t: 'concept.' }],
+          [
+            { t: 'It' },
+            { t: 'runs' },
+            { t: 'every' },
+            { t: 'day,' },
+            { t: 'in' },
+            { t: 'a' },
+            { t: 'live', em: true },
+            { t: 'service.', em: true },
+          ],
+        ]}
+      />
+
+      {/* ─────────────── CH 04 · PRODUCTION ─────────────── */}
+      <section id="production" className="bg-bg py-24 sm:py-32">
         <div className="mx-auto grid max-w-6xl items-center gap-14 px-5 lg:grid-cols-[1fr_1fr]">
           <Reveal>
-            <p className="eyebrow-mono text-sage">Proven in production</p>
+            <p className="eyebrow-mono text-sage">Chapter 04 · Proven in production</p>
             <h2 className="mt-4 text-[34px] font-extrabold leading-[1.2] tracking-[-0.03em] text-ink sm:text-[42px]">
               A real service, running daily,
               <br />
@@ -170,11 +240,12 @@ export default function EnResearchPage() {
         </div>
       </section>
 
-      {/* ─────────────── OPEN QUESTIONS ─────────────── */}
-      <section className="border-y border-line bg-ivory py-24 sm:py-32">
+      {/* ─────────────── CH 05 · OPEN QUESTIONS ─────────────── */}
+      <section id="questions" className="border-y border-line bg-ivory py-24 sm:py-32">
         <div className="mx-auto max-w-6xl px-5">
-          <Reveal className="mx-auto max-w-3xl text-center">
-            <p className="eyebrow-mono text-sage">Open questions</p>
+          <Reveal className="relative mx-auto max-w-3xl text-center">
+            <span className="rs-ch-num" aria-hidden="true">05</span>
+            <p className="eyebrow-mono text-sage">Chapter 05 · Open questions</p>
             <h2 className="mt-4 text-[34px] font-extrabold leading-[1.2] tracking-[-0.03em] text-ink sm:text-[42px]">
               The questions we haven&rsquo;t solved
             </h2>
@@ -224,11 +295,12 @@ export default function EnResearchPage() {
         </div>
       </section>
 
-      {/* ─────────────── RESEARCH FRONTIERS ─────────────── */}
+      {/* ─────────────── CH 06 · FRONTIER ─────────────── */}
       <section id="frontiers" className="bg-surface py-24 sm:py-32">
         <div className="mx-auto max-w-6xl px-5">
-          <Reveal className="mx-auto max-w-3xl text-center">
-            <p className="eyebrow-mono text-sage">Research frontier</p>
+          <Reveal className="relative mx-auto max-w-3xl text-center">
+            <span className="rs-ch-num" aria-hidden="true">06</span>
+            <p className="eyebrow-mono text-sage">Chapter 06 · Research frontier</p>
             <h2 className="mt-4 text-[34px] font-extrabold leading-[1.2] tracking-[-0.03em] text-ink sm:text-[46px]">
               One principle,
               <br />
@@ -293,14 +365,22 @@ export default function EnResearchPage() {
         </div>
       </section>
 
-      {/* ─────────────────────── FINAL CTA ─────────────────────── */}
-      <section className="bg-gradient-to-b from-sage to-sage-dk py-28 text-center text-white sm:py-36">
-        <div className="mx-auto max-w-6xl px-5">
+      {/* ─────────────────────── FINAL CTA — dark stage bookend ─────────────────────── */}
+      <section className="rs-stage overflow-hidden py-28 text-center sm:py-40">
+        <div className="rs-stage-grid" aria-hidden="true" />
+        <div className="rs-stage-glow rs-stage-glow-a" aria-hidden="true" />
+        <div className="rs-stage-glow rs-stage-glow-b" aria-hidden="true" />
+        <div className="rs-stage-grain" aria-hidden="true" />
+        <div className="relative mx-auto max-w-6xl px-5">
           <Reveal>
-            <p className="eyebrow-mono text-white/70">Research at DailyFit</p>
-            <h2 className="mx-auto mt-5 max-w-[24ch] text-[36px] font-extrabold leading-[1.18] tracking-[-0.03em] sm:text-[46px]">
+            <p className="eyebrow-mono text-sage-lt/80">Research at DailyFit</p>
+            <h2 className="mx-auto mt-5 max-w-[24ch] text-[36px] font-extrabold leading-[1.18] tracking-[-0.03em] text-ivory sm:text-[46px]">
               The next decade of AI, built together.
             </h2>
+            <p className="mx-auto mt-6 max-w-[50ch] text-[17px] leading-relaxed text-ivory/70">
+              We study self-learning Agents in a living service, not on a
+              benchmark.
+            </p>
             <div className="mt-10 flex flex-wrap justify-center gap-4">
               <Link
                 href="/en/contact"

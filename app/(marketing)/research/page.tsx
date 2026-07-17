@@ -6,14 +6,22 @@ import { AccelerationLoop } from '@/components/research/AccelerationLoop';
 import { LearningCurve } from '@/components/research/LearningCurve';
 import { ResearchConsole } from '@/components/research/ResearchConsole';
 import { FrontierField } from '@/components/research/FrontierField';
-import { MethodPipeline } from '@/components/research/MethodPipeline';
 import { LoopContrast } from '@/components/research/LoopContrast';
 import { CadenceGlyph, GoldenGlyph, CostGlyph } from '@/components/research/QuestionGlyphs';
+import { ChapterRail } from '@/components/research/story/ChapterRail';
+import { Interlude } from '@/components/research/story/Interlude';
+import { EvolutionScene } from '@/components/research/story/EvolutionScene';
+import { MethodScene } from '@/components/research/story/MethodScene';
 
 // Research (/research) — 핵심 리서치 주제 self-accelerating agentic AI 선언 +
 // 10~20년 비전. 청자: 채용 대상 AI 리서처 · VC · 언론(3인칭). 기능 나열이
 // 아니라 장기 의도의 선언(탤런트 마그넷). 소스: Michael 2026-07-02 노트
 // (A16Z "Building Self-Accelerating AI" 청취 후 창업 함의).
+//
+// 2026-07-10 스크롤텔링 개편: Anthropic institute 에세이 문법 —
+// 풀뷰포트 히어로 → 워드 일루미네이션 인터루드(다크) → 챕터 6개
+// (01 선언 · 02 논지[스티키 씬] · 03 방법[플라이휠 씬] · 04 실전 ·
+// 05 질문 · 06 확장) → 다크 스테이지 CTA 북엔드. 챕터 레일 + 진행 바.
 // 영어 미러: app/en/research/page.tsx — 카피 수정 시 양쪽 동기화.
 
 export const metadata: Metadata = {
@@ -22,60 +30,87 @@ export const metadata: Metadata = {
     'DailyFit의 핵심 리서치 주제, self-accelerating AI. 지시받기 전에 스스로 진화하는 Agent를 실제 서비스 환경에서 연구합니다.',
 };
 
+const CHAPTERS = [
+  { id: 'lab', num: '01', label: '선언' },
+  { id: 'thesis', num: '02', label: '논지' },
+  { id: 'method', num: '03', label: '방법' },
+  { id: 'production', num: '04', label: '실전' },
+  { id: 'questions', num: '05', label: '질문' },
+  { id: 'frontiers', num: '06', label: '확장' },
+];
+
 export default function ResearchPage() {
   return (
     <>
+      <ChapterRail chapters={CHAPTERS} />
+
       {/* ───────────────────────── HERO ───────────────────────── */}
       <section className="hero-field relative overflow-hidden">
         <div className="hero-grid pointer-events-none absolute inset-0" aria-hidden="true" />
         <div className="aurora aurora-1" aria-hidden="true" />
         <div className="aurora aurora-2" aria-hidden="true" />
 
-        <div className="relative mx-auto grid max-w-6xl items-center gap-14 px-5 pb-24 pt-24 lg:grid-cols-[1fr_0.9fr] lg:gap-16 lg:pb-32 lg:pt-32">
-          <div>
-            <p className="eyebrow-mono text-sage">Research at DailyFit</p>
-            <h1 className="mt-6 text-[42px] font-extrabold leading-[1.12] tracking-[-0.035em] text-ink sm:text-[54px]">
-              <span className="text-sage">Self-accelerating Agentic AI.</span>
-              <br />
-              우리가 풀 다음 문제.
-            </h1>
-            <p className="mt-8 max-w-[54ch] text-[17px] leading-relaxed text-ink-soft sm:text-[19px]">
-              과학은 가설과 실험의 반복으로 전진합니다.
-              <br />
-              이제 AI가 그 사이클을 스스로 돌리기 시작했습니다.
-              <br />
-              <br />
-              진보의 속도를 정하는 것은 더 이상 기계가 아닙니다.
-              <br />
-              이제는 인간이 Bottleneck입니다.
-              <br />
-              <br />
-              DailyFit은 그 다음을 연구합니다.
-            </p>
-            <div className="mt-10 flex flex-wrap items-center gap-4">
-              <Link
-                href="/contact"
-                className="inline-flex min-h-[56px] items-center rounded-xl bg-sage px-8 text-[17px] font-bold text-white transition-colors hover:bg-sage-dk active:scale-[0.98]"
-              >
-                Talk to us
-              </Link>
-              <a
-                href="#frontiers"
-                className="inline-flex min-h-[56px] items-center rounded-xl border border-ink/15 bg-white/50 px-8 text-[17px] font-bold text-ink transition-colors hover:border-sage hover:text-sage active:scale-[0.98]"
-              >
-                Research Frontier ↓
-              </a>
+        <div className="relative mx-auto flex min-h-[calc(100svh-72px)] max-w-6xl flex-col justify-center px-5 pb-24 pt-16 lg:pb-28">
+          <div className="grid items-center gap-14 lg:grid-cols-[1fr_0.9fr] lg:gap-16">
+            <div>
+              <p className="rs-hero-item eyebrow-mono text-sage">Research at DailyFit</p>
+              <h1 className="rs-hero-item rs-hero-d1 mt-6 text-[42px] font-extrabold leading-[1.12] tracking-[-0.035em] text-ink sm:text-[54px]">
+                <span className="text-sage">Self-accelerating Agentic AI.</span>
+                <br />
+                우리가 풀 다음 문제.
+              </h1>
+              <p className="rs-hero-item rs-hero-d2 mt-8 max-w-[54ch] text-[17px] leading-relaxed text-ink-soft sm:text-[19px]">
+                과학은 가설과 실험의 반복으로 전진합니다.
+                <br />
+                이제 AI가 그 사이클을 스스로 돌리기 시작했습니다.
+              </p>
+              <div className="rs-hero-item rs-hero-d3 mt-10 flex flex-wrap items-center gap-4">
+                <Link
+                  href="/contact"
+                  className="inline-flex min-h-[56px] items-center rounded-xl bg-sage px-8 text-[17px] font-bold text-white transition-colors hover:bg-sage-dk active:scale-[0.98]"
+                >
+                  Talk to us
+                </Link>
+                <a
+                  href="#frontiers"
+                  className="inline-flex min-h-[56px] items-center rounded-xl border border-ink/15 bg-white/50 px-8 text-[17px] font-bold text-ink transition-colors hover:border-sage hover:text-sage active:scale-[0.98]"
+                >
+                  Research Frontier ↓
+                </a>
+              </div>
+            </div>
+            <div className="rs-hero-item rs-hero-d4">
+              <AccelerationLoop />
             </div>
           </div>
-          <AccelerationLoop />
+
+          {/* scroll cue */}
+          <div className="pointer-events-none absolute bottom-7 left-1/2 -translate-x-1/2" aria-hidden="true">
+            <span className="rs-cue">
+              <span className="eyebrow-mono text-[11px] text-ink-soft/60">Scroll</span>
+              <span className="rs-cue-line" />
+            </span>
+          </div>
         </div>
       </section>
 
-      {/* ─────────────── WHY WE RESEARCH (선언) ─────────────── */}
-      <section className="bg-bg py-24 sm:py-32">
+      {/* ─────────── INTERLUDE — 선언문, 단어 단위 점등 ─────────── */}
+      <Interlude
+        eyebrow="Why this, why now"
+        lines={[
+          [{ t: '진보의' }, { t: '속도를' }, { t: '정하는' }, { t: '것은' }],
+          [{ t: '더' }, { t: '이상' }, { t: '기계가' }, { t: '아닙니다.' }],
+          [{ t: '이제는' }, { t: '인간이', em: true }, { t: 'Bottleneck입니다.', em: true }],
+          [{ t: 'DailyFit은' }, { t: '그' }, { t: '다음을' }, { t: '연구합니다.' }],
+        ]}
+      />
+
+      {/* ─────────────── CH 01 · 선언 ─────────────── */}
+      <section id="lab" className="bg-bg py-24 sm:py-32">
         <div className="mx-auto max-w-3xl px-5 text-center">
-          <Reveal>
-            <p className="eyebrow-mono text-sage">AI-native company</p>
+          <Reveal className="relative">
+            <span className="rs-ch-num" aria-hidden="true">01</span>
+            <p className="eyebrow-mono text-sage">Chapter 01 · AI-native company</p>
             <h2 className="mt-4 text-[34px] font-extrabold leading-[1.2] tracking-[-0.03em] text-ink sm:text-[46px]">
               Agent-as-a-Service 회사이자,
               <br />
@@ -95,43 +130,55 @@ export default function ResearchPage() {
         </div>
       </section>
 
-      {/* ─────────────── THE THESIS (핵심 리서치 주제) ─────────────── */}
+      {/* ─────────────── CH 02 · 논지 (스티키 씬) ─────────────── */}
       <section id="thesis" className="bg-surface py-24 sm:py-32">
-        <div className="mx-auto max-w-3xl px-5 text-center">
-          <Reveal>
-            <p className="eyebrow-mono text-sage">Core research theme</p>
+        <div className="mx-auto max-w-6xl px-5">
+          <Reveal className="relative mx-auto max-w-3xl text-center">
+            <span className="rs-ch-num" aria-hidden="true">02</span>
+            <p className="eyebrow-mono text-sage">Chapter 02 · Core research theme</p>
             <h2 className="mt-4 text-[34px] font-extrabold leading-[1.2] tracking-[-0.03em] text-ink sm:text-[46px]">
               지시받기 전에,
               <br />
               이미 진화해 있는 Agent.
             </h2>
             <p className="mx-auto mt-6 max-w-[72ch] text-body text-ink-soft">
-              Agent는 매일 같은 절차를 반복하며 장애물의 패턴을 인식합니다.
-              <br />
-              그 학습은 다음 반복에 스스로 적용됩니다.
-              <br />
-              <br />
-              목표는 하나입니다.
-              <br />
-              <strong className="font-bold text-ink">
-                사람이 개선을 지시하기 전에, Agent가 이미 더 나아져 있는 것.
-              </strong>
+              루프가 사람의 손을 떠나는 순간을, 세 단계로 따라가 봅니다.
             </p>
-            <div className="mt-10">
-              <LoopContrast />
-            </div>
           </Reveal>
-          <Reveal className="mt-14" delay={120}>
-            <LearningCurve />
-          </Reveal>
+
+          <div className="mt-10">
+            <EvolutionScene />
+          </div>
+
+          <div className="mx-auto mt-8 max-w-3xl text-center">
+            <Reveal>
+              <p className="text-body text-ink-soft">
+                목표는 하나입니다.
+                <br />
+                <strong className="font-bold text-ink">
+                  사람이 개선을 지시하기 전에, Agent가 이미 더 나아져 있는 것.
+                </strong>
+              </p>
+              <div className="mt-10">
+                <LoopContrast />
+              </div>
+            </Reveal>
+            <Reveal className="mt-14" delay={120}>
+              <LearningCurve />
+              <p className="eyebrow-mono mt-4 text-center text-ink-soft/70">
+                우리가 만들려는 곡선 · 지시 없이 꺾여 올라가는 역량
+              </p>
+            </Reveal>
+          </div>
         </div>
       </section>
 
-      {/* ─────────────── THE METHOD (파이프라인) ─────────────── */}
-      <section className="border-y border-line bg-ivory py-24 sm:py-32">
+      {/* ─────────────── CH 03 · 방법 (플라이휠 씬) ─────────────── */}
+      <section id="method" className="border-y border-line bg-ivory py-24 sm:py-32">
         <div className="mx-auto max-w-6xl px-5">
-          <Reveal className="mx-auto max-w-3xl text-center">
-            <p className="eyebrow-mono text-sage">The method</p>
+          <Reveal className="relative mx-auto max-w-3xl text-center">
+            <span className="rs-ch-num" aria-hidden="true">03</span>
+            <p className="eyebrow-mono text-sage">Chapter 03 · The method</p>
             <h2 className="mt-4 text-[34px] font-extrabold leading-[1.2] tracking-[-0.03em] text-ink sm:text-[42px]">
               가속은 다섯 단계로 만들어집니다.
             </h2>
@@ -141,17 +188,26 @@ export default function ResearchPage() {
               모든 단계가 기록되고, 측정되고, 게이트를 통과해야 합니다.
             </p>
           </Reveal>
-          <Reveal className="mt-14" delay={120}>
-            <MethodPipeline />
-          </Reveal>
+          <div className="mt-10">
+            <MethodScene />
+          </div>
         </div>
       </section>
 
-      {/* ─────────────── PROVEN IN PRODUCTION (실전이 곧 검증) ─────────────── */}
-      <section className="bg-bg py-24 sm:py-32">
+      {/* ─────────── INTERLUDE 2 — 방법론에서 실전으로 ─────────── */}
+      <Interlude
+        heightVh={170}
+        lines={[
+          [{ t: '이' }, { t: '루프는' }, { t: '개념도가' }, { t: '아닙니다.' }],
+          [{ t: '매일,' }, { t: '실제', em: true }, { t: '서비스에서', em: true }, { t: '돌아갑니다.' }],
+        ]}
+      />
+
+      {/* ─────────────── CH 04 · 실전 검증 ─────────────── */}
+      <section id="production" className="bg-bg py-24 sm:py-32">
         <div className="mx-auto grid max-w-6xl items-center gap-14 px-5 lg:grid-cols-[1fr_1fr]">
           <Reveal>
-            <p className="eyebrow-mono text-sage">Proven in production</p>
+            <p className="eyebrow-mono text-sage">Chapter 04 · Proven in production</p>
             <h2 className="mt-4 text-[34px] font-extrabold leading-[1.2] tracking-[-0.03em] text-ink sm:text-[42px]">
               매일 돌아가는 실전이
               <br />
@@ -173,11 +229,12 @@ export default function ResearchPage() {
         </div>
       </section>
 
-      {/* ─────────────── OPEN QUESTIONS ─────────────── */}
-      <section className="border-y border-line bg-ivory py-24 sm:py-32">
+      {/* ─────────────── CH 05 · 질문 ─────────────── */}
+      <section id="questions" className="border-y border-line bg-ivory py-24 sm:py-32">
         <div className="mx-auto max-w-6xl px-5">
-          <Reveal className="mx-auto max-w-3xl text-center">
-            <p className="eyebrow-mono text-sage">Open questions</p>
+          <Reveal className="relative mx-auto max-w-3xl text-center">
+            <span className="rs-ch-num" aria-hidden="true">05</span>
+            <p className="eyebrow-mono text-sage">Chapter 05 · Open questions</p>
             <h2 className="mt-4 text-[34px] font-extrabold leading-[1.2] tracking-[-0.03em] text-ink sm:text-[42px]">
               우리가 아직 풀지 못한 질문들
             </h2>
@@ -228,11 +285,12 @@ export default function ResearchPage() {
         </div>
       </section>
 
-      {/* ─────────────── RESEARCH FRONTIERS ─────────────── */}
+      {/* ─────────────── CH 06 · 확장 ─────────────── */}
       <section id="frontiers" className="bg-surface py-24 sm:py-32">
         <div className="mx-auto max-w-6xl px-5">
-          <Reveal className="mx-auto max-w-3xl text-center">
-            <p className="eyebrow-mono text-sage">Research frontier</p>
+          <Reveal className="relative mx-auto max-w-3xl text-center">
+            <span className="rs-ch-num" aria-hidden="true">06</span>
+            <p className="eyebrow-mono text-sage">Chapter 06 · Research frontier</p>
             <h2 className="mt-4 text-[34px] font-extrabold leading-[1.2] tracking-[-0.03em] text-ink sm:text-[46px]">
               하나의 원리가,
               <br />
@@ -294,14 +352,21 @@ export default function ResearchPage() {
         </div>
       </section>
 
-      {/* ─────────────────────── FINAL CTA ─────────────────────── */}
-      <section className="bg-gradient-to-b from-sage to-sage-dk py-28 text-center text-white sm:py-36">
-        <div className="mx-auto max-w-6xl px-5">
+      {/* ─────────────────────── FINAL CTA — 다크 스테이지 북엔드 ─────────────────────── */}
+      <section className="rs-stage overflow-hidden py-28 text-center sm:py-40">
+        <div className="rs-stage-grid" aria-hidden="true" />
+        <div className="rs-stage-glow rs-stage-glow-a" aria-hidden="true" />
+        <div className="rs-stage-glow rs-stage-glow-b" aria-hidden="true" />
+        <div className="rs-stage-grain" aria-hidden="true" />
+        <div className="relative mx-auto max-w-6xl px-5">
           <Reveal>
-            <p className="eyebrow-mono text-white/70">Research at DailyFit</p>
-            <h2 className="mx-auto mt-5 max-w-[20ch] text-[36px] font-extrabold leading-[1.18] tracking-[-0.03em] sm:text-[46px]">
+            <p className="eyebrow-mono text-sage-lt/80">Research at DailyFit</p>
+            <h2 className="mx-auto mt-5 max-w-[20ch] text-[36px] font-extrabold leading-[1.18] tracking-[-0.03em] text-ivory sm:text-[46px]">
               다음 10년의 AI를 함께 만들 사람.
             </h2>
+            <p className="mx-auto mt-6 max-w-[50ch] text-[17px] leading-relaxed text-ivory/70">
+              스스로 배우는 Agent를, 벤치마크가 아니라 실제 서비스에서 연구합니다.
+            </p>
             <div className="mt-10 flex flex-wrap justify-center gap-4">
               <Link
                 href="/contact"
