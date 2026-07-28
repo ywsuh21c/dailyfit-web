@@ -8,11 +8,11 @@ import { useEffect, useState } from 'react';
 // (2026-07-04 현진 요청 — 광고 심사 요건.)
 const IOS_URL = 'https://apps.apple.com/kr/app/dailyfit/id6773802603';
 // 안드로이드: 앱 출시 전에는 사전신청 구글폼, 출시 후에는 Play 스토어(+referrer 귀속).
-// 🚀 출시일(2026-07-24 예정)에 ANDROID_APP_LIVE 를 true 로 뒤집으면 버튼이 Play 로 전환.
-//   플립 시 함께 점검: 버튼 라벨(사전신청→받기)과 아래 footer 개인정보 안내(사전신청 수집 문구).
+// 🚀 ANDROID_APP_LIVE 하나가 **버튼 목적지·버튼 라벨·footer 개인정보 안내**를 모두 제어한다
+//   (플립 시 따로 손댈 곳 없음 — 단일 진실). 구글 프로덕션 승인 나는 날 이 PR 을 머지하면 전환.
 const AOS_FORM_URL = 'https://forms.gle/gUKFvTzUz2Sg5WDg7'; // 사전신청(출시 전)
 const AOS_PLAY_URL = 'https://play.google.com/store/apps/details?id=kr.dailyfit.app'; // 출시 후
-const ANDROID_APP_LIVE = false;
+const ANDROID_APP_LIVE = true;
 
 const INK = '#1E2D40';
 const SAGE = '#4A7C59';
@@ -142,9 +142,22 @@ export default function GetPage() {
           개인정보 수집·이용 안내
         </p>
         <p style={{ margin: '0 0 12px' }}>
-          Android 사전신청 시 수집 항목은 이름·연락처이며, 출시 안내 목적으로만
-          이용하고 목적 달성 시 지체 없이 파기합니다. 본인 동의 없이 제3자에게
-          제공하지 않습니다. 자세한 내용은{' '}
+          {/* 출시 전 = 사전신청 폼으로 이름·연락처를 수집하므로 그 고지가 필요.
+              출시 후 = 이 페이지는 스토어로 보내기만 하고 아무것도 수집하지 않는다 →
+              같은 문구를 남겨두면 사실과 다른 고지가 된다(광고 심사·PIPA 양쪽에서 리스크).
+              ANDROID_APP_LIVE 하나로 함께 뒤집히게 묶어 둔다. */}
+          {ANDROID_APP_LIVE ? (
+            <>
+              이 페이지는 앱 설치 안내만 제공하며 개인정보를 수집하지 않습니다.
+              앱에서 수집·이용하는 항목은{' '}
+            </>
+          ) : (
+            <>
+              Android 사전신청 시 수집 항목은 이름·연락처이며, 출시 안내 목적으로만
+              이용하고 목적 달성 시 지체 없이 파기합니다. 본인 동의 없이 제3자에게
+              제공하지 않습니다. 자세한 내용은{' '}
+            </>
+          )}
           <a href="/privacy" style={{ color: SAGE, fontWeight: 600 }}>개인정보처리방침</a>
           {' · '}
           <a href="/terms" style={{ color: SAGE, fontWeight: 600 }}>이용약관</a>
