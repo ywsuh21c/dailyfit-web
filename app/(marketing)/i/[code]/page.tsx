@@ -4,6 +4,7 @@ import Image from 'next/image';
 import { site, storeLinks } from '@/lib/site';
 import { StoreBadge } from '@/components/product/StoreBadge';
 import { CopyCodeButton } from '@/components/invite/CopyCodeButton';
+import { InviteAutoRedirect } from '@/components/invite/InviteAutoRedirect';
 
 // /i/[code] — 친구 초대 링크 착지 페이지 (2026-07-10).
 // 앱의 '친구 초대'가 공유하는 https://dailyfitai.app/i/{code} 의 실체.
@@ -87,6 +88,9 @@ export default async function InviteLandingPage({
             </strong>
             를 받아요.
           </p>
+          {/* §11 델타 v5 — 자동 이동(딥링크→iOS 스토어/웹앱 login?ref). JS 미작동
+              환경(크롤러·구형)은 이 배너 없이 아래 수동 경로가 그대로 동작한다. */}
+          <InviteAutoRedirect code={code} iosStoreUrl={storeLinks.ios} />
         </div>
       </header>
 
@@ -100,26 +104,20 @@ export default async function InviteLandingPage({
           </div>
         </div>
 
-        {/* 받는 방법 3단계 */}
-        <ol className="mx-auto mt-10 max-w-xl space-y-4">
-          {[
-            '아래 버튼으로 DailyFit 앱을 설치해요',
-            '가입할 때 ‘추천 코드 입력’에 위 코드를 넣어요',
-            `가입이 끝나면 두 분 모두 ${REFERRAL_REWARD.toLocaleString('ko-KR')} 포인트를 받아요`,
-          ].map((step, i) => (
-            <li key={step} className="flex items-start gap-4 text-[18px] leading-relaxed text-ink">
-              <span className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-sage/10 text-[15px] font-extrabold text-sage">
-                {i + 1}
-              </span>
-              {step}
-            </li>
-          ))}
-        </ol>
-
-        {/* 설치 CTA */}
-        <div className="mt-10 flex flex-wrap items-center justify-center gap-3">
-          <StoreBadge store="App Store" href={storeLinks.ios} />
-          <StoreBadge store="Google Play" href={storeLinks.android} />
+        {/* 수동 경로 — 자동 이동 실패 대비 3개(§11: 막다른 길 금지).
+            '웹으로 열기'는 ?ref 를 그대로 전달해 코드 유실이 없다. */}
+        <div className="mt-10 flex flex-col items-center gap-4">
+          <a
+            href={`https://my.dailyfitai.app/login?ref=${encodeURIComponent(code)}`}
+            className="inline-flex min-h-[56px] w-full max-w-md items-center justify-center rounded-2xl bg-sage px-8 text-[18px] font-extrabold text-white shadow-sm transition hover:opacity-90"
+          >
+            웹으로 바로 시작하기
+          </a>
+          <p className="text-[14px] text-ink-soft">앱으로 받고 싶으시면 아래에서 설치해 주세요. 가입할 때 위 코드를 넣으면 돼요.</p>
+          <div className="flex flex-wrap items-center justify-center gap-3">
+            <StoreBadge store="App Store" href={storeLinks.ios} />
+            <StoreBadge store="Google Play" href={storeLinks.android} />
+          </div>
         </div>
       </section>
     </article>
