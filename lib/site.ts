@@ -102,6 +102,10 @@ export const legalNav: NavItem[] = [
  * id를 반드시 검증할 것.
  */
 export const storeLinks = {
-  ios: process.env.NEXT_PUBLIC_IOS_APP_URL ?? '',
+  // iOS 정본 하드코딩(2026-08-04): env 미설정으로 사이트 전체 스토어 링크가 빈 값이던
+  // 실사고(초대 랜딩 iOS 자동 이동이 웹앱 폴백으로 샘). 스토어 URL 은 비밀이 아닌
+  // 공개 고정값이라 코드가 단일 진실이 맞다 — env 는 오버라이드 용도로만 남긴다.
+  ios: process.env.NEXT_PUBLIC_IOS_APP_URL || 'https://apps.apple.com/app/id6773802603',
+  // 안드는 Play 미게시(kr.dailyfit.app 404 실측 2026-08-04) — 게시 전까지 빈 값이 정직.
   android: process.env.NEXT_PUBLIC_ANDROID_APP_URL ?? '',
 } as const;
