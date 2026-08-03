@@ -40,22 +40,29 @@ export function InviteAutoRedirect({ code, iosStoreUrl }: { code: string; iosSto
     };
 
     const timers: ReturnType<typeof setTimeout>[] = [];
+    let frame: HTMLIFrameElement | null = null;
     timers.push(setTimeout(() => {
       setPhase('moving');
       if (isIos || isAndroid) {
-        // 앱 설치자 우선 — 딥링크 시도 후 미전환이면 폴백. 전환되면 탭이 hidden 이 된다.
-        const started = Date.now();
-        window.location.href = `${DEEPLINK}?ref=${encodeURIComponent(code)}`;
+        // 앱 설치자 우선 — 딥링크는 **숨은 iframe** 으로 시도(전통 패턴). location.href 로
+        // 쏘면 미설치 시 메인 페이지 내비게이션이 스킴 오류로 오염돼 이후 폴백 이동이
+        // 무시되는 브라우저가 있다(실측 2026-08-04). iframe 은 메인 프레임을 건드리지
+        // 않아 폴백이 확실하고, 주소창 오류 배너도 안 뜬다. 앱이 열리면 탭이 hidden.
+        frame = document.createElement('iframe');
+        frame.style.display = 'none';
+        frame.src = `${DEEPLINK}?ref=${encodeURIComponent(code)}`;
+        document.body.appendChild(frame);
         timers.push(setTimeout(() => {
-          if (document.visibilityState === 'visible' && Date.now() - started >= DEEPLINK_WAIT_MS - 100) {
-            void goFallback();
-          }
+          if (document.visibilityState === 'visible') void goFallback();
         }, DEEPLINK_WAIT_MS));
       } else {
         void goFallback();
       }
     }, NOTICE_MS));
-    return () => timers.forEach(clearTimeout);
+    return () => {
+      timers.forEach(clearTimeout);
+      if (frame?.parentNode) frame.parentNode.removeChild(frame);
+    };
   }, [code, iosStoreUrl]);
 
   return (
