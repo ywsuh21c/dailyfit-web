@@ -18,9 +18,12 @@ export const site = {
  * number from `getCatalogCount()` (lib/catalog-count.ts → backend
  * `GET /api/activities/count`); this literal is used only when that endpoint is
  * unreachable (env unset / not deployed / fetch fails) so the page never breaks.
- * Keep it roughly current (hand-verified against prod 2026-06-29).
+ * Keep it roughly current (hand-verified against prod 2026-08-04:
+ * GET /api/activities/count → {"active":3377,"as_of":"2026-08-04"}). 직전 값
+ * 5,207 은 1,830 건 부풀려진 상태였다 — 폴백은 엔드포인트가 한 번만 흔들려도
+ * 그대로 "발표된 수치"가 되고, 이제는 /llms.txt(AI 가 인용하는 파일)에도 실린다.
  */
-export const activeCatalogCount = 5207;
+export const activeCatalogCount = 3377;
 
 export type NavItem = { href: string; label: string };
 

@@ -100,6 +100,52 @@ export function faqJsonLd(items: FaqItem[]) {
   };
 }
 
+/**
+ * 활동 상세(/activity/[id]).
+ *
+ * ⚠️ 의도적으로 Event / Course 가 아니다. 두 타입 모두 `startDate`(+ Course 는
+ * `provider`)가 필수인데, 공개 API(`GET /api/activities/{id}/public`)는 일정·
+ * 장소·주최기관을 내려주지 않는다(2026-08-04 계약 실측). 없는 값을 지어내면
+ * 구조화 데이터 위반이라 리치결과가 아니라 수동 조치 대상이 된다.
+ * 그래서 지금은 화면에 실제로 있는 사실만 담은 WebPage 로 내보내고, 일정·장소·
+ * 주최를 공개 페이로드에 추가하는 건 백엔드 핸드오프로 넘겼다. 그 필드가
+ * 들어오면 이 함수만 Event 로 승격하면 된다.
+ */
+export function activityEventJsonLd(activity: {
+  id: string;
+  title: string;
+  summary: string | null;
+  neighborhood: string | null;
+  is_free: boolean;
+  price: number | null;
+}) {
+  const url = absoluteUrl(`/activity/${activity.id}`);
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'WebPage',
+    name: activity.title,
+    url,
+    inLanguage: 'ko-KR',
+    isPartOf: { '@id': WEBSITE_ID },
+    publisher: { '@id': ORG_ID },
+    ...(activity.summary ? { description: activity.summary } : {}),
+    // 지역은 화면에 표시되는 그 값 그대로 — 좌표·주소를 추측하지 않는다.
+    ...(activity.neighborhood
+      ? { contentLocation: { '@type': 'Place', name: activity.neighborhood } }
+      : {}),
+    ...(activity.is_free || activity.price != null
+      ? {
+          offers: {
+            '@type': 'Offer',
+            price: activity.is_free ? '0' : String(activity.price),
+            priceCurrency: 'KRW',
+            url,
+          },
+        }
+      : {}),
+  };
+}
+
 export function breadcrumbJsonLd(trail: { name: string; path: string }[]) {
   return {
     '@context': 'https://schema.org',

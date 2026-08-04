@@ -2,6 +2,9 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { getPublicActivity } from '@/lib/activity';
 import { site, storeLinks } from '@/lib/site';
+import { absoluteUrl } from '@/lib/seo';
+import { activityEventJsonLd, breadcrumbJsonLd } from '@/lib/jsonld';
+import { JsonLd } from '@/components/seo/JsonLd';
 import { StoreBadge } from '@/components/product/StoreBadge';
 
 // /activity/[id] — 링크 공유 착지 페이지 (앱 미설치자도 브라우저로 열림).
@@ -33,8 +36,11 @@ export async function generateMetadata({
     activity.summary ?? `${activity.neighborhood ?? ''} ${activity.is_free ? '무료' : ''} 활동`.trim();
   const ogImage = ogImageFor(activity);
   return {
-    title: `${activity.title} · DailyFit`,
+    title: { absolute: `${activity.title} · DailyFit` },
     description,
+    // 공유 링크와 검색 결과가 같은 URL 을 가리키게 고정 — 카톡/앱이 붙이는
+    // 쿼리스트링(utm 등)이 별개 페이지로 색인되는 것을 막는다.
+    alternates: { canonical: `/activity/${id}` },
     openGraph: {
       type: 'website',
       title: activity.title,
@@ -71,6 +77,16 @@ export default async function ActivityLandingPage({
 
   return (
     <article>
+      {/* 화면에 실제로 보이는 사실만 마크업한다 — 숨은 값 없음. */}
+      <JsonLd data={activityEventJsonLd(activity)} />
+      <JsonLd
+        data={breadcrumbJsonLd([
+          { name: 'DailyFit', path: '/' },
+          { name: '활동', path: '/product' },
+          { name: activity.title, path: `/activity/${activity.id}` },
+        ])}
+      />
+
       {/* 활동 헤더 — 브랜드 히어로(D2 OG 자산 준비 전엔 외부 이미지 대신 톤 블록) */}
       <header className="hero-field relative overflow-hidden">
         <div className="hero-grid pointer-events-none absolute inset-0" aria-hidden="true" />

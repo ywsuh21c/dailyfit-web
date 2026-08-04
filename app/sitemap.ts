@@ -2,6 +2,7 @@ import type { MetadataRoute } from 'next';
 import { site } from '@/lib/site';
 import { getPublishedPosts } from '@/lib/writing';
 import { hasTwin, localizeHref } from '@/lib/i18n';
+import { listPublicActivityIds } from '@/lib/activity-index';
 
 /**
  * sitemap.xml.
@@ -17,7 +18,11 @@ import { hasTwin, localizeHref } from '@/lib/i18n';
  *  · /terms 및 EN legal 페이지  — 각 페이지 metadata 의 기존 noindex 정책을 따름
  *  · /get, /i/[code]            — noindex (광고 착지·개인 초대 링크)
  *  · /trends                    — /writing 로 리다이렉트 (Option-B IA)
- *  · /activity/[id]             — 별도 사이트맵으로 분리 (app/activity-sitemap.xml)
+ *
+ * /activity/[id] 는 여기 함께 담긴다 — 지금은 백엔드에 공개 목록 엔드포인트가
+ * 없어 0건이지만(lib/activity-index.ts 참조), 그 엔드포인트가 배포되는 즉시
+ * 코드 변경 없이 수천 건이 자동으로 채워진다. 사이트맵 상한은 50,000 URL 이라
+ * 현재 카탈로그 규모(3,377건, 2026-08-04 실측)는 한 파일에 충분히 들어간다.
  * ────────────────────────────────────────────────────────────────────────────
  */
 
@@ -54,7 +59,7 @@ function alternatesFor(koPath: string) {
   };
 }
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const entries: MetadataRoute.Sitemap = [];
 
   for (const route of KO_ROUTES) {
@@ -86,6 +91,17 @@ export default function sitemap(): MetadataRoute.Sitemap {
         alternates: alternatesFor(koPath),
       });
     }
+  }
+
+  // 활동 상세 — 카탈로그가 곧 롱테일 검색 유입의 본체다. 공개 목록
+  // 엔드포인트가 없으면 0건(빈 배열)이라 사이트맵은 여전히 유효하다.
+  for (const activity of await listPublicActivityIds()) {
+    entries.push({
+      url: urlFor(`/activity/${activity.id}`),
+      lastModified: activity.updatedAt,
+      changeFrequency: 'weekly',
+      priority: 0.5,
+    });
   }
 
   return entries;
