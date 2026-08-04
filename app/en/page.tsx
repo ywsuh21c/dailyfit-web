@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { pageSeo } from '@/lib/seo';
 import Link from 'next/link';
 import { externalLinkProps, productAppUrl, site } from '@/lib/site';
 import { getCatalogCount } from '@/lib/catalog-count';
@@ -10,11 +11,13 @@ import { Reveal } from '@/components/motion/Reveal';
 // root is ALWAYS the default; this page is reached only by the language toggle.
 // Audience: VC · press · AI-savvy visitors (3rd person), same as the KO home.
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageSeo({
+  path: '/en',
   title: 'DailyFit · AI Agents for active seniors',
+  absoluteTitle: true, // title already carries the brand
   description:
     'We build AI Agents for the active senior generation. One conversation designs the day: discovery, reminders, and auto-apply.',
-};
+});
 
 // Floating data motes inside the runtime stage — deterministic positions
 // (no Math.random: server/client markup must match). Pure decoration.

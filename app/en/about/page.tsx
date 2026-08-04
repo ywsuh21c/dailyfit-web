@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { pageSeo } from '@/lib/seo';
 import Link from 'next/link';
 import { Section, SectionHeader } from '@/components/ui/Section';
 import { ButtonLink } from '@/components/ui/Button';
@@ -12,10 +13,11 @@ import { JourneyPath } from '@/components/motion/JourneyPath';
 // Market is global, with Korea as the beachhead. Keep copy in sync with
 // app/(marketing)/about.
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageSeo({
+  path: '/en/about',
   title: 'About',
   description: `${site.name} · AI is the instrument, seniors are the identity. A team building AI Agents for active seniors.`,
-};
+});
 
 export default function EnAboutPage() {
   return (

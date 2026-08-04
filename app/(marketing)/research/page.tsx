@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { pageSeo } from '@/lib/seo';
 import Link from 'next/link';
 import { Reveal } from '@/components/motion/Reveal';
 import { Principles } from '@/components/research/Principles';
@@ -24,11 +25,12 @@ import { MethodScene } from '@/components/research/story/MethodScene';
 // 05 질문 · 06 확장) → 다크 스테이지 CTA 북엔드. 챕터 레일 + 진행 바.
 // 영어 미러: app/en/research/page.tsx — 카피 수정 시 양쪽 동기화.
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageSeo({
+  path: '/research',
   title: 'Research',
   description:
     'DailyFit의 핵심 리서치 주제, self-accelerating AI. 지시받기 전에 스스로 진화하는 Agent를 실제 서비스 환경에서 연구합니다.',
-};
+});
 
 const CHAPTERS = [
   { id: 'lab', num: '01', label: '선언' },

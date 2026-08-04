@@ -1,12 +1,14 @@
 import type { Metadata } from 'next';
+import { pageSeo } from '@/lib/seo';
 import { site } from '@/lib/site';
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageSeo({
+  path: '/en/privacy',
   title: 'Privacy Policy',
   description:
     'How DailyFit handles personal data. Courtesy English translation; the Korean version is legally binding.',
-  robots: { index: false, follow: true },
-};
+  noindex: true, // 한국어본이 법적 정본 — 번역본은 색인 제외 (기존 정책)
+});
 
 // Placeholder until the real policy lands — the privacy link 404ing is a
 // compliance smell for a product that collects personal data.

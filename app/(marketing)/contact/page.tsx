@@ -1,13 +1,15 @@
 import type { Metadata } from 'next';
+import { pageSeo } from '@/lib/seo';
 import { site } from '@/lib/site';
 import { CopyEmail } from '@/components/ui/CopyEmail';
 import { Reveal } from '@/components/motion/Reveal';
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageSeo({
+  path: '/contact',
   title: 'Contact',
   description:
     'DailyFit에 직접 연락하세요. 투자·파트너십·채용·언론 문의 모두 창업자가 직접 읽고 답합니다.',
-};
+});
 
 // /contact — every "Talk to us" CTA on the site lands here (2026-07-04).
 // Replaces bare mailto: links, which silently no-op on machines without a

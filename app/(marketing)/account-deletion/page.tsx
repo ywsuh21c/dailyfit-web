@@ -1,12 +1,13 @@
 import type { Metadata } from 'next';
+import { pageSeo } from '@/lib/seo';
 import { site } from '@/lib/site';
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageSeo({
+  path: '/account-deletion',
   title: '계정 및 데이터 삭제',
   description:
     'DailyFit 계정과 데이터를 삭제하는 방법 안내 — 앱 내 회원 탈퇴 및 이메일 요청.',
-  robots: { index: true, follow: true },
-};
+});
 
 // 계정·데이터 삭제 안내 — Google Play 계정 삭제 URL 요구사항 대응(App content →
 // Data safety). 앱 내 탈퇴(설정 → 회원탈퇴 → app/withdraw.tsx)와 삭제 항목을

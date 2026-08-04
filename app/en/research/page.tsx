@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { pageSeo } from '@/lib/seo';
 import Link from 'next/link';
 import { Reveal } from '@/components/motion/Reveal';
 import { Principles } from '@/components/research/Principles';
@@ -23,11 +24,12 @@ import { MethodScene } from '@/components/research/story/MethodScene';
 // (01 lab · 02 thesis [sticky scene] · 03 method [flywheel scene] ·
 // 04 production · 05 questions · 06 frontier) → dark-stage CTA bookend.
 
-export const metadata: Metadata = {
-  title: 'Research · DailyFit',
+export const metadata: Metadata = pageSeo({
+  path: '/en/research',
+  title: 'Research',
   description:
     'Self-accelerating AI is the core research theme at DailyFit: an Agent that evolves before it is told to, studied in a live service environment.',
-};
+});
 
 const CHAPTERS = [
   { id: 'lab', num: '01', label: 'Lab' },

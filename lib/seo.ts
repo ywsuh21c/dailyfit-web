@@ -73,6 +73,12 @@ export type PageSeo = {
   path: string;
   title: string;
   description: string;
+  /**
+   * Use `title` verbatim instead of the root `%s · DailyFit` template. For
+   * titles that already carry the brand — otherwise the tab reads
+   * "Technology · DailyFit · DailyFit" (real bug, live 2026-08-04).
+   */
+  absoluteTitle?: boolean;
   /** Keep out of the index (still followed) — legal/utility pages. */
   noindex?: boolean;
   /** Override the OG type (default 'website'). */
@@ -88,12 +94,13 @@ export function pageSeo({
   path,
   title,
   description,
+  absoluteTitle,
   noindex,
   ogType = 'website',
 }: PageSeo): Metadata {
   const locale = localeOf(path);
   return {
-    title,
+    title: absoluteTitle ? { absolute: title } : title,
     description,
     alternates: {
       canonical: path,

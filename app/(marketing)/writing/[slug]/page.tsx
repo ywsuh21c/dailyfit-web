@@ -3,6 +3,9 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import Markdown from 'markdown-to-jsx';
 import { getPostBySlug, getPublishedPosts } from '@/lib/writing';
+import { pageSeo } from '@/lib/seo';
+import { blogPostingJsonLd, breadcrumbJsonLd } from '@/lib/jsonld';
+import { JsonLd } from '@/components/seo/JsonLd';
 
 // /writing/[slug] — published essays only. Drafts + unknown slugs → 404
 // (dynamicParams=false serves ONLY pre-generated published slugs).
@@ -20,11 +23,12 @@ export async function generateMetadata({
   const { slug } = await params;
   const post = getPostBySlug(slug);
   if (!post) return { title: 'Writing' };
-  return {
+  return pageSeo({
+    path: `/writing/${post.slug}`,
     title: post.title,
     description: post.summary,
-    openGraph: { type: 'article', title: post.title, description: post.summary },
-  };
+    ogType: 'article',
+  });
 }
 
 function formatDate(iso: string | null): string {
@@ -42,8 +46,27 @@ export default async function WritingPostPage({
   const post = getPostBySlug(slug);
   if (!post) notFound();
 
+  const path = `/writing/${post.slug}`;
+
   return (
     <article>
+      <JsonLd
+        data={blogPostingJsonLd({
+          title: post.title,
+          summary: post.summary,
+          author: post.author,
+          date: post.date,
+          path,
+        })}
+      />
+      <JsonLd
+        data={breadcrumbJsonLd([
+          { name: 'DailyFit', path: '/' },
+          { name: 'Writing', path: '/writing' },
+          { name: post.title, path },
+        ])}
+      />
+
       {/* header */}
       <header className="hero-field relative overflow-hidden">
         <div className="hero-grid pointer-events-none absolute inset-0" aria-hidden="true" />

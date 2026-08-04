@@ -1,13 +1,15 @@
 import type { Metadata } from 'next';
+import { pageSeo } from '@/lib/seo';
 import Link from 'next/link';
 import { getAllPosts } from '@/lib/writing';
 import { Reveal } from '@/components/motion/Reveal';
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageSeo({
+  path: '/writing',
   title: 'Writing',
   description:
     '우리는 만들면서 씁니다. DailyFit을 만드는 동안 배운 것, 틀린 것, 그리고 그 사고 과정.',
-};
+});
 
 // /writing — Option-B 의무 페이지 (thought leadership = 핵심 acquisition lever).
 // 콘텐츠 출처: content/writing/*.md → lib/writing.ts (swap seam). 저자=영우·현진

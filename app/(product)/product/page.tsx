@@ -1,16 +1,20 @@
 import type { Metadata } from 'next';
+import { pageSeo } from '@/lib/seo';
 import { Reveal } from '@/components/motion/Reveal';
 import { StoreBadge } from '@/components/product/StoreBadge';
 import { HabitGamification } from '@/components/gami/HabitGamification';
 import { ButtonLink } from '@/components/ui/Button';
 import { storeLinks, site } from '@/lib/site';
 import { getHelp, type FaqItem } from '@/lib/help';
+import { faqJsonLd, mobileAppJsonLd } from '@/lib/jsonld';
+import { JsonLd } from '@/components/seo/JsonLd';
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageSeo({
+  path: '/product',
   title: '내가 설계하는 나의 하루',
   description:
     '매일 아침, 나에게 꼭 맞는 하루를 제안받으세요. AI가 돕고, 결정은 언제나 내가 합니다.',
-};
+});
 
 // /product — 시니어 고객용 페이지 (mockup product-page-customer.html 기준).
 // 단일 청자: 시니어. 2인칭 카피 허용 구역. 본문 ≥18px (시니어 a11y 플로어).
@@ -29,6 +33,11 @@ export default async function ProductPage() {
 
   return (
     <>
+      {/* 검색·AI 답변엔진용 구조화 데이터. FAQ 는 이미 화면에 렌더되는 내용과
+          동일한 원본(GET /api/help)에서 나온다 — 숨은 콘텐츠를 마크업하지 않는다. */}
+      <JsonLd data={mobileAppJsonLd()} />
+      {faq.length > 0 && <JsonLd data={faqJsonLd(faq)} />}
+
       {/* 1. hero */}
       <section className="hero-field relative overflow-hidden">
         <div className="hero-grid pointer-events-none absolute inset-0" aria-hidden="true" />

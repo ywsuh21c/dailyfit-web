@@ -1,16 +1,18 @@
 import type { Metadata } from 'next';
+import { pageSeo } from '@/lib/seo';
 import { Section, SectionHeader } from '@/components/ui/Section';
 import { ButtonLink } from '@/components/ui/Button';
 import { activeCatalogCount } from '@/lib/site';
 import { CountUp } from '@/components/motion/CountUp';
 import { OrbitRings } from '@/components/motion/OrbitRings';
 
-export const metadata: Metadata = {
-  title: 'Investors (EN)',
+export const metadata: Metadata = pageSeo({
+  path: '/en/investors',
+  title: 'Investors',
   description:
     "An AI daily-life design platform for South Korea's active seniors (55–70).",
-  robots: { index: false, follow: true },
-};
+  noindex: true,
+});
 
 // English mirror of /investors. Copy is reframed for a global context, not a
 // literal translation (IR scope §7). HARD RULE: no "we are raising" language.

@@ -1,13 +1,14 @@
 import type { Metadata } from 'next';
+import { pageSeo } from '@/lib/seo';
 import Link from 'next/link';
 import { Reveal } from '@/components/motion/Reveal';
 import { OrgOrbit } from '@/components/motion/OrgOrbit';
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageSeo({
+  path: '/how-we-work',
   title: 'How we work',
-  description:
-    'AI-Native. DailyFit이 Agent 팀으로 일하는 방식.',
-};
+  description: 'AI-Native. DailyFit이 Agent 팀으로 일하는 방식.',
+});
 
 // /how-we-work — recruiting layer. HANDOFF §2: UNPROVEN bet — 실제 오픈
 // 포지션 확인 전 과투자 금지 → intentionally lean (hero + principles +

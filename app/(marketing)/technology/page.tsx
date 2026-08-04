@@ -1,15 +1,17 @@
 import type { Metadata } from 'next';
+import { pageSeo } from '@/lib/seo';
 import { Section, SectionHeader } from '@/components/ui/Section';
 import { AgentConsole } from '@/components/home/AgentConsole';
 import { FlowLine } from '@/components/motion/FlowLine';
 import { OrbitRings } from '@/components/motion/OrbitRings';
 import { OrgTree } from '@/components/motion/OrgTree';
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageSeo({
+  path: '/technology',
   title: '기술',
   description:
     '시니어의 일상을 시니어의 목소리로 누적하는 AI Agent. DailyFit이 푸는 기술 문제와 시스템 아키텍처.',
-};
+});
 
 // Company-site Technology page — VC/press audience, 3rd-person voice.
 // Market framing is global (Korean is the beachhead, not the ceiling).
