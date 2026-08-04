@@ -4,7 +4,7 @@ import { Reveal } from '@/components/motion/Reveal';
 import { StoreBadge } from '@/components/product/StoreBadge';
 import { HabitGamification } from '@/components/gami/HabitGamification';
 import { ButtonLink } from '@/components/ui/Button';
-import { storeLinks, site } from '@/lib/site';
+import { storeLinks, site, productAppUrl, externalLinkProps } from '@/lib/site';
 import { getHelp, type FaqItem } from '@/lib/help';
 import { faqJsonLd, mobileAppJsonLd } from '@/lib/jsonld';
 import { JsonLd } from '@/components/seo/JsonLd';
@@ -303,9 +303,21 @@ export default async function ProductPage() {
               오늘부터, 내가 설계하는 하루.
             </h2>
             <p className="mt-5 text-[19px] text-white/85">
-              지금 앱을 받고 첫 하루를 시작해 보세요.
+              설치하지 않아도, 지금 바로 웹에서 써 보실 수 있어요.
             </p>
-            <div className="mt-9 flex flex-wrap justify-center gap-4">
+            {/* 웹을 1순위 출구로 둔다 — 안드로이드는 아직 스토어에 없어서
+                (storeLinks.android 빈 값 → "곧 출시" 비클릭 배지) 여기까지 온
+                안드 방문자는 이 버튼이 없으면 아무 데도 못 간다. 2026-08-04. */}
+            <div className="mt-9 flex justify-center">
+              <a
+                href={productAppUrl}
+                {...externalLinkProps}
+                className="inline-flex min-h-[62px] items-center rounded-xl bg-white px-9 text-[19px] font-extrabold text-sage-dk transition-transform hover:bg-white/95 active:scale-[0.98]"
+              >
+                웹에서 바로 시작하기
+              </a>
+            </div>
+            <div className="mt-6 flex flex-wrap justify-center gap-4">
               <StoreBadge store="Google Play" href={storeLinks.android} />
               <StoreBadge store="App Store" href={storeLinks.ios} />
             </div>
