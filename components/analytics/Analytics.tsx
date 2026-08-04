@@ -9,10 +9,17 @@ import Script from 'next/script';
  * 방문자 수를 아무도 모르는 상태였다. 새 유료 계정을 트는 대신 무료인 GA4로
  * 간다. 트레이드오프는 쿠키다 — 아래 PIPA 항목 참고.
  *
- * ── ENV 게이트 (스왑 심) ────────────────────────────────────────────────────
- * NEXT_PUBLIC_GA_MEASUREMENT_ID 가 없으면 **아무것도 렌더하지 않는다** —
- * 로컬 개발과 미설정 상태에서 추적 스크립트도, 네트워크 호출도 0. 벤더를
- * 갈아끼울 땐 이 컴포넌트 하나만 교체하면 된다(Plausible → GA4 도 그렇게 했다).
+ * ── 측정 ID 는 코드가 단일 진실 (스왑 심) ───────────────────────────────────
+ * GA4 측정 ID 는 비밀이 아니다 — gtag 스크립트 URL 에 그대로 실려 모든 방문자
+ * 브라우저에 노출된다. 그래서 storeLinks(lib/site.ts)·verificationTokens
+ * (lib/seo.ts)와 같은 규칙을 따른다: **코드가 정본, env 는 오버라이드**.
+ *
+ * 왜 이게 중요한가: env 게이트로만 두면 대시보드에 값을 넣기 전까지 측정이
+ * 0 이고, 값이 빠지면 조용히 다시 0 이 된다. 실제로 이 사이트는 Plausible 을
+ * 붙여놓고도 env 가 비어 **라이브에 스크립트가 한 줄도 없었다**(2026-08-04 실측).
+ * 같은 실패를 반복하지 않으려고 코드에 박는다.
+ *
+ * 벤더를 갈아끼울 땐 이 컴포넌트 하나만 교체하면 된다(Plausible → GA4 도 그랬다).
  *
  * ── 이 작업(검색 노출)과의 연결 ─────────────────────────────────────────────
  * GA4 는 유입 도메인을 기록하므로 보고서 > 획득 > 트래픽 획득에서
@@ -31,7 +38,8 @@ import Script from 'next/script';
  * 호출하면 되도록 기본값을 이 형태로 잡아뒀다.
  */
 export function Analytics() {
-  const gaId = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID;
+  // 발급 2026-08-04, GA4 속성 "DailyFit Web" / 스트림 dailyfitai.app (현진).
+  const gaId = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID ?? 'G-KSLHY788B2';
   if (!gaId) return null;
 
   return (
