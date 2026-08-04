@@ -43,16 +43,20 @@ export function Footer({ locale = 'ko' }: { locale?: Locale }) {
                 {col.heading}
               </p>
               <ul className="mt-4">
-                {col.items.map((item) => (
-                  <li key={item.href}>
-                    <Link
-                      href={localizeHref(item.href, locale)}
-                      className="flex min-h-tap items-center text-base transition-colors hover:text-ivory"
-                    >
-                      {item.label}
-                    </Link>
-                  </li>
-                ))}
+                {/* koOnly 항목은 EN 에서 제외 — EN 트윈이 없어 /en/… 로
+                    바뀌면 404 가 된다. */}
+                {col.items
+                  .filter((item) => !(item.koOnly && locale === 'en'))
+                  .map((item) => (
+                    <li key={item.href}>
+                      <Link
+                        href={localizeHref(item.href, locale)}
+                        className="flex min-h-tap items-center text-base transition-colors hover:text-ivory"
+                      >
+                        {item.label}
+                      </Link>
+                    </li>
+                  ))}
               </ul>
             </nav>
           ))}
