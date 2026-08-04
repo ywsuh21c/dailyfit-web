@@ -1,7 +1,10 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { getPublicActivity } from '@/lib/activity';
-import { site, storeLinks } from '@/lib/site';
+import { site, storeLinks, productAppUrl, externalLinkProps } from '@/lib/site';
+import { absoluteUrl } from '@/lib/seo';
+import { activityEventJsonLd, breadcrumbJsonLd } from '@/lib/jsonld';
+import { JsonLd } from '@/components/seo/JsonLd';
 import { StoreBadge } from '@/components/product/StoreBadge';
 
 // /activity/[id] — 링크 공유 착지 페이지 (앱 미설치자도 브라우저로 열림).
@@ -33,8 +36,11 @@ export async function generateMetadata({
     activity.summary ?? `${activity.neighborhood ?? ''} ${activity.is_free ? '무료' : ''} 활동`.trim();
   const ogImage = ogImageFor(activity);
   return {
-    title: `${activity.title} · DailyFit`,
+    title: { absolute: `${activity.title} · DailyFit` },
     description,
+    // 공유 링크와 검색 결과가 같은 URL 을 가리키게 고정 — 카톡/앱이 붙이는
+    // 쿼리스트링(utm 등)이 별개 페이지로 색인되는 것을 막는다.
+    alternates: { canonical: `/activity/${id}` },
     openGraph: {
       type: 'website',
       title: activity.title,
@@ -71,6 +77,16 @@ export default async function ActivityLandingPage({
 
   return (
     <article>
+      {/* 화면에 실제로 보이는 사실만 마크업한다 — 숨은 값 없음. */}
+      <JsonLd data={activityEventJsonLd(activity)} />
+      <JsonLd
+        data={breadcrumbJsonLd([
+          { name: 'DailyFit', path: '/' },
+          { name: '활동', path: '/product' },
+          { name: activity.title, path: `/activity/${activity.id}` },
+        ])}
+      />
+
       {/* 활동 헤더 — 브랜드 히어로(D2 OG 자산 준비 전엔 외부 이미지 대신 톤 블록) */}
       <header className="hero-field relative overflow-hidden">
         <div className="hero-grid pointer-events-none absolute inset-0" aria-hidden="true" />
@@ -108,14 +124,28 @@ export default async function ActivityLandingPage({
       {/* 앱으로 유도 CTA (navy 섹션 — StoreBadge 재사용) */}
       <section className="bg-navy py-14 text-ivory sm:py-20">
         <div className="mx-auto max-w-3xl px-5 text-center">
-          <h2 className="text-[24px] font-bold sm:text-[30px]">앱에서 이 활동을 신청하세요</h2>
+          <h2 className="text-[24px] font-bold sm:text-[30px]">이 활동, 신청까지 대신 해 드려요</h2>
           <p className="mt-4 text-[18px] leading-[1.7] text-ivory/80">
-            말만 하면 DailyFit이 딱 맞는 활동을 찾아 신청까지 도와드려요.
+            설치하지 않아도 웹에서 바로 쓰실 수 있어요. 말만 하시면 딱 맞는 활동을 찾아
+            신청까지 도와드립니다.
           </p>
-          <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
+          {/* 웹이 1순위 출구다. 이 페이지는 검색·공유로 들어오는 착지점인데,
+              안드로이드는 아직 스토어에 없고(“곧 출시” 비클릭 배지) 앱 딥링크는
+              미설치자에게 아무 일도 일어나지 않는다 — 웹 링크가 없으면 여기까지
+              찾아온 방문자가 막힌다. 2026-08-04. */}
+          <div className="mt-8 flex justify-center">
+            <a
+              href={productAppUrl}
+              {...externalLinkProps}
+              className="inline-flex min-h-tap items-center rounded-xl bg-sage px-9 py-4 text-[18px] font-extrabold text-ivory transition-colors hover:bg-sage-dk active:scale-[0.98]"
+            >
+              웹에서 바로 시작하기
+            </a>
+          </div>
+          <div className="mt-6 flex flex-col items-center justify-center gap-3 sm:flex-row">
             <a
               href={deepLink}
-              className="inline-flex min-h-tap items-center rounded-xl bg-sage px-7 text-[17px] font-bold text-ivory transition-colors hover:bg-sage-dk active:scale-[0.98]"
+              className="inline-flex min-h-tap items-center rounded-xl border border-ivory/35 px-7 text-[17px] font-bold text-ivory transition-colors hover:bg-white/10 active:scale-[0.98]"
             >
               앱에서 보기
             </a>

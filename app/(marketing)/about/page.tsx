@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { pageSeo } from '@/lib/seo';
 import Link from 'next/link';
 import { Section, SectionHeader } from '@/components/ui/Section';
 import { ButtonLink } from '@/components/ui/Button';
@@ -6,10 +7,11 @@ import { site } from '@/lib/site';
 import { Reveal } from '@/components/motion/Reveal';
 import { JourneyPath } from '@/components/motion/JourneyPath';
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageSeo({
+  path: '/about',
   title: '소개',
   description: `${site.name} · ${site.tagline}. 액티브 시니어를 위한 AI Agent를 만드는 팀.`,
-};
+});
 
 // /about — Option-B tone: "AI agent founder" 내러티브 (시니어 케어 founder
 // 톤에서 swap, IA spec). 시니어 배제 아님 — 3인칭 존중 유지.

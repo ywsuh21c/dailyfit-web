@@ -1,12 +1,14 @@
 import type { Metadata } from 'next';
+import { pageSeo } from '@/lib/seo';
 import { site } from '@/lib/site';
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageSeo({
+  path: '/en/terms',
   title: 'Terms of Service',
   description:
     'DailyFit terms of service. Courtesy English translation; the Korean version is legally binding.',
-  robots: { index: false, follow: true },
-};
+  noindex: true, // 한국어본이 법적 정본 (기존 정책)
+});
 
 // Placeholder until the real terms land — a footer legal link must never 404.
 // TODO(Legal Counsel): 정식 이용약관 입고 시 본문 교체 + index 허용 검토.

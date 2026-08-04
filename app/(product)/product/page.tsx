@@ -1,16 +1,20 @@
 import type { Metadata } from 'next';
+import { pageSeo } from '@/lib/seo';
 import { Reveal } from '@/components/motion/Reveal';
 import { StoreBadge } from '@/components/product/StoreBadge';
 import { HabitGamification } from '@/components/gami/HabitGamification';
 import { ButtonLink } from '@/components/ui/Button';
-import { storeLinks, site } from '@/lib/site';
+import { storeLinks, site, productAppUrl, externalLinkProps } from '@/lib/site';
 import { getHelp, type FaqItem } from '@/lib/help';
+import { faqJsonLd, mobileAppJsonLd } from '@/lib/jsonld';
+import { JsonLd } from '@/components/seo/JsonLd';
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageSeo({
+  path: '/product',
   title: '내가 설계하는 나의 하루',
   description:
     '매일 아침, 나에게 꼭 맞는 하루를 제안받으세요. AI가 돕고, 결정은 언제나 내가 합니다.',
-};
+});
 
 // /product — 시니어 고객용 페이지 (mockup product-page-customer.html 기준).
 // 단일 청자: 시니어. 2인칭 카피 허용 구역. 본문 ≥18px (시니어 a11y 플로어).
@@ -29,6 +33,11 @@ export default async function ProductPage() {
 
   return (
     <>
+      {/* 검색·AI 답변엔진용 구조화 데이터. FAQ 는 이미 화면에 렌더되는 내용과
+          동일한 원본(GET /api/help)에서 나온다 — 숨은 콘텐츠를 마크업하지 않는다. */}
+      <JsonLd data={mobileAppJsonLd()} />
+      {faq.length > 0 && <JsonLd data={faqJsonLd(faq)} />}
+
       {/* 1. hero */}
       <section className="hero-field relative overflow-hidden">
         <div className="hero-grid pointer-events-none absolute inset-0" aria-hidden="true" />
@@ -294,9 +303,21 @@ export default async function ProductPage() {
               오늘부터, 내가 설계하는 하루.
             </h2>
             <p className="mt-5 text-[19px] text-white/85">
-              지금 앱을 받고 첫 하루를 시작해 보세요.
+              설치하지 않아도, 지금 바로 웹에서 써 보실 수 있어요.
             </p>
-            <div className="mt-9 flex flex-wrap justify-center gap-4">
+            {/* 웹을 1순위 출구로 둔다 — 안드로이드는 아직 스토어에 없어서
+                (storeLinks.android 빈 값 → "곧 출시" 비클릭 배지) 여기까지 온
+                안드 방문자는 이 버튼이 없으면 아무 데도 못 간다. 2026-08-04. */}
+            <div className="mt-9 flex justify-center">
+              <a
+                href={productAppUrl}
+                {...externalLinkProps}
+                className="inline-flex min-h-[62px] items-center rounded-xl bg-white px-9 text-[19px] font-extrabold text-sage-dk transition-transform hover:bg-white/95 active:scale-[0.98]"
+              >
+                웹에서 바로 시작하기
+              </a>
+            </div>
+            <div className="mt-6 flex flex-wrap justify-center gap-4">
               <StoreBadge store="Google Play" href={storeLinks.android} />
               <StoreBadge store="App Store" href={storeLinks.ios} />
             </div>

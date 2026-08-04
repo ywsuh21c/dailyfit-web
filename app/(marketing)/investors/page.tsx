@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { pageSeo } from '@/lib/seo';
 import { Section, SectionHeader } from '@/components/ui/Section';
 import { ButtonLink } from '@/components/ui/Button';
 import { activeCatalogCount } from '@/lib/site';
@@ -6,13 +7,14 @@ import { CountUp } from '@/components/motion/CountUp';
 import { FlowLine } from '@/components/motion/FlowLine';
 import { OrbitRings } from '@/components/motion/OrbitRings';
 
-export const metadata: Metadata = {
+// Per plan decision D / IR Q24: keep out of top nav; indexing decision pending.
+export const metadata: Metadata = pageSeo({
+  path: '/investors',
   title: 'Investors',
   description:
     '액티브 시니어(55–70)를 위한 AI 일상 설계 플랫폼. 무엇을, 왜 지금, 누가 만드는지.',
-  // Per plan decision D / IR Q24: keep out of top nav; indexing decision pending.
-  robots: { index: false, follow: true },
-};
+  noindex: true,
+});
 
 // Source copy: ir-investors-page-scope.md (IR Strategist, 2026-05-28).
 // HARD RULE [[feedback_no_fundraise_disclosure_on_web]]: no "we are raising"

@@ -40,3 +40,4 @@ HANDOFF*.md
 
 # local scratch (auto-mode logs etc.)
 .tmp/
+.env*

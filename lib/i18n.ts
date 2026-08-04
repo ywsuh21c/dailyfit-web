@@ -32,7 +32,7 @@ export function localeOf(pathname: string): Locale {
 // Company-site routes that exist in BOTH locales. The language toggle maps a
 // path to its twin only when a twin exists — otherwise it falls back to the
 // locale home so the switch never lands on a 404 (e.g. /product is KO-only).
-const MIRRORED = new Set([
+export const MIRRORED = new Set([
   '/',
   '/technology',
   '/research',
@@ -45,7 +45,7 @@ const MIRRORED = new Set([
   '/terms',
 ]);
 
-function hasTwin(koPath: string): boolean {
+export function hasTwin(koPath: string): boolean {
   return MIRRORED.has(koPath) || koPath.startsWith('/writing/'); // blog slugs
 }
 

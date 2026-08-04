@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { pageSeo } from '@/lib/seo';
 import { Section, SectionHeader } from '@/components/ui/Section';
 import { AgentConsole } from '@/components/home/AgentConsole';
 import { FlowLine } from '@/components/motion/FlowLine';
@@ -11,11 +12,12 @@ import { OrgTree } from '@/components/motion/OrgTree';
 // No em-dash (—) in visible copy — use periods / colons / middots.
 // Keep in sync with the Korean source.
 
-export const metadata: Metadata = {
-  title: 'Technology · DailyFit',
+export const metadata: Metadata = pageSeo({
+  path: '/en/technology',
+  title: 'Technology',
   description:
     'An AI Agent that accumulates a senior’s daily life in a senior’s own voice. The technical problems DailyFit solves and the system architecture behind them.',
-};
+});
 
 export default function EnTechnologyPage() {
   return (

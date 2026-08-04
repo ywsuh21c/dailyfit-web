@@ -1,14 +1,16 @@
 import type { Metadata } from 'next';
+import { pageSeo } from '@/lib/seo';
 import { site } from '@/lib/site';
 import { CopyEmail } from '@/components/ui/CopyEmail';
 import { Reveal } from '@/components/motion/Reveal';
 
-export const metadata: Metadata = {
-  title: 'Contact (EN)',
+export const metadata: Metadata = pageSeo({
+  path: '/en/contact',
+  title: 'Contact',
   description:
     'Reach DailyFit directly. Investors, partnerships, talent, and press all get a personal reply from the founders.',
-  robots: { index: false, follow: true },
-};
+  noindex: true, // 기존 정책 유지
+});
 
 // English mirror of /contact. Same one-page, one-action design: the email
 // address, copyable. mailto stays a secondary affordance because it no-ops on

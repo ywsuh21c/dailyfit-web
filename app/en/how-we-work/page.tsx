@@ -1,13 +1,14 @@
 import type { Metadata } from 'next';
+import { pageSeo } from '@/lib/seo';
 import Link from 'next/link';
 import { Reveal } from '@/components/motion/Reveal';
 import { OrgOrbit } from '@/components/motion/OrgOrbit';
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageSeo({
+  path: '/en/how-we-work',
   title: 'How we work',
-  description:
-    'AI-Native. How DailyFit works as a team of Agents.',
-};
+  description: 'AI-Native. How DailyFit works as a team of Agents.',
+});
 
 // /en/how-we-work — English mirror of app/(marketing)/how-we-work.
 // Recruiting layer, intentionally lean (hero + principles + agent-org +

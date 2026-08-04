@@ -1,13 +1,15 @@
 import type { Metadata } from 'next';
+import { pageSeo } from '@/lib/seo';
 import Link from 'next/link';
 import { getAllPosts } from '@/lib/writing';
 import { Reveal } from '@/components/motion/Reveal';
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageSeo({
+  path: '/en/writing',
   title: 'Writing',
   description:
     'We write as we build. What we learned, what we got wrong, and the thinking behind it, while building DailyFit.',
-};
+});
 
 // /en/writing — English mirror of the Option-B Writing page (thought leadership
 // = core acquisition lever). Content source: content/writing/en/*.md via

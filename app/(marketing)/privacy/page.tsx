@@ -1,12 +1,13 @@
 import type { Metadata } from 'next';
+import { pageSeo } from '@/lib/seo';
 import { site } from '@/lib/site';
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageSeo({
+  path: '/privacy',
   title: '개인정보처리방침',
   description:
     'DailyFit 개인정보처리방침 — 수집 항목·이용 목적·보유기간·국외 이전·정보주체의 권리를 안내합니다.',
-  robots: { index: true, follow: true },
-};
+});
 
 // 정식 개인정보처리방침 v1 — 워크스페이스 초안(개인정보처리방침-draft-v2)에서 입고.
 // 운영자=개인(예비창업, 사업자 미등록) · 국외이전=Deepgram/Anthropic(미국) ·

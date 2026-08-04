@@ -27,7 +27,7 @@ export type CatalogCount = {
 };
 
 /** Last date the bundled fallback count was hand-verified against prod. */
-const FALLBACK_AS_OF = '2026-06-29';
+const FALLBACK_AS_OF = '2026-08-04';
 
 const FALLBACK: CatalogCount = {
   count: activeCatalogCount,
@@ -45,7 +45,11 @@ const ISO_DATE = /^\d{4}-\d{2}-\d{2}$/;
  * so a daily ISR refresh keeps the number fresh without per-request API load.
  */
 export async function getCatalogCount(): Promise<CatalogCount> {
-  const base = process.env.NEXT_PUBLIC_API_BASE_URL;
+  // 하드코딩 폴백은 lib/activity.ts 와 같은 이유다: 2026-07-14 배포 환경에
+  // 이 변수가 없어 /activity/[id] 가 통째로 404 였던 실사고. API 주소는 앱에도
+  // 박혀 있는 공개값이라 폴백이 안전하고, 여기서는 잘못되면 "1,830건 부풀려진
+  // 숫자"가 홈과 llms.txt(=AI 가 인용하는 파일)에 그대로 나간다.
+  const base = process.env.NEXT_PUBLIC_API_BASE_URL ?? 'https://api.dailyfitai.app';
   if (!base) return FALLBACK;
 
   try {
