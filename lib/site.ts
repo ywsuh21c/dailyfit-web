@@ -25,7 +25,16 @@ export const site = {
  */
 export const activeCatalogCount = 3377;
 
-export type NavItem = { href: string; label: string };
+export type NavItem = {
+  href: string;
+  label: string;
+  /**
+   * KO 전용 라우트 — EN 렌더에서 제외한다. Footer/Nav 는 href 를 localizeHref
+   * 로 변환하는데, EN 트윈이 없는 라우트(/product)를 그냥 두면 /en/product
+   * 라는 404 링크가 생긴다.
+   */
+  koOnly?: boolean;
+};
 
 // Option-B primary nav. "Product" = Home itself (Anthropic/Linear pattern).
 export const primaryNav: NavItem[] = [
@@ -73,6 +82,12 @@ export const footerNav: { heading: string; items: NavItem[] }[] = [
     heading: 'DailyFit',
     items: [
       { href: '/', label: 'Product' },
+      // 고객용 페이지로 가는 내부 링크. 2026-08-04 구글 URL 검사 실측에서
+      // /product 가 "Referring page: None detected" — 사이트 안 어디에서도
+      // 링크되지 않는 고아 페이지였고, 그래서 크롤은 돼도 색인이 안 됐다
+      // (Crawled - currently not indexed). 상단 nav 구조(Option-B, Michael
+      // 2026-06-11 확정)는 그대로 두고 푸터에서만 경로를 낸다.
+      { href: '/product', label: '서비스 소개', koOnly: true },
       { href: '/technology', label: 'Technology' },
       { href: '/research', label: 'Research' },
     ],

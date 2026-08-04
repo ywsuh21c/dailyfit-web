@@ -36,7 +36,10 @@ export const verificationTokens = {
   google:
     process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION ??
     'GIvRcy78ObtiCgtJuCpqpXy7DbiHHRWnlSatok0muS8',
-  naver: process.env.NEXT_PUBLIC_NAVER_SITE_VERIFICATION ?? '',
+  // 발급 2026-08-04, 네이버 서치어드바이저 웹마스터도구 (현진).
+  naver:
+    process.env.NEXT_PUBLIC_NAVER_SITE_VERIFICATION ??
+    '278d8660d41d0639a7d9ecc466cd009fec6dca2a',
   bing: process.env.NEXT_PUBLIC_BING_SITE_VERIFICATION ?? '',
 } as const;
 

@@ -350,6 +350,17 @@ export default async function HomePage() {
                 >
                   DailyFit 시작하기 →
                 </Link>
+                {/* 고객용 페이지로 가는 홈의 유일한 경로. 이게 없으면 /product 는
+                    사이트 안에서 아무도 가리키지 않는 고아 페이지가 된다 —
+                    구글 URL 검사가 "Referring page: None detected" 로 확인해 준
+                    상태였고(2026-08-04) 그래서 크롤은 돼도 색인이 안 됐다.
+                    검색으로 홈에 들어온 고객이 제품을 알아볼 길이기도 하다. */}
+                <Link
+                  href="/product"
+                  className="inline-flex min-h-[56px] items-center rounded-xl border border-ivory/25 bg-white/5 px-8 text-[17px] font-bold text-ivory transition-colors hover:border-sage-lt hover:text-sage-lt active:scale-[0.98]"
+                >
+                  서비스 자세히 보기
+                </Link>
               </div>
             </Reveal>
           </div>
