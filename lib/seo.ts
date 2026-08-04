@@ -32,7 +32,10 @@ import { hasTwin, localeOf, localizeHref, toKoPath } from '@/lib/i18n';
  * 빈 값이면 태그 자체가 렌더되지 않는다(빈 meta 를 내보내지 않음).
  */
 export const verificationTokens = {
-  google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION ?? '',
+  // 발급 2026-08-04, URL 접두어 속성 https://dailyfitai.app (현진).
+  google:
+    process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION ??
+    'GIvRcy78ObtiCgtJuCpqpXy7DbiHHRWnlSatok0muS8',
   naver: process.env.NEXT_PUBLIC_NAVER_SITE_VERIFICATION ?? '',
   bing: process.env.NEXT_PUBLIC_BING_SITE_VERIFICATION ?? '',
 } as const;
