@@ -82,12 +82,11 @@ export const footerNav: { heading: string; items: NavItem[] }[] = [
     heading: 'DailyFit',
     items: [
       { href: '/', label: 'Product' },
-      // 고객용 페이지로 가는 내부 링크. 2026-08-04 구글 URL 검사 실측에서
-      // /product 가 "Referring page: None detected" — 사이트 안 어디에서도
-      // 링크되지 않는 고아 페이지였고, 그래서 크롤은 돼도 색인이 안 됐다
-      // (Crawled - currently not indexed). 상단 nav 구조(Option-B, Michael
-      // 2026-06-11 확정)는 그대로 두고 푸터에서만 경로를 낸다.
-      { href: '/product', label: '서비스 소개', koOnly: true },
+      // /product 로 가는 푸터 링크는 2026-08-05 제거했다 — 청자 분리 방침
+      // (영우·현진 확정): **소비자는 my.dailyfitai.app, 투자자는 이 사이트.**
+      // 이 사이트가 소비자 페이지로 트래픽을 흘리면 두 청자가 다시 섞인다.
+      // /product 라우트 자체는 검색광고 착지로 계속 살아 있고(광고는 색인과
+      // 무관), 소비자 검색 노출은 my. 쪽에서 해결한다.
       { href: '/technology', label: 'Technology' },
       { href: '/research', label: 'Research' },
     ],
