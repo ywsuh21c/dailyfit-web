@@ -31,6 +31,8 @@ export const CATALOG_REVALIDATE = 86400;
 const PAGE_SIZE = 40; // 서버 상한 (limit=200 을 줘도 40개만 온다)
 const MAX_PAGES = 120;
 const PAGE_DELAY_MS = 150; // 429 회피
+const RETRY_LIMIT = 4; // 429·5xx 재시도 횟수
+const RETRY_BACKOFF_MS = 1500; // 선형 백오프: 1.5s → 3s → 4.5s → 6s
 
 export type CatalogActivity = { id: string };
 
@@ -68,18 +70,29 @@ async function fetchAll(): Promise<CatalogActivity[]> {
     const qs = new URLSearchParams({ limit: String(PAGE_SIZE) });
     if (cursor) qs.set('cursor', cursor);
 
-    let payload: { items?: { id?: unknown }[]; next_cursor?: unknown };
-    try {
-      const res = await fetch(`${API_BASE}/api/activities?${qs}`, {
-        headers: { 'X-Guest-Session': session },
-        next: { revalidate: CATALOG_REVALIDATE },
-      });
-      // 429 를 포함한 모든 실패 → 여기까지 모은 것으로 진행한다.
-      if (!res.ok) break;
-      payload = await res.json();
-    } catch {
-      break;
+    // 429(Too Many Requests)는 "천천히 하라"는 뜻이지 "끝"이 아니다. 여기서
+    // 그냥 멈추면 카탈로그가 통째로 잘린다 — Netlify 빌드에서 실제로 4,365건
+    // 중 2,318건만 담겼다(2026-08-05). 백오프 후 재시도한다.
+    let payload: { items?: { id?: unknown }[]; next_cursor?: unknown } | null = null;
+    for (let attempt = 0; attempt < RETRY_LIMIT; attempt++) {
+      try {
+        const res = await fetch(`${API_BASE}/api/activities?${qs}`, {
+          headers: { 'X-Guest-Session': session },
+          next: { revalidate: CATALOG_REVALIDATE },
+        });
+        if (res.ok) {
+          payload = await res.json();
+          break;
+        }
+        // 429·5xx 는 일시적일 수 있으니 기다렸다 다시. 그 외(4xx)는 재시도 무의미.
+        if (res.status !== 429 && res.status < 500) break;
+      } catch {
+        // 네트워크 오류도 일시적일 수 있다 — 같은 백오프를 탄다.
+      }
+      await sleep(RETRY_BACKOFF_MS * (attempt + 1));
     }
+    // 재시도까지 실패 → 여기까지 모은 것으로 진행한다(지어내지 않는다).
+    if (!payload) break;
 
     const items = Array.isArray(payload.items) ? payload.items : [];
     for (const raw of items) {
