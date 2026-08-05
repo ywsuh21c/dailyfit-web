@@ -50,9 +50,18 @@ export async function generateMetadata({
   return {
     title: { absolute: `${activity.title} · DailyFit` },
     description,
-    // 공유 링크와 검색 결과가 같은 URL 을 가리키게 고정 — 카톡/앱이 붙이는
-    // 쿼리스트링(utm 등)이 별개 페이지로 색인되는 것을 막는다.
-    alternates: { canonical: `/activity/${id}` },
+    // ── canonical 은 my. 를 가리킨다 (2026-08-05 청자 분리 방침) ──────────
+    // 활동 상세는 소비자 화면이고, 소비자 도메인은 my.dailyfitai.app 이다.
+    // 그런데 my. 는 Expo 정적 export 라 내용을 서버가 그려 보내지 못한다(크롤러가
+    // 읽는 글자 16자). 그래서 **렌더는 여기서, 색인은 my. 로** 나눈다:
+    //   · my.dailyfitai.app/activity/{id} → vercel rewrite → 이 페이지
+    //   · 이 페이지의 canonical → my. 주소
+    // 그 결과 검색결과에 뜨는 주소는 항상 my. 다.
+    //
+    // 301 리다이렉트를 쓰지 않는 이유: rewrite 목적지가 이 URL 이라 리다이렉트를
+    // 걸면 무한 루프가 된다. 또 이미 카톡으로 나간 dailyfitai.app 공유 링크가
+    // 깨지면 안 된다 — 그 링크는 계속 열리고, 색인만 my. 로 모인다.
+    alternates: { canonical: `${productAppUrl}/activity/${id}` },
     openGraph: {
       type: 'website',
       title: activity.title,
