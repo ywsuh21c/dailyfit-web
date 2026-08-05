@@ -12,15 +12,27 @@ import { StoreBadge } from '@/components/product/StoreBadge';
 
 // 카톡 미리보기 카드용 이미지.
 //
-// 백엔드는 og_image_url 로 `${site}/og/scene/{scene_key}.png` 를 주는데, 그 씬별 OG 에셋은
-// 아직 웹에 없다(2026-07-14 실측: /og/scene/dance.png → 404). 죽은 이미지를 og:image 로
-// 내보내면 카카오가 이미지를 못 받아 카드에 그림이 안 뜬다 → 실존하는 브랜드 OG 로 폴백해
-// 최소한 DailyFit 카드가 보이게 한다. 씬별 에셋이 추가되면 og_image_url 이 자동으로 쓰인다.
+// 2026-07-14: 백엔드가 og_image_url 로 `${site.url}/og/scene/{scene_key}.png` 를 줬는데 그
+// 씬별 에셋이 웹에 없어(404) 카드 그림이 통째로 안 떴다 → 스위치를 꺼 브랜드 OG 로 폴백.
+//
+// 🔴 영우 E-01(2026-08-05): "카카오에서 링크만 공유했을때 뜨는 링크 + 메시지는 지금 너무
+//    무미건조함 … 썸네일도 안 뜸 (사진이 없음)."
+//    전제가 바뀌었다. 2026-08-05 실측(공개 활동 56건):
+//      · `/og/scene/*.png` 형태 = **0건** (스위치를 켠 이유 자체가 사라짐)
+//      · `cdn.jsdelivr.net/.../dailyfit-activity-photos/...` 실사진 = 27건 → **200 OK**
+//      · `https://dailyfitai.app/og/default.png` = 29건 → **여전히 404**
+//    그래서 스위치를 그냥 켜면 절반이 죽은 이미지가 된다(끄게 만든 그 사고 재발). 켜고 끄는
+//    깃발 대신 **URL 이 실물인지**로 가른다 — 우리 도메인의 `/og/*` 는 아직 자리표시자이므로
+//    브랜드 OG 로 폴백하고, 외부 CDN 실사진은 그대로 내보낸다. 나중에 `/og/*` 에셋이 실제로
+//    배포되면 이 예외만 지우면 된다.
 const BRAND_OG = `${site.url}/opengraph-image.png`;
-const OG_SCENE_ASSETS_READY = false; // 씬별 OG 에셋 배포 시 true (그 전엔 브랜드 OG 폴백)
+
+/** 아직 실물이 없는 자리표시자 경로(우리 도메인의 /og/…). 실측으로만 늘린다. */
+const OG_PLACEHOLDER_RE = /^https?:\/\/(?:www\.)?dailyfitai\.app\/og\//i;
 
 function ogImageFor(activity: { og_image_url: string | null }): string {
-  if (OG_SCENE_ASSETS_READY && activity.og_image_url) return activity.og_image_url;
+  const url = activity.og_image_url;
+  if (url && !OG_PLACEHOLDER_RE.test(url)) return url;
   return BRAND_OG;
 }
 
