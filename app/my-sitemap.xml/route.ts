@@ -1,5 +1,5 @@
 import { getCatalog, CATALOG_REVALIDATE } from '@/lib/activity-catalog';
-import { productAppUrl } from '@/lib/site';
+import { productAppUrl, myIndexLive } from '@/lib/site';
 
 /**
  * `my.dailyfitai.app` 의 활동 사이트맵.
@@ -40,7 +40,11 @@ function xmlEscape(s: string): string {
 }
 
 export async function GET(): Promise<Response> {
-  const activities = (await getCatalog()).slice(0, MAX_URLS);
+  // my. rewrite 가 죽어 있으면 이 사이트맵의 <loc> 는 전부 404 다 (8/6 실측).
+  // 죽은 주소 2,316 개를 검색엔진에 계속 내미는 것보다 빈 사이트맵이 낫다 —
+  // 활동 색인은 그동안 dailyfitai.app 의 /sitemap.xml 이 맡는다.
+  // 되돌리기 = lib/site.ts 의 `myIndexLive` 한 줄.
+  const activities = myIndexLive ? (await getCatalog()).slice(0, MAX_URLS) : [];
 
   const urls = activities
     .map(

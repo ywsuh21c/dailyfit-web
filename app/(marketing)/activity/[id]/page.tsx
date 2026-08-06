@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { getPublicActivity } from '@/lib/activity';
-import { site, storeLinks, productAppUrl, externalLinkProps } from '@/lib/site';
+import { site, storeLinks, productAppUrl, myIndexLive, externalLinkProps } from '@/lib/site';
 import { absoluteUrl } from '@/lib/seo';
 import { activityEventJsonLd, breadcrumbJsonLd } from '@/lib/jsonld';
 import { JsonLd } from '@/components/seo/JsonLd';
@@ -61,7 +61,13 @@ export async function generateMetadata({
     // 301 리다이렉트를 쓰지 않는 이유: rewrite 목적지가 이 URL 이라 리다이렉트를
     // 걸면 무한 루프가 된다. 또 이미 카톡으로 나간 dailyfitai.app 공유 링크가
     // 깨지면 안 된다 — 그 링크는 계속 열리고, 색인만 my. 로 모인다.
-    alternates: { canonical: `${productAppUrl}/activity/${id}` },
+    //
+    // ⚠️ 위 설계는 my. rewrite 가 살아 있을 때만 성립한다. 8/6 실측에서 그 전제가
+    //    깨져 있어(my./activity/{id} = 404) `myIndexLive` 스위치로 가른다 —
+    //    꺼져 있으면 자기참조 canonical 로 돌아가 색인을 살려둔다. lib/site.ts 참고.
+    alternates: {
+      canonical: myIndexLive ? `${productAppUrl}/activity/${id}` : `/activity/${id}`,
+    },
     openGraph: {
       type: 'website',
       title: activity.title,

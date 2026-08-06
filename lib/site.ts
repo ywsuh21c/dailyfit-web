@@ -62,6 +62,24 @@ export const companyNav: NavItem[] = [
 // page, reached by direct URL, not from the company nav.
 export const productAppUrl = 'https://my.dailyfitai.app' as const;
 
+// ── my. 색인 이관 스위치 (2026-08-06) ───────────────────────────────────────
+// 8/5 청자 분리 방침은 활동 상세의 정본 주소를 my. 로 옮기는 것이고, 그 설계는
+// **my. 쪽 vercel rewrite 가 살아 있다**는 전제 위에 서 있다 (my./activity/{id}
+// → 여기로 rewrite). 그런데 8/6 실측에서 그 전제가 깨져 있었다:
+//   · https://my.dailyfitai.app/activity/{id}  → 404
+//   · https://my.dailyfitai.app/robots.txt     → 404
+//   · https://my.dailyfitai.app/sitemap.xml    → 404
+// (rewrite 를 담은 5파일은 main 에만 있고, 라이브 my. 는 그 파일들이 없는
+//  feat/v3-web-airbnb 에서 배포된 판이다.)
+//
+// 그 결과가 최악의 조합이다 — 서버렌더된 활동 상세 11,240 장이 전부 "정본은
+// my. 에 있다"고 선언하는데, 그 my. 주소가 404 다. 색인이 통째로 막힌다.
+// 방침을 뒤집는 게 아니라, **전제가 살아날 때까지 색인을 살려두는 임시 원복**이다.
+//
+// my. rewrite 가 라이브로 확인되면 이 값을 true 로 되돌리면 8/5 방침이 그대로
+// 복구된다 (canonical → my., my-sitemap 재활성). 되돌리기 = 이 한 줄.
+export const myIndexLive = false;
+
 // Spread onto any <Link>/<a> that points at productAppUrl — opens the web app in
 // a new tab so the company site stays put. Single source for the new-tab policy.
 export const externalLinkProps = {
