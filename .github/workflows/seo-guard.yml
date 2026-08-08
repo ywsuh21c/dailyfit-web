@@ -1,0 +1,53 @@
+# SEO 불변식 가드 — 색인 보류가 다시 조용히 생기는 것을 막는다.
+#
+# 왜 스케줄인가:
+#   8/6 실사고(활동 상세 10,282장이 404 인 my. 를 정본으로 선언)는 배포 직후가
+#   아니라 **아무 배포 없이도** 다시 생길 수 있다 — my. 쪽 배포, 백엔드
+#   public-index 응답, DNS·인증서, robots 어느 하나만 흔들려도 재발한다.
+#   그래서 "우리 코드가 바뀔 때"가 아니라 "매일" 확인하는 것이 맞다.
+#
+# 왜 IndexNow 는 자동이 아닌가:
+#   외부(검색엔진)로 나가는 호출은 사람 판단 없이 반복 발신하지 않는다는 원칙.
+#   Actions 탭에서 "Run workflow" 한 번으로 돌릴 수 있게만 해 둔다.
+#
+# 이 저장소는 public 이라 Actions 사용료 $0.
+
+name: SEO guard
+
+on:
+  schedule:
+    # 매일 09:00 KST (= 00:00 UTC). 아침에 결과가 나와 있도록.
+    - cron: '0 0 * * *'
+  workflow_dispatch:
+    inputs:
+      submit_indexnow:
+        description: 'IndexNow 재제출까지 함께 실행 (검색엔진에 재크롤 통지)'
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+jobs:
+  healthcheck:
+    name: 불변식 실측 (prod)
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      # 의존성 설치 불필요 — 스크립트는 Node 내장 fetch 만 쓴다.
+      - name: SEO 불변식 헬스체크
+        run: node scripts/seo-healthcheck.mjs
+        env:
+          BASE: https://dailyfitai.app
+          # 표본을 넉넉히 — 활동 상세는 10,000장 규모라 5건이면 얇다.
+          SEO_SAMPLE: '12'
+
+      - name: IndexNow 재제출 (수동 실행 시에만)
+        if: github.event_name == 'workflow_dispatch' && inputs.submit_indexnow
+        run: node scripts/indexnow.mjs
