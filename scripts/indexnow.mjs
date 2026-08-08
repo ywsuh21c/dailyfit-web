@@ -48,9 +48,33 @@ function die(msg) {
   process.exit(1);
 }
 
+/**
+ * 재시도 + 타임아웃이 붙은 fetch. 사이트맵은 백엔드를 타는 동적 라우트라
+ * 콜드 스타트에 오래 걸릴 수 있고, CI 러너에서는 일시적 네트워크 실패가 난다.
+ * 실패 시 **어느 URL 이** 죽었는지 말한다 ("fetch failed" 한 줄은 진단 불가).
+ */
+async function fetchRetry(url, init, attempts = 3) {
+  let lastErr;
+  for (let i = 1; i <= attempts; i += 1) {
+    try {
+      return await fetch(url, {
+        signal: AbortSignal.timeout(Number(process.env.INDEXNOW_TIMEOUT_MS || 60_000)),
+        ...init,
+      });
+    } catch (e) {
+      lastErr = e;
+      const why = e?.cause?.code || e?.cause?.message || e?.name || '';
+      console.error(`  · 요청 실패 (${i}/${attempts}) ${url} — ${e?.message}${why ? ` [${why}]` : ''}`);
+      if (i < attempts) await new Promise((r) => setTimeout(r, i * 3000));
+    }
+  }
+  const why = lastErr?.cause?.code || lastErr?.cause?.message || lastErr?.name || '';
+  die(`요청 ${attempts}회 모두 실패: ${url} — ${lastErr?.message}${why ? ` [${why}]` : ''}`);
+}
+
 /** 키 파일이 라이브인지 실측. 이게 통과 못 하면 제출은 전부 422 다. */
 async function assertKeyLive() {
-  const res = await fetch(KEY_LOCATION, { cache: 'no-store' });
+  const res = await fetchRetry(KEY_LOCATION, { cache: 'no-store' });
   if (!res.ok) {
     die(
       `키 파일이 라이브가 아님: ${KEY_LOCATION} → HTTP ${res.status}\n` +
@@ -63,7 +87,7 @@ async function assertKeyLive() {
 }
 
 async function urlsFromSitemap() {
-  const res = await fetch(`${ORIGIN}/sitemap.xml`, { cache: 'no-store' });
+  const res = await fetchRetry(`${ORIGIN}/sitemap.xml`, { cache: 'no-store' });
   if (!res.ok) die(`사이트맵을 못 읽음: HTTP ${res.status}`);
   const xml = await res.text();
   const locs = [...xml.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => m[1].trim());
@@ -76,7 +100,7 @@ async function urlsFromSitemap() {
 
 async function submit(batch, idx, total) {
   const payload = { host: HOST, key: KEY, keyLocation: KEY_LOCATION, urlList: batch };
-  const res = await fetch(ENDPOINT, {
+  const res = await fetchRetry(ENDPOINT, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json; charset=utf-8' },
     body: JSON.stringify(payload),

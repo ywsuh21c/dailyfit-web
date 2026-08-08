@@ -38,9 +38,31 @@ const fail = (name, detail) => results.push({ ok: false, name, detail });
 
 async function get(path, init) {
   const url = path.startsWith('http') ? path : `${BASE}${path}`;
-  const res = await fetch(url, { redirect: 'manual', cache: 'no-store', ...init });
-  const body = res.status >= 300 && res.status < 400 ? '' : await res.text().catch(() => '');
-  return { res, body, url };
+  // 재시도 + 어느 URL 이 죽었는지 말하는 오류. 맨 처음 CI 실행이 "fetch failed"
+  // 한 줄만 남기고 죽었다 — 어떤 요청인지 알 수 없으면 가드가 아니라 소음이다.
+  // 사이트맵은 백엔드를 타는 동적 라우트라 콜드 스타트에 30초 넘게 걸릴 수 있다.
+  let lastErr;
+  for (let attempt = 1; attempt <= 3; attempt += 1) {
+    try {
+      const res = await fetch(url, {
+        redirect: 'manual',
+        cache: 'no-store',
+        signal: AbortSignal.timeout(Number(process.env.SEO_TIMEOUT_MS || 60_000)),
+        headers: { 'User-Agent': 'DailyFit-SEO-Healthcheck/1.0' },
+        ...init,
+      });
+      const body =
+        res.status >= 300 && res.status < 400 ? '' : await res.text().catch(() => '');
+      return { res, body, url };
+    } catch (e) {
+      lastErr = e;
+      const why = e?.cause?.code || e?.cause?.message || e?.name || '';
+      console.error(`  · 요청 실패 (${attempt}/3) ${url} — ${e?.message}${why ? ` [${why}]` : ''}`);
+      if (attempt < 3) await new Promise((r) => setTimeout(r, attempt * 3000));
+    }
+  }
+  const why = lastErr?.cause?.code || lastErr?.cause?.message || lastErr?.name || '';
+  throw new Error(`요청 3회 모두 실패: ${url} — ${lastErr?.message}${why ? ` [${why}]` : ''}`);
 }
 
 function canonicalOf(html) {
