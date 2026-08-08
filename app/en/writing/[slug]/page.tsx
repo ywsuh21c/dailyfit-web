@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import Markdown from 'markdown-to-jsx';
 import { getPostBySlug, getPublishedPosts } from '@/lib/writing';
+import { pageSeo } from '@/lib/seo';
 
 // /en/writing/[slug] — published essays only. Drafts + unknown slugs → 404
 // (dynamicParams=false serves ONLY pre-generated published slugs).
@@ -20,11 +21,15 @@ export async function generateMetadata({
   const { slug } = await params;
   const post = getPostBySlug(slug, 'en');
   if (!post) return { title: 'Writing' };
-  return {
+  // pageSeo 로 자기참조 canonical 을 명시한다 — alternates 없이 두면 루트
+  // 레이아웃의 canonical '/' 를 상속해 이 글이 "홈의 사본"으로 선언된다
+  // (KO 쪽 /writing/[slug] 는 처음부터 pageSeo 를 썼다. 빌드 실측 2026-08-08).
+  return pageSeo({
+    path: `/en/writing/${post.slug}`,
     title: post.title,
     description: post.summary,
-    openGraph: { type: 'article', title: post.title, description: post.summary },
-  };
+    ogType: 'article',
+  });
 }
 
 function formatDate(iso: string | null): string {
