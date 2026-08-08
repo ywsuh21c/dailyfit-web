@@ -19,18 +19,43 @@
  *   6. noindex 여야 하는 페이지(/investors)가 사이트맵에 없다.
  *   7. www → apex 301, apex 200.
  *   8. IndexNow 키 파일이 라이브다.
+ *   9. 활동 구조화 데이터가 유효하다 (2026-08-09 추가) — Event 면 `name`·`startDate`
+ *      ·`location` 필수, `startDate` ISO, 역전 구간 없음, `organizer`·`image` 없음,
+ *      그리고 Event 인 페이지는 화면에도 날짜가 보인다. Event 는 필수 속성이 없으면
+ *      리치결과가 아니라 **수동조치 대상**이라 무효 Event 를 만 장 규모로 내보내는
+ *      것이 가장 큰 위험이다.
  *
  * 사용법:
  *   node scripts/seo-healthcheck.mjs              # prod
- *   BASE=https://deploy-preview-53--x.netlify.app node scripts/seo-healthcheck.mjs
+ *   BASE=https://deploy-preview-56--x.netlify.app node scripts/seo-healthcheck.mjs
+ *   BASE=http://localhost:3000 node scripts/seo-healthcheck.mjs
+ *
+ * ⚠️ BASE 는 "어디로 요청하나"이고 SEO_SITE_URL 은 "정본이 어디여야 하나"다(기본 prod).
+ * 사이트맵·canonical 은 항상 정본 주소로 나오므로, preview 를 검사할 때도 정본 기대값은
+ * prod 주소다. 둘을 섞으면 preview 에서 가짜 실패가 난다.
  *
  * 종료코드: 0 = 전부 통과, 1 = 하나라도 실패.
  */
 
+/** 요청을 실제로 보낼 곳. prod 가 기본, deploy preview·localhost 도 가능. */
 const BASE = (process.env.BASE || 'https://dailyfitai.app').replace(/\/$/, '');
+/**
+ * 정본 오리진 — sitemap 의 `<loc>` 와 canonical 은 **항상 이 주소**로 나온다
+ * (`lib/site.ts` 의 `site.url`). BASE 와 분리해 둬야 preview 검증이 가능하다:
+ * preview 를 때리면서 "정본은 prod 주소여야 한다"를 검사하는 게 올바른 판정이다.
+ *
+ * 🔴 이 분리가 없던 첫 버전은 `BASE=localhost` 로 돌리면 표본 URL 이 prod 를
+ * 때려서(사이트맵이 절대 prod URL 을 담으므로) "자기 호스트 아님 · canonical 불일치"
+ * 라는 **가짜 실패 3건**을 냈다. 헤더에 적어 둔 preview 사용법이 실제로는 안 됐다.
+ */
+const SITE = (process.env.SEO_SITE_URL || 'https://dailyfitai.app').replace(/\/$/, '');
 const KEY = process.env.INDEXNOW_KEY || 'e45cb2375308eb5b91fc5a68d981f7e4';
-/** 사이트맵에서 뽑아 canonical 을 검사할 활동 상세 표본 수. */
+/** 사이트맵에서 뽑아 canonical·구조화 데이터를 검사할 활동 상세 표본 수. */
 const SAMPLE = Number(process.env.SEO_SAMPLE || 5);
+
+/** 정본 URL(사이트맵에 실린 주소) → 실제로 요청할 URL. BASE==SITE 면 그대로. */
+const toFetchUrl = (canonicalUrl) =>
+  BASE === SITE ? canonicalUrl : canonicalUrl.replace(SITE, BASE);
 
 const results = [];
 const pass = (name, detail) => results.push({ ok: true, name, detail });
@@ -72,6 +97,52 @@ function canonicalOf(html) {
   return href ? href[1] : null;
 }
 
+/**
+ * 활동 상세의 주 JSON-LD 블록(Event 또는 WebPage)을 감사한다.
+ *
+ * 검사 대상은 "우리가 지키기로 한 것" 그대로다:
+ *   · Event 면 `name`·`startDate`·`location` 이 전부 있어야 한다 (구글 필수).
+ *   · `startDate` 는 ISO 날짜여야 한다 — 형식이 깨진 날짜는 수동조치 위험.
+ *   · `organizer` 는 없어야 한다 — DB 에 실제 주최기관이 없어 일부러 뺐다.
+ *   · `image` 는 없어야 한다 — 상세면이 실사진을 렌더하지 않는 동안은 "숨은 값"이다.
+ *   · Event 면 화면에도 날짜가 보여야 한다 (구조화 데이터 = 보이는 내용).
+ */
+function auditActivitySchema(html, url, acc) {
+  const blocks = [];
+  for (const m of html.matchAll(
+    /<script type="application\/ld\+json">([\s\S]*?)<\/script>/g
+  )) {
+    try {
+      blocks.push(JSON.parse(m[1]));
+    } catch {
+      acc.violations.push(`${url} — JSON-LD 파싱 실패`);
+    }
+  }
+  const main = blocks.find((b) => b?.['@type'] === 'Event' || b?.['@type'] === 'WebPage');
+  if (!main) {
+    acc.none += 1;
+    return;
+  }
+  const type = main['@type'];
+  acc[type] += 1;
+  if (main.organizer) acc.violations.push(`${url} — organizer 가 들어갔다(DB 에 없는 사실)`);
+  if (main.image) acc.violations.push(`${url} — image 가 들어갔다(화면에 안 보이는 값)`);
+  if (type !== 'Event') return;
+
+  for (const key of ['name', 'startDate', 'location']) {
+    if (!main[key]) acc.violations.push(`${url} — Event 필수 속성 ${key} 없음`);
+  }
+  if (main.startDate && !/^\d{4}-\d{2}-\d{2}/.test(main.startDate)) {
+    acc.violations.push(`${url} — startDate 형식 불량: "${main.startDate}"`);
+  }
+  if (main.endDate && main.startDate && main.endDate < main.startDate) {
+    acc.violations.push(`${url} — 역전된 구간 (${main.startDate} > ${main.endDate})`);
+  }
+  if (!/<time [^>]*>[^<]+<\/time>/i.test(html)) {
+    acc.violations.push(`${url} — Event 인데 화면에 날짜가 안 보인다`);
+  }
+}
+
 async function main() {
   // ── 사이트맵 ──────────────────────────────────────────────────────────────
   const sitemap = await get('/sitemap.xml');
@@ -91,9 +162,9 @@ async function main() {
       );
     }
 
-    const foreign = locs.filter((u) => !u.startsWith(BASE));
-    if (foreign.length === 0) pass('사이트맵 전부 자기 호스트', `${locs.length}건`);
-    else fail('사이트맵 전부 자기 호스트', `타 호스트 ${foreign.length}건: ${foreign[0]}`);
+    const foreign = locs.filter((u) => !u.startsWith(SITE));
+    if (foreign.length === 0) pass('사이트맵 전부 정본 호스트', `${locs.length}건 모두 ${SITE}`);
+    else fail('사이트맵 전부 정본 호스트', `타 호스트 ${foreign.length}건: ${foreign[0]}`);
 
     const investors = locs.filter((u) => /\/investors\b/.test(u));
     if (investors.length === 0) pass('noindex 페이지 사이트맵 제외', '/investors 없음');
@@ -103,8 +174,11 @@ async function main() {
     const step = Math.max(1, Math.floor(activities.length / SAMPLE));
     const sample = Array.from({ length: Math.min(SAMPLE, activities.length) }, (_, i) => activities[i * step]);
     let bad = 0;
+    // 구조화 데이터 집계 — Event 로 승격된 비율과 필수 속성 위반을 같은 순회에서 본다.
+    const schema = { Event: 0, WebPage: 0, none: 0, violations: [] };
     for (const url of sample) {
-      const page = await get(url);
+      // url = 정본(사이트맵) 주소. 요청은 BASE 로, 기대 canonical 은 정본 주소.
+      const page = await get(toFetchUrl(url));
       const canon = canonicalOf(page.body);
       if (!canon) {
         bad += 1;
@@ -116,8 +190,24 @@ async function main() {
           `${url}\n      → canonical="${canon}" (다른 주소를 정본으로 선언 = 색인 제외)`
         );
       }
+      auditActivitySchema(page.body, url, schema);
     }
     if (bad === 0) pass('활동 canonical 자기참조', `표본 ${sample.length}건 전부 자기참조`);
+
+    // ── 활동 구조화 데이터 ───────────────────────────────────────────────────
+    // 왜 가드가 필요한가: Event 는 `startDate`·`location` 이 없으면 리치결과가 아니라
+    // **수동조치 대상**이다. 백엔드가 날짜를 null 로 주기 시작하거나 계약이 바뀌면
+    // 웹은 조용히 "필수 속성 없는 Event" 를 10,000장 규모로 내보낼 수 있다.
+    if (schema.violations.length === 0) {
+      pass(
+        '활동 구조화 데이터 유효',
+        `Event ${schema.Event}건 · WebPage ${schema.WebPage}건 (표본 ${sample.length}) — 필수 속성 위반 0`
+      );
+    } else {
+      fail('활동 구조화 데이터 유효', schema.violations.slice(0, 5).join('\n      '));
+    }
+    if (schema.none === 0) pass('활동 JSON-LD 존재', `표본 ${sample.length}건 전부 존재`);
+    else fail('활동 JSON-LD 존재', `${schema.none}건에 Event/WebPage 블록이 없음`);
   }
 
   // ── my-sitemap (myIndexLive=false 정합) ───────────────────────────────────
