@@ -8,7 +8,9 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "indexnow": "node scripts/indexnow.mjs",
+    "seo:check": "node scripts/seo-healthcheck.mjs"
   },
   "dependencies": {
     "gray-matter": "^4.0.3",
