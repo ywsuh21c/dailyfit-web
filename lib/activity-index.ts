@@ -12,13 +12,9 @@
  * ── THE SWAP SEAM ───────────────────────────────────────────────────────────
  * The sitemap reads IDs ONLY through `listPublicActivityIds()` below.
  *
- * Today it returns [] — the backend has no public listing endpoint. `GET
- * /api/activities` requires a session (401 실측 2026-08-04), and minting guest
- * sessions from a sitemap build would pollute the guest table, so we do NOT do
- * that. The honest state is an empty (but valid) sitemap, never fabricated IDs.
- *
- * The moment the backend ships a public index, this lights up with NO other
- * code change. Expected contract (handoff sent to 영우 2026-08-04):
+ * 2026-08-08 실측: public-index 가 배포되어 이제 10,282건을 반환한다. 미배포
+ * 시절의 "빈 목록 반환" 폴백은 안전망으로 그대로 둔다 — 어떤 실패에서도 없는
+ * 활동을 지어내지 않는다. Contract as shipped (handoff 2026-08-04):
  *     GET /api/activities/public-index?cursor=&limit=1000
  *     → { items: [{ id, updated_at }], next_cursor: string | null }
  *   · active(미만료) 활동만

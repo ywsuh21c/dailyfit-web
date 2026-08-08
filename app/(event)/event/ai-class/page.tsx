@@ -79,6 +79,12 @@ const PAGE_DESCRIPTION =
 export const metadata: Metadata = {
   title: PAGE_TITLE,
   description: PAGE_DESCRIPTION,
+  // 자기참조 canonical — 없으면 루트 레이아웃의 canonical '/' 를 상속해 이
+  // 페이지가 "홈의 사본"으로 선언된다(빌드 실측 2026-08-08). 문자 캠페인 착지라
+  // 색인 대상도 아니므로 /get 과 같은 정책으로 noindex 를 함께 명시한다
+  // (기수 종료 후에도 문자 링크는 계속 열려야 하니 페이지 자체는 유지).
+  alternates: { canonical: '/event/ai-class' },
+  robots: { index: false, follow: true },
   openGraph: {
     type: 'website',
     title: PAGE_TITLE,
