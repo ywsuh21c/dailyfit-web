@@ -91,6 +91,39 @@ function priceLabel(activity: { is_free: boolean; price: number | null }): strin
   return '문의';
 }
 
+/**
+ * 일정 한 줄 — `2026년 1월 12일 ~ 12월 4일`. 날짜가 없으면 null(줄 자체가 사라진다).
+ *
+ * 왜 화면에도 넣는가: 이 페이지는 이제 날짜가 있는 건에 schema.org `Event` 를
+ * 내보낸다. 구조화 데이터는 **페이지에 실제로 보이는 내용**을 나타내야 하고, 지금은
+ * 날짜가 소개문(`summary`) 안 "교육기간: …" 텍스트에만 묻혀 있어서 그 대응이 암묵적이다.
+ * 명시적으로 보여주면 그 요건이 분명해지고, 무엇보다 "언제 하는지"는 방문자가 가장
+ * 먼저 찾는 사실이다.
+ *
+ * 지어내지 않는다: 백엔드가 형식 불량·역전 구간을 이미 null 로 걸러 보내므로 여기서는
+ * 파싱만 하고, `Date` 로 못 읽히면 그 값은 버린다(잘못된 날짜를 그리지 않는다).
+ */
+function scheduleLabel(start?: string | null, end?: string | null): string | null {
+  const fmt = (iso: string, withYear: boolean) => {
+    const d = new Date(`${iso}T00:00:00+09:00`);
+    if (Number.isNaN(d.getTime())) return null;
+    return new Intl.DateTimeFormat('ko-KR', {
+      timeZone: 'Asia/Seoul',
+      ...(withYear ? { year: 'numeric' as const } : {}),
+      month: 'long',
+      day: 'numeric',
+    }).format(d);
+  };
+  if (!start) return null;
+  const startLabel = fmt(start, true);
+  if (!startLabel) return null;
+  if (!end || end === start) return startLabel;
+  // 같은 해면 종료일에서 연도를 뺀다 — "2026년 1월 12일 ~ 12월 4일".
+  const sameYear = start.slice(0, 4) === end.slice(0, 4);
+  const endLabel = fmt(end, !sameYear);
+  return endLabel ? `${startLabel} ~ ${endLabel}` : startLabel;
+}
+
 export default async function ActivityLandingPage({
   params,
 }: {
@@ -101,10 +134,12 @@ export default async function ActivityLandingPage({
   if (!activity) notFound();
 
   const deepLink = `dailyfit://activity/${activity.id}`;
+  const schedule = scheduleLabel(activity.start_date, activity.end_date);
 
   return (
     <article>
-      {/* 화면에 실제로 보이는 사실만 마크업한다 — 숨은 값 없음. */}
+      {/* 화면에 실제로 보이는 사실만 마크업한다 — 숨은 값 없음.
+          날짜가 있으면 Event, 없으면 종전 WebPage (lib/jsonld.ts 승격 규칙). */}
       <JsonLd data={activityEventJsonLd(activity)} />
       <JsonLd
         data={breadcrumbJsonLd([
@@ -123,6 +158,11 @@ export default async function ActivityLandingPage({
             {activity.title}
           </h1>
           <div className="mt-6 flex flex-wrap items-center gap-3 text-[18px]">
+            {schedule && (
+              <span className="font-semibold text-ink">
+                <time dateTime={activity.start_date ?? undefined}>{schedule}</time>
+              </span>
+            )}
             {activity.neighborhood && (
               <span className="text-ink-soft">{activity.neighborhood}</span>
             )}
