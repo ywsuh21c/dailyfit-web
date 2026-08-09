@@ -115,8 +115,8 @@ export function faqJsonLd(items: FaqItem[]) {
  *   · `startDate` 는 Event 의 필수 속성이다. 없는데 Event 를 선언하면 리치결과가
  *     아니라 수동조치 대상이 된다. 그래서 데이터 유무가 스키마를 결정한다.
  *   · 실측 충전율(2026-08-09, 사이트맵 무작위 n=60): `start_date` **26.7%**.
- *     즉 오늘은 약 4건 중 1건이 Event 로, 나머지 약 73%는 종전 WebPage 와
- *     **글자 단위로 동일한** 출력이 나간다. 회귀 위험이 그만큼 좁다.
+ *     즉 약 4건 중 1건이 Event 로, 나머지는 WebPage 로 나간다(WebPage 쪽도 실사진이
+ *     있으면 `image` 가 붙는다 — 화면이 그 사진을 띄우게 된 뒤에 활성화했다).
  *   · 날짜 형식 불량·역전 구간(시작>종료)은 **백엔드가 이미 걸러 null 로** 준다
  *     (`share.py _schedule_dates`). 여기서 두 번 검증하지 않는다 — 날짜로 인정하는
  *     기준이 두 곳에서 갈리는 게 더 위험하다.
@@ -139,6 +139,8 @@ export function activityEventJsonLd(activity: {
   start_date?: string | null;
   end_date?: string | null;
   address?: string | null;
+  image_url?: string | null;
+  hero_image_url?: string | null;
 }) {
   const url = absoluteUrl(`/activity/${activity.id}`);
 
@@ -157,12 +159,17 @@ export function activityEventJsonLd(activity: {
 
   const description = activity.summary ? { description: activity.summary } : {};
 
-  // ⚠️ `image` 는 **일부러 넣지 않는다.** 실사진 필드(`hero_image_url`·`image_url`)가
-  // 계약에 있고 Event 리치결과에 이미지가 권장되지만, 이 페이지는 아직 히어로에 실사진을
-  // 띄우지 않는다(브랜드 톤 블록). 이 파일의 규칙은 "화면에 실제로 보이는 사실만
-  // 마크업한다 — 숨은 값 없음" 이고, 안 보이는 사진을 구조화 데이터에만 싣는 건 그 규칙
-  // 위반이다. 순서는 반대여야 한다 — 상세면이 실사진을 렌더하게 만든 다음 여기에 붙인다.
-  // (충전율 실측 2026-08-09: 실사진 보유 28.3%. 별건 후속으로 남김.)
+  // `image` — 2026-08-09 활성화. 직전 버전은 일부러 비워 뒀고 이유는 "상세면이 실사진을
+  // 렌더하지 않아 숨은 값이 된다" 였다. 같은 날 상세면이 실사진을 띄우게 했으므로
+  // (`activity/[id]/page.tsx` 의 실사진 블록) 이제 화면과 마크업이 **같은 값**이다.
+  //
+  // ⚠️ **실사진 두 필드만** 쓴다. `og_image_url` 은 폴백으로 scene_key 스톡·브랜드
+  // 디폴트가 섞여 오므로, 그걸 여기 실으면 "그 행사의 사진"이 아닌 분위기 이미지를
+  // 행사 사진으로 선언하게 된다 — 카톡 카드(og)와 판단이 다른 이유다.
+  // 화면 쪽과 이 순서(hero → image)가 **반드시 같아야** 한다. 갈리면 숨은 값이 된다.
+  // 실측 2026-08-09: 실사진 보유 28.3% · 표본 12/12 URL 이 200 + image/* 응답.
+  const realPhoto = activity.hero_image_url || activity.image_url;
+  const image = realPhoto ? { image: [realPhoto] } : {};
 
   // ── 날짜가 없으면 종전 WebPage (동작 불변) ────────────────────────────────
   if (!activity.start_date) {
@@ -180,6 +187,7 @@ export function activityEventJsonLd(activity: {
         ? { contentLocation: { '@type': 'Place', name: activity.neighborhood } }
         : {}),
       ...offers,
+      ...image,
     };
   }
 
@@ -222,6 +230,7 @@ export function activityEventJsonLd(activity: {
     isAccessibleForFree: activity.is_free,
     ...description,
     ...offers,
+    ...image,
     // 발행 주체는 우리(카탈로그 제공자)다 — 주최기관(organizer)이 아니다. 둘을 섞지 않는다.
     isPartOf: { '@id': WEBSITE_ID },
     publisher: { '@id': ORG_ID },

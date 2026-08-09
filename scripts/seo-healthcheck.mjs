@@ -20,8 +20,9 @@
  *   7. www → apex 301, apex 200.
  *   8. IndexNow 키 파일이 라이브다.
  *   9. 활동 구조화 데이터가 유효하다 (2026-08-09 추가) — Event 면 `name`·`startDate`
- *      ·`location` 필수, `startDate` ISO, 역전 구간 없음, `organizer`·`image` 없음,
- *      그리고 Event 인 페이지는 화면에도 날짜가 보인다. Event 는 필수 속성이 없으면
+ *      ·`location` 필수, `startDate` ISO, 역전 구간 없음, `organizer` 없음,
+ *      `image` 는 있으면 그 URL 이 화면 `<img>` 에도 있어야 하고(숨은 값 금지),
+ *      Event 인 페이지는 화면에도 날짜가 보인다. Event 는 필수 속성이 없으면
  *      리치결과가 아니라 **수동조치 대상**이라 무효 Event 를 만 장 규모로 내보내는
  *      것이 가장 큰 위험이다.
  *
@@ -104,7 +105,8 @@ function canonicalOf(html) {
  *   · Event 면 `name`·`startDate`·`location` 이 전부 있어야 한다 (구글 필수).
  *   · `startDate` 는 ISO 날짜여야 한다 — 형식이 깨진 날짜는 수동조치 위험.
  *   · `organizer` 는 없어야 한다 — DB 에 실제 주최기관이 없어 일부러 뺐다.
- *   · `image` 는 없어야 한다 — 상세면이 실사진을 렌더하지 않는 동안은 "숨은 값"이다.
+ *   · `image` 가 있으면 그 URL 이 **페이지 <img> 에도 실제로 있어야** 한다 — 구조화
+ *     데이터에만 있는 사진은 "숨은 값"이고 그게 이 검사가 막는 것이다.
  *   · Event 면 화면에도 날짜가 보여야 한다 (구조화 데이터 = 보이는 내용).
  */
 function auditActivitySchema(html, url, acc) {
@@ -126,7 +128,18 @@ function auditActivitySchema(html, url, acc) {
   const type = main['@type'];
   acc[type] += 1;
   if (main.organizer) acc.violations.push(`${url} — organizer 가 들어갔다(DB 에 없는 사실)`);
-  if (main.image) acc.violations.push(`${url} — image 가 들어갔다(화면에 안 보이는 값)`);
+
+  // `image` 는 이제 있어도 된다(2026-08-09 상세면이 실사진을 렌더함). 대신 **화면과
+  // 같은 값인지**를 검사한다 — 구조화 데이터에만 있는 사진은 "숨은 값"이고, 그게
+  // 이 항목이 원래 막으려던 것이다. 마크업의 URL 이 페이지 <img src> 에 실제로 있어야 한다.
+  const declared = Array.isArray(main.image) ? main.image : main.image ? [main.image] : [];
+  for (const src of declared) {
+    if (!html.includes(src)) {
+      acc.violations.push(`${url} — image 가 화면에 없다(숨은 값): ${String(src).slice(0, 70)}`);
+    } else {
+      acc.withPhoto += 1;
+    }
+  }
   if (type !== 'Event') return;
 
   for (const key of ['name', 'startDate', 'location']) {
@@ -175,7 +188,7 @@ async function main() {
     const sample = Array.from({ length: Math.min(SAMPLE, activities.length) }, (_, i) => activities[i * step]);
     let bad = 0;
     // 구조화 데이터 집계 — Event 로 승격된 비율과 필수 속성 위반을 같은 순회에서 본다.
-    const schema = { Event: 0, WebPage: 0, none: 0, violations: [] };
+    const schema = { Event: 0, WebPage: 0, none: 0, withPhoto: 0, violations: [] };
     for (const url of sample) {
       // url = 정본(사이트맵) 주소. 요청은 BASE 로, 기대 canonical 은 정본 주소.
       const page = await get(toFetchUrl(url));
@@ -201,7 +214,7 @@ async function main() {
     if (schema.violations.length === 0) {
       pass(
         '활동 구조화 데이터 유효',
-        `Event ${schema.Event}건 · WebPage ${schema.WebPage}건 (표본 ${sample.length}) — 필수 속성 위반 0`
+        `Event ${schema.Event}건 · WebPage ${schema.WebPage}건 · 실사진 ${schema.withPhoto}건 (표본 ${sample.length}) — 위반 0`
       );
     } else {
       fail('활동 구조화 데이터 유효', schema.violations.slice(0, 5).join('\n      '));
