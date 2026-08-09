@@ -135,6 +135,11 @@ export default async function ActivityLandingPage({
 
   const deepLink = `dailyfit://activity/${activity.id}`;
   const schedule = scheduleLabel(activity.start_date, activity.end_date);
+  // 실사진만 — `og_image_url` 은 폴백으로 scene_key 스톡/브랜드 디폴트가 섞여 오므로
+  // 여기 쓰면 "그 활동의 사진"이 아닌 분위기 이미지를 사진처럼 보여주게 된다.
+  // 그래서 실사진 두 필드만 본다. 구조화 데이터의 `image` 와 **같은 값**을 쓴다
+  // (화면과 마크업이 갈리면 그게 곧 숨은 값이다).
+  const activityPhoto = activity.hero_image_url || activity.image_url || null;
 
   return (
     <article>
@@ -178,6 +183,37 @@ export default async function ActivityLandingPage({
           </div>
         </div>
       </header>
+
+      {/* 실사진 — 있을 때만. 없으면 이 블록 자체가 사라진다(자리표시자 안 만든다).
+          왜 넣는가 (2026-08-09):
+            · 이 페이지는 카톡 공유·검색으로 들어오는 착지점인데, 카드(브라우즈)는 실사진을
+              보여주고 상세면은 브랜드 톤 블록만 보여주는 불일치가 있었다(현진 실측
+              2026-08-04, 풋살장→한옥거리). 백엔드가 `image_url`·`hero_image_url` 를
+              공개 계약에 넣은 것도 "웹 상세면이 카드와 같은 사진을 쓰게" 하기 위해서였다.
+            · 그리고 이게 구조화 데이터의 `image` 를 **정당하게** 만든다 — 리치결과에
+              이미지가 권장되지만, 화면에 안 보이는 사진을 마크업에만 싣는 것은
+              "숨은 값"이라 이 레포 규칙 위반이었다. 순서는 화면이 먼저다.
+          히어로(16:9)를 우선한다 — 가로형이라 이 폭에서 잘림이 적다.
+          next/image 를 쓰지 않는 이유: 사진 CDN(jsdelivr)이 `remotePatterns` 에 없고,
+          그걸 추가하는 건 이미지 최적화 파이프라인을 새로 켜는 별건 결정이다. 이미 CDN
+          위에 있는 파일이라 plain <img> + 명시 비율로 충분하고 설정 위험이 0이다. */}
+      {activityPhoto && (
+        <div className="bg-bg pt-10 sm:pt-12">
+          <div className="mx-auto max-w-3xl px-5">
+            <div className="relative overflow-hidden rounded-2xl bg-ink/5" style={{ aspectRatio: '16 / 9' }}>
+              <img
+                src={activityPhoto}
+                alt={activity.title}
+                className="h-full w-full object-cover"
+                width={1200}
+                height={675}
+                loading="eager"
+                decoding="async"
+              />
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* 소개 */}
       {activity.summary && (
