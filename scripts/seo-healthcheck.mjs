@@ -25,6 +25,13 @@
  *      Event 인 페이지는 화면에도 날짜가 보인다. Event 는 필수 속성이 없으면
  *      리치결과가 아니라 **수동조치 대상**이라 무효 Event 를 만 장 규모로 내보내는
  *      것이 가장 큰 위험이다.
+ *  10. 사이트맵에 실린 URL 이 실제로 살아있다 (2026-08-13 추가) — 만료 URL 이
+ *      섞이는 것 자체는 구조상 정상(사이트맵 일 1회 갱신 vs 매일 마감)이므로
+ *      소량은 경고, 임계 초과만 실패. 이 검사가 **canonical 검사보다 먼저** 돈다.
+ *
+ * 판정 3단계: ✓ 통과 · ⚠ 경고(통과하되 기록) · ✗ 실패(종료코드 1).
+ * 경고를 만든 이유는 8/10 사고다 — 무해한 lag 이 빨간불로 올라오면 가드 전체가
+ * 신뢰를 잃고, 실제로 그날 빨간불은 아무도 열어보지 않은 채 지나갔다.
  *
  * 사용법:
  *   node scripts/seo-healthcheck.mjs              # prod
@@ -54,6 +61,23 @@ const KEY = process.env.INDEXNOW_KEY || 'e45cb2375308eb5b91fc5a68d981f7e4';
 /** 사이트맵에서 뽑아 canonical·구조화 데이터를 검사할 활동 상세 표본 수. */
 const SAMPLE = Number(process.env.SEO_SAMPLE || 5);
 
+/** 활동 활성 건수를 대조할 백엔드. 사이트맵 전체 규모가 맞는지 보는 데만 쓴다. */
+const API_BASE = (process.env.SEO_API_BASE || 'https://api.dailyfitai.app').replace(/\/$/, '');
+
+/**
+ * 만료 URL 을 "실패"로 올릴 임계.
+ *
+ * 사이트맵은 하루 1회 갱신되고 활동은 매일 마감되므로, 최대 하루치 만료분이
+ * 사이트맵에 남는 것은 **구조상 정상**이다(2026-08-13 실측: 8/12 322건 3.3% ·
+ * 8/13 22건 0.24% — 그날 몇 건이 마감되냐에 따라 크게 흔들린다).
+ * 임계를 넘는다는 건 lag 이 아니라 **사이트맵 갱신 자체가 멈췄다**는 뜻이다.
+ *
+ * 이 두 상수가 "경고냐 실패냐"를 정하는 유일한 지점이다 — 정책을 되돌리려면
+ * 0 으로 낮추면 만료 URL 이 1건만 있어도 실패한다.
+ */
+const EXPIRED_FAIL_RATIO = Number(process.env.SEO_EXPIRED_FAIL_RATIO || 0.2); // 표본 기준
+const TOTAL_LAG_FAIL_RATIO = Number(process.env.SEO_TOTAL_LAG_FAIL_RATIO || 0.05); // 전체 기준
+
 /** 정본 URL(사이트맵에 실린 주소) → 실제로 요청할 URL. BASE==SITE 면 그대로. */
 const toFetchUrl = (canonicalUrl) =>
   BASE === SITE ? canonicalUrl : canonicalUrl.replace(SITE, BASE);
@@ -61,6 +85,8 @@ const toFetchUrl = (canonicalUrl) =>
 const results = [];
 const pass = (name, detail) => results.push({ ok: true, name, detail });
 const fail = (name, detail) => results.push({ ok: false, name, detail });
+/** 통과시키되 기록만 남긴다 — "알아야 하지만 고칠 건 아닌" 상태 전용. */
+const warn = (name, detail) => results.push({ ok: true, warned: true, name, detail });
 
 async function get(path, init) {
   const url = path.startsWith('http') ? path : `${BASE}${path}`;
@@ -183,15 +209,63 @@ async function main() {
     if (investors.length === 0) pass('noindex 페이지 사이트맵 제외', '/investors 없음');
     else fail('noindex 페이지 사이트맵 제외', `/investors 계열 ${investors.length}건이 실려 있음`);
 
-    // ── 표본 canonical 자기참조 ─────────────────────────────────────────────
+    // ── 사이트맵 ↔ 백엔드 활성 건수 대조 ──────────────────────────────────────
+    // 표본은 몇십 건이라 3% 수준의 lag 을 통째로 놓칠 수 있다(8/12 실측 3.3% 인데
+    // 표본 10건 중 1건만 걸렸다). 전체 규모를 직접 맞춰야 "사이트맵이 며칠째 안
+    // 갱신되고 있다" 는 큰 고장이 잡힌다.
+    //   초과(사이트맵 > 활성) = 마감됐는데 아직 실려 있는 것 — 이번 사안.
+    //   부족(사이트맵 < 활성) = 새로 생겼는데 아직 안 실린 것 — 같은 lag 의 반대편.
+    // 백엔드가 안 뜨면 실패가 아니라 경고다. SEO 가드가 백엔드 가용성까지 판정하면
+    // 빨간불의 의미가 흐려진다.
+    try {
+      const cnt = await get(`${API_BASE}/api/activities/count`);
+      const active = Number(JSON.parse(cnt.body)?.active);
+      if (!Number.isFinite(active) || active <= 0) {
+        warn('사이트맵 규모 대조', `백엔드 활성 건수를 못 읽음 — ${cnt.body.slice(0, 80)}`);
+      } else {
+        const diff = activities.length - active;
+        const ratio = Math.abs(diff) / active;
+        const how = diff >= 0 ? '초과(마감분 잔류)' : '부족(신규 미반영)';
+        const detail =
+          `사이트맵 ${activities.length}건 · 백엔드 활성 ${active}건 → ` +
+          `${diff >= 0 ? '+' : ''}${diff}건 ${how}, ${(ratio * 100).toFixed(1)}%`;
+        if (ratio >= TOTAL_LAG_FAIL_RATIO) {
+          fail(
+            '사이트맵 규모 대조',
+            `${detail} — 임계 ${(TOTAL_LAG_FAIL_RATIO * 100).toFixed(0)}% 초과. 일 1회 갱신 lag 으로는 ` +
+              `설명이 안 되는 크기다. 사이트맵 재생성이 멈췄는지 볼 것`
+          );
+        } else {
+          pass('사이트맵 규모 대조', detail);
+        }
+      }
+    } catch (e) {
+      warn('사이트맵 규모 대조', `백엔드 대조 실패(가드 판정에서 제외) — ${e?.message ?? e}`);
+    }
+
+    // ── 표본: 먼저 살아있는지, 그다음 canonical·구조화 데이터 ────────────────
+    //
+    // 🔴 이 순서가 핵심이다. 2026-08-10 가드 빨간불의 정체는 canonical 회귀가
+    // 아니라 **표본으로 뽑힌 활동이 그 사이 마감돼 404 였던 것**이었다. 404 페이지는
+    // 루트 레이아웃의 canonical '/' 을 상속하므로, 상태코드를 안 보고 canonical 만
+    // 보면 `canonical="https://dailyfitai.app" (다른 주소를 정본으로 선언)` 이라고
+    // 찍힌다 — 8/6 실사고와 글자까지 똑같아서 진짜 회귀로 오독된다. 그래서 죽은
+    // URL 은 canonical·구조화 데이터 검사에서 **제외**하고 별도 신호로 보고한다.
     const step = Math.max(1, Math.floor(activities.length / SAMPLE));
     const sample = Array.from({ length: Math.min(SAMPLE, activities.length) }, (_, i) => activities[i * step]);
+    const expired = [];
+    const live = [];
     let bad = 0;
     // 구조화 데이터 집계 — Event 로 승격된 비율과 필수 속성 위반을 같은 순회에서 본다.
     const schema = { Event: 0, WebPage: 0, none: 0, withPhoto: 0, violations: [] };
     for (const url of sample) {
       // url = 정본(사이트맵) 주소. 요청은 BASE 로, 기대 canonical 은 정본 주소.
       const page = await get(toFetchUrl(url));
+      if (page.res.status === 404 || page.res.status === 410) {
+        expired.push(url);
+        continue;
+      }
+      live.push(url);
       const canon = canonicalOf(page.body);
       if (!canon) {
         bad += 1;
@@ -205,22 +279,51 @@ async function main() {
       }
       auditActivitySchema(page.body, url, schema);
     }
-    if (bad === 0) pass('활동 canonical 자기참조', `표본 ${sample.length}건 전부 자기참조`);
+
+    // ── 사이트맵 URL 생존 (표본) ─────────────────────────────────────────────
+    const expiredRatio = sample.length ? expired.length / sample.length : 0;
+    const expiredPct = (expiredRatio * 100).toFixed(0);
+    if (expired.length === 0) {
+      pass('사이트맵 URL 생존', `표본 ${sample.length}건 전부 응답`);
+    } else if (expiredRatio >= EXPIRED_FAIL_RATIO) {
+      fail(
+        '사이트맵 URL 생존',
+        `사이트맵에 만료 URL ${expired.length}/${sample.length}건 (${expiredPct}%) — 임계 ` +
+          `${(EXPIRED_FAIL_RATIO * 100).toFixed(0)}% 초과. canonical 문제가 아니라 사이트맵 갱신이 ` +
+          `멈췄을 가능성을 먼저 볼 것\n      ${expired[0]}`
+      );
+    } else {
+      warn(
+        '사이트맵 URL 생존',
+        `사이트맵에 만료 URL ${expired.length}/${sample.length}건 (${expiredPct}%) — 일 1회 갱신 lag, ` +
+          `정상 범위(임계 ${(EXPIRED_FAIL_RATIO * 100).toFixed(0)}%). 만료면 404 이고 404 는 noindex 라 색인 위험 없음`
+      );
+    }
+
+    if (live.length === 0) {
+      // 표본이 전부 죽으면 canonical·구조화 데이터는 "위반 0"으로 조용히 통과한다.
+      // 검사를 못 한 것을 통과로 읽지 않도록 여기서 명시적으로 실패시킨다.
+      fail('활동 canonical 자기참조', `표본 ${sample.length}건이 전부 만료라 canonical 을 검사하지 못했다`);
+    } else if (bad === 0) {
+      pass('활동 canonical 자기참조', `살아있는 표본 ${live.length}건 전부 자기참조`);
+    }
 
     // ── 활동 구조화 데이터 ───────────────────────────────────────────────────
     // 왜 가드가 필요한가: Event 는 `startDate`·`location` 이 없으면 리치결과가 아니라
     // **수동조치 대상**이다. 백엔드가 날짜를 null 로 주기 시작하거나 계약이 바뀌면
     // 웹은 조용히 "필수 속성 없는 Event" 를 10,000장 규모로 내보낼 수 있다.
-    if (schema.violations.length === 0) {
+    if (schema.violations.length > 0) {
+      fail('활동 구조화 데이터 유효', schema.violations.slice(0, 5).join('\n      '));
+    } else if (live.length > 0) {
       pass(
         '활동 구조화 데이터 유효',
-        `Event ${schema.Event}건 · WebPage ${schema.WebPage}건 · 실사진 ${schema.withPhoto}건 (표본 ${sample.length}) — 위반 0`
+        `Event ${schema.Event}건 · WebPage ${schema.WebPage}건 · 실사진 ${schema.withPhoto}건 (살아있는 표본 ${live.length}) — 위반 0`
       );
-    } else {
-      fail('활동 구조화 데이터 유효', schema.violations.slice(0, 5).join('\n      '));
     }
-    if (schema.none === 0) pass('활동 JSON-LD 존재', `표본 ${sample.length}건 전부 존재`);
-    else fail('활동 JSON-LD 존재', `${schema.none}건에 Event/WebPage 블록이 없음`);
+    if (live.length > 0) {
+      if (schema.none === 0) pass('활동 JSON-LD 존재', `살아있는 표본 ${live.length}건 전부 존재`);
+      else fail('활동 JSON-LD 존재', `${schema.none}건에 Event/WebPage 블록이 없음`);
+    }
   }
 
   // ── my-sitemap (myIndexLive=false 정합) ───────────────────────────────────
@@ -271,10 +374,13 @@ async function main() {
 
   // ── 리포트 ────────────────────────────────────────────────────────────────
   const failed = results.filter((r) => !r.ok);
+  const warned = results.filter((r) => r.warned);
   console.log(`\nSEO 헬스체크 — ${BASE}\n${'─'.repeat(60)}`);
-  for (const r of results) console.log(`${r.ok ? '✓' : '✗'} ${r.name}\n    ${r.detail}`);
+  for (const r of results)
+    console.log(`${!r.ok ? '✗' : r.warned ? '⚠' : '✓'} ${r.name}\n    ${r.detail}`);
   console.log(`${'─'.repeat(60)}`);
-  console.log(`${results.length - failed.length}/${results.length} 통과`);
+  console.log(`${results.length - failed.length}/${results.length} 통과${warned.length ? ` (경고 ${warned.length}건)` : ''}`);
+  if (warned.length) console.log(`경고 ${warned.length}건: ${warned.map((w) => w.name).join(' · ')}`);
   if (failed.length) {
     console.log(`\n실패 ${failed.length}건: ${failed.map((f) => f.name).join(' · ')}`);
     process.exit(1);
