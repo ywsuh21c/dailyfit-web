@@ -35,6 +35,20 @@ const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL ?? 'https://api.dailyfitai
 const MAX_PAGES = 20;
 const PAGE_SIZE = 1000;
 
+/**
+ * How long the ID list is cached — and therefore how stale /sitemap.xml gets.
+ *
+ * This is the sitemap's refresh cadence: Next derives the route's revalidate
+ * from the fetch below, which is why the sitemap was observed to be exactly one
+ * day behind while this was 86400 (2026-08-13: sitemap activity count equalled
+ * the previous day's active count, to the URL).
+ *
+ * Deliberately the ONLY place this number lives. Do not also declare
+ * `export const revalidate` in app/sitemap.ts — two knobs for one cadence drift
+ * apart silently, and the fetch-derived path is the one proven in production.
+ */
+const SITEMAP_REVALIDATE_SECONDS = 21600; // 6h
+
 export async function listPublicActivityIds(): Promise<ActivityIndexEntry[]> {
   if (!API_BASE) return [];
 
@@ -51,9 +65,19 @@ export async function listPublicActivityIds(): Promise<ActivityIndexEntry[]> {
     };
     try {
       const res = await fetch(`${API_BASE}/api/activities/public-index?${qs}`, {
-        // Daily refresh — the catalog moves slowly and a sitemap need not be
-        // realtime. Also keeps build-time cost to one request per page per day.
-        next: { revalidate: 86400 },
+        // 6-hourly refresh. It was daily until 2026-08-13, and that cadence was
+        // the one knob behind a real problem: the sitemap regenerates on this
+        // schedule while activities expire continuously, so everything that
+        // expired since the last regen keeps being advertised to Google as a
+        // live page. Measured 2026-08-12: sitemap 9,629 vs 9,307 actually
+        // active — 322 stale (3.3%), and sampled stale URLs really did 404.
+        //
+        // Six hours caps that window at a quarter of a day. Cost is the only
+        // reason not to go lower: each regeneration is ~10 paginated requests
+        // (PAGE_SIZE 1000 over ~9,300 activities), so this is 40 requests a day
+        // instead of 10 — less than a single visitor browsing. Hourly would be
+        // 240/day to shave a lag the catalog's own daily rhythm hides anyway.
+        next: { revalidate: SITEMAP_REVALIDATE_SECONDS },
       });
       // 404 = endpoint not shipped yet (today's state). Any other failure is
       // treated the same way: return what we have, never invent entries.
