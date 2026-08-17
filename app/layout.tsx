@@ -17,9 +17,12 @@ const pretendard = localFont({
 
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
+  // 한글 브랜드 토큰을 title 에 싣는다 (근거는 lib/site.ts `nameKo` 주석).
+  // template 은 KO 서브트리 전체 — 활동 상세 8,701장 포함 — 에 한 번에 적용된다.
+  // `/en/*` 는 app/en/layout.tsx 가 영문 template 으로 덮으므로 영향받지 않는다.
   title: {
-    default: `${site.name} · ${site.tagline}`,
-    template: `%s · ${site.name}`,
+    default: `${site.brandTitle} · ${site.tagline}`,
+    template: `%s · ${site.nameKo}`,
   },
   description: site.description,
   // KO root is the canonical default; /en carries its own via pageSeo().
@@ -32,12 +35,12 @@ export const metadata: Metadata = {
     locale: 'ko_KR',
     siteName: site.name,
     url: site.url,
-    title: `${site.name} · ${site.tagline}`,
+    title: `${site.brandTitle} · ${site.tagline}`,
     description: site.description,
   },
   twitter: {
     card: 'summary_large_image',
-    title: `${site.name} · ${site.tagline}`,
+    title: `${site.brandTitle} · ${site.tagline}`,
     description: site.description,
   },
   // Search-console ownership proof. Renders nothing until the tokens are

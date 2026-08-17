@@ -25,6 +25,9 @@
  *      Event 인 페이지는 화면에도 날짜가 보인다. Event 는 필수 속성이 없으면
  *      리치결과가 아니라 **수동조치 대상**이라 무효 Event 를 만 장 규모로 내보내는
  *      것이 가장 큰 위험이다.
+ *  11. 홈·활동 상세 title 에 한글 브랜드 토큰("데일리핏")이 있다 (2026-08-17 추가)
+ *      — 없으면 네이버 브랜드 질의에 구조적으로 안 잡힌다. 홈과 활동 상세는 title 을
+ *      얻는 경로가 달라(default vs template) 따로 검사한다.
  *  10. 사이트맵에 실린 URL 이 실제로 살아있다 (2026-08-13 추가) — 만료 URL 이
  *      섞이는 것 자체는 구조상 정상(사이트맵 일 1회 갱신 vs 매일 마감)이므로
  *      소량은 경고, 임계 초과만 실패. 이 검사가 **canonical 검사보다 먼저** 돈다.
@@ -58,6 +61,13 @@ const BASE = (process.env.BASE || 'https://dailyfitai.app').replace(/\/$/, '');
  */
 const SITE = (process.env.SEO_SITE_URL || 'https://dailyfitai.app').replace(/\/$/, '');
 const KEY = process.env.INDEXNOW_KEY || 'e45cb2375308eb5b91fc5a68d981f7e4';
+/**
+ * title 에 반드시 있어야 하는 한글 브랜드 토큰. `lib/site.ts` 의 `nameKo` 와 같은
+ * 값이어야 한다 — 이 스크립트는 라이브 HTTP 만 보므로 소스를 import 하지 않고
+ * 문자열을 복제한다. 브랜드 표기를 바꾸면 **두 곳 다** 바꿔야 하고, 안 바꾸면
+ * 이 가드가 즉시 빨간불로 알려준다(그게 이 복제가 안전한 이유다).
+ */
+const BRAND_KO = process.env.SEO_BRAND_KO || '데일리핏';
 /** 사이트맵에서 뽑아 canonical·구조화 데이터를 검사할 활동 상세 표본 수. */
 const SAMPLE = Number(process.env.SEO_SAMPLE || 5);
 
@@ -183,6 +193,13 @@ function auditActivitySchema(html, url, acc) {
 }
 
 async function main() {
+  /**
+   * 브랜드 토큰 검사(아래)가 쓸 표본 하나. 사이트맵 표본 중 **살아있는 것**에서
+   * 고른다 — 404 페이지는 루트 레이아웃 title 을 상속해서, 죽은 URL 로 검사하면
+   * 활동 상세 template 이 깨져도 홈 title 을 보고 통과해 버린다.
+   */
+  let liveActivityUrl = null;
+
   // ── 사이트맵 ──────────────────────────────────────────────────────────────
   const sitemap = await get('/sitemap.xml');
   if (!sitemap.res.ok) {
@@ -266,6 +283,7 @@ async function main() {
         continue;
       }
       live.push(url);
+      if (!liveActivityUrl) liveActivityUrl = url;
       const canon = canonicalOf(page.body);
       if (!canon) {
         bad += 1;
@@ -335,6 +353,45 @@ async function main() {
       'my-sitemap 비어 있음',
       `loc ${myLocs}건 — myIndexLive 가 켜졌다면 my. rewrite 가 살아있는지 먼저 확인할 것`
     );
+
+  // ── 한글 브랜드 토큰 (2026-08-17 추가) ────────────────────────────────────
+  //
+  // 왜 가드가 필요한가: 8/17 실측에서 홈·활동 상세 8,701장의 title 에 "데일리핏"
+  // 이라는 한글 문자열이 **0회**였다. 전부 `· DailyFit` 접미였다. 이건 화면상
+  // 아무 이상이 없고 빌드도 통과하는 종류의 고장이라 — 8/6 색인 사고와 성질이
+  // 같다 — 사람 눈으로는 영원히 안 잡힌다. 그리고 지금 그 토큰은 `app/layout.tsx`
+  // 의 title.template **한 줄**에 걸려 있어서, 누가 그 줄을 영문으로 되돌리면
+  // 만 장 규모가 조용히 함께 되돌아간다.
+  //
+  // 활동 상세를 홈과 **따로** 검사하는 이유: 둘은 서로 다른 경로로 title 을 얻는다
+  // (홈 = title.default, 활동 = title.template). 홈만 보면 template 회귀를 놓친다.
+  {
+    const home = await get('/');
+    const homeTitle = (home.body.match(/<title>([^<]*)<\/title>/i) || [])[1] || '';
+    if (homeTitle.includes(BRAND_KO))
+      pass('홈 title 한글 브랜드', `"${homeTitle}"`);
+    else
+      fail(
+        '홈 title 한글 브랜드',
+        `"${homeTitle}" — "${BRAND_KO}" 없음. 네이버는 어휘 매칭 비중이 높아 이 토큰이 ` +
+          `없으면 브랜드 질의에 구조적으로 안 잡힌다 (lib/site.ts nameKo)`
+      );
+
+    if (!liveActivityUrl) {
+      warn('활동 상세 title 한글 브랜드', '살아있는 표본 URL 이 없어 검사 못 함');
+    } else {
+      const act = await get(toFetchUrl(liveActivityUrl));
+      const actTitle = (act.body.match(/<title>([^<]*)<\/title>/i) || [])[1] || '';
+      if (actTitle.includes(BRAND_KO))
+        pass('활동 상세 title 한글 브랜드', `"${actTitle}"`);
+      else
+        fail(
+          '활동 상세 title 한글 브랜드',
+          `"${actTitle}" — "${BRAND_KO}" 없음. 롱테일 ${'수천'}장이 통째로 브랜드 토큰을 ` +
+            `잃은 상태다 (app/layout.tsx 의 title.template 확인)`
+        );
+    }
+  }
 
   // ── robots ────────────────────────────────────────────────────────────────
   const robots = await get('/robots.txt');

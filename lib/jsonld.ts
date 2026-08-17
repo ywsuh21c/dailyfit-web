@@ -23,6 +23,12 @@ import type { FaqItem } from '@/lib/help';
 const ORG_ID = `${site.url}/#organization`;
 const WEBSITE_ID = `${site.url}/#website`;
 
+/**
+ * 사람들이 실제로 타이핑하는 표기들. Organization·WebSite 두 노드가 **같은 목록**을
+ * 쓰게 단일 상수로 둔다 — 두 곳에 손으로 적어두면 한쪽만 바뀌어 별칭이 갈린다.
+ */
+const BRAND_ALIASES = ['데일리핏', 'DailyFit Korea', '데일리핏 AI'];
+
 /** Verified public profiles — each one checked to return 200 (2026-08-04). */
 const SAME_AS = [
   'https://www.instagram.com/dailyfitkorea/',
@@ -36,7 +42,7 @@ export function organizationJsonLd() {
     '@id': ORG_ID,
     name: site.name,
     // Disambiguation aliases — the strings people actually type.
-    alternateName: ['데일리핏', 'DailyFit Korea', '데일리핏 AI'],
+    alternateName: BRAND_ALIASES,
     url: site.url,
     logo: `${site.url}/brand/dailyfit-logo.png`,
     image: `${site.url}/opengraph-image.png`,
@@ -54,6 +60,10 @@ export function websiteJsonLd() {
     '@id': WEBSITE_ID,
     url: site.url,
     name: site.name,
+    // Organization 과 **같은 별칭**을 WebSite 에도 싣는다. 사이트링크·브랜드 패널은
+    // WebSite 노드를 읽는 경로가 따로 있어서, 한쪽에만 있으면 "데일리핏 = 이 사이트"
+    // 라는 연결이 절반만 선언된다. 별칭 목록은 한 곳에서 온다(BRAND_ALIASES).
+    alternateName: BRAND_ALIASES,
     inLanguage: 'ko-KR',
     description: site.description,
     publisher: { '@id': ORG_ID },
