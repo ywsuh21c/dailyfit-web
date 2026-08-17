@@ -12,7 +12,21 @@ const IOS_URL = 'https://apps.apple.com/kr/app/dailyfit/id6773802603';
 //   (플립 시 따로 손댈 곳 없음 — 단일 진실). 구글 프로덕션 승인 나는 날 이 PR 을 머지하면 전환.
 const AOS_FORM_URL = 'https://forms.gle/gUKFvTzUz2Sg5WDg7'; // 사전신청(출시 전)
 const AOS_PLAY_URL = 'https://play.google.com/store/apps/details?id=kr.dailyfit.app'; // 출시 후
-const ANDROID_APP_LIVE = true;
+//
+// ⏸️ 2026-08-17 false 로 되돌림 — 이 플립은 **전제가 아직 안 왔는데** 켜져 있었다.
+//   8/8 에 true 로 머지됐으나(#42) 그 전제인 Play 프로덕션 승인은 7/30 에 거절됐고,
+//   재신청 D-day 는 **8/20**(테스터 연속일 카운터 11/14, 8/17 기준)이다. 승인 후 심사까지
+//   더하면 몇 주다.
+//   그 9일간 라이브 실측: 버튼 라벨 "Android · 플레이스토어에서 받기" → 목적지
+//   `play.google.com/…?id=kr.dailyfit.app` = **HTTP 404**. 초대 링크를 받은 안드로이드
+//   사용자 전원이 막힌 페이지에 부딪혔고, 그들은 이유를 남기지 않고 이탈한다.
+//   (`/get` 은 noindex 라 검색 유입엔 무영향 — 영우가 직접 보낸 링크만 해당됐다.)
+//
+//   ⚠️ 다시 true 로 켤 조건은 "제출했다"가 아니라 **공개 Play URL 이 200 을 주는 것**이다.
+//   비공개 트랙(내부·비공개 테스트)은 테스터 전용 옵트인 링크로만 열리고 공개 URL 은
+//   그대로 404 라, 승인 전에 켜면 이 사고가 그대로 재발한다. 켜기 전 실측 한 줄:
+//     curl -sS -o /dev/null -w '%{http_code}\n' 'https://play.google.com/store/apps/details?id=kr.dailyfit.app'
+const ANDROID_APP_LIVE = false;
 
 const INK = '#1E2D40';
 const SAGE = '#4A7C59';
