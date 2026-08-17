@@ -43,12 +43,17 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { id } = await params;
   const activity = await getPublicActivity(id);
-  if (!activity) return { title: '활동 · DailyFit' };
+  if (!activity) return { title: `활동 · ${site.nameKo}` };
   const description =
     activity.summary ?? `${activity.neighborhood ?? ''} ${activity.is_free ? '무료' : ''} 활동`.trim();
   const ogImage = ogImageFor(activity);
   return {
-    title: { absolute: `${activity.title} · DailyFit` },
+    // ⚠️ `absolute` 라 루트 layout 의 title.template 을 **타지 않는다.** 즉 브랜드
+    // 접미를 여기서 직접 써야 하고, layout 만 고치면 이 8,701장은 조용히 옛 표기로
+    // 남는다 (2026-08-17 가드가 실제로 그렇게 잡아냈다). 한글 토큰이 가장 중요한
+    // 곳이 바로 여기다 — 롱테일 검색 유입의 본체이고, 네이버·구글에 우리 이름으로
+    // 걸리는 페이지 수의 99% 다.
+    title: { absolute: `${activity.title} · ${site.nameKo}` },
     description,
     // ── canonical 은 my. 를 가리킨다 (2026-08-05 청자 분리 방침) ──────────
     // 활동 상세는 소비자 화면이고, 소비자 도메인은 my.dailyfitai.app 이다.

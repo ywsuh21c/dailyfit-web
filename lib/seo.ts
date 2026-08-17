@@ -80,7 +80,8 @@ export type PageSeo = {
   title: string;
   description: string;
   /**
-   * Use `title` verbatim instead of the root `%s · DailyFit` template. For
+   * Use `title` verbatim instead of the root `%s · 데일리핏` template (`%s · DailyFit`
+   * under /en). For
    * titles that already carry the brand — otherwise the tab reads
    * "Technology · DailyFit · DailyFit" (real bug, live 2026-08-04).
    */
