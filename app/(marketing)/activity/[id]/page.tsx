@@ -1,5 +1,7 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
+import { Fragment } from 'react';
+import { parseFacts } from '@/lib/description-facts';
 import { getPublicActivity } from '@/lib/activity';
 import { site, storeLinks, productAppUrl, myIndexLive, externalLinkProps } from '@/lib/site';
 import { absoluteUrl } from '@/lib/seo';
@@ -145,6 +147,8 @@ export default async function ActivityLandingPage({
   // 그래서 실사진 두 필드만 본다. 구조화 데이터의 `image` 와 **같은 값**을 쓴다
   // (화면과 마크업이 갈리면 그게 곧 숨은 값이다).
   const activityPhoto = activity.hero_image_url || activity.image_url || null;
+  // 설명을 (항목 · 불릿 · 남은 산문)으로 가른다. 표가 아니면 facts 가 비고 원문이 그대로 나온다.
+  const summaryFacts = parseFacts(activity.summary);
 
   return (
     <article>
@@ -220,11 +224,43 @@ export default async function ActivityLandingPage({
         </div>
       )}
 
-      {/* 소개 */}
+      {/* 소개 — 공급처 설명은 실제로는 «문장이 아니라 표»다. 라벨이 있으면 표로 되돌리고,
+          진짜 산문이면 손대지 않는다(판정은 lib/description-facts.ts 의 parseFacts 4조건).
+          길재혁 2026-08-17 #dev-error-log: "설명 글이 문단이라 안 읽힌다 — 불렛으로".
+          앱·웹앱 상세는 8/3 부터 이 분해를 해 왔고, 랜딩만 못 받고 있었다. */}
       {activity.summary && (
         <div className="bg-bg py-12 sm:py-16">
           <div className="mx-auto max-w-3xl px-5">
-            <p className="text-[20px] leading-[1.8] text-ink">{activity.summary}</p>
+            {summaryFacts.facts.length > 0 ? (
+              <>
+                <dl className="grid gap-x-8 gap-y-3 sm:grid-cols-[max-content_1fr]">
+                  {summaryFacts.facts.map((f) => (
+                    <Fragment key={`${f.label}-${f.value}`}>
+                      <dt className="text-[17px] font-semibold text-ink/60 sm:text-[18px]">
+                        {f.label}
+                      </dt>
+                      <dd className="text-[19px] leading-[1.7] text-ink sm:text-[20px]">
+                        {f.value}
+                      </dd>
+                    </Fragment>
+                  ))}
+                </dl>
+                {summaryFacts.bullets.length > 0 && (
+                  <ul className="mt-5 list-disc space-y-2 pl-5 text-[19px] leading-[1.7] text-ink sm:text-[20px]">
+                    {summaryFacts.bullets.map((b) => (
+                      <li key={b}>{b}</li>
+                    ))}
+                  </ul>
+                )}
+                {summaryFacts.rest && (
+                  <p className="mt-5 text-[19px] leading-[1.8] text-ink sm:text-[20px]">
+                    {summaryFacts.rest}
+                  </p>
+                )}
+              </>
+            ) : (
+              <p className="text-[20px] leading-[1.8] text-ink">{activity.summary}</p>
+            )}
           </div>
         </div>
       )}
