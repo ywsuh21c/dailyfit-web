@@ -32,10 +32,30 @@ import { hasTwin, localeOf, localizeHref, toKoPath } from '@/lib/i18n';
  * 빈 값이면 태그 자체가 렌더되지 않는다(빈 meta 를 내보내지 않음).
  */
 export const verificationTokens = {
-  // 발급 2026-08-04, URL 접두어 속성 https://dailyfitai.app (현진).
-  google:
-    process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION ??
-    'GIvRcy78ObtiCgtJuCpqpXy7DbiHHRWnlSatok0muS8',
+  /**
+   * 구글 소유확인 토큰 — **배열이다.** 구글은 한 사이트에 여러 소유확인 태그를 동시에
+   * 허용하고, Next 의 `metadata.verification.google` 도 배열을 받아 meta 를 여러 개 낸다.
+   *
+   * ── 왜 두 개인가 (2026-09-02 실측) ───────────────────────────────────────
+   * 첫 값은 8/4 에 배선된 것인데, **어느 계정 것인지 특정되지 않는다.**
+   * 영우의 두 계정(`ywsuh21c` · `michaelsuh21c`) 모두 서치콘솔 속성이 **0개**이고,
+   * Site Verification API 로 대조한 `michaelsuh21c` 의 META 토큰은 `Et8TFKjo…` 라
+   * 첫 값과 **다르다**. 즉 태그는 살아 있는데 **우리 손에 콘솔이 없다** —
+   * 8/8·8/17·8/19 세 세션이 「사이트맵 제출」을 3주간 못 닫은 진짜 이유다.
+   *
+   * 그래서 첫 값을 **지우지 않고**(지우면 그 계정의 소유확인이 깨진다) 우리 계정
+   * 토큰을 덧붙인다. 되돌리기 = 두 번째 원소 한 줄 제거.
+   *
+   * env 오버라이드는 종전대로 단일 값이며, 주면 배열 전체를 대체한다(프리뷰용).
+   */
+  google: (process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION
+    ? [process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION]
+    : [
+        // 발급 2026-08-04, URL 접두어 속성 https://dailyfitai.app (현진이 배선, 계정 미상).
+        'GIvRcy78ObtiCgtJuCpqpXy7DbiHHRWnlSatok0muS8',
+        // 발급 2026-09-02, michaelsuh21c@gmail.com (Site Verification API).
+        'Et8TFKjojzctaBlyFYGh1m3VeiqygkQjwgg9Vgr0fY8',
+      ]) as readonly string[],
   // 발급 2026-08-04, 네이버 서치어드바이저 웹마스터도구 (현진).
   naver:
     process.env.NEXT_PUBLIC_NAVER_SITE_VERIFICATION ??
@@ -49,7 +69,7 @@ export function verificationMetadata(): Metadata['verification'] {
   if (verificationTokens.naver) other['naver-site-verification'] = verificationTokens.naver;
   if (verificationTokens.bing) other['msvalidate.01'] = verificationTokens.bing;
   const v: NonNullable<Metadata['verification']> = {};
-  if (verificationTokens.google) v.google = verificationTokens.google;
+  if (verificationTokens.google.length > 0) v.google = [...verificationTokens.google];
   if (Object.keys(other).length > 0) v.other = other;
   return Object.keys(v).length > 0 ? v : undefined;
 }
