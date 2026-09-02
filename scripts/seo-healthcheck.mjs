@@ -525,6 +525,72 @@ async function main() {
       `HTTP ${key.res.status} — 배포 전이면 정상. 배포 후에도 실패면 public/ 서빙 확인`
     );
 
+  // ── 사용자 노출면 금지어 ───────────────────────────────────────────────────
+  // 영우 2026-09-02: 「유저들한테는 "어르신" 및 "시니어" 같은 표현은 싹 다 보여주지
+  // 않을거야」 + 범위 확정(9/2): 회사 사이트 dailyfitai.app 도 포함.
+  //
+  // 🔴 화면에 «렌더되는» 것만 대상이다. 소스 주석·iOS 키워드 칸처럼 사용자에게
+  //    안 보이는 자리는 금지 대상이 아니다(영우 9/2 확인) — 그래서 이 가드는
+  //    소스 grep 이 아니라 «응답 HTML» 을 잰다. site.description 이 JSON-LD 로
+  //    전 페이지에 주입되므로 한 곳이 새면 활동 상세 9,765장이 같이 샌다.
+  //
+  // 🔴 대조군이 없으면 «아무것도 못 읽은» 것도 0건으로 통과한다. 브랜드명이
+  //    안 잡히면 그건 "깨끗하다"가 아니라 "측정이 실패했다"이므로 실패로 올린다.
+  {
+    const BANNED = ['시니어', '어르신', '노인'];
+    const CONTROL = '데일리핏';
+    const surfaces = [
+      '/',
+      '/about',
+      '/technology',
+      '/investors',
+      '/product',
+      '/get',
+      '/writing',
+      '/llms.txt',
+      '/llms-full.txt',
+    ];
+    const violations = [];
+    const unmeasured = [];
+    for (const path of surfaces) {
+      let page;
+      try {
+        page = await get(path);
+      } catch (e) {
+        unmeasured.push(`${path} — 요청 실패: ${e?.message ?? e}`);
+        continue;
+      }
+      if (!page.res.ok) {
+        unmeasured.push(`${path} — HTTP ${page.res.status}`);
+        continue;
+      }
+      if (!page.body.includes(CONTROL)) {
+        unmeasured.push(`${path} — 대조군 "${CONTROL}" 미검출(측정 실패로 판정)`);
+        continue;
+      }
+      for (const word of BANNED) {
+        const hits = page.body.split(word).length - 1;
+        if (hits > 0) violations.push(`${path} — "${word}" ${hits}회`);
+      }
+    }
+    if (unmeasured.length)
+      fail(
+        '사용자 노출면 금지어 없음',
+        `${unmeasured.length}개 면을 재지 못했다(0건이 아니라 «측정 실패»다):\n      ` +
+          unmeasured.join('\n      ')
+      );
+    else if (violations.length)
+      fail(
+        '사용자 노출면 금지어 없음',
+        `${violations.length}건 노출:\n      ` + violations.join('\n      ')
+      );
+    else
+      pass(
+        '사용자 노출면 금지어 없음',
+        `${surfaces.length}개 면 · ${BANNED.join('/')} 0건 (대조군 "${CONTROL}" 전 면 검출)`
+      );
+  }
+
   // ── 리포트 ────────────────────────────────────────────────────────────────
   const failed = results.filter((r) => !r.ok);
   const warned = results.filter((r) => r.warned);

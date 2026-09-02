@@ -10,7 +10,7 @@ import { JourneyPath } from '@/components/motion/JourneyPath';
 export const metadata: Metadata = pageSeo({
   path: '/about',
   title: '소개',
-  description: `${site.name} · ${site.tagline}. 액티브 시니어를 위한 AI Agent를 만드는 팀.`,
+  description: `${site.name} · ${site.tagline}. 55세 이상 어른들을 위한 AI Agent를 만드는 팀.`,
 });
 
 // /about — Option-B tone: "AI agent founder" 내러티브 (시니어 케어 founder
@@ -26,11 +26,11 @@ export default function AboutPage() {
           <p className="eyebrow-mono text-sage">About DailyFit</p>
           <h1 className="mt-5 max-w-3xl text-h1">{site.tagline}</h1>
           <p className="mt-6 max-w-prose text-body text-ink-soft">
-            DailyFit은 액티브 시니어 세대를 위한 AI Agent를 만듭니다.
+            DailyFit은 55세 이상 어른들을 위한 AI Agent를 만듭니다.
             <br />
             취미와 일상을 설계하는 Agent 팀입니다.
             <br />
-            우리는 시니어를 그 누구보다 매력적인 세그먼트라고 봅니다.
+            우리는 이 세대를 그 누구보다 매력적인 세그먼트라고 봅니다.
             <br />
             그래서 기술보다 먼저, 더 활기찬 하루를 이야기합니다.
           </p>
@@ -41,7 +41,7 @@ export default function AboutPage() {
         <SectionHeader
           eyebrow="미션"
           title="모두가 자기 하루의 저자가 되도록"
-          lead="DailyFit은 돌봄 앱도, 모니터링 도구도, 의료 서비스도 아닙니다. 자기결정·활력·구조, 시니어가 스스로 하루를 설계하는 도구입니다."
+          lead="DailyFit은 돌봄 앱도, 모니터링 도구도, 의료 서비스도 아닙니다. 자기결정·활력·구조, 스스로 하루를 설계하는 도구입니다."
         />
       </Section>
 
@@ -51,7 +51,7 @@ export default function AboutPage() {
           title="회사도 Agent로 운영합니다"
           lead={
             <>
-              제품은 시니어의 하루를 설계하는 Agent, 회사는 AI Agent 팀이 운영하는 조직.
+              제품은 회원의 하루를 설계하는 Agent, 회사는 AI Agent 팀이 운영하는 조직.
               <br />
               우리가 일하는 방식을 공개합니다.
             </>
@@ -101,12 +101,12 @@ export default function AboutPage() {
           <FounderCard
             name="Youngwoo Michael Suh"
             role="Co-founder · CEO"
-            bio="Boston University → Fudan University → Bain → PYLER → DailyFit. AI Agent 팀을 직접 운영하며 시니어의 하루를 AaaS로 설계합니다."
+            bio="Boston University → Fudan University → Bain → PYLER → DailyFit. AI Agent 팀을 직접 운영하며 5060 세대의 하루를 AaaS로 설계합니다."
           />
           <FounderCard
             name="Hyunjin Jake Kim"
             role="Co-founder · Head of Strategy"
-            bio="고려대학교 → EY-Parthenon → Bain → University of Virginia MBA → DailyFit. 전략과 글로벌 확장을 이끌며 시니어의 하루를 함께 설계합니다."
+            bio="고려대학교 → EY-Parthenon → Bain → University of Virginia MBA → DailyFit. 전략과 글로벌 확장을 이끌며 5060 세대의 하루를 함께 설계합니다."
           />
         </div>
         <p className="mt-8 max-w-prose text-body text-ink-soft">

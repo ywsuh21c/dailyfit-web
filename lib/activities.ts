@@ -23,8 +23,10 @@ export type ActivityChip = { tag: string; name: string };
 
 // Confirmed-real activities (verified against the live catalog 2026-07-01).
 // Used when the live fetch is unavailable — never fabricated placeholders.
+// 🔴 이 목록은 사용자에게 «렌더된다». 카탈로그의 실제 활동명 중 「시니어/어르신/노인」이
+// 들어간 것은 여기 실으면 안 된다(2026-09-02 방침). 이름을 지어내지 말고 «빼라» —
+// 「시니어 러닝클럽」은 그래서 제외했다. 카탈로그 쪽 개명이 되면 그때 되돌린다.
 const FALLBACK: ActivityChip[] = [
-  { tag: '자체 운영', name: '시니어 러닝클럽' },
   { tag: '자체 운영', name: '한강 자전거 라이딩' },
   { tag: '자체 운영', name: 'AI·디지털 첫걸음 교실' },
   { tag: '여가', name: '요가라테스' },

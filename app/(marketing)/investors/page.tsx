@@ -12,7 +12,7 @@ export const metadata: Metadata = pageSeo({
   path: '/investors',
   title: 'Investors',
   description:
-    '액티브 시니어(55–70)를 위한 AI 일상 설계 플랫폼. 무엇을, 왜 지금, 누가 만드는지.',
+    '55–70세를 위한 AI 일상 설계 플랫폼. 무엇을, 왜 지금, 누가 만드는지.',
   noindex: true,
 });
 
@@ -31,7 +31,7 @@ export default function InvestorsPage() {
           한국에서 가장 빠르게 늘어나는 인구는 디지털을 씁니다.
         </h1>
         <p className="mt-6 max-w-prose text-body text-ink-soft">
-          1,300만 명의 한국 시니어(55–70세)가 이미 카카오톡으로 하루를 운영합니다.
+          한국의 55–70세 1,300만 명이 이미 카카오톡으로 하루를 운영합니다.
           DailyFit은 그 위에 AI Agent를 얹어 &ldquo;건강하게 오래 재미나게
           의미있게 사는 일상&rdquo;을 매일 설계합니다.
         </p>
@@ -41,7 +41,7 @@ export default function InvestorsPage() {
           </ButtonLink>
         </div>
         <div className="mt-14 grid gap-4 sm:grid-cols-3">
-          <StatCard suffix="만 명" label="한국 55–70 액티브 시니어">
+          <StatCard suffix="만 명" label="한국 55–70세 인구">
             <CountUp to={1300} />
           </StatCard>
           <StatCard suffix="건" label="보유 프로그램·활동 DB (실시간)">
@@ -64,7 +64,7 @@ export default function InvestorsPage() {
           title="왜 지금인가"
           lead={
             <>
-              한국 55–70세 액티브 시니어 시장이 변곡점을 맞은 이유는
+              한국 55–70세 시장이 변곡점을 맞은 이유는
               세 가지 흐름이 동시에 교차하기 때문입니다.
               <br />
               <br />
@@ -81,7 +81,7 @@ export default function InvestorsPage() {
         <div className="mt-8 grid gap-4 sm:grid-cols-3">
           <EvidenceCard
             stat="96.5% vs 65.6%"
-            claim="시니어의 디지털 접근은 이미 보편입니다. 활용 역량과의 30%p 격차가 Agent의 기회 공간입니다."
+            claim="이 세대의 디지털 접근은 이미 보편입니다. 활용 역량과의 30%p 격차가 Agent의 기회 공간입니다."
             source="과기정통부·NIA 디지털정보격차 실태조사 2024"
           />
           <EvidenceCard
@@ -96,15 +96,15 @@ export default function InvestorsPage() {
           />
         </div>
         <p className="mt-8 max-w-prose text-body text-ink-soft">
-          액티브 시니어는 더 이상 돌봄의 대상이 아니라 자기 하루의 저자입니다.
+          이 세대는 더 이상 돌봄의 대상이 아니라 자기 하루의 저자입니다.
         </p>
         <div className="mt-12">
           <OrbitRings
-            aria="시장 확장: 한국 1,300만 첫 시장에서 동아시아, 글로벌 시니어 시장으로"
+            aria="시장 확장: 한국 1,300만 첫 시장에서 동아시아, 글로벌 5060 시장으로"
             coreTop="한국 1,300만"
             coreBottom="첫 시장"
             mid="동아시아"
-            outer="글로벌 시니어 시장"
+            outer="글로벌 5060 시장"
           />
         </div>
       </Section>
@@ -116,10 +116,10 @@ export default function InvestorsPage() {
           title="무엇을 만들고 있나"
           lead={
             <>
-              DailyFit은 시니어가 매일을 의미 있게 설계하도록 돕는 AI Agent입니다.
+              DailyFit은 회원이 매일을 의미 있게 설계하도록 돕는 AI Agent입니다.
               <br />
               인기 복지관·문화센터 프로그램은 신청이 복잡하고 경쟁이 치열합니다.
-              DailyFit은 시니어 대신 활동을 찾아 신청까지 대행하는 Agent as a
+              DailyFit은 회원 대신 활동을 찾아 신청까지 대행하는 Agent as a
               Service입니다. 카카오톡 위에서, 익숙한 대화로 움직입니다.
             </>
           }
@@ -168,7 +168,7 @@ export default function InvestorsPage() {
         <SectionHeader
           eyebrow="Business model"
           title="검색은 무료, 대행에 과금합니다"
-          lead="Agent as a Service의 크레딧 모델입니다. 대행이 성공했을 때만 지불하는 구조가 시니어의 소비 습관과 맞습니다."
+          lead="Agent as a Service의 크레딧 모델입니다. 대행이 성공했을 때만 지불하는 구조가 이 세대의 소비 습관과 맞습니다."
         />
         <div className="mt-10 grid gap-4 sm:grid-cols-3">
           <ModelCard tag="Credit" title="쓴 만큼만 과금">
@@ -176,7 +176,7 @@ export default function InvestorsPage() {
             차감되고, 난이도에 따라 건당 가격이 달라집니다.
           </ModelCard>
           <ModelCard tag="Why not subscription" title="구독제가 아닌 이유">
-            앞서 시도된 시니어 구독 서비스의 공개 지표(월 9,900원, 유료 전환 약
+            앞서 시도된 동일 세대 구독 서비스의 공개 지표(월 9,900원, 유료 전환 약
             10%)가 천장을 시사합니다. 성과 기반 과금이 그 천장을 넘는
             설계입니다.
           </ModelCard>
