@@ -610,19 +610,35 @@ async function main() {
     // 개념 하나가 항목 여럿이 되고, 새 낱말을 넣는 사람이 변형을 손으로 다 적어야 한다.
     const countOf = (hay, word) => hay.toLowerCase().split(word.toLowerCase()).length - 1;
 
-    // 18개 면은 서로 의존이 없다. 순차로 돌면 프로드 실측 1,558ms, 병렬이면 337ms
+    // 면끼리는 의존이 없다. 순차로 돌면 프로드 실측 1,558ms, 병렬이면 337ms
     // (2026-09-02 측정) — 게다가 순차는 한 면의 재시도(3회·최대 60s)가 나머지를
     // 통째로 세운다.
-    const fetched = await Promise.all(
-      surfaces.map(async (sf) => {
-        try {
-          const page = await get(sf.path);
-          return { ...sf, page };
-        } catch (e) {
-          return { ...sf, error: e?.message ?? String(e) };
+    //
+    // 🔴 그렇다고 «전부 한꺼번에» 던지면 안 된다. 25개 면을 동시에 때렸더니
+    //    갓 깨어난 Netlify 프리뷰가 ECONNRESET 으로 끊어서, 위반이 아니라
+    //    «측정 실패» 2건으로 빨간불이 났다(PR #69 첫 실전). 프로드는 견디지만
+    //    콜드 프리뷰는 못 견딘다 — 가드는 «가장 약한 대상»에 맞춰야 한다.
+    const CONCURRENCY = Number(process.env.SEO_CONCURRENCY || 6);
+    const mapPool = async (items, limit, fn) => {
+      const out = new Array(items.length);
+      let next = 0;
+      const worker = async () => {
+        while (next < items.length) {
+          const i = next++;
+          out[i] = await fn(items[i]);
         }
-      })
-    );
+      };
+      await Promise.all(Array.from({ length: Math.min(limit, items.length) }, worker));
+      return out;
+    };
+    const fetched = await mapPool(surfaces, CONCURRENCY, async (sf) => {
+      try {
+        const page = await get(sf.path);
+        return { ...sf, page };
+      } catch (e) {
+        return { ...sf, error: e?.message ?? String(e) };
+      }
+    });
 
     const violations = [];
     const unmeasured = [];
@@ -662,6 +678,65 @@ async function main() {
           `금지어 ${KO_BANNED.join('/')} · senior · 창업자 이름·번호·「둘」 주장 — 전부 0건 ` +
           `(대조군 전 면 검출)`
       );
+  }
+
+  // ── 연락처 ↔ 백엔드 정합 ──────────────────────────────────────────────────
+  // 🔴 왜 필요한가: lib/help.ts 는 자기를 「폴백」이라 부르지만 프로드에
+  //    NEXT_PUBLIC_API_URL 이 없어 «상시» 그 값이 화면이 된다. 2026-09-02 에
+  //    백엔드는 이미 창업자 한 명의 번호만 주는데도 /product 에는 떠난 사람의
+  //    번호가 5회 남아 있었다 — 두 값이 갈렸는데 아무도 몰랐다.
+  //
+  // 무엇을 재나: 백엔드가 주는 «전화번호 집합»과 /product 에 실제로 그려진
+  //    번호를 대조한다. 화면에만 있는 번호(=낡은 사본)를 실패로 올린다.
+  //    백엔드에만 있고 화면에 없는 번호는 경고로 둔다(폴백이 뒤처진 것뿐).
+  //
+  // 🔴 어긋남 탐지기는 «어느 쪽이 틀렸는지» 모른다 — 그래서 메시지에 양쪽 값을
+  //    다 싣는다. 고칠 곳은 상황에 따라 lib/help.ts 일 수도, 백엔드일 수도 있다.
+  try {
+    const apiBase = process.env.SEO_API_BASE || 'https://api.dailyfitai.app';
+    const helpRes = await fetch(`${apiBase}/api/help`, {
+      cache: 'no-store',
+      signal: AbortSignal.timeout(Number(process.env.SEO_TIMEOUT_MS || 60_000)),
+      headers: { 'User-Agent': 'DailyFit-SEO-Healthcheck/1.0' },
+    });
+    if (!helpRes.ok) {
+      warn('연락처 ↔ 백엔드 정합', `GET ${apiBase}/api/help → HTTP ${helpRes.status} — 대조하지 못했다`);
+    } else {
+      const help = await helpRes.json();
+      const apiTels = (help?.contact?.phones ?? [])
+        .map((p) => String(p?.tel ?? '').replace(/\D/g, ''))
+        .filter(Boolean);
+      const product = await get('/product');
+      if (!product.res.ok) {
+        warn('연락처 ↔ 백엔드 정합', `/product HTTP ${product.res.status} — 화면 쪽을 못 읽었다`);
+      } else if (apiTels.length === 0) {
+        warn('연락처 ↔ 백엔드 정합', '백엔드가 전화번호를 하나도 주지 않는다 — 대조 대상 없음');
+      } else {
+        // 화면에 그려진 tel: 링크 = 실제로 회원이 누르는 번호.
+        const screenTels = [...product.body.matchAll(/tel:([0-9-]{9,})/g)]
+          .map((m) => m[1].replace(/\D/g, ''));
+        const uniq = [...new Set(screenTels)];
+        const stale = uniq.filter((t) => !apiTels.includes(t));
+        const missing = apiTels.filter((t) => !uniq.includes(t));
+        if (uniq.length === 0)
+          warn('연락처 ↔ 백엔드 정합', '/product 에 tel: 링크가 하나도 없다 — 화면 쪽 표본이 비었다');
+        else if (stale.length)
+          fail(
+            '연락처 ↔ 백엔드 정합',
+            `화면에만 있는 번호 ${stale.length}건: ${stale.join(', ')} — 백엔드는 [${apiTels.join(', ')}] 를 준다. ` +
+              `어느 쪽이 옳은지는 이 검사가 모른다: 떠난 사람이면 lib/help.ts 폴백을, 새 회선이면 백엔드를 고쳐라`
+          );
+        else if (missing.length)
+          warn(
+            '연락처 ↔ 백엔드 정합',
+            `백엔드에만 있는 번호 ${missing.length}건: ${missing.join(', ')} — 폴백이 뒤처졌다(화면은 ${uniq.join(', ')})`
+          );
+        else
+          pass('연락처 ↔ 백엔드 정합', `백엔드·화면 모두 [${uniq.join(', ')}]`);
+      }
+    }
+  } catch (e) {
+    warn('연락처 ↔ 백엔드 정합', `판정 불가 — ${e?.message ?? e}(가드가 침묵하는 것보다 경고로 강등)`);
   }
 
   // ── 리포트 ────────────────────────────────────────────────────────────────
