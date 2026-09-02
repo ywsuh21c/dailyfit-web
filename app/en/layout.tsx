@@ -12,7 +12,7 @@ import { site } from '@/lib/site';
 // 쓰이는 경우는 /en 하위에서 title 을 안 정한 페이지뿐이고, 현재는 전부 정하고 있다.
 export const metadata: Metadata = {
   title: {
-    default: `${site.name} · AI Agents for active seniors`,
+    default: `${site.name} · AI Agents for adults 55+`,
     template: `%s · ${site.name}`,
   },
 };

@@ -16,7 +16,7 @@ import { JourneyPath } from '@/components/motion/JourneyPath';
 export const metadata: Metadata = pageSeo({
   path: '/en/about',
   title: 'About',
-  description: `${site.name} · AI is the instrument, seniors are the identity. A team building AI Agents for active seniors.`,
+  description: `${site.name} · AI is the instrument, the 55+ generation is the identity. A team building AI Agents for adults 55+.`,
 });
 
 export default function EnAboutPage() {
@@ -27,13 +27,13 @@ export default function EnAboutPage() {
         <div className="aurora aurora-1" aria-hidden="true" />
         <div className="relative mx-auto max-w-6xl px-5 pb-20 pt-24 lg:pt-28">
           <p className="eyebrow-mono text-sage">About DailyFit</p>
-          <h1 className="mt-5 max-w-3xl text-h1">AI is the instrument. Seniors are the identity.</h1>
+          <h1 className="mt-5 max-w-3xl text-h1">AI is the instrument. The 55+ generation is the identity.</h1>
           <p className="mt-6 max-w-prose text-body text-ink-soft">
-            DailyFit builds AI Agents for the active senior generation.
+            DailyFit builds AI Agents for the 55+ generation.
             <br />
             A team of Agents that designs hobbies and daily life.
             <br />
-            We see seniors as one of the most compelling segments anywhere.
+            We see this generation as one of the most compelling segments anywhere.
             <br />
             So before technology, we talk about a more vibrant day.
           </p>
@@ -44,7 +44,7 @@ export default function EnAboutPage() {
         <SectionHeader
           eyebrow="Mission"
           title="So everyone becomes the author of their own day"
-          lead="DailyFit is not a care app, not a monitoring tool, and not a medical service. It is a tool for self-determination, vitality, and structure, so seniors design their own day."
+          lead="DailyFit is not a care app, not a monitoring tool, and not a medical service. It is a tool for self-determination, vitality, and structure, so people design their own day."
         />
       </Section>
 
@@ -54,7 +54,7 @@ export default function EnAboutPage() {
           title="We run the company with Agents too"
           lead={
             <>
-              The product is an Agent that designs a senior's day; the company is an organization run by a team of AI Agents.
+              The product is an Agent that designs a member's day; the company is an organization run by a team of AI Agents.
               <br />
               We are open about how we work.
             </>
@@ -97,20 +97,16 @@ export default function EnAboutPage() {
             </p>
           </div>
         </Reveal>
-        {/* TODO(Michael): founder photos + Hyunjin full-bio publication consent */}
         <Reveal className="mt-12">
           <JourneyPath lang="en" />
         </Reveal>
-        <div className="mt-12 grid gap-6 sm:grid-cols-2">
+        {/* Founder card — solo-founder structure (2026-08-20). One card, so a
+            two-column grid would leave it half-width; constrain to prose width. */}
+        <div className="mt-12 max-w-xl">
           <FounderCard
-            name="Youngwoo Michael Suh"
-            role="Co-founder · CEO"
-            bio="Boston University → Fudan University → Bain → PYLER → DailyFit. Runs the AI Agent team directly and designs the senior's day as AaaS."
-          />
-          <FounderCard
-            name="Hyunjin Jake Kim"
-            role="Co-founder · Head of Strategy"
-            bio="Korea University → EY-Parthenon → Bain → University of Virginia MBA → DailyFit. Leads strategy and global expansion, designing the senior's day alongside the team."
+            name={site.founder.name}
+            role={site.founder.role}
+            bio="Boston University → Fudan University → Bain → PYLER → DailyFit. Runs the AI Agent team directly and designs the day of adults 55+ as AaaS."
           />
         </div>
         <p className="mt-8 max-w-prose text-body text-ink-soft">

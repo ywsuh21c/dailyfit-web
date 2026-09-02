@@ -21,6 +21,6 @@ Three reasons.
 
 ## What we will write about
 
-How to run a company with a team of AI Agents, the hypothesis of the active senior market, the design notes behind how a family of Agents composes a person's day, and the things we deliberately chose not to do in order to ship every week. We want to put the weight on **the thinking that leads to a conclusion**, more than on the conclusion itself.
+How to run a company with a team of AI Agents, the hypothesis of the 55+ market, the design notes behind how a family of Agents composes a person's day, and the things we deliberately chose not to do in order to ship every week. We want to put the weight on **the thinking that leads to a conclusion**, more than on the conclusion itself.
 
 We call this *Radically Transparent*. This piece is the first entry.

@@ -8,7 +8,7 @@ export const metadata: Metadata = pageSeo({
   path: '/en/contact',
   title: 'Contact',
   description:
-    'Reach DailyFit directly. Investors, partnerships, talent, and press all get a personal reply from the founders.',
+    'Reach DailyFit directly. Investors, partnerships, talent, and press all get a personal reply from the founder.',
   noindex: true, // 기존 정책 유지
 });
 

@@ -334,7 +334,7 @@ export default async function HomePage() {
                 55세 이상 어른들을 위한 차세대 AI를 만듭니다.
               </h2>
               <p className="mt-5 text-base text-ivory/60">
-                Building the next AI for active seniors.
+                Building the next AI for adults 55+.
               </p>
               <div className="mt-10 flex flex-wrap justify-center gap-4">
                 <Link

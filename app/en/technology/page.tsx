@@ -16,7 +16,7 @@ export const metadata: Metadata = pageSeo({
   path: '/en/technology',
   title: 'Technology',
   description:
-    'An AI Agent that accumulates a senior’s daily life in a senior’s own voice. The technical problems DailyFit solves and the system architecture behind them.',
+    'An AI Agent that accumulates the daily life of the 55+ generation in that generation’s own voice. The technical problems DailyFit solves and the system architecture behind them.',
 });
 
 export default function EnTechnologyPage() {
@@ -26,23 +26,23 @@ export default function EnTechnologyPage() {
       <Section tone="light" className="pt-24">
         <p className="text-base font-semibold text-sage">About our technology</p>
         <h1 className="mt-3 max-w-3xl text-h1">
-          A senior’s daily life only becomes meaningful when it accumulates in a senior’s own voice.
+          The daily life of adults 55+ only becomes meaningful when it accumulates in their own voice.
         </h1>
         <div className="mt-6 max-w-prose space-y-4 text-body text-ink-soft">
           <p>
-            General-purpose LLMs struggle to read how seniors express their day.
+            General-purpose LLMs struggle to read how this generation expresses their day.
             <br />
             The slow speech, the dialect, the context carried over from yesterday.
             <br />
-            We accumulate, every day, the way seniors actually speak and the everyday context they live in.
+            We accumulate, every day, the way they actually speak and the everyday context they live in.
           </p>
           <ul className="space-y-2">
             <li>· Everyday context: &ldquo;My knee hurt yesterday&rdquo; changes today’s suggestion.</li>
-            <li>· A senior’s way of speaking: not a translation, but understanding the words a generation actually uses.</li>
-            <li>· Data that accumulates: the more it is used, the more senior expression patterns build into an asset.</li>
+            <li>· A generation’s way of speaking: not a translation, but understanding the words it actually uses.</li>
+            <li>· Data that accumulates: the more it is used, the more of this generation’s expression patterns build into an asset.</li>
           </ul>
           <p className="text-ink-soft/80">
-            We start with Korean-speaking seniors.
+            We start with Korean speakers aged 55+.
             <br />
             The same structure extends to the languages and generations of global markets.
           </p>
@@ -184,7 +184,7 @@ export default function EnTechnologyPage() {
         </div>
         <div className="mt-10 grid gap-6 sm:grid-cols-3">
           <MoatItem title="Raw Conversation Insight">
-            The raw, unfiltered &lsquo;everyday conversation&rsquo; of active seniors.
+            The raw, unfiltered &lsquo;everyday conversation&rsquo; of adults 55+.
             <br />
             Our biggest moat.
           </MoatItem>
@@ -206,7 +206,7 @@ export default function EnTechnologyPage() {
           title="The company itself is an AI Agent team"
           lead={
             <>
-              In the product, AI Agents help design a senior’s day,
+              In the product, AI Agents help design a member’s day,
               <br />
               and in operations, an AI Agent team helps run the company.
             </>

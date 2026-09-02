@@ -10,7 +10,7 @@ import { site } from '@/lib/site';
  *
  * The payload mirrors the app's two source files (apps/mobile/src/lib/
  * supportFaq.ts FAQ_ITEMS + support.ts contact). The website renders FAQ q/a and
- * the contact handoff: both founders' public phone numbers, the team email, and
+ * the contact handoff: the founder's public phone number, the team email, and
  * the KakaoTalk 1:1 channel.
  *
  * Safe-fallback rule: if NEXT_PUBLIC_API_URL is unset OR the fetch fails / is
@@ -29,7 +29,7 @@ export type PhoneEntry = { label: string; display: string; tel: string };
 
 export type HelpContact = {
   email: string;
-  /** Both founders' public phone numbers. Empty array → no phone shown. */
+  /** Public support phone numbers (1인 체제 — 창업자 한 명). Empty array → no phone shown. */
   phones: PhoneEntry[];
   /** KakaoTalk channel 1:1 https URL. Empty until the channel is live → CTA hidden. */
   kakao_url: string;
@@ -108,8 +108,7 @@ const FALLBACK_FAQ: FaqItem[] = [
 const FALLBACK_CONTACT: HelpContact = {
   email: site.contactEmail,
   phones: [
-    { label: '서영우', display: '010-8807-6397', tel: '01088076397' },
-    { label: '김현진', display: '010-4901-7898', tel: '01049017898' },
+    { label: site.founder.nameKo, ...site.founder.phone },
   ],
   kakao_url: 'http://pf.kakao.com/_kxmUXX/chat',
   kakao_handle: '@데일리핏',

@@ -13,10 +13,10 @@ import { Reveal } from '@/components/motion/Reveal';
 
 export const metadata: Metadata = pageSeo({
   path: '/en',
-  title: 'DailyFit · AI Agents for active seniors',
+  title: 'DailyFit · AI Agents for adults 55+',
   absoluteTitle: true, // title already carries the brand
   description:
-    'We build AI Agents for the active senior generation. One conversation designs the day: discovery, reminders, and auto-apply.',
+    'We build AI Agents for the 55+ generation. One conversation designs the day: discovery, reminders, and auto-apply.',
 });
 
 // Floating data motes inside the runtime stage — deterministic positions
@@ -40,7 +40,6 @@ const MOTES: Array<{ left: string; top: string; size: number; dur: string; delay
 // is Korean-first; this mirrors the KO home's live ticker with representative
 // English examples so the marquee reads for an English audience).
 const TICKER: Array<[string, string]> = [
-  ['In-house', 'Senior Running Club'],
   ['In-house', 'Hangang Cycling'],
   ['In-house', 'AI & Digital Basics'],
   ['Fitness', 'Yogalates'],
@@ -87,10 +86,10 @@ export default async function EnHomePage() {
             <h1 className="mt-8 text-[30px] font-extrabold leading-[1.1] tracking-[-0.04em] text-ivory min-[430px]:text-[34px] sm:text-[60px] sm:leading-[1.08] lg:text-[72px]">
               <span className="hx-glow-text">AI Agents</span>
               <br />
-              for active seniors.
+              for adults 55+.
             </h1>
             <p className="mt-7 max-w-[46ch] text-[18px] leading-relaxed text-ivory/70 sm:text-[21px]">
-              <span className="block">Active seniors are learning, meeting, and enjoying life on their smartphones.</span>
+              <span className="block">Adults 55+ are learning, meeting, and enjoying life on their smartphones.</span>
               <span className="mt-2 block">We design the day for the fastest-growing generation in the world.</span>
             </p>
             <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
@@ -126,7 +125,7 @@ export default async function EnHomePage() {
           <Reveal>
             <p className="hx-eyebrow eyebrow-mono text-sage">The problem</p>
             <h2 className="mt-6 text-[30px] font-extrabold leading-[1.18] tracking-[-0.035em] text-ink sm:text-[42px]">
-              Active seniors have the time and the curiosity.
+              Adults 55+ have the time and the curiosity.
               <br />
               Finding what to do is the hard part.
             </h2>
@@ -301,7 +300,7 @@ export default async function EnHomePage() {
             <Reveal>
               <p className="eyebrow-mono text-sage-lt/80">Agent-as-a-Service</p>
               <h2 className="mx-auto mt-6 max-w-[20ch] text-[34px] font-extrabold leading-[1.16] tracking-[-0.035em] text-ivory sm:text-[46px]">
-                Building the next AI for active seniors.
+                Building the next AI for adults 55+.
               </h2>
               <div className="mt-10 flex flex-wrap justify-center gap-4">
                 <Link

@@ -93,20 +93,16 @@ export default function AboutPage() {
             </p>
           </div>
         </Reveal>
-        {/* TODO(Michael): 창업자 사진 + 현진 풀 bio 게재 동의 */}
         <Reveal className="mt-12">
           <JourneyPath />
         </Reveal>
-        <div className="mt-12 grid gap-6 sm:grid-cols-2">
+        {/* 창업자 카드 — 1인 체제(2026-08-20). 카드는 하나뿐이라 2열 그리드가 아니라
+            본문 폭에 맞춘 단일 카드로 둔다(반쪽짜리 그리드가 되지 않게). */}
+        <div className="mt-12 max-w-xl">
           <FounderCard
-            name="Youngwoo Michael Suh"
-            role="Co-founder · CEO"
+            name={site.founder.name}
+            role={site.founder.role}
             bio="Boston University → Fudan University → Bain → PYLER → DailyFit. AI Agent 팀을 직접 운영하며 5060 세대의 하루를 AaaS로 설계합니다."
-          />
-          <FounderCard
-            name="Hyunjin Jake Kim"
-            role="Co-founder · Head of Strategy"
-            bio="고려대학교 → EY-Parthenon → Bain → University of Virginia MBA → DailyFit. 전략과 글로벌 확장을 이끌며 5060 세대의 하루를 함께 설계합니다."
           />
         </div>
         <p className="mt-8 max-w-prose text-body text-ink-soft">
