@@ -62,6 +62,13 @@ const BASE = (process.env.BASE || 'https://dailyfitai.app').replace(/\/$/, '');
 const SITE = (process.env.SEO_SITE_URL || 'https://dailyfitai.app').replace(/\/$/, '');
 const KEY = process.env.INDEXNOW_KEY || 'e45cb2375308eb5b91fc5a68d981f7e4';
 /**
+ * Play 공개 스토어 URL — `lib/site.ts` 의 `androidPlayUrl` 과 같은 값이어야 한다.
+ * BRAND_KO 와 같은 이유로 import 하지 않고 복제한다: 이 스크립트는 **라이브 HTTP 만**
+ * 보는 것이 계약이고, 소스를 읽기 시작하면 "배포된 판"이 아니라 "워크트리"를 검사하게 된다.
+ */
+const PLAY_URL =
+  process.env.SEO_PLAY_URL || 'https://play.google.com/store/apps/details?id=kr.dailyfit.app';
+/**
  * title 에 반드시 있어야 하는 한글 브랜드 토큰. `lib/site.ts` 의 `nameKo` 와 같은
  * 값이어야 한다 — 이 스크립트는 라이브 HTTP 만 보므로 소스를 import 하지 않고
  * 문자열을 복제한다. 브랜드 표기를 바꾸면 **두 곳 다** 바꿔야 하고, 안 바꾸면
@@ -419,6 +426,65 @@ async function main() {
       pass('www → apex 301', `${www.res.status} → ${loc}`);
     else fail('www → apex 301', `HTTP ${www.res.status} location="${loc}"`);
   }
+
+  // ── 안드 출시 스위치 ↔ Play 공개 URL (2026-09-02 추가) ────────────────────
+  // 왜 여기인가: 8/8 에 #42 가 `ANDROID_APP_LIVE=true` 로 머지됐는데 그 전제인
+  // Play 프로덕션 승인은 7/30 에 거절된 상태였다. **9일간** `/get` 의 안드 버튼이
+  // 404 로 보냈고, 빌드·타입체크·테스트 어느 것도 못 잡았다 — 이건 코드가 아니라
+  // **바깥 세상과의 정합**이라 라이브 HTTP 로만 잡힌다.
+  //
+  // 🔴 양방향으로 판정한다. 한쪽만 보면 반대편 사고가 그대로 남는다:
+  //   · 켰는데 Play 가 404      → ✗ 실패. 사용자가 막힌 페이지에 부딪힌다
+  //   · Play 가 200 인데 껐음   → ⚠ 경고. 출시했는데 사이트가 "미출시"라고 말한다
+  //     (실패가 아닌 이유: 출시 직후 배포 전까지는 정상적으로 이 상태를 지난다)
+  //
+  // 사이트가 실제로 어느 쪽인지는 **라이브에서** 읽는다 — 소스 상수를 import 하지
+  // 않는다. 이 가드는 "배포된 판"을 검사하는 것이지 "워크트리"를 검사하는 게 아니다.
+  // 판정 근거 = `/product` 의 MobileApplication JSON-LD `operatingSystem`
+  // (`androidAppLive` 에서 파생되는 값이라 이게 곧 배포된 스위치의 상태다).
+  const productForSwitch = await get('/product');
+  const playProbe = await get(PLAY_URL);
+  // 🔴 소프트-404 대조군. "200 이면 게시됨"은 Play 가 없는 앱에도 200 을 주는 순간
+  // 무너진다. 그래서 **존재할 수 없는 패키지 id** 를 같은 방식으로 한 번 때려 보고,
+  // 그쪽도 200 이면 상태코드 자체를 판정에 못 쓴다고 선언한다(미상 처리).
+  const playControl = await get(PLAY_URL.replace(/id=.*$/, 'id=kr.dailyfit.app.nonexistent'));
+  const statusIsMeaningful = playControl.res.status !== 200;
+  const siteSaysAndroidLive = /"operatingSystem"\s*:\s*"[^"]*Android/i.test(
+    productForSwitch.body
+  );
+  const playIsPublic = playProbe.res.status === 200;
+  if (!statusIsMeaningful)
+    warn(
+      '안드 출시 스위치 ↔ Play 공개 URL',
+      `판정 불가 — 없는 패키지에도 HTTP 200 이 돌아왔다(소프트-404). ` +
+        `상태코드로는 게시 여부를 못 가른다. Play Console 에서 직접 확인할 것`
+    );
+  else if (playProbe.res.status >= 300 && playProbe.res.status < 400)
+    warn(
+      '안드 출시 스위치 ↔ Play 공개 URL',
+      `판정 불가 — Play 가 HTTP ${playProbe.res.status} 리다이렉트를 줬다 ` +
+        `(location="${playProbe.res.headers.get('location') || ''}"). 200/404 가 아니면 판정에 쓰지 않는다`
+    );
+  else if (siteSaysAndroidLive && !playIsPublic)
+    fail(
+      '안드 출시 스위치 ↔ Play 공개 URL',
+      `사이트는 Android 출시라고 말하는데 Play 공개 URL 이 HTTP ${playProbe.res.status} 다 — ` +
+        `/get 의 안드 버튼이 막힌 페이지로 보낸다. lib/site.ts 의 androidAppLive 를 false 로.`
+    );
+  else if (!siteSaysAndroidLive && playIsPublic)
+    warn(
+      '안드 출시 스위치 ↔ Play 공개 URL',
+      `Play 공개 URL 이 200(게시됨)인데 사이트는 아직 "미출시"로 말한다 — ` +
+        `lib/site.ts 의 androidAppLive 를 true 로 켜고 배포할 것. ` +
+        `(스토어 배지 · sameAs · MobileApplication · /llms.txt 가 한꺼번에 따라온다)`
+    );
+  else
+    pass(
+      '안드 출시 스위치 ↔ Play 공개 URL',
+      siteSaysAndroidLive
+        ? `양쪽 다 출시됨 (Play ${playProbe.res.status})`
+        : `양쪽 다 미출시 (Play ${playProbe.res.status})`
+    );
 
   // ── IndexNow 키 파일 ──────────────────────────────────────────────────────
   const key = await get(`/${KEY}.txt`);
