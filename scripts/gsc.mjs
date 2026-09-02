@@ -33,22 +33,42 @@
  */
 
 import { execFileSync } from 'node:child_process';
+import { readFileSync } from 'node:fs';
 
 const SITE = process.env.GSC_SITE || 'https://dailyfitai.app/';
 const SITEMAP = process.env.GSC_SITEMAP || 'https://dailyfitai.app/sitemap.xml';
 const SCOPE = 'https://www.googleapis.com/auth/webmasters';
 
-/** gcloud 가 들고 있는 액세스 토큰. 없으면 명확히 죽는다(조용한 폴백 금지). */
+/**
+ * 액세스 토큰.
+ *
+ * 🔴 **ADC(application-default) 를 먼저 본다.** `gcloud auth login` 은 `--scopes` 를
+ * 아예 받지 않는다(SDK 573 실측: `unrecognized arguments: --scopes`). 스코프를 지정해
+ * 로그인할 수 있는 경로는 `gcloud auth application-default login --scopes=...` 뿐이고,
+ * 그 자격증명은 `gcloud auth application-default print-access-token` 으로 읽힌다.
+ *
+ * 처음엔 `gcloud auth login --update-adc --scopes=...` 를 안내했는데 그 명령은
+ * **존재하지 않는다.** 그런데 실행하면 gcloud 가 에러를 찍고도 **종료코드 0** 을 준다 —
+ * 종료코드만 보고 "권한 받았다"고 넘어갈 뻔했고, `tokeninfo` 로 실측해서 잡았다.
+ * 그래서 이 스크립트는 항상 **스코프를 직접 확인**한다(`hasScope`).
+ */
 function token() {
-  try {
-    return execFileSync('gcloud', ['auth', 'print-access-token'], {
-      encoding: 'utf8',
-      stdio: ['ignore', 'pipe', 'ignore'],
-    }).trim();
-  } catch {
-    console.error('✗ gcloud 액세스 토큰을 못 읽었다. `gcloud auth login` 먼저.');
-    process.exit(2);
+  for (const args of [
+    ['auth', 'application-default', 'print-access-token'],
+    ['auth', 'print-access-token'],
+  ]) {
+    try {
+      const t = execFileSync('gcloud', args, {
+        encoding: 'utf8',
+        stdio: ['ignore', 'pipe', 'ignore'],
+      }).trim();
+      if (t) return t;
+    } catch {
+      /* 다음 경로 시도 */
+    }
   }
+  console.error('✗ gcloud 액세스 토큰을 못 읽었다. `gcloud auth login` 먼저.');
+  process.exit(2);
 }
 
 /**
@@ -73,8 +93,11 @@ async function grantCommand() {
   }
   if (!current.length) return null;
   // 지금 있는 것 전부 + webmasters. 순서는 그대로 두고 중복만 뺀다.
-  const merged = Array.from(new Set([...current, SCOPE]));
-  return `gcloud auth login --update-adc --scopes="${merged.join(',')}"`;
+  // openid·email 은 ADC 로그인이 알아서 붙이므로 명시 목록에서 뺀다(중복 경고 방지).
+  const merged = Array.from(new Set([...current, SCOPE])).filter(
+    (x) => x.startsWith('https://')
+  );
+  return `gcloud auth application-default login --scopes="${merged.join(',')}"`;
 }
 
 async function explainScope() {
@@ -97,17 +120,44 @@ async function explainScope() {
       '  · 🔴 위 명령에는 **지금 쓰고 있는 스코프가 전부 포함돼 있다.** 재로그인이 스코프를',
       '    덮어쓰기 때문에, 짧은 명령을 대신 치면 배포용 권한(cloud-platform·compute 등)이',
       '    조용히 빠진다. 그대로 복사해서 쓸 것.',
-      '  · 되돌리기: `gcloud auth revoke` 후 평소 쓰던 로그인으로 다시.',
+      '  · 🔴 이 명령은 **ADC(application-default) 자격증명을 덮어쓴다.** 위 목록에 지금 쓰는',
+      '    스코프가 전부 들어 있는지 확인하고 그대로 실행할 것 — 짧게 줄이면 배포용 권한이 빠진다.',
+      '  · 되돌리기: `gcloud auth application-default revoke` 후 평소 쓰던 로그인으로 다시',
+      '    (또는 백업해 둔 ~/.config/gcloud/application_default_credentials.json 복원).',
       '',
     ].join('\n')
   );
   process.exit(3);
 }
 
+/**
+ * ADC 로 인증하면 구글이 **쿼터 프로젝트 헤더**를 요구한다 —
+ * `403: requires a quota project, which is not set by default` (9/2 실측).
+ * `gcloud auth application-default login` 이 ADC 파일에 `quota_project_id` 를 넣어 주므로
+ * 거기서 읽어 `x-goog-user-project` 로 보낸다. env 로 덮어쓸 수 있게 둔다.
+ */
+function quotaProject() {
+  if (process.env.GSC_QUOTA_PROJECT) return process.env.GSC_QUOTA_PROJECT;
+  try {
+    const raw = readFileSync(
+      `${process.env.HOME}/.config/gcloud/application_default_credentials.json`,
+      'utf8'
+    );
+    return JSON.parse(raw).quota_project_id || '';
+  } catch {
+    return '';
+  }
+}
+
 async function api(path, init) {
+  const qp = quotaProject();
   const res = await fetch(`https://www.googleapis.com/webmasters/v3${path}`, {
     ...init,
-    headers: { Authorization: `Bearer ${token()}`, ...(init?.headers || {}) },
+    headers: {
+      Authorization: `Bearer ${token()}`,
+      ...(qp ? { 'x-goog-user-project': qp } : {}),
+      ...(init?.headers || {}),
+    },
   });
   if (res.status === 403) {
     const body = await res.text().catch(() => '');
