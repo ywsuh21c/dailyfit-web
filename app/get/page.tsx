@@ -18,6 +18,9 @@ const AOS_PLAY_URL = storeLinks.android; // 출시 후 (미출시면 빈 문자�
 //
 // ⏸️ 2026-08-17 false 로 되돌림 — 이 플립은 **전제가 아직 안 왔는데** 켜져 있었다.
 //   8/8 에 true 로 머지됐으나(#42) 그 전제인 Play 프로덕션 승인은 7/30 에 거절됐고,
+//   재신청 D-day 는 8/20 이었다(테스터 연속일 카운터 11/14, 8/17 기준).
+//   ↑ 이 줄은 지난 이야기다. 현재(2026-09-02): 빌드 vc37 이 Play **프로덕션 draft** 로
+//     올라가 있고 공개 URL 은 여전히 404 다 — 영우가 「출시 시작」을 누르면 200 이 된다.
 //   그 9일간 라이브 실측: 버튼 라벨 "Android · 플레이스토어에서 받기" → 목적지
 //   `play.google.com/…?id=kr.dailyfit.app` = **HTTP 404**. 초대 링크를 받은 안드로이드
 //   사용자 전원이 막힌 페이지에 부딪혔고, 그들은 이유를 남기지 않고 이탈한다.
@@ -57,7 +60,20 @@ export default function GetPage() {
           if (v) ref.set(k, v);
         }
         const refStr = ref.toString();
-        setAosHref(refStr ? `${AOS_PLAY_URL}&referrer=${encodeURIComponent(refStr)}` : AOS_PLAY_URL);
+        // 🔴 `&referrer=` 를 하드코딩하지 않는다. AOS_PLAY_URL 은 이제 env 로 갈아끼울 수
+        //    있고(`storeLinks.android`), 쿼리스트링이 없는 URL 이 오면 `&` 가 첫 파라미터를
+        //    망가뜨려 Install Referrer 귀속이 조용히 죽는다. URL 로 조립하면 ?/& 를 알아서 고른다.
+        if (refStr) {
+          try {
+            const u = new URL(AOS_PLAY_URL);
+            u.searchParams.set('referrer', refStr);
+            setAosHref(u.toString());
+          } catch {
+            setAosHref(AOS_PLAY_URL);
+          }
+        } else {
+          setAosHref(AOS_PLAY_URL);
+        }
       } catch {
         /* referrer 부착 실패 시 순수 Play 링크로 폴백 */
       }

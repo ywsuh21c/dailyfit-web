@@ -442,49 +442,79 @@ async function main() {
   // 않는다. 이 가드는 "배포된 판"을 검사하는 것이지 "워크트리"를 검사하는 게 아니다.
   // 판정 근거 = `/product` 의 MobileApplication JSON-LD `operatingSystem`
   // (`androidAppLive` 에서 파생되는 값이라 이게 곧 배포된 스위치의 상태다).
-  const productForSwitch = await get('/product');
-  const playProbe = await get(PLAY_URL);
-  // 🔴 소프트-404 대조군. "200 이면 게시됨"은 Play 가 없는 앱에도 200 을 주는 순간
-  // 무너진다. 그래서 **존재할 수 없는 패키지 id** 를 같은 방식으로 한 번 때려 보고,
-  // 그쪽도 200 이면 상태코드 자체를 판정에 못 쓴다고 선언한다(미상 처리).
-  const playControl = await get(PLAY_URL.replace(/id=.*$/, 'id=kr.dailyfit.app.nonexistent'));
-  const statusIsMeaningful = playControl.res.status !== 200;
-  const siteSaysAndroidLive = /"operatingSystem"\s*:\s*"[^"]*Android/i.test(
-    productForSwitch.body
-  );
-  const playIsPublic = playProbe.res.status === 200;
-  if (!statusIsMeaningful)
+  // 🔴 이 블록은 스크립트의 **첫 서드파티 호출**이다. Play 가 흔들리면 get() 이 3회
+  //    재시도 뒤 throw 하고, main() 에 try/catch 가 없어 **앞서 쌓은 결과 11건이 통째로
+  //    버려진 채** 리포트도 못 찍고 죽는다. 남의 집 사정으로 우리 가드 전체가 침묵하면
+  //    안 되므로, 여기만 따로 감싸서 «판정 불가» 로 강등한다 (코드리뷰 적발).
+  try {
+    const productForSwitch = await get('/product');
+    const playProbe = await get(PLAY_URL);
+    // 🔴 소프트-404 대조군. "200 이면 게시됨"은 Play 가 없는 앱에도 200 을 주는 순간
+    // 무너진다. 그래서 **존재할 수 없는 패키지 id** 를 같은 방식으로 한 번 때려 보고,
+    // 그쪽도 200 이면 상태코드 자체를 판정에 못 쓴다고 선언한다(미상 처리).
+    const playControl = await get(PLAY_URL.replace(/id=.*$/, 'id=kr.dailyfit.app.nonexistent'));
+    const statusIsMeaningful = playControl.res.status !== 200;
+
+    // 🔴 사이트 쪽 판정은 **JSON-LD 가 실제로 있을 때만** 유효하다. 종전 정규식은
+    //    "operatingSystem 에 Android 가 없다"와 "MobileApplication 자체가 없다"를
+    //    구분하지 못해, <JsonLd data={mobileAppJsonLd()} /> 를 지우면 이 검사가
+    //    영원히 초록이 됐다 — 아무것도 안 재고 통과하는 가드다 (코드리뷰 적발).
+    const osMatch = productForSwitch.body.match(/"operatingSystem"\s*:\s*"([^"]*)"/i);
+    if (!productForSwitch.res.ok)
+      fail('안드 출시 스위치 ↔ Play 공개 URL', `/product 가 HTTP ${productForSwitch.res.status} — 판정 근거를 못 읽었다`);
+    else if (!osMatch)
+      fail(
+        '안드 출시 스위치 ↔ Play 공개 URL',
+        '/product 에 MobileApplication 의 operatingSystem 이 없다 — ' +
+          '스위치를 읽을 근거가 사라졌다(JsonLd 블록이 지워졌는지 확인). 이 가드는 그 상태를 초록으로 넘기지 않는다'
+      );
+    // 🔴 상태코드는 **200/404 일 때만** 판정에 쓴다. 403·429·5xx 를 "미게시"로 읽으면,
+    //    출시 후 CI 아이피가 429 를 한 번 맞는 순간 가드가 "살아있는 앱을 내려라"고
+    //    지시한다. 대조군도 같이 막히므로 소프트-404 검사로는 안 걸러진다 (코드리뷰 적발).
+    else if (![200, 404].includes(playProbe.res.status))
+      warn(
+        '안드 출시 스위치 ↔ Play 공개 URL',
+        `판정 불가 — Play 가 HTTP ${playProbe.res.status} 를 줬다` +
+          `${playProbe.res.headers.get('location') ? ` (location="${playProbe.res.headers.get('location')}")` : ''}. ` +
+          `200/404 가 아니면 게시 여부를 가를 수 없다(차단·레이트리밋·장애 구분 불가)`
+      );
+    else if (!statusIsMeaningful)
+      warn(
+        '안드 출시 스위치 ↔ Play 공개 URL',
+        '판정 불가 — 없는 패키지에도 HTTP 200 이 돌아왔다(소프트-404). ' +
+          '상태코드로는 게시 여부를 못 가른다. Play Console 에서 직접 확인할 것'
+      );
+    else {
+      const siteSaysAndroidLive = /Android/i.test(osMatch[1]);
+      const playIsPublic = playProbe.res.status === 200;
+      if (siteSaysAndroidLive && !playIsPublic)
+        fail(
+          '안드 출시 스위치 ↔ Play 공개 URL',
+          `사이트는 Android 출시라고 말하는데 Play 공개 URL 이 HTTP ${playProbe.res.status} 다 — ` +
+            `/get 의 안드 버튼이 막힌 페이지로 보낸다. lib/site.ts 의 androidAppLive 를 false 로.`
+        );
+      else if (!siteSaysAndroidLive && playIsPublic)
+        warn(
+          '안드 출시 스위치 ↔ Play 공개 URL',
+          `Play 공개 URL 이 200(게시됨)인데 사이트는 아직 "미출시"로 말한다 — ` +
+            `lib/site.ts 의 androidAppLive 를 true 로 켜고 배포할 것. ` +
+            `(스토어 배지 · sameAs · MobileApplication · /llms.txt 가 한꺼번에 따라온다)`
+        );
+      else
+        pass(
+          '안드 출시 스위치 ↔ Play 공개 URL',
+          siteSaysAndroidLive
+            ? `양쪽 다 출시됨 (operatingSystem="${osMatch[1]}" · Play 200)`
+            : `양쪽 다 미출시 (operatingSystem="${osMatch[1]}" · Play 404)`
+        );
+    }
+  } catch (e) {
     warn(
       '안드 출시 스위치 ↔ Play 공개 URL',
-      `판정 불가 — 없는 패키지에도 HTTP 200 이 돌아왔다(소프트-404). ` +
-        `상태코드로는 게시 여부를 못 가른다. Play Console 에서 직접 확인할 것`
+      `판정 불가 — 요청이 끝내 실패했다: ${e?.message ?? e}. ` +
+        `다른 검사를 죽이지 않으려고 경고로 강등한다(가드가 침묵하는 것보다 낫다)`
     );
-  else if (playProbe.res.status >= 300 && playProbe.res.status < 400)
-    warn(
-      '안드 출시 스위치 ↔ Play 공개 URL',
-      `판정 불가 — Play 가 HTTP ${playProbe.res.status} 리다이렉트를 줬다 ` +
-        `(location="${playProbe.res.headers.get('location') || ''}"). 200/404 가 아니면 판정에 쓰지 않는다`
-    );
-  else if (siteSaysAndroidLive && !playIsPublic)
-    fail(
-      '안드 출시 스위치 ↔ Play 공개 URL',
-      `사이트는 Android 출시라고 말하는데 Play 공개 URL 이 HTTP ${playProbe.res.status} 다 — ` +
-        `/get 의 안드 버튼이 막힌 페이지로 보낸다. lib/site.ts 의 androidAppLive 를 false 로.`
-    );
-  else if (!siteSaysAndroidLive && playIsPublic)
-    warn(
-      '안드 출시 스위치 ↔ Play 공개 URL',
-      `Play 공개 URL 이 200(게시됨)인데 사이트는 아직 "미출시"로 말한다 — ` +
-        `lib/site.ts 의 androidAppLive 를 true 로 켜고 배포할 것. ` +
-        `(스토어 배지 · sameAs · MobileApplication · /llms.txt 가 한꺼번에 따라온다)`
-    );
-  else
-    pass(
-      '안드 출시 스위치 ↔ Play 공개 URL',
-      siteSaysAndroidLive
-        ? `양쪽 다 출시됨 (Play ${playProbe.res.status})`
-        : `양쪽 다 미출시 (Play ${playProbe.res.status})`
-    );
+  }
 
   // ── IndexNow 키 파일 ──────────────────────────────────────────────────────
   const key = await get(`/${KEY}.txt`);

@@ -18,8 +18,15 @@
  *
  * ── 쓰는 법 ─────────────────────────────────────────────────────────────────
  *   node scripts/gsc.mjs check     # 권한·속성 확인만 (아무것도 바꾸지 않음)
- *   node scripts/gsc.mjs status    # 사이트맵 제출 이력·색인 장수·상위 질의
+ *   node scripts/gsc.mjs status    # 사이트맵 제출 이력 (언제 냈나 · 구글이 가져갔나 · 오류)
+ *   node scripts/gsc.mjs queries   # 최근 28일 검색 노출 실측 (노출수·클릭·평균순위)
  *   node scripts/gsc.mjs submit    # 🔴 사이트맵 제출 (구글에 쓰기)
+ *
+ * 🔴 **「색인 장수」는 이 API 로 못 읽는다.** 그 숫자는 서치콘솔 «페이지 색인 생성»
+ * 리포트에만 있고 공개 API 에 없다. 처음엔 `status` 가 그걸 준다고 적어 뒀는데
+ * 구현은 사이트맵만 읽고 있었다(코드리뷰 적발) — 그래서 문구를 구현에 맞췄다.
+ * 대신 `queries` 가 더 직접적인 답을 준다: **우리가 검색 결과에 뜨긴 하는가**
+ * (노출수 0 이면 색인이 안 됐거나 아무 질의에도 안 걸린 것이다).
  *
  * 스코프가 없으면 어느 명령이든 **정확한 한 줄 명령**을 안내하고 종료한다.
  * ────────────────────────────────────────────────────────────────────────────
@@ -109,7 +116,15 @@ async function api(path, init) {
     process.exit(4);
   }
   const text = await res.text().catch(() => '');
-  return { status: res.status, body: text ? JSON.parse(text) : null };
+  if (!text) return { status: res.status, body: null };
+  try {
+    return { status: res.status, body: JSON.parse(text) };
+  } catch {
+    // 프록시·게이트웨이가 HTML 오류면을 돌려주면 JSON.parse 가 «Unexpected token '<'»
+    // 로 죽어 정작 알아야 할 HTTP 상태를 가린다 (코드리뷰 적발). 상태를 먼저 말한다.
+    console.error(`✗ HTTP ${res.status} — JSON 이 아닌 응답: ${text.slice(0, 200)}`);
+    process.exit(4);
+  }
 }
 
 async function cmdCheck() {
@@ -155,6 +170,52 @@ async function cmdStatus() {
   }
 }
 
+/**
+ * 최근 28일 검색 실적. **색인 장수를 못 읽는 대신 이걸 본다** — "우리가 검색 결과에
+ * 뜨긴 하는가"에 대한 1차 관측이다. 노출수 0 이면 색인이 안 됐거나 아무 질의에도
+ * 안 걸린 것이고, 둘 중 뭔지는 사이트맵 제출 이력(`status`)과 함께 봐야 갈린다.
+ *
+ * GSC 데이터는 2~3일 지연된다 — 오늘 제출하고 오늘 재면 당연히 0 이다.
+ */
+async function cmdQueries() {
+  const enc = encodeURIComponent(SITE);
+  const end = new Date();
+  const start = new Date(end.getTime() - 28 * 86400_000);
+  const iso = (d) => d.toISOString().slice(0, 10);
+  const { status, body } = await api(`/sites/${enc}/searchAnalytics/query`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      startDate: iso(start),
+      endDate: iso(end),
+      dimensions: ['query'],
+      rowLimit: 25,
+    }),
+  });
+  if (status !== 200) {
+    console.error(`✗ HTTP ${status}`, body);
+    process.exit(4);
+  }
+  const rows = body?.rows || [];
+  console.log(`검색 실적 ${iso(start)} ~ ${iso(end)} (구글 데이터는 2~3일 지연)`);
+  if (!rows.length) {
+    console.log('⚠ 노출 0건 — 이 기간에 어떤 질의로도 검색 결과에 뜨지 않았다.');
+    console.log('   사이트맵 제출 이력을 함께 볼 것: `node scripts/gsc.mjs status`');
+    return;
+  }
+  const tot = rows.reduce(
+    (a, r) => ({ imp: a.imp + (r.impressions || 0), clk: a.clk + (r.clicks || 0) }),
+    { imp: 0, clk: 0 }
+  );
+  console.log(`상위 ${rows.length}개 질의 합계 — 노출 ${tot.imp} · 클릭 ${tot.clk}\n`);
+  console.log('  노출   클릭  평균순위  질의');
+  for (const r of rows)
+    console.log(
+      `  ${String(r.impressions ?? 0).padStart(5)} ${String(r.clicks ?? 0).padStart(6)}  ` +
+        `${(r.position ?? 0).toFixed(1).padStart(7)}  ${r.keys?.[0] ?? ''}`
+    );
+}
+
 async function cmdSubmit() {
   const enc = encodeURIComponent(SITE);
   const encMap = encodeURIComponent(SITEMAP);
@@ -170,9 +231,9 @@ async function cmdSubmit() {
 }
 
 const cmd = process.argv[2] || 'check';
-const run = { check: cmdCheck, status: cmdStatus, submit: cmdSubmit }[cmd];
+const run = { check: cmdCheck, status: cmdStatus, queries: cmdQueries, submit: cmdSubmit }[cmd];
 if (!run) {
-  console.error('사용법: node scripts/gsc.mjs [check|status|submit]');
+  console.error('사용법: node scripts/gsc.mjs [check|status|queries|submit]');
   process.exit(1);
 }
 run().catch((e) => {

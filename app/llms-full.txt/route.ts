@@ -1,4 +1,4 @@
-import { site, productAppUrl, storeLinks, androidAppLive } from '@/lib/site';
+import { site, productAppUrl, storeLinks, androidStoreLive } from '@/lib/site';
 import { getCatalogCount, formatAsOf } from '@/lib/catalog-count';
 import { getHelp } from '@/lib/help';
 import { getPublishedPosts } from '@/lib/writing';
@@ -25,6 +25,11 @@ import { getPublishedPosts } from '@/lib/writing';
  *   · 안도감 문장은 **전부 현재형**. 과거형 성공담(「몇 번 떨어졌는데 이번엔 됐어요」)은
  *     외부기관 대행의 실적으로 받칠 수 없다 (사내 원장 FD-014 ★조건)
  *   · 사이트가 스스로 하지 않는 주장은 이 파일에도 넣지 않는다
+ *
+ * 🔴 안드 출시 여부는 **반드시 `androidStoreLive`** 로 읽는다. 저작 스위치
+ * (`androidAppLive`)를 직접 읽었더니 env 오버라이드가 걸린 빌드에서 §5 는
+ * "아직 출시 전", 열두 줄 아래 §6 은 실제 Play 링크를 찍었다 — **한 파일 안에서
+ * 자기모순**이고, 하필 AI 가 그대로 인용하려고 만든 파일이다 (코드리뷰 적발).
  * ────────────────────────────────────────────────────────────────────────────
  */
 
@@ -118,7 +123,7 @@ ${site.nameKo}이 직접 여는 강좌는 **접수까지 끝까지 마무리해 
 - 이용 언어: 한국어
 - 설치와 활동 찾기: 무료
 - 일부 신청 대행: 포인트가 사용되며, 사용 전에 화면에서 안내
-- 안드로이드 앱: ${androidAppLive ? '출시됨' : '아직 출시 전 (iOS·웹으로 이용 가능)'}
+- 안드로이드 앱: ${androidStoreLive ? '출시됨' : '아직 출시 전 (iOS·웹으로 이용 가능)'}
 - 문의: ${contact.email || site.contactEmail}
 
 ---
