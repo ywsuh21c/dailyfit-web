@@ -48,6 +48,21 @@ const QUERIES = [
 ];
 
 const ALLOWED_CATEGORIES = new Set(['activity', 'education', 'social']);
+
+/**
+ * 🔴 홈 티커에 올리지 않을 낱말 (영우 2026-09-02: 사용자에게 「어르신」·「시니어」를
+ * 보여주지 않는다).
+ *
+ * 이건 «개명»이 아니라 «선별»이다. 카탈로그에는 「시니어 모델워킹」처럼 기관이 붙인
+ * 진짜 이름이 있고, 우리가 그걸 고쳐 쓰면 강좌를 잘못 안내하게 된다. 그래서 이름은
+ * 그대로 두고 **우리 히어로에 싣지만 않는다** — 바로 위 ALLOWED_CATEGORIES 가
+ * jobs/welfare 를 "off-brand" 로 빼는 것과 같은 층의 판단이다.
+ * 활동 자체는 검색·상세 페이지에서 제 이름 그대로 계속 찾을 수 있다.
+ *
+ * 걸러낸 뒤 MIN_CHIPS 에 못 미치면 FALLBACK 으로 떨어진다(FALLBACK 도 이 규칙을
+ * 지킨다) — 그래서 이 필터가 티커를 비게 만들 수는 없다.
+ */
+const CHIP_BANNED_WORDS = ['시니어', '어르신', '노인'];
 const MIN_CHIPS = 8;
 const MAX_CHIPS = 12;
 const REVALIDATE_S = 21600; // 6h
@@ -162,6 +177,7 @@ export async function getLiveActivities(): Promise<ActivityChip[]> {
     if (!ALLOWED_CATEGORIES.has(category)) continue; // no jobs/welfare
     const name = cleanTitle(c.title);
     if (name.length < 2 || name.length > 20 || seen.has(name)) continue;
+    if (CHIP_BANNED_WORDS.some((w) => name.includes(w))) continue; // 이름은 안 고치고 «안 싣는다»
     seen.add(name);
     chips.push({ tag: tagFor(category, typeof c.source === 'string' ? c.source : ''), name });
   }
