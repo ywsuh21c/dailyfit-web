@@ -29,45 +29,42 @@ type Stop = {
   label: string;
   sub: string;
   cls: string;
-  /** which side of the dot the label stack sits on. 'below-right' hangs the
-   *  stack start-anchored to the dot's lower right — used where a centered
-   *  below-label would sit in the incoming curve's band (Fudan). */
-  side: 'above' | 'below' | 'below-right';
+  /** 라벨 더미는 전부 점 «아래»에 달린다(레인이 하나라 위로 피할 이유가 없다).
+   *  'below-right' 만 예외로 점의 오른쪽 아래에 start-anchor 로 매단다 —
+   *  가운데 정렬하면 들어오는 곡선 띠에 라벨이 걸리는 자리(Fudan)에서 쓴다. */
+  side: 'below' | 'below-right';
 };
 
 // The founder's lane (sage) — labels below the line.
-const YW_STOPS: Stop[] = [
+const STOPS: Stop[] = [
   { x: 72, y: 288, label: 'Boston University', sub: '경영학', cls: 'curve-pt-1', side: 'below' },
   { x: 185, y: 246, label: 'Fudan University', sub: '금융학 석사', cls: 'curve-pt-1', side: 'below-right' },
   { x: 470, y: 152, label: 'PYLER', sub: 'Corporate Development', cls: 'curve-pt-2', side: 'below' },
 ];
 
 // English mirror — same coords/cls/side, translated subs only.
-const YW_STOPS_EN: Stop[] = [
+const STOPS_EN: Stop[] = [
   { x: 72, y: 288, label: 'Boston University', sub: 'Business', cls: 'curve-pt-1', side: 'below' },
   { x: 185, y: 246, label: 'Fudan University', sub: 'MS in Finance', cls: 'curve-pt-1', side: 'below-right' },
   { x: 470, y: 152, label: 'PYLER', sub: 'Corporate Development', cls: 'curve-pt-2', side: 'below' },
 ];
-
-const ALL_STOPS: Stop[] = YW_STOPS;
-const ALL_STOPS_EN: Stop[] = YW_STOPS_EN;
 
 // Language-specific copy for the fixed nodes/legend.
 const COPY = {
   ko: {
     ariaLabel:
       '창업자의 여정: 서영우가 Boston University와 Fudan University, Bain, PYLER를 거쳐 DailyFit으로 올라가는 모습',
-    bainMet: '컨설팅',
+    bainSub: '컨설팅',
   },
   en: {
     ariaLabel:
       "The founder's journey: Youngwoo through Boston University, Fudan University, Bain, and PYLER, rising to DailyFit",
-    bainMet: 'Consulting',
+    bainSub: 'Consulting',
   },
 } as const;
 
 export function JourneyPath({ lang = 'ko' }: { lang?: Lang }) {
-  const stops = lang === 'en' ? ALL_STOPS_EN : ALL_STOPS;
+  const stops = lang === 'en' ? STOPS_EN : STOPS;
   const copy = lang === 'en' ? COPY.en : COPY.ko;
   const ref = useRef<HTMLDivElement>(null);
   const [on, setOn] = useState(false);
@@ -114,29 +111,29 @@ export function JourneyPath({ lang = 'ko' }: { lang?: Lang }) {
           strokeLinecap="round"
         />
         {/* individual stops — labels hang below the line */}
-        {stops.map((s) => (
+        {stops.map((s) => {
+          // 제목과 부제가 «같은» 배치 규칙을 공유해야 어긋나지 않는다 — 한 번만 파생한다.
+          const shift = s.side === 'below-right';
+          const tx = shift ? s.x + 14 : s.x;
+          const anchor = shift ? 'start' : 'middle';
+          return (
           <g key={s.label} className={`curve-pt ${s.cls}`}>
             <circle cx={s.x} cy={s.y} r={5} fill="#F5F0E8" stroke={SAGE} strokeWidth={2} />
-            <text
-              x={s.side === 'below-right' ? s.x + 14 : s.x}
-              y={s.side === 'above' ? s.y - 30 : s.y + 24}
-              textAnchor={s.side === 'below-right' ? 'start' : 'middle'}
-              className="fill-ink"
-              style={{ fontWeight: 700, fontSize: 14 }}
-            >
+            <text x={tx} y={s.y + 24} textAnchor={anchor} className="fill-ink" style={{ fontWeight: 700, fontSize: 14 }}>
               {s.label}
             </text>
             <text
-              x={s.side === 'below-right' ? s.x + 14 : s.x}
-              y={s.side === 'above' ? s.y - 14 : s.y + 40}
-              textAnchor={s.side === 'below-right' ? 'start' : 'middle'}
+              x={tx}
+              y={s.y + 40}
+              textAnchor={anchor}
               className="fill-ink-soft"
               style={{ fontWeight: 600, fontSize: 11, letterSpacing: '0.06em' }}
             >
               {s.sub}
             </text>
           </g>
-        ))}
+          );
+        })}
 
         {/* Bain */}
         <g className="curve-pt curve-pt-1">
@@ -145,11 +142,11 @@ export function JourneyPath({ lang = 'ko' }: { lang?: Lang }) {
             Bain &amp; Company
           </text>
           <text x={320} y={231} textAnchor="middle" className="fill-ink-soft" style={{ fontWeight: 600, fontSize: 11, letterSpacing: '0.06em' }}>
-            {copy.bainMet}
+            {copy.bainSub}
           </text>
         </g>
 
-        {/* DailyFit — the shared summit */}
+        {/* DailyFit — the summit */}
         <g className="curve-pt curve-pt-3">
           <circle cx={610} cy={64} r={24} fill="url(#journey-glow)" />
           <circle cx={610} cy={64} r={6.5} fill={SAGE} />

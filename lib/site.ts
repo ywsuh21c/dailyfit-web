@@ -35,7 +35,31 @@ export const site = {
   tagline: 'AI는 수단, 5060이 정체성',
   description:
     '데일리핏(DailyFit)은 55세 이상 어른들을 위한 AI Agent입니다. 대화 한 번으로 하루를 설계합니다.',
+  /**
+   * 👤 **창업자 — 1인 체제(2026-08-20). 사이트 전체가 이 한 곳에서 파생된다.**
+   *
+   * 2026-09-02 에 공동창업자 표기를 걷어내는 작업이 **열여덟 번의 손편집**이 됐다
+   * (소개 카드 2 · writing 바이라인 2 · 조직도 · 여정 그래픽 · 폴백 연락처 …).
+   * 그러고도 네 면이 「Co-founder」·「두 명의 팀」이라고 계속 말하고 있었고,
+   * 그건 헬스체크 가드가 뒤늦게 잡았다. 바로 아래 `androidAppLive` 가 같은 교훈을
+   * 적어 두고 파생으로 바꾼 선례다 — **손으로 유지하는 목록은 반드시 샌다.**
+   *
+   * ⚠️ 여기에는 «구조화된 사실»만 둔다. 「한 사람과 Agent 팀이 큰 조직의 속도를…」
+   *    같은 **산문은 상수로 뽑으면 어색해지므로** 페이지에 그대로 두고,
+   *    창업자 수를 잘못 말하는 문장은 `scripts/seo-healthcheck.mjs` 의
+   *    SOLO_KO/SOLO_EN 가드가 잡는다. 사실은 파생, 주장은 가드 — 두 축이다.
+   */
+  founder: {
+    name: 'Youngwoo Michael Suh',
+    nameKo: '서영우',
+    role: 'Founder · CEO',
+    /** 지원 회선. 백엔드 `GET /api/help` 가 정본이고 이건 폴백값이다(lib/help.ts). */
+    phone: { display: '010-8807-6397', tel: '01088076397' },
+  },
 } as const;
+
+/** 창업자 «수» — 화면이 "1 human" 같은 주장을 할 때 여기서 파생한다. */
+export const founderCount = 1;
 
 /**
  * Active activity catalog count — FALLBACK only. The home page reads the live

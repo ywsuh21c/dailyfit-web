@@ -104,8 +104,8 @@ export default function EnAboutPage() {
             two-column grid would leave it half-width; constrain to prose width. */}
         <div className="mt-12 max-w-xl">
           <FounderCard
-            name="Youngwoo Michael Suh"
-            role="Founder · CEO"
+            name={site.founder.name}
+            role={site.founder.role}
             bio="Boston University → Fudan University → Bain → PYLER → DailyFit. Runs the AI Agent team directly and designs the day of adults 55+ as AaaS."
           />
         </div>

@@ -1,4 +1,5 @@
 import { Reveal } from '@/components/motion/Reveal';
+import { site, founderCount } from '@/lib/site';
 
 /**
  * Technology-page centerpiece — the company's real AI-agent org chart, drawn
@@ -40,8 +41,7 @@ function Drop({ tall }: { tall?: boolean }) {
 
 export function OrgTree({ lang = 'ko' }: { lang?: 'ko' | 'en' }) {
   const en = lang === 'en';
-  // 1인 체제(2026-08-20) — 창업자는 한 명이다.
-  const humansLabel = en ? 'Youngwoo Michael Suh' : '서영우';
+  const humansLabel = en ? site.founder.name : site.founder.nameKo;
   const orchestratorDesc = en
     ? 'Routes every request to the right Agent'
     : '모든 요청을 읽고 담당 Agent에게 라우팅';
@@ -110,9 +110,13 @@ export function OrgTree({ lang = 'ko' }: { lang?: 'ko' | 'en' }) {
             </div>
           </div>
 
-          {/* the stat line that carries the claim */}
+          {/* the stat line that carries the claim.
+              ⚠️ 보간(`{founderCount}`)은 렌더 HTML 에서 텍스트 노드를 쪼갠다
+              (`1<!-- --> human`). 값이 안 갈리는 대신, HTML 을 훑는
+              seo-healthcheck 가드가 보간을 «가로질러» 문구를 못 잡는다.
+              그러니 금지 대상이 될 수 있는 문장은 보간 뒤에 숨기지 말 것. */}
           <p className="eyebrow-mono mt-8 text-center !text-[11.5px] text-ivory/50">
-            1 human · 1 orchestrator · 15+ agents · 6 divisions ·{' '}
+            {founderCount} human · 1 orchestrator · 15+ agents · 6 divisions ·{' '}
             <span className="text-sage-lt">More to come!</span>
           </p>
         </div>

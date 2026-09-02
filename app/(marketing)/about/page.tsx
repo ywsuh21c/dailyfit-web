@@ -100,8 +100,8 @@ export default function AboutPage() {
             본문 폭에 맞춘 단일 카드로 둔다(반쪽짜리 그리드가 되지 않게). */}
         <div className="mt-12 max-w-xl">
           <FounderCard
-            name="Youngwoo Michael Suh"
-            role="Founder · CEO"
+            name={site.founder.name}
+            role={site.founder.role}
             bio="Boston University → Fudan University → Bain → PYLER → DailyFit. AI Agent 팀을 직접 운영하며 5060 세대의 하루를 AaaS로 설계합니다."
           />
         </div>

@@ -526,11 +526,13 @@ async function main() {
     );
 
   // ── 사용자 노출면 금지어 ───────────────────────────────────────────────────
-  // 영우 2026-09-02 확정 3건이 여기서 지켜진다:
+  // 영우 2026-09-02 확정을 여기서 지킨다:
   //   ① 한국어 「어르신·시니어·노인」 — 유저에게 보여주지 않는다
-  //   ② 영문 `senior` — 영문 페이지에서도 뺀다 (9/2 저녁 결정 1-B)
-  //   ③ 김현진 — 소개 페이지에서 전부 뺀다 (1인 체제 2026-08-20). 9/2 저녁 확대:
-  //      조직도(/technology)와 폴백 연락처(/product)의 이름·전화번호까지.
+  //   ② 영문 `senior` — 영문 페이지에서도 뺀다
+  //   ③ 김현진 — 사이트에서 전부 뺀다 (1인 체제 2026-08-20): 이름·전화번호에
+  //      더해 「두 명의 팀」·Co-founder 같은 «주장»까지 본다. 이름만 막으면
+  //      2026-09-02 코드리뷰가 잡은 것처럼 네 면이 초록인 채로 창업자가 둘이라고
+  //      계속 말한다.
   //
   // 🔴 화면에 «렌더되는» 것만 대상이다. 소스 주석·iOS 키워드 칸처럼 사용자에게
   //    안 보이는 자리는 금지 대상이 아니다(영우 9/2 확인) — 그래서 이 가드는
@@ -540,84 +542,106 @@ async function main() {
   // 🔴 대조군이 없으면 «아무것도 못 읽은» 것도 0건으로 통과한다. 브랜드명이
   //    안 잡히면 그건 "깨끗하다"가 아니라 "측정이 실패했다"이므로 실패로 올린다.
   //
+  // 🔴 면 목록을 손으로 적었더니 곧바로 샜다 — /research·/privacy·
+  //    /account-deletion 이 라이브·색인 대상인데 빠져 있었다(2026-09-02 리뷰).
+  //    그래서 KO 경로만 한 번 적고 EN 트윈은 «파생»한다. 새 면을 추가하는
+  //    사람이 두 줄을 짝맞춰 적을 일이 없다.
+  //
   // 🔎 이 가드가 «안 보는» 축: 활동 상세(9,745장)는 대상이 아니다. 강좌명·자격요건이
   //    공급처가 쓴 원문이라 우리가 고쳐 쓰면 잘못 안내가 된다 — 설계상 제외다.
   {
     const KO_BANNED = ['시니어', '어르신', '노인'];
-    const EN_BANNED = ['senior', 'Senior'];
-    // 창업자 표기 — 이름과 «폴백 연락처의 전화번호»까지. 백엔드 /api/help 는 이미
-    // 서영우 번호만 주는데 prod 에 NEXT_PUBLIC_API_URL 이 없어 lib/help.ts 폴백이
-    // 실제로 쓰이고 있었다 — 낡은 폴백이 그대로 사용자 화면이 된다(2026-09-02 실측:
-    // /product 에 5회 노출). 이름만 보면 번호가 남는 것을 못 잡는다.
-    const FOUNDER_BANNED = ['김현진', 'Hyunjin', '4901-7898', '01049017898'];
-    // 🔴 이름·번호만 막으면 «두 창업자라는 주장»은 그대로 남는다. 2026-09-02 코드리뷰가
-    //    이름 제거 PR 이 초록인 채로 네 면(/writing·/how-we-work·/contact 계열)이 아직
-    //    「Co-founder」·「두 명의 팀」·「the founders」라고 말하고 있는 것을 잡았다.
-    //    가드는 «사실»(이름)이 아니라 «주장»까지 봐야 한다.
+    const EN_BANNED = ['senior'];
+    // 이름·번호라는 «사실».
+    const FOUNDER_FACTS = ['김현진', 'Hyunjin', '4901-7898', '01049017898'];
+    // 창업자가 둘이라는 «주장». 사실만 지우면 주장은 남는다.
     const SOLO_KO = ['두 명의 팀', '공동창업', '창업자들'];
-    const SOLO_EN = ['Co-founder', 'co-founder', 'a team of two', 'the founders'];
-    const CONTROL = '데일리핏';
-    const CONTROL_EN = 'DailyFit';
+    const SOLO_EN = ['Co-founder', 'a team of two', 'the founders'];
+    const CONTROL = { ko: '데일리핏', en: 'DailyFit' };
 
-    /** [경로, 금지어 목록, 그 면에서 반드시 잡혀야 하는 대조군] */
-    const surfaces = [
-      ['/', KO_BANNED, CONTROL],
-      ['/about', [...KO_BANNED, ...FOUNDER_BANNED, ...SOLO_KO, ...SOLO_EN], CONTROL],
-      ['/technology', [...KO_BANNED, ...FOUNDER_BANNED, ...SOLO_KO, ...SOLO_EN], CONTROL],
-      ['/investors', KO_BANNED, CONTROL],
-      ['/product', [...KO_BANNED, ...FOUNDER_BANNED], CONTROL],
-      ['/get', KO_BANNED, CONTROL],
-      ['/writing', [...KO_BANNED, ...FOUNDER_BANNED, ...SOLO_KO, ...SOLO_EN], CONTROL],
-      ['/how-we-work', [...KO_BANNED, ...FOUNDER_BANNED, ...SOLO_KO, ...SOLO_EN], CONTROL],
-      ['/contact', [...KO_BANNED, ...FOUNDER_BANNED, ...SOLO_KO, ...SOLO_EN], CONTROL],
-      ['/llms.txt', KO_BANNED, CONTROL],
-      ['/llms-full.txt', [...KO_BANNED, ...FOUNDER_BANNED], CONTROL],
-      ['/en', EN_BANNED, CONTROL_EN],
-      ['/en/about', [...EN_BANNED, ...FOUNDER_BANNED, ...SOLO_EN], CONTROL_EN],
-      ['/en/technology', [...EN_BANNED, ...FOUNDER_BANNED, ...SOLO_EN], CONTROL_EN],
-      ['/en/investors', EN_BANNED, CONTROL_EN],
-      ['/en/writing', [...EN_BANNED, ...FOUNDER_BANNED, ...SOLO_EN], CONTROL_EN],
-      ['/en/how-we-work', [...EN_BANNED, ...FOUNDER_BANNED, ...SOLO_EN], CONTROL_EN],
-      ['/en/contact', [...EN_BANNED, ...FOUNDER_BANNED, ...SOLO_EN], CONTROL_EN],
-    ];
+    // 정책은 KO 경로 기준으로 «한 번»만 선언한다.
+    //   base   = 로케일 금지어만
+    //   people = + 창업자 이름·번호
+    //   claim  = + 창업자 수 주장까지
+    // EN 면은 KO 면에서 파생하되(트윈이 있을 때만), KO 전용 주장 어휘는 빼고 잰다.
+    const POLICY = {
+      '/': 'base',
+      '/about': 'claim',
+      '/technology': 'claim',
+      '/research': 'base',
+      '/investors': 'base',
+      '/writing': 'claim',
+      '/how-we-work': 'claim',
+      '/contact': 'claim',
+      '/privacy': 'base',
+      '/terms': 'base',
+      // KO 전용(영문 트윈 없음)
+      '/product': 'people',
+      '/get': 'base',
+      '/account-deletion': 'base',
+      '/llms.txt': 'base',
+      '/llms-full.txt': 'people',
+    };
+    // lib/i18n.ts 의 MIRRORED 와 같은 집합. 이 스크립트는 TS 를 import 하지 않는
+    // 계약이라(헤더 참조) 값을 복제하되, 어긋나면 아래 트윈 실측에서 404 로 드러난다.
+    const MIRRORED = new Set([
+      '/', '/technology', '/research', '/about', '/how-we-work',
+      '/writing', '/investors', '/contact', '/privacy', '/terms',
+    ]);
+
+    const bannedFor = (koPath, locale) => {
+      const level = POLICY[koPath];
+      const out = [...(locale === 'en' ? EN_BANNED : KO_BANNED)];
+      if (level === 'people' || level === 'claim') out.push(...FOUNDER_FACTS);
+      if (level === 'claim') out.push(...(locale === 'en' ? SOLO_EN : [...SOLO_KO, ...SOLO_EN]));
+      return out;
+    };
+
+    const surfaces = [];
+    for (const koPath of Object.keys(POLICY)) {
+      surfaces.push({ path: koPath, banned: bannedFor(koPath, 'ko'), control: CONTROL.ko });
+      if (MIRRORED.has(koPath)) {
+        const enPath = koPath === '/' ? '/en' : `/en${koPath}`;
+        surfaces.push({ path: enPath, banned: bannedFor(koPath, 'en'), control: CONTROL.en });
+      }
+    }
+
+    // 대소문자는 낱말이 아니라 표기다 — 'Senior'/'co-founder' 를 목록에 또 적으면
+    // 개념 하나가 항목 여럿이 되고, 새 낱말을 넣는 사람이 변형을 손으로 다 적어야 한다.
+    const countOf = (hay, word) => hay.toLowerCase().split(word.toLowerCase()).length - 1;
+
+    // 18개 면은 서로 의존이 없다. 순차로 돌면 프로드 실측 1,558ms, 병렬이면 337ms
+    // (2026-09-02 측정) — 게다가 순차는 한 면의 재시도(3회·최대 60s)가 나머지를
+    // 통째로 세운다.
+    const fetched = await Promise.all(
+      surfaces.map(async (sf) => {
+        try {
+          const page = await get(sf.path);
+          return { ...sf, page };
+        } catch (e) {
+          return { ...sf, error: e?.message ?? String(e) };
+        }
+      })
+    );
 
     const violations = [];
     const unmeasured = [];
-    for (const [path, banned, control] of surfaces) {
-      let page;
-      try {
-        page = await get(path);
-      } catch (e) {
-        unmeasured.push(`${path} — 요청 실패: ${e?.message ?? e}`);
+    for (const sf of fetched) {
+      if (sf.error) {
+        unmeasured.push(`${sf.path} — 요청 실패: ${sf.error}`);
         continue;
       }
-      if (!page.res.ok) {
-        unmeasured.push(`${path} — HTTP ${page.res.status}`);
+      if (!sf.page.res.ok) {
+        unmeasured.push(`${sf.path} — HTTP ${sf.page.res.status}`);
         continue;
       }
-      if (!page.body.includes(control)) {
-        unmeasured.push(`${path} — 대조군 "${control}" 미검출(측정 실패로 판정)`);
+      if (!sf.page.body.includes(sf.control)) {
+        unmeasured.push(`${sf.path} — 대조군 "${sf.control}" 미검출(측정 실패로 판정)`);
         continue;
       }
-      // 파일명에서 온 슬러그는 «읽히는 낱말»이 아니다. /writing 목록은 미발행
-      // 초안(published:false)까지 카드로 그리는데, 그 카드의 React key 가 파일명
-      // 그대로라 RSC 페이로드에 슬러그가 찍힌다 — 링크도 아니고(href 에 안 나온다)
-      // 화면에 글자로도 안 보인다. 파일명을 바꾸면 URL 이 바뀌므로, 사용자 이득 0에
-      // SEO 리스크만 생긴다. 그래서 «정확히 이 슬러그 문자열만» 세기 전에 걷어낸다
-      // (낱말 자체를 지우는 게 아니라서, 본문에 그 낱말이 들어오면 그대로 잡힌다).
-      const DRAFT_SLUGS = ['korea-senior-market-thesis', 'korean-senior-language-data'];
-      let body = page.body;
-      for (const slug of DRAFT_SLUGS) {
-        // 🔴 «무조건» 걷어내면 frontmatter 의 published 를 true 로 한 글자 바꾼 순간
-        //    그 슬러그가 진짜 링크가 되는데도 가드는 계속 0건이라고 말한다. 그래서
-        //    href 안에 나타나면 예외를 «거두고» 그대로 세게 둔다 — 예외의 근거가
-        //    "링크가 아니다" 였으므로, 링크가 되면 근거가 사라진다.
-        if (body.includes(`href="/writing/${slug}"`) || body.includes(`href="/en/writing/${slug}"`)) continue;
-        body = body.split(slug).join('');
-      }
-      for (const word of banned) {
-        const hits = body.split(word).length - 1;
-        if (hits > 0) violations.push(`${path} — "${word}" ${hits}회`);
+      for (const word of sf.banned) {
+        const hits = countOf(sf.page.body, word);
+        if (hits > 0) violations.push(`${sf.path} — "${word}" ${hits}회`);
       }
     }
     if (unmeasured.length)
@@ -634,8 +658,9 @@ async function main() {
     else
       pass(
         '사용자 노출면 금지어 없음',
-        `${surfaces.length}개 면 · 한국어 ${KO_BANNED.join('/')} · 영문 senior · 창업자 표기 — 전부 0건 ` +
-          `(대조군 "${CONTROL}"/"${CONTROL_EN}" 전 면 검출)`
+        `${surfaces.length}개 면(KO ${Object.keys(POLICY).length} + EN 트윈 ${surfaces.length - Object.keys(POLICY).length}) · ` +
+          `금지어 ${KO_BANNED.join('/')} · senior · 창업자 이름·번호·「둘」 주장 — 전부 0건 ` +
+          `(대조군 전 면 검출)`
       );
   }
 

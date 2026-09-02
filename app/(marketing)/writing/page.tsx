@@ -3,6 +3,7 @@ import { pageSeo } from '@/lib/seo';
 import Link from 'next/link';
 import { getAllPosts } from '@/lib/writing';
 import { Reveal } from '@/components/motion/Reveal';
+import { site } from '@/lib/site';
 
 export const metadata: Metadata = pageSeo({
   path: '/writing',
@@ -68,7 +69,7 @@ export default function WritingPage() {
             부릅니다.
           </p>
           <p className="mt-6 text-base font-semibold text-ink">
-            Youngwoo Michael Suh, Founder · DailyFit
+            {site.founder.name}, Founder · {site.name}
           </p>
           </Reveal>
         </div>
