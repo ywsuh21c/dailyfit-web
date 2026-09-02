@@ -85,12 +85,12 @@ export default async function HomePage() {
           <div className="relative mx-auto flex max-w-5xl flex-col items-center px-5 pb-20 pt-16 text-center sm:px-10 sm:pb-24 sm:pt-24">
             <p className="hx-chip-live">Agent-as-a-Service</p>
             <h1 className="mt-8 text-[30px] font-extrabold leading-[1.1] tracking-[-0.04em] text-ivory min-[430px]:text-[34px] sm:text-[60px] sm:leading-[1.08] lg:text-[72px]">
-              액티브 시니어를 위한
+              55세 이상 어른들을 위한
               <br />
               <span className="hx-glow-text">AI Agent</span>를 만듭니다.
             </h1>
             <p className="mt-7 max-w-[44ch] text-[18px] leading-relaxed text-ivory/70 sm:text-[21px]">
-              <span className="block">스마트폰으로 배우고, 만나고, 즐기기 시작한 액티브 시니어.</span>
+              <span className="block">스마트폰으로 배우고, 만나고, 즐기기 시작한 5060 세대.</span>
               <span className="mt-2 block">전 세계에서 가장 빠르게 늘어나는 세대의 하루를 설계합니다.</span>
             </p>
             <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
@@ -126,7 +126,7 @@ export default async function HomePage() {
           <Reveal>
             <p className="hx-eyebrow eyebrow-mono text-sage">The problem</p>
             <h2 className="mt-6 text-[30px] font-extrabold leading-[1.18] tracking-[-0.035em] text-ink sm:text-[42px]">
-              액티브 시니어들은 시간도, 호기심도 있습니다.
+              5060 세대는 시간도, 호기심도 있습니다.
               <br />
               무엇을 할지 찾는 게 어려울 뿐입니다.
             </h2>
@@ -331,7 +331,7 @@ export default async function HomePage() {
             <Reveal>
               <p className="eyebrow-mono text-sage-lt/80">Agent-as-a-Service</p>
               <h2 className="mx-auto mt-6 max-w-[18ch] text-[34px] font-extrabold leading-[1.16] tracking-[-0.035em] text-ivory sm:text-[46px]">
-                액티브 시니어를 위한 차세대 AI를 만듭니다.
+                55세 이상 어른들을 위한 차세대 AI를 만듭니다.
               </h2>
               <p className="mt-5 text-base text-ivory/60">
                 Building the next AI for active seniors.

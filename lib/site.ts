@@ -32,9 +32,9 @@ export const site = {
   domain: 'dailyfitai.app',
   url: 'https://dailyfitai.app',
   contactEmail: 'dailyfitkorea@gmail.com',
-  tagline: 'AI는 수단, 시니어가 정체성',
+  tagline: 'AI는 수단, 5060이 정체성',
   description:
-    '데일리핏(DailyFit)은 액티브 시니어 세대를 위한 AI Agent입니다. 대화 한 번으로 하루를 설계합니다.',
+    '데일리핏(DailyFit)은 55세 이상 어른들을 위한 AI Agent입니다. 대화 한 번으로 하루를 설계합니다.',
 } as const;
 
 /**

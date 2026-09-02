@@ -53,7 +53,7 @@ export default function WritingPage() {
           <p className="mt-7 text-body text-ink-soft">
             DailyFit을 만드는 동안 배운 것들을 정리해 공개합니다.
             <br />
-            AI Agent 팀으로 회사를 운영하는 방법, 액티브 시니어 시장이라는
+            AI Agent 팀으로 회사를 운영하는 방법, 5060 시장이라는
             가설, 그리고{' '}
             <strong className="text-ink">잘 안 풀린 것들</strong>까지.
           </p>

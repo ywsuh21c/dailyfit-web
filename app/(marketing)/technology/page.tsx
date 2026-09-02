@@ -10,7 +10,7 @@ export const metadata: Metadata = pageSeo({
   path: '/technology',
   title: '기술',
   description:
-    '시니어의 일상을 시니어의 목소리로 누적하는 AI Agent. DailyFit이 푸는 기술 문제와 시스템 아키텍처.',
+    '5060 세대의 일상을 그 세대의 목소리로 누적하는 AI Agent. DailyFit이 푸는 기술 문제와 시스템 아키텍처.',
 });
 
 // Company-site Technology page — VC/press audience, 3rd-person voice.
@@ -28,23 +28,23 @@ export default function TechnologyPage() {
       <Section tone="light" className="pt-24">
         <p className="text-base font-semibold text-sage">About our technology</p>
         <h1 className="mt-3 max-w-3xl text-h1">
-          시니어의 일상은, 시니어의 목소리 그대로 쌓여야 의미가 생깁니다.
+          5060 세대의 일상은, 그 세대의 목소리 그대로 쌓여야 의미가 생깁니다.
         </h1>
         <div className="mt-6 max-w-prose space-y-4 text-body text-ink-soft">
           <p>
-            범용 LLM은 시니어가 하루를 표현하는 방식을 잘 읽지 못합니다.
+            범용 LLM은 이 세대가 하루를 표현하는 방식을 잘 읽지 못합니다.
             <br />
             느린 말, 사투리, 어제의 맥락까지.
             <br />
-            저희는 시니어가 실제로 쓰는 말투와 일상의 맥락을 매일 누적합니다.
+            저희는 이분들이 실제로 쓰는 말투와 일상의 맥락을 매일 누적합니다.
           </p>
           <ul className="space-y-2">
             <li>· 일상 맥락: &ldquo;어제 무릎이 아팠다&rdquo;가 오늘의 제안을 바꿉니다.</li>
-            <li>· 시니어 말투: 번역이 아니라, 세대가 실제로 쓰는 말 그대로의 이해.</li>
-            <li>· 누적되는 데이터: 쓸수록 시니어 표현 패턴이 자산으로 쌓입니다.</li>
+            <li>· 세대의 말투: 번역이 아니라, 실제로 쓰는 말 그대로의 이해.</li>
+            <li>· 누적되는 데이터: 쓸수록 이 세대의 표현 패턴이 자산으로 쌓입니다.</li>
           </ul>
           <p className="text-ink-soft/80">
-            지금은 한국어 시니어부터.
+            지금은 한국의 5060부터.
             <br />
             같은 구조로 글로벌 시장의 언어와 세대로 확장합니다.
           </p>
@@ -192,7 +192,7 @@ export default function TechnologyPage() {
         </div>
         <div className="mt-10 grid gap-6 sm:grid-cols-3">
           <MoatItem title="Raw Conversation Insight">
-            액티브 시니어의 날것 그대로의 &lsquo;일상 대화&rsquo;.
+            5060 세대의 날것 그대로의 &lsquo;일상 대화&rsquo;.
             <br />
             저희의 가장 큰 해자입니다.
           </MoatItem>
@@ -215,7 +215,7 @@ export default function TechnologyPage() {
           title="회사 자체가 AI Agent 팀입니다"
           lead={
             <>
-              DailyFit의 제품은 AI Agent가 시니어의 하루를 함께 설계하고,
+              DailyFit의 제품은 AI Agent가 회원의 하루를 함께 설계하고,
               <br />
               운영은 AI Agent 팀이 회사를 함께 굴립니다.
             </>

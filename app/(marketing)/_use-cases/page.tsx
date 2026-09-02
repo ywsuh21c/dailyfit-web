@@ -6,7 +6,7 @@ import { Reveal } from '@/components/motion/Reveal';
 export const metadata: Metadata = {
   title: 'Use cases',
   description:
-    'DailyFit의 Agent가 실제로 쓰이는 곳 — 개인 시니어의 하루부터 기관 파트너의 운영까지.',
+    'DailyFit의 Agent가 실제로 쓰이는 곳 — 개인 회원의 하루부터 기관 파트너의 운영까지.',
 };
 
 // /use-cases — Option-B 신규 페이지. Source: option-b-content-strategist-
@@ -28,7 +28,7 @@ export default function UseCasesPage() {
             DailyFit이 함께 만드는 <span className="text-sage">하루의 시나리오</span>들.
           </h1>
           <p className="mt-6 max-w-[58ch] text-body text-ink-soft">
-            개인 시니어의 일상부터 복지관·동호회 같은 기관 파트너의 운영까지 —
+            개인 회원의 일상부터 복지관·동호회 같은 기관 파트너의 운영까지 —
             DailyFit의 Agent는 이미 여러 맥락에서 하루를 설계하고 있습니다.
           </p>
           <p className="mt-3 max-w-[58ch] text-base text-ink-soft/80">
@@ -54,7 +54,7 @@ export default function UseCasesPage() {
           <div className="mt-12 grid gap-5 md:grid-cols-2">
             <CaseCard
               real
-              cat="시니어 개인"
+              cat="개인 회원"
               title="65세, 새 취미를 시작한 하루"
               persona="대상: 베타 사용자 (composite persona)"
               delay={0}
@@ -74,9 +74,9 @@ export default function UseCasesPage() {
               기관의 큐레이션 채널이 됩니다.
             </CaseCard>
             <CaseCard
-              cat="시니어 개인 · 자녀 채널"
+              cat="개인 회원 · 자녀 채널"
               title="떨어져 사는 부모, 자녀의 안심 채널"
-              persona="대상: 시니어 부모를 둔 30~40대 자녀"
+              persona="대상: 5060 부모를 둔 30~40대 자녀"
               delay={200}
             >
               매일 안부 전화에 &ldquo;괜찮다&rdquo;만 돌아오던 관계가, 옵트인
@@ -85,7 +85,7 @@ export default function UseCasesPage() {
             </CaseCard>
             <CaseCard
               cat="커뮤니티"
-              title="시니어 동호회 운영 도구"
+              title="동호회 운영 도구"
               persona="대상: 동호회 · 모임 리더"
               delay={300}
             >
@@ -116,16 +116,16 @@ export default function UseCasesPage() {
             </p>
           </Reveal>
           <div className="mt-12 grid gap-5 md:grid-cols-3">
-            <VisionCard cat="보험사" title="시니어 웰니스 번들" delay={0}>
+            <VisionCard cat="보험사" title="5060 웰니스 번들" delay={0}>
               활동적인 일상이 곧 건강 지표입니다. 보험 가입자 대상 웰니스
               프로그램으로 제공하는 모델을 탐색합니다.
             </VisionCard>
-            <VisionCard cat="통신사" title="시니어 요금제 번들" delay={100}>
-              시니어 요금제 가입 시 DailyFit을 부가가치로 제공 — 부가가치
+            <VisionCard cat="통신사" title="5060 요금제 번들" delay={100}>
+              5060 요금제 가입 시 DailyFit을 부가가치로 제공 — 부가가치
               인식이 가입 유지율로 이어지는지 검증합니다.
             </VisionCard>
             <VisionCard cat="Your partnership" title="여기에 당신의 시나리오가" delay={200}>
-              시니어 시장에서 DailyFit과 함께 검증하고 싶은 채널이 있으신가요?
+              5060 시장에서 DailyFit과 함께 검증하고 싶은 채널이 있으신가요?
               첫 사례를 함께 설계합니다.
             </VisionCard>
           </div>
@@ -140,7 +140,7 @@ export default function UseCasesPage() {
               파트너십을 함께 만들 분을 찾습니다.
             </h2>
             <p className="mx-auto mt-5 max-w-[52ch] text-base text-white/80">
-              복지관·동호회·플랫폼·보험·통신 — 시니어의 하루에 닿는 채널을
+              복지관·동호회·플랫폼·보험·통신 — 회원의 하루에 닿는 채널을
               운영하신다면, 첫 사례를 함께 설계하고 싶습니다. 창업자가 직접
               응답합니다.
             </p>
