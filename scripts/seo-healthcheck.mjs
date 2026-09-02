@@ -610,19 +610,35 @@ async function main() {
     // 개념 하나가 항목 여럿이 되고, 새 낱말을 넣는 사람이 변형을 손으로 다 적어야 한다.
     const countOf = (hay, word) => hay.toLowerCase().split(word.toLowerCase()).length - 1;
 
-    // 18개 면은 서로 의존이 없다. 순차로 돌면 프로드 실측 1,558ms, 병렬이면 337ms
+    // 면끼리는 의존이 없다. 순차로 돌면 프로드 실측 1,558ms, 병렬이면 337ms
     // (2026-09-02 측정) — 게다가 순차는 한 면의 재시도(3회·최대 60s)가 나머지를
     // 통째로 세운다.
-    const fetched = await Promise.all(
-      surfaces.map(async (sf) => {
-        try {
-          const page = await get(sf.path);
-          return { ...sf, page };
-        } catch (e) {
-          return { ...sf, error: e?.message ?? String(e) };
+    //
+    // 🔴 그렇다고 «전부 한꺼번에» 던지면 안 된다. 25개 면을 동시에 때렸더니
+    //    갓 깨어난 Netlify 프리뷰가 ECONNRESET 으로 끊어서, 위반이 아니라
+    //    «측정 실패» 2건으로 빨간불이 났다(PR #69 첫 실전). 프로드는 견디지만
+    //    콜드 프리뷰는 못 견딘다 — 가드는 «가장 약한 대상»에 맞춰야 한다.
+    const CONCURRENCY = Number(process.env.SEO_CONCURRENCY || 6);
+    const mapPool = async (items, limit, fn) => {
+      const out = new Array(items.length);
+      let next = 0;
+      const worker = async () => {
+        while (next < items.length) {
+          const i = next++;
+          out[i] = await fn(items[i]);
         }
-      })
-    );
+      };
+      await Promise.all(Array.from({ length: Math.min(limit, items.length) }, worker));
+      return out;
+    };
+    const fetched = await mapPool(surfaces, CONCURRENCY, async (sf) => {
+      try {
+        const page = await get(sf.path);
+        return { ...sf, page };
+      } catch (e) {
+        return { ...sf, error: e?.message ?? String(e) };
+      }
+    });
 
     const violations = [];
     const unmeasured = [];
