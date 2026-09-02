@@ -81,7 +81,7 @@ export default function EnHowWeWorkPage() {
             <p className="mt-6 max-w-[46ch] text-body text-ink-soft">
               DailyFit is a company that runs a team of AI Agents directly.
               <br />
-              It is why a team of two delivers the speed and rigor of a large organization at once.
+              It is why one person with a team of Agents delivers the speed and rigor of a large organization at once.
             </p>
             <p className="mt-4 max-w-[46ch] text-body font-semibold text-ink">
               This is not a demo device. It is how we actually work.

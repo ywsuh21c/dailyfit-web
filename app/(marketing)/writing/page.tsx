@@ -68,7 +68,7 @@ export default function WritingPage() {
             부릅니다.
           </p>
           <p className="mt-6 text-base font-semibold text-ink">
-            Youngwoo Michael Suh, Co-founder · DailyFit
+            Youngwoo Michael Suh, Founder · DailyFit
           </p>
           </Reveal>
         </div>

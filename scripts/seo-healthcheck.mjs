@@ -550,25 +550,35 @@ async function main() {
     // 실제로 쓰이고 있었다 — 낡은 폴백이 그대로 사용자 화면이 된다(2026-09-02 실측:
     // /product 에 5회 노출). 이름만 보면 번호가 남는 것을 못 잡는다.
     const FOUNDER_BANNED = ['김현진', 'Hyunjin', '4901-7898', '01049017898'];
+    // 🔴 이름·번호만 막으면 «두 창업자라는 주장»은 그대로 남는다. 2026-09-02 코드리뷰가
+    //    이름 제거 PR 이 초록인 채로 네 면(/writing·/how-we-work·/contact 계열)이 아직
+    //    「Co-founder」·「두 명의 팀」·「the founders」라고 말하고 있는 것을 잡았다.
+    //    가드는 «사실»(이름)이 아니라 «주장»까지 봐야 한다.
+    const SOLO_KO = ['두 명의 팀', '공동창업', '창업자들'];
+    const SOLO_EN = ['Co-founder', 'co-founder', 'a team of two', 'the founders'];
     const CONTROL = '데일리핏';
     const CONTROL_EN = 'DailyFit';
 
     /** [경로, 금지어 목록, 그 면에서 반드시 잡혀야 하는 대조군] */
     const surfaces = [
       ['/', KO_BANNED, CONTROL],
-      ['/about', [...KO_BANNED, ...FOUNDER_BANNED], CONTROL],
-      ['/technology', [...KO_BANNED, ...FOUNDER_BANNED], CONTROL],
+      ['/about', [...KO_BANNED, ...FOUNDER_BANNED, ...SOLO_KO, ...SOLO_EN], CONTROL],
+      ['/technology', [...KO_BANNED, ...FOUNDER_BANNED, ...SOLO_KO, ...SOLO_EN], CONTROL],
       ['/investors', KO_BANNED, CONTROL],
       ['/product', [...KO_BANNED, ...FOUNDER_BANNED], CONTROL],
       ['/get', KO_BANNED, CONTROL],
-      ['/writing', KO_BANNED, CONTROL],
+      ['/writing', [...KO_BANNED, ...FOUNDER_BANNED, ...SOLO_KO, ...SOLO_EN], CONTROL],
+      ['/how-we-work', [...KO_BANNED, ...FOUNDER_BANNED, ...SOLO_KO, ...SOLO_EN], CONTROL],
+      ['/contact', [...KO_BANNED, ...FOUNDER_BANNED, ...SOLO_KO, ...SOLO_EN], CONTROL],
       ['/llms.txt', KO_BANNED, CONTROL],
       ['/llms-full.txt', [...KO_BANNED, ...FOUNDER_BANNED], CONTROL],
       ['/en', EN_BANNED, CONTROL_EN],
-      ['/en/about', [...EN_BANNED, ...FOUNDER_BANNED], CONTROL_EN],
-      ['/en/technology', [...EN_BANNED, ...FOUNDER_BANNED], CONTROL_EN],
+      ['/en/about', [...EN_BANNED, ...FOUNDER_BANNED, ...SOLO_EN], CONTROL_EN],
+      ['/en/technology', [...EN_BANNED, ...FOUNDER_BANNED, ...SOLO_EN], CONTROL_EN],
       ['/en/investors', EN_BANNED, CONTROL_EN],
-      ['/en/writing', EN_BANNED, CONTROL_EN],
+      ['/en/writing', [...EN_BANNED, ...FOUNDER_BANNED, ...SOLO_EN], CONTROL_EN],
+      ['/en/how-we-work', [...EN_BANNED, ...FOUNDER_BANNED, ...SOLO_EN], CONTROL_EN],
+      ['/en/contact', [...EN_BANNED, ...FOUNDER_BANNED, ...SOLO_EN], CONTROL_EN],
     ];
 
     const violations = [];
@@ -597,7 +607,14 @@ async function main() {
       // (낱말 자체를 지우는 게 아니라서, 본문에 그 낱말이 들어오면 그대로 잡힌다).
       const DRAFT_SLUGS = ['korea-senior-market-thesis', 'korean-senior-language-data'];
       let body = page.body;
-      for (const slug of DRAFT_SLUGS) body = body.split(slug).join('');
+      for (const slug of DRAFT_SLUGS) {
+        // 🔴 «무조건» 걷어내면 frontmatter 의 published 를 true 로 한 글자 바꾼 순간
+        //    그 슬러그가 진짜 링크가 되는데도 가드는 계속 0건이라고 말한다. 그래서
+        //    href 안에 나타나면 예외를 «거두고» 그대로 세게 둔다 — 예외의 근거가
+        //    "링크가 아니다" 였으므로, 링크가 되면 근거가 사라진다.
+        if (body.includes(`href="/writing/${slug}"`) || body.includes(`href="/en/writing/${slug}"`)) continue;
+        body = body.split(slug).join('');
+      }
       for (const word of banned) {
         const hits = body.split(word).length - 1;
         if (hits > 0) violations.push(`${path} — "${word}" ${hits}회`);

@@ -79,7 +79,7 @@ export default function HowWeWorkPage() {
             </h2>
             <p className="mt-6 max-w-[46ch] text-body text-ink-soft">
               DailyFit은 AI Agent 팀을 직접 운영하는 회사입니다.
-              <br />두 명의 팀이 큰 조직의 속도와 체계를 동시에 내는 이유입니다.
+              <br />한 사람과 Agent 팀이 큰 조직의 속도와 체계를 동시에 내는 이유입니다.
             </p>
             <p className="mt-4 max-w-[46ch] text-body font-semibold text-ink">
               이것은 데모용 장치가 아니라 우리가 실제로 일하는 방식입니다.

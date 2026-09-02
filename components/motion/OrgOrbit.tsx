@@ -30,10 +30,10 @@ const COPY = {
   },
   en: {
     ariaLabel:
-      'Operating model: humans at the center set direction and make the final call, while four orbiting Agents (Strategy, Product, Technology, Finance) handle execution',
-    core: 'Humans',
+      'Operating model: the human at the center sets direction and makes the final call, while four orbiting Agents (Strategy, Product, Technology, Finance) handle execution',
+    core: 'Human',
     coreSub: 'Direction · final say',
-    footer: 'Agents execute · humans decide',
+    footer: 'Agents execute · the human decides',
   },
 } as const;
 

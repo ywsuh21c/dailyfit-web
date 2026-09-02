@@ -26,7 +26,7 @@ export default function EnTechnologyPage() {
       <Section tone="light" className="pt-24">
         <p className="text-base font-semibold text-sage">About our technology</p>
         <h1 className="mt-3 max-w-3xl text-h1">
-          This generation’s daily life only becomes meaningful when it accumulates in that generation’s own voice.
+          The daily life of adults 55+ only becomes meaningful when it accumulates in their own voice.
         </h1>
         <div className="mt-6 max-w-prose space-y-4 text-body text-ink-soft">
           <p>

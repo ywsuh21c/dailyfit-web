@@ -115,8 +115,8 @@ export default function InvestorsEnPage() {
           title="A market at an inflection point"
           lead={
             <>
-              They are no longer subjects of care; they are the authors
-              of their own days. Three forces cross at once.
+              Koreans aged 55–70 are no longer subjects of care; they are the
+              authors of their own days. Three forces cross at once.
               <br />
               <br />
               <strong className="text-ink">Digital fluency</strong>
@@ -188,8 +188,8 @@ export default function InvestorsEnPage() {
             an application succeeds, priced by difficulty.
           </ModelCard>
           <ModelCard tag="Why not subscription" title="Why not a subscription">
-            A prior subscription service for this generation&apos;s public numbers, 9,900
-            won a month with roughly 10% paid conversion, suggest the ceiling.
+            The public numbers of an earlier subscription service aimed at the same
+            generation — 9,900 won a month, roughly 10% paid conversion — suggest the ceiling.
             Performance-based pricing is built to clear it.
           </ModelCard>
           <ModelCard tag="Fun-driven" title="Fun-driven participation">

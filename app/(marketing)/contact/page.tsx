@@ -44,7 +44,7 @@ export default function ContactPage() {
             <CopyEmail email={site.contactEmail} />
           </div>
           <p className="mt-8 text-caption text-ink-soft/70">
-            Prefer English? Write to us at the same address. The founders read
+            Prefer English? Write to us at the same address. The founder reads
             every email.
           </p>
         </div>
