@@ -10,7 +10,7 @@ export const metadata: Metadata = pageSeo({
   path: '/en/investors',
   title: 'Investors',
   description:
-    "An AI daily-life design platform for South Korea's active seniors (55–70).",
+    "An AI daily-life design platform for South Koreans aged 55–70.",
   noindex: true,
 });
 
@@ -82,7 +82,7 @@ export default function InvestorsEnPage() {
           Korea&apos;s fastest-growing cohort already runs its day online.
         </h1>
         <p className="mt-6 max-w-prose text-body text-ivory/85">
-          South Korea&apos;s 13M-strong active seniors (55–70) already run their
+          South Korea&apos;s 13M people aged 55–70 already run their
           days on KakaoTalk. DailyFit layers an AI Agent on top, designing a
           longer, healthier daily life full of fun and meaning, one
           conversation at a time.
@@ -93,7 +93,7 @@ export default function InvestorsEnPage() {
           </ButtonLink>
         </div>
         <div className="mt-14 grid gap-4 sm:grid-cols-3">
-          <StatCard suffix="M" label="Korean active seniors (55–70)">
+          <StatCard suffix="M" label="Koreans aged 55–70">
             <CountUp to={13} duration={1100} />
           </StatCard>
           <StatCard suffix="" label="programs & activities in our live DB">
@@ -115,7 +115,7 @@ export default function InvestorsEnPage() {
           title="A market at an inflection point"
           lead={
             <>
-              Active seniors are no longer subjects of care; they are the authors
+              They are no longer subjects of care; they are the authors
               of their own days. Three forces cross at once.
               <br />
               <br />
@@ -130,13 +130,13 @@ export default function InvestorsEnPage() {
         <div className="mt-8 grid gap-4 sm:grid-cols-3">
           <EvidenceCard
             stat="96.5% vs 65.6%"
-            claim="Senior digital access is near-universal. The 30-point capability gap is the Agent's opportunity."
+            claim="Digital access in this generation is already near-universal. The 30-point capability gap is the Agent's opportunity."
             source="MSIT · NIA Digital Divide Survey 2024"
           />
           <EvidenceCard
             stat="10.51M"
             claim="Koreans aged 65+, 20.3% of the population, projected to reach 30.9% by 2036."
-            source="Statistics Korea, 2025 Senior Statistics · projections"
+            source="Statistics Korea, 2025 older-population statistics · projections"
           />
           <EvidenceCard
             stat="88.2%"
@@ -146,11 +146,11 @@ export default function InvestorsEnPage() {
         </div>
         <div className="mt-12">
           <OrbitRings
-            aria="Market expansion: from Korea's 13M first market to East Asia and the global senior market"
+            aria="Market expansion: from Korea's 13M first market to East Asia and the global 55+ market"
             coreTop="Korea · 13M"
             coreBottom="first market"
             mid="East Asia"
-            outer="global senior market"
+            outer="global 55+ market"
           />
         </div>
       </Section>
@@ -180,7 +180,7 @@ export default function InvestorsEnPage() {
         <SectionHeader
           eyebrow="Business model"
           title="Search is free. We charge for delegation."
-          lead="A credit model for Agent as a Service: pay only when delegation succeeds. It matches how seniors actually spend."
+          lead="A credit model for Agent as a Service: pay only when delegation succeeds. It matches how this generation actually spends."
         />
         <div className="mt-10 grid gap-4 sm:grid-cols-3">
           <ModelCard tag="Credit" title="Pay per successful action">
@@ -188,7 +188,7 @@ export default function InvestorsEnPage() {
             an application succeeds, priced by difficulty.
           </ModelCard>
           <ModelCard tag="Why not subscription" title="Why not a subscription">
-            A prior senior subscription service&apos;s public numbers, 9,900
+            A prior subscription service for this generation&apos;s public numbers, 9,900
             won a month with roughly 10% paid conversion, suggest the ceiling.
             Performance-based pricing is built to clear it.
           </ModelCard>

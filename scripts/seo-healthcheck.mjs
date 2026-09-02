@@ -526,33 +526,49 @@ async function main() {
     );
 
   // ── 사용자 노출면 금지어 ───────────────────────────────────────────────────
-  // 영우 2026-09-02: 「유저들한테는 "어르신" 및 "시니어" 같은 표현은 싹 다 보여주지
-  // 않을거야」 + 범위 확정(9/2): 회사 사이트 dailyfitai.app 도 포함.
+  // 영우 2026-09-02 확정 3건이 여기서 지켜진다:
+  //   ① 한국어 「어르신·시니어·노인」 — 유저에게 보여주지 않는다
+  //   ② 영문 `senior` — 영문 페이지에서도 뺀다 (9/2 저녁 결정 1-B)
+  //   ③ 김현진 — 소개 페이지에서 전부 뺀다 (1인 체제 2026-08-20)
   //
   // 🔴 화면에 «렌더되는» 것만 대상이다. 소스 주석·iOS 키워드 칸처럼 사용자에게
   //    안 보이는 자리는 금지 대상이 아니다(영우 9/2 확인) — 그래서 이 가드는
   //    소스 grep 이 아니라 «응답 HTML» 을 잰다. site.description 이 JSON-LD 로
-  //    전 페이지에 주입되므로 한 곳이 새면 활동 상세 9,765장이 같이 샌다.
+  //    전 페이지에 주입되므로 한 곳이 새면 활동 상세 9,745장이 같이 샌다.
   //
   // 🔴 대조군이 없으면 «아무것도 못 읽은» 것도 0건으로 통과한다. 브랜드명이
   //    안 잡히면 그건 "깨끗하다"가 아니라 "측정이 실패했다"이므로 실패로 올린다.
+  //
+  // 🔎 이 가드가 «안 보는» 축: 활동 상세(9,745장)는 대상이 아니다. 강좌명·자격요건이
+  //    공급처가 쓴 원문이라 우리가 고쳐 쓰면 잘못 안내가 된다 — 설계상 제외다.
   {
-    const BANNED = ['시니어', '어르신', '노인'];
+    const KO_BANNED = ['시니어', '어르신', '노인'];
+    const EN_BANNED = ['senior', 'Senior'];
+    const FOUNDER_BANNED = ['김현진', 'Hyunjin'];
     const CONTROL = '데일리핏';
+    const CONTROL_EN = 'DailyFit';
+
+    /** [경로, 금지어 목록, 그 면에서 반드시 잡혀야 하는 대조군] */
     const surfaces = [
-      '/',
-      '/about',
-      '/technology',
-      '/investors',
-      '/product',
-      '/get',
-      '/writing',
-      '/llms.txt',
-      '/llms-full.txt',
+      ['/', KO_BANNED, CONTROL],
+      ['/about', [...KO_BANNED, ...FOUNDER_BANNED], CONTROL],
+      ['/technology', KO_BANNED, CONTROL],
+      ['/investors', KO_BANNED, CONTROL],
+      ['/product', KO_BANNED, CONTROL],
+      ['/get', KO_BANNED, CONTROL],
+      ['/writing', KO_BANNED, CONTROL],
+      ['/llms.txt', KO_BANNED, CONTROL],
+      ['/llms-full.txt', KO_BANNED, CONTROL],
+      ['/en', EN_BANNED, CONTROL_EN],
+      ['/en/about', [...EN_BANNED, ...FOUNDER_BANNED], CONTROL_EN],
+      ['/en/technology', EN_BANNED, CONTROL_EN],
+      ['/en/investors', EN_BANNED, CONTROL_EN],
+      ['/en/writing', EN_BANNED, CONTROL_EN],
     ];
+
     const violations = [];
     const unmeasured = [];
-    for (const path of surfaces) {
+    for (const [path, banned, control] of surfaces) {
       let page;
       try {
         page = await get(path);
@@ -564,12 +580,21 @@ async function main() {
         unmeasured.push(`${path} — HTTP ${page.res.status}`);
         continue;
       }
-      if (!page.body.includes(CONTROL)) {
-        unmeasured.push(`${path} — 대조군 "${CONTROL}" 미검출(측정 실패로 판정)`);
+      if (!page.body.includes(control)) {
+        unmeasured.push(`${path} — 대조군 "${control}" 미검출(측정 실패로 판정)`);
         continue;
       }
-      for (const word of BANNED) {
-        const hits = page.body.split(word).length - 1;
+      // 파일명에서 온 슬러그는 «읽히는 낱말»이 아니다. /writing 목록은 미발행
+      // 초안(published:false)까지 카드로 그리는데, 그 카드의 React key 가 파일명
+      // 그대로라 RSC 페이로드에 슬러그가 찍힌다 — 링크도 아니고(href 에 안 나온다)
+      // 화면에 글자로도 안 보인다. 파일명을 바꾸면 URL 이 바뀌므로, 사용자 이득 0에
+      // SEO 리스크만 생긴다. 그래서 «정확히 이 슬러그 문자열만» 세기 전에 걷어낸다
+      // (낱말 자체를 지우는 게 아니라서, 본문에 그 낱말이 들어오면 그대로 잡힌다).
+      const DRAFT_SLUGS = ['korea-senior-market-thesis', 'korean-senior-language-data'];
+      let body = page.body;
+      for (const slug of DRAFT_SLUGS) body = body.split(slug).join('');
+      for (const word of banned) {
+        const hits = body.split(word).length - 1;
         if (hits > 0) violations.push(`${path} — "${word}" ${hits}회`);
       }
     }
@@ -587,7 +612,8 @@ async function main() {
     else
       pass(
         '사용자 노출면 금지어 없음',
-        `${surfaces.length}개 면 · ${BANNED.join('/')} 0건 (대조군 "${CONTROL}" 전 면 검출)`
+        `${surfaces.length}개 면 · 한국어 ${KO_BANNED.join('/')} · 영문 senior · 창업자 표기 — 전부 0건 ` +
+          `(대조군 "${CONTROL}"/"${CONTROL_EN}" 전 면 검출)`
       );
   }
 

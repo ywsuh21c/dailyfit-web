@@ -3,22 +3,23 @@
 import { useEffect, useRef, useState } from 'react';
 
 /**
- * About-page visual — BOTH founders' journeys, drawn as two paths that meet
- * at Bain (where they met) and reconverge at DailyFit.
+ * About-page visual — the founder's journey, drawn as one path rising to DailyFit.
  *
- * Design rule (Michael 2026-07-05): both lines climb MONOTONICALLY — a career
+ * Design rule (Michael 2026-07-05): the line climbs MONOTONICALLY — a career
  * chart that dips reads as a career going downhill. Time flows left→right,
- * altitude only ever rises; the two lanes touch at Bain, then rise together
- * to DailyFit. Youngwoo's labels sit BELOW his line, Hyunjin's ABOVE his, so
- * five stops per lane never collide.
+ * altitude only ever rises. Labels sit BELOW the line so the stops never
+ * collide with the curve.
+ *
+ * 2026-09-02: 두 번째 레인(김현진)을 걷어냈다 — 1인 체제(2026-08-20)라
+ * 소개 페이지에서 전부 뺀다는 영우 확정. 남은 것은 «지우고 남은 반쪽»이 아니라
+ * 한 사람의 여정으로 다시 읽히도록, Bain 의 부제("여기서 처음 만났습니다")와
+ * 정상 노드의 "Co-founders" 도 함께 고쳤고 2인용 범례는 통째로 없앴다.
  *
  * Careers (verified: Michael's context + 2026-07-05 additions):
  * 서영우 Boston University → Fudan University(석사) → Bain → PYLER → DailyFit
- * 김현진 고려대학교 → EY-Parthenon → Bain → UVA MBA → DailyFit
  */
 
 const SAGE = '#4A7C59';
-const NAVY = '#1E2D40';
 
 type Lang = 'ko' | 'en';
 
@@ -34,18 +35,11 @@ type Stop = {
   side: 'above' | 'below' | 'below-right';
 };
 
-// Youngwoo's lane (sage) — starts lower, labels below the line.
+// The founder's lane (sage) — labels below the line.
 const YW_STOPS: Stop[] = [
   { x: 72, y: 288, label: 'Boston University', sub: '경영학', cls: 'curve-pt-1', side: 'below' },
   { x: 185, y: 246, label: 'Fudan University', sub: '금융학 석사', cls: 'curve-pt-1', side: 'below-right' },
   { x: 470, y: 152, label: 'PYLER', sub: 'Corporate Development', cls: 'curve-pt-2', side: 'below' },
-];
-
-// Hyunjin's lane (navy) — starts higher, labels above the line.
-const HJ_STOPS: Stop[] = [
-  { x: 72, y: 232, label: '고려대학교', sub: '경영학', cls: 'curve-pt-1', side: 'above' },
-  { x: 185, y: 214, label: 'EY-Parthenon', sub: '컨설팅', cls: 'curve-pt-1', side: 'above' },
-  { x: 470, y: 104, label: 'UVA', sub: 'MBA', cls: 'curve-pt-2', side: 'above' },
 ];
 
 // English mirror — same coords/cls/side, translated subs only.
@@ -55,31 +49,20 @@ const YW_STOPS_EN: Stop[] = [
   { x: 470, y: 152, label: 'PYLER', sub: 'Corporate Development', cls: 'curve-pt-2', side: 'below' },
 ];
 
-const HJ_STOPS_EN: Stop[] = [
-  { x: 72, y: 232, label: 'Korea University', sub: 'Business', cls: 'curve-pt-1', side: 'above' },
-  { x: 185, y: 214, label: 'EY-Parthenon', sub: 'Consulting', cls: 'curve-pt-1', side: 'above' },
-  { x: 470, y: 104, label: 'UVA', sub: 'MBA', cls: 'curve-pt-2', side: 'above' },
-];
-
-// Both founders' stops share one marker layer — combine once, not per render.
-const ALL_STOPS: Stop[] = [...YW_STOPS, ...HJ_STOPS];
-const ALL_STOPS_EN: Stop[] = [...YW_STOPS_EN, ...HJ_STOPS_EN];
+const ALL_STOPS: Stop[] = YW_STOPS;
+const ALL_STOPS_EN: Stop[] = YW_STOPS_EN;
 
 // Language-specific copy for the fixed nodes/legend.
 const COPY = {
   ko: {
     ariaLabel:
-      '두 창업자의 여정: 서영우는 Boston University와 Fudan University, Bain, PYLER를 거치고, 김현진은 고려대학교와 EY-Parthenon, Bain, UVA MBA를 거쳐 DailyFit에서 다시 만나 함께 올라가는 모습',
-    bainMet: '여기서 처음 만났습니다',
-    legendYw: '서영우',
-    legendHj: '김현진',
+      '창업자의 여정: 서영우가 Boston University와 Fudan University, Bain, PYLER를 거쳐 DailyFit으로 올라가는 모습',
+    bainMet: '컨설팅',
   },
   en: {
     ariaLabel:
-      "The two founders' journeys: Youngwoo through Boston University, Fudan University, Bain, and PYLER; Hyunjin through Korea University, EY-Parthenon, Bain, and UVA MBA, reconverging and rising together at DailyFit",
-    bainMet: 'Where they first met',
-    legendYw: 'Youngwoo',
-    legendHj: 'Hyunjin',
+      "The founder's journey: Youngwoo through Boston University, Fudan University, Bain, and PYLER, rising to DailyFit",
+    bainMet: 'Consulting',
   },
 } as const;
 
@@ -108,7 +91,7 @@ export function JourneyPath({ lang = 'ko' }: { lang?: Lang }) {
   return (
     <div ref={ref} className={`mx-auto w-full max-w-[720px] ${on ? 'curve-on' : ''}`}>
       <svg
-        viewBox="0 0 680 350"
+        viewBox="0 0 680 336"
         role="img"
         aria-label={copy.ariaLabel}
         className="h-auto w-full"
@@ -130,21 +113,10 @@ export function JourneyPath({ lang = 'ko' }: { lang?: Lang }) {
           strokeWidth="2.5"
           strokeLinecap="round"
         />
-        {/* Hyunjin: 고려대 → EY-Parthenon → Bain → UVA → DailyFit (always rising) */}
-        <path
-          className="curve-draw"
-          d="M 72 232 C 110 226, 148 220, 185 214 C 230 207, 278 202, 320 198 C 372 192, 430 148, 470 104 C 505 66, 560 65, 610 64"
-          fill="none"
-          stroke={NAVY}
-          strokeOpacity="0.4"
-          strokeWidth="2.5"
-          strokeLinecap="round"
-        />
-
-        {/* individual stops — label stack flips per lane so nothing collides */}
+        {/* individual stops — labels hang below the line */}
         {stops.map((s) => (
           <g key={s.label} className={`curve-pt ${s.cls}`}>
-            <circle cx={s.x} cy={s.y} r={5} fill="#F5F0E8" stroke={s.side === 'above' ? NAVY : SAGE} strokeOpacity={s.side === 'above' ? 0.55 : 1} strokeWidth={2} />
+            <circle cx={s.x} cy={s.y} r={5} fill="#F5F0E8" stroke={SAGE} strokeWidth={2} />
             <text
               x={s.side === 'below-right' ? s.x + 14 : s.x}
               y={s.side === 'above' ? s.y - 30 : s.y + 24}
@@ -166,7 +138,7 @@ export function JourneyPath({ lang = 'ko' }: { lang?: Lang }) {
           </g>
         ))}
 
-        {/* Bain — where the two lanes first touch */}
+        {/* Bain */}
         <g className="curve-pt curve-pt-1">
           <circle cx={320} cy={198} r={6} fill="#F5F0E8" stroke={SAGE} strokeWidth={2.5} />
           <text x={320} y={172} textAnchor="middle" className="fill-ink" style={{ fontWeight: 700, fontSize: 14 }}>
@@ -185,19 +157,7 @@ export function JourneyPath({ lang = 'ko' }: { lang?: Lang }) {
             DailyFit
           </text>
           <text x={610} y={96} textAnchor="middle" className="fill-ink-soft" style={{ fontWeight: 600, fontSize: 11, letterSpacing: '0.06em' }}>
-            Co-founders
-          </text>
-        </g>
-
-        {/* legend */}
-        <g aria-hidden="true">
-          <circle cx={78} cy={334} r={4} fill={SAGE} />
-          <text x={90} y={338} className="fill-ink-soft" style={{ fontWeight: 600, fontSize: 11.5 }}>
-            {copy.legendYw}
-          </text>
-          <circle cx={152} cy={334} r={4} fill={NAVY} fillOpacity={0.55} />
-          <text x={164} y={338} className="fill-ink-soft" style={{ fontWeight: 600, fontSize: 11.5 }}>
-            {copy.legendHj}
+            Founder &amp; CEO
           </text>
         </g>
       </svg>

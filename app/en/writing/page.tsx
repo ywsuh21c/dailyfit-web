@@ -56,7 +56,7 @@ export default function WritingPage() {
             We publish what we learn while building DailyFit.
             <br />
             How we run a company as a team of AI Agents, our hypothesis about the
-            active senior market, and even{' '}
+            55+ market, and even{' '}
             <strong className="text-ink">the things that did not work out</strong>.
           </p>
           <p className="mt-4 text-body text-ink-soft">

@@ -33,7 +33,7 @@ export function Footer({ locale = 'ko' }: { locale?: Locale }) {
             {/* One line, always (Michael 2026-07-04) — sizes step down so the
                 sentence never wraps even at 320px viewports. */}
             <p className="mt-4 whitespace-nowrap text-[12.5px] leading-relaxed min-[400px]:text-[14px] sm:text-base">
-              Building AI agents for the active senior generation.
+              Building AI agents for the 55+ generation.
             </p>
           </div>
 
