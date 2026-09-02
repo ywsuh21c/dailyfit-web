@@ -33,6 +33,7 @@
  */
 
 import { execFileSync } from 'node:child_process';
+import { readFileSync } from 'node:fs';
 
 const SITE = process.env.GSC_SITE || 'https://dailyfitai.app/';
 const SITEMAP = process.env.GSC_SITEMAP || 'https://dailyfitai.app/sitemap.xml';
@@ -129,10 +130,34 @@ async function explainScope() {
   process.exit(3);
 }
 
+/**
+ * ADC 로 인증하면 구글이 **쿼터 프로젝트 헤더**를 요구한다 —
+ * `403: requires a quota project, which is not set by default` (9/2 실측).
+ * `gcloud auth application-default login` 이 ADC 파일에 `quota_project_id` 를 넣어 주므로
+ * 거기서 읽어 `x-goog-user-project` 로 보낸다. env 로 덮어쓸 수 있게 둔다.
+ */
+function quotaProject() {
+  if (process.env.GSC_QUOTA_PROJECT) return process.env.GSC_QUOTA_PROJECT;
+  try {
+    const raw = readFileSync(
+      `${process.env.HOME}/.config/gcloud/application_default_credentials.json`,
+      'utf8'
+    );
+    return JSON.parse(raw).quota_project_id || '';
+  } catch {
+    return '';
+  }
+}
+
 async function api(path, init) {
+  const qp = quotaProject();
   const res = await fetch(`https://www.googleapis.com/webmasters/v3${path}`, {
     ...init,
-    headers: { Authorization: `Bearer ${token()}`, ...(init?.headers || {}) },
+    headers: {
+      Authorization: `Bearer ${token()}`,
+      ...(qp ? { 'x-goog-user-project': qp } : {}),
+      ...(init?.headers || {}),
+    },
   });
   if (res.status === 403) {
     const body = await res.text().catch(() => '');
