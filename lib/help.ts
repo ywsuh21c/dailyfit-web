@@ -109,7 +109,6 @@ const FALLBACK_CONTACT: HelpContact = {
   email: site.contactEmail,
   phones: [
     { label: '서영우', display: '010-8807-6397', tel: '01088076397' },
-    { label: '김현진', display: '010-4901-7898', tel: '01049017898' },
   ],
   kakao_url: 'http://pf.kakao.com/_kxmUXX/chat',
   kakao_handle: '@데일리핏',

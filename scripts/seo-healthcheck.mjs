@@ -529,7 +529,8 @@ async function main() {
   // 영우 2026-09-02 확정 3건이 여기서 지켜진다:
   //   ① 한국어 「어르신·시니어·노인」 — 유저에게 보여주지 않는다
   //   ② 영문 `senior` — 영문 페이지에서도 뺀다 (9/2 저녁 결정 1-B)
-  //   ③ 김현진 — 소개 페이지에서 전부 뺀다 (1인 체제 2026-08-20)
+  //   ③ 김현진 — 소개 페이지에서 전부 뺀다 (1인 체제 2026-08-20). 9/2 저녁 확대:
+  //      조직도(/technology)와 폴백 연락처(/product)의 이름·전화번호까지.
   //
   // 🔴 화면에 «렌더되는» 것만 대상이다. 소스 주석·iOS 키워드 칸처럼 사용자에게
   //    안 보이는 자리는 금지 대상이 아니다(영우 9/2 확인) — 그래서 이 가드는
@@ -544,7 +545,11 @@ async function main() {
   {
     const KO_BANNED = ['시니어', '어르신', '노인'];
     const EN_BANNED = ['senior', 'Senior'];
-    const FOUNDER_BANNED = ['김현진', 'Hyunjin'];
+    // 창업자 표기 — 이름과 «폴백 연락처의 전화번호»까지. 백엔드 /api/help 는 이미
+    // 서영우 번호만 주는데 prod 에 NEXT_PUBLIC_API_URL 이 없어 lib/help.ts 폴백이
+    // 실제로 쓰이고 있었다 — 낡은 폴백이 그대로 사용자 화면이 된다(2026-09-02 실측:
+    // /product 에 5회 노출). 이름만 보면 번호가 남는 것을 못 잡는다.
+    const FOUNDER_BANNED = ['김현진', 'Hyunjin', '4901-7898', '01049017898'];
     const CONTROL = '데일리핏';
     const CONTROL_EN = 'DailyFit';
 
@@ -552,16 +557,16 @@ async function main() {
     const surfaces = [
       ['/', KO_BANNED, CONTROL],
       ['/about', [...KO_BANNED, ...FOUNDER_BANNED], CONTROL],
-      ['/technology', KO_BANNED, CONTROL],
+      ['/technology', [...KO_BANNED, ...FOUNDER_BANNED], CONTROL],
       ['/investors', KO_BANNED, CONTROL],
-      ['/product', KO_BANNED, CONTROL],
+      ['/product', [...KO_BANNED, ...FOUNDER_BANNED], CONTROL],
       ['/get', KO_BANNED, CONTROL],
       ['/writing', KO_BANNED, CONTROL],
       ['/llms.txt', KO_BANNED, CONTROL],
-      ['/llms-full.txt', KO_BANNED, CONTROL],
+      ['/llms-full.txt', [...KO_BANNED, ...FOUNDER_BANNED], CONTROL],
       ['/en', EN_BANNED, CONTROL_EN],
       ['/en/about', [...EN_BANNED, ...FOUNDER_BANNED], CONTROL_EN],
-      ['/en/technology', EN_BANNED, CONTROL_EN],
+      ['/en/technology', [...EN_BANNED, ...FOUNDER_BANNED], CONTROL_EN],
       ['/en/investors', EN_BANNED, CONTROL_EN],
       ['/en/writing', EN_BANNED, CONTROL_EN],
     ];

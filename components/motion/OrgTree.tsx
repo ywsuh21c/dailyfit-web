@@ -3,7 +3,7 @@ import { Reveal } from '@/components/motion/Reveal';
 /**
  * Technology-page centerpiece — the company's real AI-agent org chart, drawn
  * as a dark schematic board (echoes the landing hero's runtime-stage look):
- * two humans on top, the Orchestrator routing underneath, six divisions with
+ * one human on top, the Orchestrator routing underneath, six divisions with
  * their agent roster below. Data mirrors the actual workspace org
  * (1. Agents/ divisions) at a public-safe altitude: role names only, no
  * internals. Connectors reuse `.glyph-flow` (globals.css) so the "packets"
@@ -40,7 +40,8 @@ function Drop({ tall }: { tall?: boolean }) {
 
 export function OrgTree({ lang = 'ko' }: { lang?: 'ko' | 'en' }) {
   const en = lang === 'en';
-  const humansLabel = en ? 'Youngwoo Michael Suh · Hyunjin Jake Kim' : '서영우 · 김현진';
+  // 1인 체제(2026-08-20) — 창업자는 한 명이다.
+  const humansLabel = en ? 'Youngwoo Michael Suh' : '서영우';
   const orchestratorDesc = en
     ? 'Routes every request to the right Agent'
     : '모든 요청을 읽고 담당 Agent에게 라우팅';
@@ -56,7 +57,7 @@ export function OrgTree({ lang = 'ko' }: { lang?: 'ko' | 'en' }) {
             <span className="console-live-dot !bg-sage-lt" aria-hidden="true" />
             <span className="text-[15px] font-bold text-ivory">{humansLabel}</span>
             <span className="hidden text-[11px] font-semibold uppercase tracking-[0.14em] text-ivory/60 sm:inline">
-              Humans · direction, final say
+              Human · direction, final say
             </span>
           </div>
 
@@ -111,7 +112,7 @@ export function OrgTree({ lang = 'ko' }: { lang?: 'ko' | 'en' }) {
 
           {/* the stat line that carries the claim */}
           <p className="eyebrow-mono mt-8 text-center !text-[11.5px] text-ivory/50">
-            2 humans · 1 orchestrator · 15+ agents · 6 divisions ·{' '}
+            1 human · 1 orchestrator · 15+ agents · 6 divisions ·{' '}
             <span className="text-sage-lt">More to come!</span>
           </p>
         </div>
