@@ -29,10 +29,22 @@ const WEBSITE_ID = `${site.url}/#website`;
  */
 const BRAND_ALIASES = ['데일리핏', 'DailyFit Korea', '데일리핏 AI'];
 
-/** Verified public profiles — each one checked to return 200 (2026-08-04). */
+/**
+ * Verified public profiles — each one checked to return 200 (2026-08-04).
+ *
+ * `sameAs` 는 "이 엔티티가 다른 곳에서 어떤 이름으로 존재하는가"의 선언이다. 스토어
+ * 페이지가 여기 실려야 검색엔진·AI 답변엔진이 **웹사이트의 데일리핏 = 스토어의
+ * 데일리핏** 을 같은 것으로 묶는다. 동명 업체(헬스장·샐러드·건기식)가 SERP 를
+ * 점령한 상태에서 이 연결이 브랜드 패널의 근거가 된다.
+ *
+ * 안드는 `storeLinks.android` 에서 온다 — 미게시면 빈 문자열이라 `filter(Boolean)`
+ * 이 자동으로 뺀다. **없는 프로필을 sameAs 에 적으면 404 를 가리키는 거짓 선언**이
+ * 되므로, 이 파생이 곧 정직성 가드다. 출시일에 여기 손댈 일은 없다.
+ */
 const SAME_AS = [
   'https://www.instagram.com/dailyfitkorea/',
   storeLinks.ios,
+  storeLinks.android,
 ].filter(Boolean);
 
 export function organizationJsonLd() {
@@ -72,22 +84,41 @@ export function websiteJsonLd() {
   };
 }
 
-/** The app itself, for /product (the seniors-facing page ads land on). */
+/**
+ * The app itself, for /product (the seniors-facing page ads land on).
+ *
+ * `name` 은 **한글 브랜드를 앞에 세운다** — 이 노드가 "데일리핏 앱" 류 질의의 엔티티
+ * 근거이고, AI 답변엔진이 앱 이름을 인용할 때 읽는 값이다. 화면 워드마크(`site.name`,
+ * 영문)와 다른 이유는 `lib/site.ts` 의 `nameKo` 주석과 같다: 화면은 영문이 맞고,
+ * 검색은 한국인이 실제로 타이핑하는 문자열이 필요하다.
+ *
+ * `operatingSystem` 과 `installUrl` 은 **게시된 스토어에서만 파생**한다. 안드가
+ * 미게시면 'iOS' 하나, 게시되면 'iOS, Android' 로 자동 확장된다 —
+ * 출시일에 이 파일을 여는 일이 없어야 한다(`androidAppLive` 한 곳만 켠다).
+ */
 export function mobileAppJsonLd() {
   const offers = {
     '@type': 'Offer',
     price: '0',
     priceCurrency: 'KRW',
   };
+  // 게시된 스토어만 나열한다. 없는 스토어를 적으면 404 를 가리키는 거짓 선언이고,
+  // 구조화 데이터의 거짓말은 리치결과가 아니라 수동조치 대상이다.
+  const platforms = [storeLinks.ios ? 'iOS' : '', storeLinks.android ? 'Android' : '']
+    .filter(Boolean)
+    .join(', ');
+  const installUrls = [storeLinks.ios, storeLinks.android].filter(Boolean);
   return {
     '@context': 'https://schema.org',
     '@type': 'MobileApplication',
-    name: site.name,
+    name: `${site.nameKo}(${site.name})`,
+    alternateName: BRAND_ALIASES,
     applicationCategory: 'LifestyleApplication',
-    // Android intentionally absent — not published on Play yet (2026-08-04).
-    operatingSystem: 'iOS',
+    operatingSystem: platforms,
     url: absoluteUrl('/product'),
-    installUrl: storeLinks.ios || undefined,
+    // 단수 URL 이 기대되는 소비자를 위해 첫 값을 그대로 두고, 전체 목록은 배열로도
+    // 싣는다(schema.org 는 값이 하나든 여럿이든 같은 속성을 허용한다).
+    installUrl: installUrls.length > 1 ? installUrls : installUrls[0] || undefined,
     publisher: { '@id': ORG_ID },
     description:
       '대화 한 번으로 하루를 설계하는 AI Agent. 주변 프로그램을 찾아 알려주고, 신청까지 대신 해 드립니다.',

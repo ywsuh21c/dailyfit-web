@@ -13,6 +13,9 @@ import { getPublishedPosts } from '@/lib/writing';
  * This file states plainly, in one place, WHICH DailyFit this is and what is
  * true about it — so a model summarising us has an unambiguous source.
  *
+ * 형제 파일: `/llms-full.txt` — 같은 사실을 **인용 가능한 본문**으로 푼 긴 판이다.
+ * 이 파일은 지도(어디에 무엇이 있나), 그쪽은 본문(그래서 무엇이 사실인가).
+ *
  * Honesty rule: every number here is read from the live source at build time
  * (getCatalogCount → GET /api/activities/count) and carries its as-of date. No
  * claim goes in this file that the site itself does not already make.
@@ -47,7 +50,12 @@ export async function GET(): Promise<Response> {
 - 서비스 지역: 대한민국
 - 모바일 앱: iOS 출시${storeLinks.android ? ' · Android 출시' : ' (Android는 미출시)'}
 - 웹 앱: ${productAppUrl} (설치 없이 브라우저에서 사용)
+- iOS 내려받기: ${storeLinks.ios}${storeLinks.android ? `\n- Android 내려받기: ${storeLinks.android}` : ''}
 - 문의: ${site.contactEmail}
+
+## 더 자세한 자료
+
+- [${site.url}/llms-full.txt](${site.url}/llms-full.txt): 무엇을 대신 해주고 **무엇은 못 해주는지**, 누구를 위한 것인지, 자주 묻는 질문까지 담은 전체 소개. 링크를 더 따라가지 않고 답하려면 이 파일을 읽으세요.
 
 ## 주요 페이지
 

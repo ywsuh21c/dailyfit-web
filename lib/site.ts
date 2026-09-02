@@ -161,11 +161,62 @@ export const legalNav: NavItem[] = [
  * Install Referrer 귀속). 라이브 전 iOS App Store URL(숫자 app id)·Play 패키지
  * id를 반드시 검증할 것.
  */
+/**
+ * Play 공개 스토어 URL. 패키지 id 는 `kr.dailyfit.app` 고정.
+ * 값이 아니라 **게시 여부**가 변수이므로 URL 자체는 상수로 둔다.
+ */
+export const androidPlayUrl =
+  'https://play.google.com/store/apps/details?id=kr.dailyfit.app' as const;
+
+/**
+ * 🚀 **안드로이드 출시 스위치 — 사이트 전체가 이 한 값에서 파생된다.**
+ *
+ * ── 왜 한 곳이어야 하는가 (2026-09-02) ──────────────────────────────────────
+ * 이날까지 이 스위치는 **다섯 곳에 흩어져 있었다**:
+ *   1. `app/get/page.tsx` 의 로컬 `ANDROID_APP_LIVE` (버튼 목적지·라벨·개인정보 고지)
+ *   2. 여기 `storeLinks.android` (StoreBadge "곧 출시" 여부)
+ *   3. `lib/jsonld.ts` 의 `SAME_AS` (엔티티 선언에 Play 프로필)
+ *   4. `lib/jsonld.ts` 의 `mobileAppJsonLd().operatingSystem` ('iOS' 하드코딩)
+ *   5. `app/llms.txt` 의 "(Android는 미출시)" 문장
+ * 출시일에 하나만 켜고 넷을 놓치면 사이트가 몇 주 동안 사실과 다른 말을 한다.
+ * 손으로 유지하는 목록은 반드시 샌다 — 그래서 **파생**으로 바꿨다.
+ *
+ * ── 🔴 켜기 전 반드시 실측할 것 ─────────────────────────────────────────────
+ * 조건은 "제출했다"가 아니라 **공개 Play URL 이 200 을 주는 것**이다. 비공개
+ * 트랙(내부·비공개 테스트)은 테스터 전용 옵트인 링크로만 열리고 공개 URL 은
+ * 그대로 404 라, 승인 전에 켜면 사고가 재발한다.
+ *
+ *   curl -sS -o /dev/null -w '%{http_code}\n' \
+ *     'https://play.google.com/store/apps/details?id=kr.dailyfit.app'
+ *
+ * 8/8 에 #42 가 이 확인 없이 true 로 머지됐고(Play 프로덕션 승인은 7/30 거절 상태),
+ * **9일간** 안드로이드 사용자 전원이 404 에 부딪혔다. 아무도 몰랐다.
+ * 이제는 `scripts/seo-healthcheck.mjs` 의 "안드 출시 스위치 ↔ Play 공개 URL"
+ * 불변식이 **양방향으로** 실측한다 — 켰는데 404 면 실패, 200 인데 껐으면 경고.
+ * ────────────────────────────────────────────────────────────────────────────
+ */
+export const androidAppLive = false;
+
 export const storeLinks = {
   // iOS 정본 하드코딩(2026-08-04): env 미설정으로 사이트 전체 스토어 링크가 빈 값이던
   // 실사고(초대 랜딩 iOS 자동 이동이 웹앱 폴백으로 샘). 스토어 URL 은 비밀이 아닌
   // 공개 고정값이라 코드가 단일 진실이 맞다 — env 는 오버라이드 용도로만 남긴다.
   ios: process.env.NEXT_PUBLIC_IOS_APP_URL || 'https://apps.apple.com/app/id6773802603',
-  // 안드는 Play 미게시(kr.dailyfit.app 404 실측 2026-08-04) — 게시 전까지 빈 값이 정직.
-  android: process.env.NEXT_PUBLIC_ANDROID_APP_URL ?? '',
+  // 안드는 `androidAppLive` 에서 파생 — 게시 전까지 빈 값이 정직하고, StoreBadge 가
+  // "곧 출시"(비클릭)로 안전하게 렌더된다. env 는 종전대로 오버라이드로 남긴다
+  // (`?? ` 이므로 env 를 빈 문자열로 두면 강제로 끌 수도 있다).
+  android: process.env.NEXT_PUBLIC_ANDROID_APP_URL ?? (androidAppLive ? androidPlayUrl : ''),
 } as const;
+
+/**
+ * **안드 출시 여부를 묻는 «유일한» 술어.** 소비자(버튼·JSON-LD·llms.txt)는 반드시
+ * 이 값을 읽는다 — `androidAppLive` 를 직접 읽으면 안 된다.
+ *
+ * 왜 한 겹 더 두는가: `androidAppLive` 는 **저작 의도**이고 `storeLinks.android` 는
+ * **해석된 값**이다(env `NEXT_PUBLIC_ANDROID_APP_URL` 오버라이드가 그 사이에 낀다).
+ * 둘이 갈리는 순간 화면과 마크업이 서로 다른 말을 한다 — 실제로 이 PR 의 뮤테이션
+ * 테스트에서 그 갈림이 재현됐다: env 로 켰더니 JSON-LD·llms.txt·스토어 배지는
+ * "출시됨"이 됐는데 `/get` 버튼만 "사전신청"으로 남았다. 노출을 결정하는 술어는
+ * 게이트 «그 값»이어야 하고, 소비자가 재파생하면 반드시 갈린다.
+ */
+export const androidStoreLive: boolean = Boolean(storeLinks.android);

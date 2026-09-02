@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { androidStoreLive, storeLinks } from '@/lib/site';
 
 // 광고 랜딩(구글 디맨드젠·카카오): 자동 리다이렉트를 쓰면 도착 도메인이
 // dailyfitai.app → apple.com 으로 튀어 구글이 "도착 도메인 불일치"로 반려한다.
@@ -8,25 +9,31 @@ import { useEffect, useState } from 'react';
 // (2026-07-04 현진 요청 — 광고 심사 요건.)
 const IOS_URL = 'https://apps.apple.com/kr/app/dailyfit/id6773802603';
 // 안드로이드: 앱 출시 전에는 사전신청 구글폼, 출시 후에는 Play 스토어(+referrer 귀속).
-// 🚀 ANDROID_APP_LIVE 하나가 **버튼 목적지·버튼 라벨·footer 개인정보 안내**를 모두 제어한다
-//   (플립 시 따로 손댈 곳 없음 — 단일 진실). 구글 프로덕션 승인 나는 날 이 PR 을 머지하면 전환.
+// 🚀 이 페이지 안에서는 ANDROID_APP_LIVE 하나가 **버튼 목적지·버튼 라벨·footer 개인정보
+//   안내**를 제어한다. 다만 그 값의 **정본은 이 파일이 아니라 `lib/site.ts` 의
+//   `androidAppLive`** 다 — 사이트 전체(스토어 배지·JSON-LD·llms.txt)가 같은 값에서
+//   파생돼야 출시일에 한 곳만 켜고 나머지를 놓치는 일이 없다.
 const AOS_FORM_URL = 'https://forms.gle/gUKFvTzUz2Sg5WDg7'; // 사전신청(출시 전)
-const AOS_PLAY_URL = 'https://play.google.com/store/apps/details?id=kr.dailyfit.app'; // 출시 후
+const AOS_PLAY_URL = storeLinks.android; // 출시 후 (미출시면 빈 문자열 — 아래 스위치가 꺼져 안 쓰인다)
 //
 // ⏸️ 2026-08-17 false 로 되돌림 — 이 플립은 **전제가 아직 안 왔는데** 켜져 있었다.
 //   8/8 에 true 로 머지됐으나(#42) 그 전제인 Play 프로덕션 승인은 7/30 에 거절됐고,
-//   재신청 D-day 는 **8/20**(테스터 연속일 카운터 11/14, 8/17 기준)이다. 승인 후 심사까지
-//   더하면 몇 주다.
+//   재신청 D-day 는 8/20 이었다(테스터 연속일 카운터 11/14, 8/17 기준).
+//   ↑ 이 줄은 지난 이야기다. 현재(2026-09-02): 빌드 vc37 이 Play **프로덕션 draft** 로
+//     올라가 있고 공개 URL 은 여전히 404 다 — 영우가 「출시 시작」을 누르면 200 이 된다.
 //   그 9일간 라이브 실측: 버튼 라벨 "Android · 플레이스토어에서 받기" → 목적지
 //   `play.google.com/…?id=kr.dailyfit.app` = **HTTP 404**. 초대 링크를 받은 안드로이드
 //   사용자 전원이 막힌 페이지에 부딪혔고, 그들은 이유를 남기지 않고 이탈한다.
 //   (`/get` 은 noindex 라 검색 유입엔 무영향 — 영우가 직접 보낸 링크만 해당됐다.)
 //
-//   ⚠️ 다시 true 로 켤 조건은 "제출했다"가 아니라 **공개 Play URL 이 200 을 주는 것**이다.
-//   비공개 트랙(내부·비공개 테스트)은 테스터 전용 옵트인 링크로만 열리고 공개 URL 은
-//   그대로 404 라, 승인 전에 켜면 이 사고가 그대로 재발한다. 켜기 전 실측 한 줄:
-//     curl -sS -o /dev/null -w '%{http_code}\n' 'https://play.google.com/store/apps/details?id=kr.dailyfit.app'
-const ANDROID_APP_LIVE = false;
+// 🔴 2026-09-02: 이 상수는 **더 이상 여기서 정의하지 않는다.** 출시 스위치가 이 파일에만
+//   있어서, 같은 날 함께 뒤집혀야 할 네 곳(`storeLinks.android` · JSON-LD `sameAs` ·
+//   `mobileAppJsonLd().operatingSystem` · `/llms.txt`)이 뒤에 남는 구조였다.
+//   정본은 `lib/site.ts` 의 `androidAppLive` 하나이고, 켜는 조건(공개 Play URL 200)과
+//   그 조건을 실측하는 가드도 거기 주석에 적혀 있다. 여기서는 읽기만 한다.
+//   🔴 읽는 값은 `androidAppLive` 가 아니라 **`androidStoreLive`** 다 — env 오버라이드가
+//   그 사이에 끼기 때문에, 저작 스위치를 직접 읽으면 이 버튼만 뒤에 남는다(뮤테이션 실측).
+const ANDROID_APP_LIVE = androidStoreLive;
 
 const INK = '#1E2D40';
 const SAGE = '#4A7C59';
@@ -53,7 +60,20 @@ export default function GetPage() {
           if (v) ref.set(k, v);
         }
         const refStr = ref.toString();
-        setAosHref(refStr ? `${AOS_PLAY_URL}&referrer=${encodeURIComponent(refStr)}` : AOS_PLAY_URL);
+        // 🔴 `&referrer=` 를 하드코딩하지 않는다. AOS_PLAY_URL 은 이제 env 로 갈아끼울 수
+        //    있고(`storeLinks.android`), 쿼리스트링이 없는 URL 이 오면 `&` 가 첫 파라미터를
+        //    망가뜨려 Install Referrer 귀속이 조용히 죽는다. URL 로 조립하면 ?/& 를 알아서 고른다.
+        if (refStr) {
+          try {
+            const u = new URL(AOS_PLAY_URL);
+            u.searchParams.set('referrer', refStr);
+            setAosHref(u.toString());
+          } catch {
+            setAosHref(AOS_PLAY_URL);
+          }
+        } else {
+          setAosHref(AOS_PLAY_URL);
+        }
       } catch {
         /* referrer 부착 실패 시 순수 Play 링크로 폴백 */
       }
