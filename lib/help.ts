@@ -16,6 +16,23 @@ import { site } from '@/lib/site';
  * Safe-fallback rule: if NEXT_PUBLIC_API_URL is unset OR the fetch fails / is
  * malformed, fall back to FALLBACK_FAQ / FALLBACK_CONTACT (the SAME items the
  * app ships) so the page renders identical content and NEVER breaks.
+ *
+ * ── 🔴 2026-09-02 실측: 「폴백」이 프로드에서 «상시» 경로다 ──────────────────
+ * 위 문단은 설계를 말하지 이 서비스의 «현재»를 말하지 않는다. 프로드(Netlify)에
+ * `NEXT_PUBLIC_API_URL` 이 설정돼 있지 않아 `getHelp()` 는 첫 줄에서 곧장
+ * FALLBACK 을 반환한다 — 즉 아래 상수가 **배포되는 값 그 자체**다.
+ *
+ * 대가를 실제로 치렀다: 백엔드 `GET /api/help` 는 이미 창업자 한 명의 번호만
+ * 주고 있었는데, 이 파일의 낡은 사본 때문에 /product 에 떠난 사람의 번호가
+ * 5회 노출된 채 남아 있었다(9/2 발견). **낡은 폴백은 조용히 낡은 화면이 된다.**
+ *
+ * 그래서 두 가지를 걸어 뒀다:
+ *   1) 이 주석 — 다음 편집자가 "어차피 안 쓰이는 값"으로 오해하지 않도록.
+ *   2) `scripts/seo-healthcheck.mjs` 의 「연락처 ↔ 백엔드 정합」 검사 —
+ *      백엔드가 주는 번호와 화면에 실제로 그려진 번호가 갈리면 매일 잡힌다.
+ *
+ * 구조적으로 닫으려면 프로드에 `NEXT_PUBLIC_API_URL` 을 넣어 선언된 정본이
+ * 실제로 발동하게 해야 한다(영우 승인 2026-09-02, Netlify 콘솔 작업).
  * ────────────────────────────────────────────────────────────────────────────
  */
 
@@ -104,6 +121,10 @@ const FALLBACK_FAQ: FaqItem[] = [
  * Local fallback contact. Email comes from the canonical site constant; Kakao
  * stays empty until the channel is live (the page hides the Kakao CTA when the
  * URL is empty), so we never render a dead link.
+ */
+/**
+ * ⚠️ 이름은 「폴백」이지만 프로드에서는 **이것이 배포되는 값**이다(위 주석 참조).
+ *    여기를 고치는 것은 «비상용을 손보는 일»이 아니라 «라이브 화면을 바꾸는 일»이다.
  */
 const FALLBACK_CONTACT: HelpContact = {
   email: site.contactEmail,

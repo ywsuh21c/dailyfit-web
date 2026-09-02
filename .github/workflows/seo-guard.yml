@@ -15,6 +15,9 @@
 name: SEO guard
 
 on:
+  # 머지 «앞»으로 온 게이트. 종전에는 스케줄뿐이라 위반이 프로드에 배포된 뒤
+  # 최대 24시간 사용자 화면에 남았다(2026-09-02: /product 에 떠난 사람의 전화번호).
+  pull_request:
   schedule:
     # 매일 09:00 KST (= 00:00 UTC). 아침에 결과가 나와 있도록.
     - cron: '0 0 * * *'
@@ -31,6 +34,8 @@ permissions:
 jobs:
   healthcheck:
     name: 불변식 실측 (prod)
+    # PR 에서는 프로드가 아니라 «그 PR 의 프리뷰»를 재야 한다 — 아래 preview 잡이 한다.
+    if: github.event_name != 'pull_request'
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
@@ -51,3 +56,61 @@ jobs:
       - name: IndexNow 재제출 (수동 실행 시에만)
         if: github.event_name == 'workflow_dispatch' && inputs.submit_indexnow
         run: node scripts/indexnow.mjs
+
+  preview:
+    name: 불변식 실측 (PR 프리뷰 · 경고만)
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    # 🟡 **경고만 한다 — 머지를 막지 않는다.** 영우 2026-09-02 승인 조건이다:
+    #    며칠 지켜보고 헛빨간불이 없으면 그때 막게 바꾼다. 지금 막게 하면
+    #    프리뷰가 늦게 뜨는 것만으로 멀쩡한 작업이 서 버린다.
+    continue-on-error: true
+    permissions:
+      contents: read
+      statuses: read
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      # Netlify 는 «head SHA» 에 커밋 상태로 프리뷰 URL 을 붙인다.
+      # pull_request 이벤트의 github.sha 는 머지 커밋이라 여기선 쓰면 안 된다.
+      - name: Netlify 프리뷰 URL 기다리기
+        id: preview
+        env:
+          GH_TOKEN: ${{ github.token }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          set -euo pipefail
+          url=""
+          for i in $(seq 1 40); do
+            state=$(gh api "repos/${GITHUB_REPOSITORY}/commits/${HEAD_SHA}/status" \
+              --jq '.statuses[] | select(.context=="netlify/dailyfit-beta/deploy-preview") | .state' 2>/dev/null | head -1 || true)
+            url=$(gh api "repos/${GITHUB_REPOSITORY}/commits/${HEAD_SHA}/status" \
+              --jq '.statuses[] | select(.context=="netlify/dailyfit-beta/deploy-preview") | .target_url' 2>/dev/null | head -1 || true)
+            echo "t=$((i*15))s state=${state:-none}"
+            if [ "${state:-}" = "success" ] && [ -n "${url:-}" ]; then
+              echo "url=$url" >> "$GITHUB_OUTPUT"
+              exit 0
+            fi
+            if [ "${state:-}" = "failure" ] || [ "${state:-}" = "error" ]; then
+              echo "::warning::프리뷰 빌드가 실패했다 — 이 PR 은 검사하지 못한다"
+              exit 0
+            fi
+            sleep 15
+          done
+          echo "::warning::프리뷰 URL 을 10분 안에 못 받았다 — 검사 건너뜀(0건이 아니라 «측정 실패»다)"
+
+      # 🔴 URL 을 못 받았으면 «통과»가 아니라 «측정 실패»다. 조용히 초록으로
+      #    지나가지 않도록 스텝을 건너뛰고 위 경고만 남긴다.
+      - name: SEO 불변식 헬스체크 (프리뷰)
+        if: steps.preview.outputs.url != ''
+        run: node scripts/seo-healthcheck.mjs
+        env:
+          # BASE = 어디로 요청하나 · SEO_SITE_URL = 정본이 어디여야 하나(프로드 고정)
+          BASE: ${{ steps.preview.outputs.url }}
+          SEO_SITE_URL: https://dailyfitai.app
+          SEO_SAMPLE: '6'
