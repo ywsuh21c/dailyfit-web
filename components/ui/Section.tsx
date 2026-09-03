@@ -1,28 +1,38 @@
 import { cn } from '@/lib/cn';
 
-type Tone = 'light' | 'surface' | 'dark';
+type Tone = 'light' | 'surface' | 'paper' | 'dark';
 
 const tones: Record<Tone, string> = {
   light: 'bg-bg text-ink',
   surface: 'bg-surface text-ink',
+  paper: 'ed-paper text-ink',
   dark: 'bg-navy text-ivory',
 };
 
-/** Consistent section wrapper — controls vertical rhythm + light/dark tone. */
+/**
+ * Consistent section wrapper — vertical rhythm + tone. `rule` draws the warm
+ * hairline along the top edge (the editorial page break); most sections on
+ * the company site set it.
+ */
 export function Section({
   tone = 'light',
   className,
   children,
   id,
+  rule,
 }: {
   tone?: Tone;
   className?: string;
   id?: string;
+  rule?: boolean;
   children: React.ReactNode;
 }) {
   return (
-    <section id={id} className={cn(tones[tone], 'py-16 sm:py-24', className)}>
-      <div className="mx-auto max-w-6xl px-5">{children}</div>
+    <section
+      id={id}
+      className={cn(tones[tone], rule && 'border-t border-hair', 'py-20 sm:py-28', className)}
+    >
+      <div className="mx-auto max-w-wrap px-5 sm:px-8">{children}</div>
     </section>
   );
 }
@@ -42,15 +52,17 @@ export function SectionHeader({
   return (
     <div className="max-w-prose">
       {eyebrow && (
-        <p className={cn('eyebrow-mono', invert ? 'text-sage-lt' : 'text-sage')}>
+        <p className={cn('text-eyebrow uppercase', invert ? 'text-sage-lt' : 'text-sage')}>
           {eyebrow}
         </p>
       )}
-      <h2 className="mt-2 text-h2">{title}</h2>
+      <h2 className="mt-3 text-[30px] font-bold leading-[1.18] tracking-[-0.03em] sm:text-[38px]">
+        {title}
+      </h2>
       {lead && (
         <p
           className={cn(
-            'mt-4 text-body',
+            'mt-5 text-body',
             invert ? 'text-ivory/80' : 'text-ink-soft',
           )}
         >

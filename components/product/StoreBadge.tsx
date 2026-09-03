@@ -14,8 +14,23 @@ type Store = 'App Store' | 'Google Play';
  *   App Store는 쿼리 append(best-effort). 클라이언트에서 처리해 페이지는 정적으로
  *   유지(빠른 로드). JS 없으면 기본 스토어 URL로 폴백(UTM만 미전달).
  */
-export function StoreBadge({ store, href }: { store: Store; href: string }) {
+export function StoreBadge({
+  store,
+  href,
+  tone = 'dark',
+}: {
+  store: Store;
+  href: string;
+  /** 'dark' = on navy/sage grounds (default) · 'light' = on white cards (activity aside). */
+  tone?: 'dark' | 'light';
+}) {
   const [resolved, setResolved] = useState(href);
+  const frame =
+    tone === 'light'
+      ? 'border-hair-strong bg-white text-ink'
+      : 'border-white/35 bg-white/10 text-white';
+  const sub = tone === 'light' ? 'text-ink-soft' : 'text-white/70';
+  const hover = tone === 'light' ? 'hover:border-sage hover:text-sage' : 'hover:bg-white/20';
 
   useEffect(() => {
     if (!href) return;
@@ -42,9 +57,9 @@ export function StoreBadge({ store, href }: { store: Store; href: string }) {
 
   if (!href) {
     return (
-      <span className="inline-flex min-h-[58px] items-center gap-3 rounded-xl border border-white/35 bg-white/10 px-7">
+      <span className={`inline-flex min-h-[58px] items-center gap-3 rounded-xl border px-7 ${frame}`}>
         <span className="text-left leading-tight">
-          <span className="block text-[12px] text-white/70">{store}</span>
+          <span className={`block text-[12px] ${sub}`}>{store}</span>
           <span className="block text-[17px] font-bold">곧 출시</span>
         </span>
       </span>
@@ -55,10 +70,10 @@ export function StoreBadge({ store, href }: { store: Store; href: string }) {
     <a
       href={resolved}
       rel="noopener"
-      className="inline-flex min-h-[58px] items-center gap-3 rounded-xl border border-white/35 bg-white/10 px-7 transition-colors hover:bg-white/20 active:scale-[0.98]"
+      className={`inline-flex min-h-[58px] items-center gap-3 rounded-xl border px-7 transition-colors active:scale-[0.98] ${frame} ${hover}`}
     >
       <span className="text-left leading-tight">
-        <span className="block text-[12px] text-white/70">{store}</span>
+        <span className={`block text-[12px] ${sub}`}>{store}</span>
         <span className="block text-[17px] font-bold">다운로드</span>
       </span>
     </a>
