@@ -84,8 +84,3 @@ export function SpreadTitle({
     </h2>
   );
 }
-
-/** A hairline rule between sections. */
-export function Rule({ className }: { className?: string }) {
-  return <hr className={cn('border-0 border-t border-hair', className)} />;
-}

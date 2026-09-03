@@ -52,7 +52,7 @@ export default function ResearchPage() {
         <div className="aurora aurora-1" aria-hidden="true" />
         <div className="aurora aurora-2" aria-hidden="true" />
 
-        <div className="relative mx-auto flex min-h-[calc(100svh-72px)] max-w-6xl flex-col justify-center px-5 pb-24 pt-16 lg:pb-28">
+        <div className="relative mx-auto flex min-h-[calc(100svh-72px)] max-w-wrap flex-col justify-center px-5 sm:px-8 pb-24 pt-16 lg:pb-28">
           <div className="grid items-center gap-14 lg:grid-cols-[1fr_0.9fr] lg:gap-16">
             <div>
               <p className="rs-hero-item eyebrow-mono text-sage">Research at DailyFit</p>
@@ -127,14 +127,14 @@ export default function ResearchPage() {
             </p>
           </Reveal>
         </div>
-        <div className="mx-auto mt-16 max-w-6xl px-5">
+        <div className="mx-auto mt-16 max-w-wrap px-5 sm:px-8">
           <Principles />
         </div>
       </section>
 
       {/* ─────────────── CH 02 · 논지 (스티키 씬) ─────────────── */}
       <section id="thesis" className="bg-surface py-24 sm:py-32">
-        <div className="mx-auto max-w-6xl px-5">
+        <div className="mx-auto max-w-wrap px-5 sm:px-8">
           <Reveal className="relative mx-auto max-w-3xl text-center">
             <span className="rs-ch-num" aria-hidden="true">02</span>
             <p className="eyebrow-mono text-sage">Chapter 02 · Core research theme</p>
@@ -177,7 +177,7 @@ export default function ResearchPage() {
 
       {/* ─────────────── CH 03 · 방법 (플라이휠 씬) ─────────────── */}
       <section id="method" className="border-y border-line bg-ivory py-24 sm:py-32">
-        <div className="mx-auto max-w-6xl px-5">
+        <div className="mx-auto max-w-wrap px-5 sm:px-8">
           <Reveal className="relative mx-auto max-w-3xl text-center">
             <span className="rs-ch-num" aria-hidden="true">03</span>
             <p className="eyebrow-mono text-sage">Chapter 03 · The method</p>
@@ -207,7 +207,7 @@ export default function ResearchPage() {
 
       {/* ─────────────── CH 04 · 실전 검증 ─────────────── */}
       <section id="production" className="bg-bg py-24 sm:py-32">
-        <div className="mx-auto grid max-w-6xl items-center gap-14 px-5 lg:grid-cols-[1fr_1fr]">
+        <div className="mx-auto grid max-w-wrap items-center gap-14 px-5 sm:px-8 lg:grid-cols-[1fr_1fr]">
           <Reveal>
             <p className="eyebrow-mono text-sage">Chapter 04 · Proven in production</p>
             <h2 className="mt-4 text-[34px] font-extrabold leading-[1.2] tracking-[-0.03em] text-ink sm:text-[42px]">
@@ -233,7 +233,7 @@ export default function ResearchPage() {
 
       {/* ─────────────── CH 05 · 질문 ─────────────── */}
       <section id="questions" className="border-y border-line bg-ivory py-24 sm:py-32">
-        <div className="mx-auto max-w-6xl px-5">
+        <div className="mx-auto max-w-wrap px-5 sm:px-8">
           <Reveal className="relative mx-auto max-w-3xl text-center">
             <span className="rs-ch-num" aria-hidden="true">05</span>
             <p className="eyebrow-mono text-sage">Chapter 05 · Open questions</p>
@@ -289,7 +289,7 @@ export default function ResearchPage() {
 
       {/* ─────────────── CH 06 · 확장 ─────────────── */}
       <section id="frontiers" className="bg-surface py-24 sm:py-32">
-        <div className="mx-auto max-w-6xl px-5">
+        <div className="mx-auto max-w-wrap px-5 sm:px-8">
           <Reveal className="relative mx-auto max-w-3xl text-center">
             <span className="rs-ch-num" aria-hidden="true">06</span>
             <p className="eyebrow-mono text-sage">Chapter 06 · Research frontier</p>
@@ -360,7 +360,7 @@ export default function ResearchPage() {
         <div className="rs-stage-glow rs-stage-glow-a" aria-hidden="true" />
         <div className="rs-stage-glow rs-stage-glow-b" aria-hidden="true" />
         <div className="rs-stage-grain" aria-hidden="true" />
-        <div className="relative mx-auto max-w-6xl px-5">
+        <div className="relative mx-auto max-w-wrap px-5 sm:px-8">
           <Reveal>
             <p className="eyebrow-mono text-sage-lt/80">Research at DailyFit</p>
             <h2 className="mx-auto mt-5 max-w-[20ch] text-[36px] font-extrabold leading-[1.18] tracking-[-0.03em] text-ivory sm:text-[46px]">
