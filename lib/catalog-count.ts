@@ -27,7 +27,7 @@ export type CatalogCount = {
 };
 
 /** Last date the bundled fallback count was hand-verified against prod. */
-const FALLBACK_AS_OF = '2026-08-04';
+const FALLBACK_AS_OF = '2026-09-03';
 
 const FALLBACK: CatalogCount = {
   count: activeCatalogCount,
