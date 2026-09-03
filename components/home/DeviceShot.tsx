@@ -3,9 +3,12 @@ import { cn } from '@/lib/cn';
 
 /**
  * A real app screenshot in a plain phone frame. Screens live in
- * `public/app/*.webp` — exported from the store-listing set (2026-09-02 build,
- * 1080×1920 → 540 wide). No fake status bar, no invented UI: the frame is a
- * white card with a hairline; the screen is the screen.
+ * `public/app/*.webp` — the store-listing set (2026-09-02 build, 1080×1920
+ * originals resampled to 640 wide, ~35 KB each). No fake status bar and no
+ * invented UI: the frame is a white card with a hairline, and the screen is
+ * the screen. Intrinsic size MUST match the file (640×1138) or Next serves a
+ * blurry upscale — the first version pointed at a 303px intermediate and the
+ * phones rendered as near-empty white slabs.
  */
 export function DeviceShot({
   src,
@@ -20,7 +23,7 @@ export function DeviceShot({
 }) {
   return (
     <figure className={cn('ed-device', className)}>
-      <Image src={src} alt={alt} width={540} height={960} priority={priority} sizes="(max-width: 640px) 70vw, 260px" />
+      <Image src={src} alt={alt} width={640} height={1138} priority={priority} sizes="(max-width: 640px) 70vw, 320px" />
     </figure>
   );
 }

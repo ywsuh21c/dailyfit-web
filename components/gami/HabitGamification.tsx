@@ -6,10 +6,10 @@ import { LevelCards, LevelUpStrip, WeekAttendance, WelcomePoints } from '@/compo
 // the real characters. Tone = warm encouragement, non-competitive. Body ≥18px.
 export function HabitGamification() {
   return (
-    <section className="bg-surface py-20 sm:py-24">
-      <div className="mx-auto max-w-6xl px-5">
+    <section className="ed-paper py-20 sm:py-24">
+      <div className="mx-auto max-w-wrap px-5 sm:px-8">
         <Reveal className="mx-auto max-w-[54ch] text-center">
-          <p className="eyebrow-mono text-sage">함께 자라는 하루</p>
+          <p className="text-eyebrow uppercase text-sage">함께 자라는 하루</p>
           <h2 className="mt-4 text-[30px] font-extrabold tracking-[-0.03em] text-ink sm:text-[38px]">
             캐릭터와 함께, 매일 한 걸음.
           </h2>
@@ -28,7 +28,7 @@ export function HabitGamification() {
         </div>
 
         <Reveal
-          className="mt-12 rounded-3xl border border-line bg-white p-8 text-center sm:p-10"
+          className="mt-12 rounded-3xl border border-hair bg-white p-8 text-center sm:p-10"
           delay={80}
         >
           <p className="text-[22px] font-extrabold text-ink">출석할수록, 캐릭터가 자라요</p>

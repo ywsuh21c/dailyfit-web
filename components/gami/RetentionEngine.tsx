@@ -9,10 +9,10 @@ import { LevelCards, LevelUpStrip, Mascot } from '@/components/gami/parts';
 export function RetentionEngine() {
   return (
     <section className="bg-surface py-24 sm:py-32">
-      <div className="mx-auto max-w-6xl px-5">
+      <div className="mx-auto max-w-wrap px-5 sm:px-8">
         <Reveal className="mx-auto max-w-[62ch] text-center">
           <Mascot className="char-float mx-auto mb-5 h-20 w-20 object-contain" />
-          <p className="eyebrow-mono text-sage">Habits</p>
+          <p className="text-eyebrow uppercase text-sage">Habits</p>
           <h2 className="mt-4 text-[34px] font-extrabold leading-[1.2] tracking-[-0.03em] text-ink sm:text-[42px]">
             캐릭터와 함께, 매일이 이어집니다.
           </h2>
@@ -31,7 +31,7 @@ export function RetentionEngine() {
         </div>
 
         <Reveal
-          className="mt-12 rounded-3xl border border-line bg-white p-8 text-center sm:p-10"
+          className="mt-12 rounded-3xl border border-hair bg-white p-8 text-center sm:p-10"
           delay={120}
         >
           <p className="text-[20px] font-extrabold text-ink">레벨이 오를수록, 캐릭터를 꾸밉니다</p>
@@ -44,14 +44,14 @@ export function RetentionEngine() {
         </Reveal>
 
         <div className="mt-12 grid gap-4 md:grid-cols-2">
-          <div className="rounded-2xl border border-line border-l-[3px] border-l-sage bg-white p-6">
+          <div className="rounded-2xl border border-hair border-l-[3px] border-l-sage bg-white p-6">
             <p className="text-base font-bold text-ink">쓸수록 쌓이는 포인트</p>
             <p className="mt-1.5 text-[14.5px] leading-relaxed text-ink-soft">
               웰컴 포인트로 시작해 출석·추천으로 쌓입니다. 가치를 받은 다음의
               지불 — 돈이 빠지는 고통이 아니라.
             </p>
           </div>
-          <div className="rounded-2xl border border-line border-l-[3px] border-l-sage bg-white p-6">
+          <div className="rounded-2xl border border-hair border-l-[3px] border-l-sage bg-white p-6">
             <p className="text-base font-bold text-ink">또래로 번지는 확산</p>
             <p className="mt-1.5 text-[14.5px] leading-relaxed text-ink-soft">
               만족한 사용자가 또래를 데려오고, 아파트·동네 커뮤니티를 타고 퍼지는

@@ -36,13 +36,21 @@ const FALLBACK: CatalogCount = {
 
 const ISO_DATE = /^\d{4}-\d{2}-\d{2}$/;
 
+/** 6h — same window as the pages that render this number. */
+const SAMPLE_REVALIDATE = 21600;
+
 /**
  * Returns the active catalog count + as-of date. Reads the canonical
  * `GET /api/activities/count` when NEXT_PUBLIC_API_BASE_URL is set; otherwise
  * (or on any error / malformed payload) returns the bundled fallback.
  *
- * Cached for 1 day (`next: { revalidate: 86400 }`) — the catalog moves slowly,
- * so a daily ISR refresh keeps the number fresh without per-request API load.
+ * Cached for 6h (`next: { revalidate: 21600 }`), matching the pages that show
+ * it. It used to be 24h, and that is longer than it looks: Netlify restores
+ * `.next/cache` between builds, so the fetch cache OUTLIVES a deploy. On
+ * 2026-09-03 a fresh build rendered `9,745건 · 2026.09.02 기준` while the live
+ * endpoint said `{"active":9475,"as_of":"2026-09-03"}` — a day-old number
+ * survived a full rebuild. The date shown next to it kept that honest, but a
+ * published figure should not need its own footnote to be excused.
  */
 export async function getCatalogCount(): Promise<CatalogCount> {
   // 하드코딩 폴백은 lib/activity.ts 와 같은 이유다: 2026-07-14 배포 환경에
@@ -54,7 +62,7 @@ export async function getCatalogCount(): Promise<CatalogCount> {
 
   try {
     const res = await fetch(`${base}/api/activities/count`, {
-      next: { revalidate: 86400 },
+      next: { revalidate: SAMPLE_REVALIDATE },
     });
     if (!res.ok) return FALLBACK;
 

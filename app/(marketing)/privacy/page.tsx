@@ -24,7 +24,7 @@ function Section({
   children: React.ReactNode;
 }) {
   return (
-    <div className="mt-10 border-t border-line pt-8">
+    <div className="mt-10 border-t border-hair pt-8">
       <h2 className="text-h3 text-ink">
         <span className="text-sage">{n}.</span> {title}
       </h2>
@@ -37,11 +37,16 @@ function Section({
 
 export default function PrivacyPage() {
   return (
-    <section className="bg-bg py-24">
-      <div className="mx-auto max-w-3xl px-5">
-        <p className="eyebrow-mono text-sage">Legal</p>
-        <h1 className="mt-4 text-h2 text-ink">개인정보처리방침</h1>
-        <p className="mt-3 text-sm text-ink-soft/70">최종 개정 · 2026년 7월</p>
+    <section className="bg-bg pb-24">
+      <div className="ed-hero mb-14">
+        <div className="ed-hero-grid" aria-hidden="true" />
+        <div className="relative mx-auto max-w-3xl px-5 pb-12 pt-16 sm:px-8">
+          <p className="text-eyebrow uppercase text-sage">Legal</p>
+          <h1 className="mt-5 text-[32px] font-extrabold leading-[1.2] tracking-[-0.03em] text-ink sm:text-[40px]">개인정보처리방침</h1>
+        </div>
+      </div>
+      <div className="mx-auto max-w-3xl px-5 sm:px-8">
+        <p className="text-sm text-ink-soft/70">최종 개정 · 2026년 7월</p>
 
         <p className="mt-6 text-body leading-[1.75] text-ink-soft">
           {site.name} 서비스 운영자(이하 &ldquo;운영자&rdquo;)는 이용자의
@@ -146,7 +151,7 @@ export default function PrivacyPage() {
           <div className="overflow-x-auto">
             <table className="mt-2 w-full border-collapse text-left text-sm">
               <thead>
-                <tr className="border-b border-line text-ink">
+                <tr className="border-b border-hair-strong text-ink">
                   <th className="py-2 pr-4 font-semibold">수탁자</th>
                   <th className="py-2 pr-4 font-semibold">위탁 업무</th>
                   <th className="py-2 pr-4 font-semibold">이전 항목</th>
@@ -155,7 +160,7 @@ export default function PrivacyPage() {
                 </tr>
               </thead>
               <tbody className="text-ink-soft">
-                <tr className="border-b border-line/60 align-top">
+                <tr className="border-b border-hair-strong/60 align-top">
                   <td className="py-2 pr-4">Deepgram, Inc.</td>
                   <td className="py-2 pr-4">음성→텍스트 변환(STT)</td>
                   <td className="py-2 pr-4">음성 데이터</td>
@@ -165,7 +170,7 @@ export default function PrivacyPage() {
                     보관·삭제
                   </td>
                 </tr>
-                <tr className="border-b border-line/60 align-top">
+                <tr className="border-b border-hair-strong/60 align-top">
                   <td className="py-2 pr-4">Anthropic, PBC</td>
                   <td className="py-2 pr-4">발화 텍스트 의도 분석(AI)</td>
                   <td className="py-2 pr-4">

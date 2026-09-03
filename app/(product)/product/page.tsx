@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { pageSeo } from '@/lib/seo';
 import { Reveal } from '@/components/motion/Reveal';
 import { StoreBadge } from '@/components/product/StoreBadge';
+import { DeviceShot } from '@/components/home/DeviceShot';
 import { HabitGamification } from '@/components/gami/HabitGamification';
 import { ButtonLink } from '@/components/ui/Button';
 import { storeLinks, site, productAppUrl, externalLinkProps } from '@/lib/site';
@@ -11,221 +12,222 @@ import { JsonLd } from '@/components/seo/JsonLd';
 
 export const metadata: Metadata = pageSeo({
   path: '/product',
-  title: '내가 설계하는 나의 하루',
+  title: '번거로운 신청, 내 Agent가 대신 해 드려요',
   description:
-    '매일 아침, 나에게 꼭 맞는 하루를 제안받으세요. AI가 돕고, 결정은 언제나 내가 합니다.',
+    '우리 동네 활동을 말 한마디로 찾아드리고, 번거로운 신청을 내 Agent가 대신 진행해 드립니다. AI가 돕고, 결정은 언제나 내가 합니다.',
 });
 
-// /product — 시니어 고객용 페이지 (mockup product-page-customer.html 기준).
-// 단일 청자: 시니어. 2인칭 카피 허용 구역. 본문 ≥18px (시니어 a11y 플로어).
-// 정직성: 가짜 후기·별점 게재 금지 — 실사용 후기는 베타 고객 동의 후 추가.
-// 스토어 링크 = lib/site.ts storeLinks 단일 출처(env override 가능). 6/26 앱 공개
-// 시 채우면 StoreBadge가 실링크 + UTM 전달(Play referrer). 비면 "곧 출시" 안전 배포.
-// 광고 착지 = 이 페이지(/product). 진입 UTM은 그대로 보존되며(미들웨어/리다이렉트
-// 없음) StoreBadge 클릭 시 스토어로 전달된다.
-// TODO(Michael): 히어로 실사 이미지(공원 아침 산책, 자연광·따뜻한 색조) 입고.
+// /product — 고객용 페이지. 단일 청자이고 2인칭 카피 허용 구역이다.
+// 본문 ≥18px · tap target ≥48px. 광고 착지 = 이 페이지(진입 UTM 보존 → StoreBadge 가 스토어로 전달).
+// 정직성: 가짜 후기·별점 게재 금지 — 실사용 후기는 고객 동의 후에만 추가한다.
+//
+// 🔴 2026-09-03 개편이 문 두 가지 결정
+// ① FD-014(편익 서열) — **안도감 → 즐거움 → 간편함**. 「말만 하면 딸깍」(간편함)을 히어로에
+//    세우지 않는다. 같은 화자가 「내가 하면 되는데」라며 천 원을 거절했다. 지갑이 열린 쪽은
+//    「내 힘으로 안 돼서」였다. 간편함은 3순위 자리에서 쓴다(금지되는 건 «리드»이지 «사용»이 아니다).
+//    ★조건: 안도감 문장은 **전부 현재형**. 외부 기관 대행의 외부 회원 `done` 이 0건이라
+//    「몇 번을 떨어졌는데 이번엔 됐어요」류 과거형 성공담은 우리 기록으로 받칠 수 없다.
+//    「무조건」·「100%」 보장 워딩 금지.
+// ② FD-015(회사 한 줄 약속) — 「할 줄 몰라서 못 하는 일이 없는 삶」 +
+//    「마음먹은 일은 끝까지 되게 한다」. 마무리 절이 이 문장을 문다.
+//
+// 대행 표현은 앱의 정직 분기를 그대로 옮긴 것이다(ApplyScreen):
+//   자체활동 = 「저희가 끝까지 신청해 드려요」
+//   외부기관 = 「정보는 미리 준비하고, 본인인증 단계는 그때 안내해 드려요」
+// 히어로 자리표시자(그라데이션 박스 + "공원에서 아침 산책하는 60대" 캡션)는 실제 앱 화면으로
+// 교체했다 — 실물이 있는데 자리표시자를 두는 건 우리 손해다.
+
+const PROBLEMS = [
+  { n: '01', title: '어디서 뭘 하는지 찾기가 어렵다', body: '기관마다 홈페이지가 다르고, 한곳에 모여 있지 않습니다.' },
+  { n: '02', title: '겨우 찾으면 신청이 또 일이다', body: '전화하고, 회원가입하고, 서류를 내야 합니다.' },
+  { n: '03', title: '“선착순”인데 알았을 땐 마감', body: '접수 시작 시각을 놓치면 그걸로 끝입니다.' },
+  { n: '04', title: '혼자 시작하기가 부담이다', body: '같이 갈 사람도, 시작할 계기도 마땅치 않습니다.' },
+];
+
+const STEPS = [
+  { n: '1', title: '말로 물어보세요', body: '“이번 주에 배울 만한 거 있어?” 두서없이 말해도 다 알아들어요.' },
+  { n: '2', title: '딱 맞는 활동을 골라드려요', body: '주민센터·복지관·도서관·문화센터·평생학습관을 한자리에 모아 보여드려요.' },
+  { n: '3', title: '신청은 Agent가 진행해요', body: '복잡한 절차는 Agent가 밟고, 마지막 확인만 하시면 돼요.' },
+];
 
 export default async function ProductPage() {
   // FAQ + contact from the single source of truth (GET /api/help). On unset
   // NEXT_PUBLIC_API_URL or any failure, getHelp() returns the bundled fallback
-  // (same 10 items the app ships) so this page never breaks. See lib/help.ts.
+  // (the same items the app ships) so this page never breaks. See lib/help.ts —
+  // 🔴 프로드에는 그 env 가 없어서 «폴백이 상시 화면»이다. 거기 값을 고치는 것은
+  //    비상용을 손보는 일이 아니라 라이브를 바꾸는 일이다.
   const { faq, contact } = await getHelp();
 
   return (
     <>
-      {/* 검색·AI 답변엔진용 구조화 데이터. FAQ 는 이미 화면에 렌더되는 내용과
-          동일한 원본(GET /api/help)에서 나온다 — 숨은 콘텐츠를 마크업하지 않는다. */}
+      {/* 검색·AI 답변엔진용 구조화 데이터. FAQ 는 화면에 렌더되는 것과 동일한 원본에서
+          나온다 — 숨은 콘텐츠를 마크업하지 않는다. */}
       <JsonLd data={mobileAppJsonLd()} />
       {faq.length > 0 && <JsonLd data={faqJsonLd(faq)} />}
 
-      {/* 1. hero */}
-      <section className="hero-field relative overflow-hidden">
-        <div className="hero-grid pointer-events-none absolute inset-0" aria-hidden="true" />
-        <div className="aurora aurora-1" aria-hidden="true" />
-        <div className="relative mx-auto grid max-w-6xl items-center gap-12 px-5 pb-20 pt-16 lg:grid-cols-2 lg:pb-24 lg:pt-24">
+      {/* ─────────── 1. hero — 안도감이 먼저다 (FD-014) ─────────── */}
+      <section className="ed-hero">
+        <div className="ed-hero-grid" aria-hidden="true" />
+        <div className="relative mx-auto grid max-w-wrap gap-12 px-5 pb-16 pt-14 sm:px-8 lg:grid-cols-[minmax(0,1fr)_400px] lg:items-center lg:gap-16 lg:pb-24 lg:pt-20">
           <div>
-            <p className="eyebrow-mono text-sage">5060 세대를 위한 AI 일상 동반자</p>
-            <h1 className="mt-5 text-[42px] font-extrabold leading-[1.16] tracking-[-0.03em] text-ink sm:text-[54px]">
-              내가 설계하는
+            <p className="text-eyebrow uppercase text-sage">55세 이상 어른들을 위한 AI Agent</p>
+            <h1 className="mt-6 text-[38px] font-extrabold leading-[1.16] tracking-[-0.03em] text-ink sm:text-[50px] lg:text-[56px]">
+              번거로운 신청,
               <br />
-              <span className="text-sage">나의 하루.</span>
+              <span className="text-sage">내 Agent가 대신</span> 해 드려요.
             </h1>
-            <p className="mt-6 max-w-[40ch] text-[20px] leading-[1.7] text-ink-soft">
-              매일 아침, 나에게 꼭 맞는 하루를 제안받으세요. AI가 돕고, 결정은
+            <p className="mt-7 max-w-[34rem] text-[20px] leading-[1.7] text-ink-soft">
+              우리 동네 활동을 말 한마디로 찾아드리고, 접수까지 함께합니다. AI가 돕고, 결정은
               언제나 내가 합니다.
             </p>
-            <div className="mt-9 flex flex-wrap items-center gap-4">
+            <div className="mt-9 flex flex-wrap items-center gap-3.5">
               <a
-                href="#get"
-                className="inline-flex min-h-[58px] items-center rounded-xl bg-sage px-9 text-[18px] font-bold text-white transition-colors hover:bg-sage-dk active:scale-[0.98]"
+                href={productAppUrl}
+                {...externalLinkProps}
+                className="inline-flex min-h-[60px] items-center rounded-xl bg-sage px-8 text-[19px] font-extrabold text-white transition-colors hover:bg-sage-dk active:scale-[0.98]"
               >
-                앱 다운로드
+                웹에서 바로 시작하기
               </a>
               <a
-                href="#features"
-                className="inline-flex min-h-[58px] items-center rounded-xl border border-ink/15 bg-white/50 px-9 text-[18px] font-bold text-ink transition-colors hover:border-sage hover:text-sage active:scale-[0.98]"
+                href="#how"
+                className="inline-flex min-h-[60px] items-center rounded-xl border border-hair-strong bg-white/60 px-8 text-[18px] font-bold text-ink transition-colors hover:border-sage hover:text-sage active:scale-[0.98]"
               >
-                기능 둘러보기
+                어떻게 쓰나요?
               </a>
             </div>
-            <p className="mt-5 text-[15px] text-ink-soft">
-              무료로 시작 · 5분이면 충분합니다
-            </p>
+            <p className="mt-5 text-[16px] text-ink-soft">설치하지 않아도 됩니다 · 무료로 시작</p>
           </div>
-          <div className="flex aspect-[4/3] items-end rounded-3xl bg-gradient-to-br from-[#E7EEE4] via-[#F4EDE0] to-[#FCF8EF] p-5 shadow-[0_30px_70px_-40px_rgba(30,45,64,0.3)]">
-            <span className="rounded-lg bg-white/80 px-3 py-2 text-caption italic text-ink-soft">
-              공원에서 아침 산책하는 60대 · 자연광, 따뜻한 색조
-            </span>
-          </div>
+          <Reveal delay={100}>
+            <DeviceShot
+              src="/app/01-delegate-button.webp"
+              alt="활동 화면에서 «내 Agent가 대신 신청» 버튼을 누르는 DailyFit 앱 화면"
+              className="mx-auto w-[68%] max-w-[300px] lg:w-full"
+              priority
+            />
+            <p className="mt-4 text-center text-[15px] text-ink-soft">실제 앱 화면</p>
+          </Reveal>
         </div>
       </section>
 
-      {/* 2. problem */}
-      <section className="border-y border-line bg-ivory py-20 sm:py-24">
-        <div className="mx-auto max-w-6xl px-5">
-          <Reveal className="max-w-[54ch]">
-            <p className="eyebrow-mono text-sage">이런 적 있으셨나요</p>
-            <h2 className="mt-4 text-[30px] font-extrabold tracking-[-0.03em] text-ink sm:text-[38px]">
-              은퇴 다음 날, 하루가 막막했습니다.
-            </h2>
-            <p className="mt-4 text-[19px] leading-[1.7] text-ink-soft">
-              누구나 겪지만, 아무도 먼저 말하지 않는 변화입니다.
-            </p>
-          </Reveal>
-          <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-            <ProblemCard n="01" title="출근 없는 첫 월요일" delay={0}>
-              하루를 시작하는 신호가 사라집니다.
-            </ProblemCard>
-            <ProblemCard n="02" title="흐려진 하루의 리듬" delay={100}>
-              매일이 비슷하게 흘러가 버립니다.
-            </ProblemCard>
-            <ProblemCard n="03" title="혼자 시작하는 부담" delay={200}>
-              새 일을 시작할 계기를 찾기 어렵습니다.
-            </ProblemCard>
-            <ProblemCard n="04" title="놓치는 신청 날짜" delay={300}>
-              가고 싶던 강좌가 신청 당일에 마감됩니다.
-            </ProblemCard>
-          </div>
-        </div>
-      </section>
-
-      {/* 3. solution */}
-      <section id="features" className="bg-bg py-20 sm:py-24">
-        <div className="mx-auto grid max-w-6xl items-center gap-14 px-5 lg:grid-cols-2">
-          <Reveal>
-            <div className="rounded-2xl border border-line bg-white p-7 shadow-[0_30px_70px_-40px_rgba(30,45,64,0.35)]">
-              <div className="flex items-center justify-between border-b border-line pb-4">
-                <span className="text-[17px] font-extrabold text-ink">DailyFit</span>
-                <span className="text-caption text-ink-soft">오늘의 하루</span>
-              </div>
-              <div className="mt-5 flex flex-col gap-3">
-                <Bubble who="DailyFit">어제 저녁 산책은 어떠셨어요?</Bubble>
-                <Bubble who="나" me>
-                  무릎이 좀 뻐근했어
-                </Bubble>
-                <Bubble who="DailyFit">
-                  오늘은 가벼운 실내 스트레칭 15분 어떠세요? 오후엔 사진 동호회
-                  모임도 있어요.
-                </Bubble>
-                <Bubble who="나" me>
-                  좋아, 그렇게 할게
-                </Bubble>
-              </div>
-            </div>
-          </Reveal>
-          <Reveal delay={120}>
-            <p className="eyebrow-mono text-sage">DailyFit이란</p>
-            <h2 className="mt-4 text-[30px] font-extrabold leading-[1.2] tracking-[-0.03em] text-ink sm:text-[38px]">
-              나의 하루를
-              <br />
-              함께 설계합니다.
+      {/* ─────────── 2. 이런 적 있으셨지요 ─────────── */}
+      <section className="border-t border-hair bg-bg py-20 sm:py-24">
+        <div className="mx-auto max-w-wrap px-5 sm:px-8">
+          <Reveal className="max-w-[46rem]">
+            <p className="text-eyebrow uppercase text-sage">이런 적 있으셨지요</p>
+            <h2 className="mt-4 text-[30px] font-extrabold leading-[1.25] tracking-[-0.03em] text-ink sm:text-[38px]">
+              찾는 것도 일이고, 신청은 더 일입니다.
             </h2>
             <p className="mt-5 text-[19px] leading-[1.7] text-ink-soft">
-              AI가 제안하고, 내가 결정하는 일상 동반자.
+              DailyFit은 그 두 가지를 대신 해 드리려고 만들었습니다.
             </p>
-            <div className="mt-8 flex flex-col gap-3.5">
-              <ValueItem title="결정은 내 몫입니다">
-                AI는 제안만 합니다. 무엇을 할지는 언제나 내가 정합니다.
-              </ValueItem>
-              <ValueItem title="매일 나에게 맞춥니다">
-                어제 어땠는지 기억해, 오늘의 하루를 다시 조정합니다.
-              </ValueItem>
-              <ValueItem title="혼자가 아닙니다">
-                비슷한 또래의 활동과 관심사를 함께 나눕니다.
-              </ValueItem>
+          </Reveal>
+          <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            {PROBLEMS.map((p, i) => (
+              <Reveal key={p.n} delay={i * 80}>
+                <div className="ed-card h-full p-7">
+                  <p className="num text-eyebrow text-sage">{p.n}</p>
+                  <h3 className="mt-4 text-[20px] font-bold leading-[1.4] text-ink">{p.title}</h3>
+                  <p className="mt-3 text-[18px] leading-[1.7] text-ink-soft">{p.body}</p>
+                </div>
+              </Reveal>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ─────────── 3. 어떻게 쓰나요 — 실제 앱 화면 3장 ─────────── */}
+      <section id="how" className="ed-paper border-t border-hair py-20 sm:py-24">
+        <div className="mx-auto max-w-wrap px-5 sm:px-8">
+          <Reveal className="max-w-[46rem]">
+            <p className="text-eyebrow uppercase text-sage">이렇게 쓰세요</p>
+            <h2 className="mt-4 text-[30px] font-extrabold leading-[1.25] tracking-[-0.03em] text-ink sm:text-[38px]">
+              말 한마디로 시작해서, 신청까지.
+            </h2>
+          </Reveal>
+          <div className="mt-12 grid gap-12 sm:grid-cols-3 sm:gap-6">
+            <StepShot
+              step={STEPS[0]}
+              src="/app/05-voice-search.webp"
+              alt="마이크를 누르고 말로 활동을 찾는 앱 화면"
+              delay={0}
+            />
+            <StepShot
+              step={STEPS[1]}
+              src="/app/04-top3-recommend.webp"
+              alt="나에게 맞는 활동 세 개를 추천한 앱 화면"
+              delay={100}
+            />
+            <StepShot
+              step={STEPS[2]}
+              src="/app/02-openrun-reserved.webp"
+              alt="접수 시작 시각에 맞춰 대신 신청이 예약된 앱 화면"
+              delay={200}
+            />
+          </div>
+          <p className="mt-8 text-[15px] text-ink-soft">실제 앱 화면 · 2026년 9월 빌드</p>
+        </div>
+      </section>
+
+      {/* ─────────── 4. 무엇을 대신 해 드리나 — 정직 분기 그대로 ─────────── */}
+      <section className="border-t border-hair bg-bg py-20 sm:py-24">
+        <div className="mx-auto max-w-wrap px-5 sm:px-8">
+          <div className="grid gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:gap-16">
+            <Reveal>
+              <p className="text-eyebrow uppercase text-sage">신청, 어디까지 대신 하나요</p>
+              <h2 className="mt-4 text-[30px] font-extrabold leading-[1.25] tracking-[-0.03em] text-ink sm:text-[38px]">
+                할 수 있는 데까지 하고,
+                <br />
+                못 하는 건 그때 말씀드려요.
+              </h2>
+              <p className="mt-6 max-w-[34rem] text-[19px] leading-[1.7] text-ink-soft">
+                기관마다 절차가 다릅니다. 어디까지 대신 할 수 있는지 미리 알려 드리고, 그 앞까지는
+                Agent가 진행합니다.
+              </p>
+            </Reveal>
+            <div className="flex flex-col gap-4">
+              <Reveal delay={80}>
+                <div className="ed-card border-l-[3px] border-l-sage p-7">
+                  <p className="text-[19px] font-bold text-ink">DailyFit이 여는 활동</p>
+                  <p className="mt-3 text-[18px] leading-[1.7] text-ink-soft">
+                    저희가 끝까지 신청해 드려요. 신청이 끝나면 결과를 알려 드립니다.
+                  </p>
+                </div>
+              </Reveal>
+              <Reveal delay={160}>
+                <div className="ed-card border-l-[3px] border-l-sage p-7">
+                  <p className="text-[19px] font-bold text-ink">기관·문화센터 프로그램</p>
+                  <p className="mt-3 text-[18px] leading-[1.7] text-ink-soft">
+                    정보는 미리 준비해 두고, 본인인증이나 결제처럼 본인만 하실 수 있는 단계는 그때
+                    안내해 드려요.
+                  </p>
+                </div>
+              </Reveal>
+              <Reveal delay={240}>
+                <div className="ed-card border-l-[3px] border-l-sage p-7">
+                  <p className="text-[19px] font-bold text-ink">선착순 강좌</p>
+                  <p className="mt-3 text-[18px] leading-[1.7] text-ink-soft">
+                    접수 시작 시각에 맞춰 Agent가 대신 신청합니다. 새벽에 기다리지 않으셔도 돼요.
+                  </p>
+                </div>
+              </Reveal>
             </div>
-          </Reveal>
-        </div>
-      </section>
-
-      {/* 4. how it works */}
-      <section className="border-y border-line bg-surface py-20 sm:py-24">
-        <div className="mx-auto max-w-6xl px-5">
-          <Reveal className="mx-auto max-w-[54ch] text-center">
-            <p className="eyebrow-mono text-sage">작동 방식</p>
-            <h2 className="mt-4 text-[30px] font-extrabold tracking-[-0.03em] text-ink sm:text-[38px]">
-              3단계, 5분이면 시작합니다.
-            </h2>
-          </Reveal>
-          <div className="mx-auto mt-12 grid max-w-4xl gap-5 sm:grid-cols-3">
-            <StepCard n="1" title="오늘을 말합니다" delay={0}>
-              오늘 하루 어떠셨는지, 말하듯 편하게 알려주세요.
-            </StepCard>
-            <StepCard n="2" title="내일을 제안받습니다" delay={100}>
-              나에게 맞춘 내일의 하루를 설계해 드립니다.
-            </StepCard>
-            <StepCard n="3" title="골라서 시작합니다" delay={200}>
-              마음에 드는 것을 고르면 하루가 시작됩니다.
-            </StepCard>
           </div>
         </div>
       </section>
 
-      {/* 5. helpers (agent capabilities in customer terms) */}
-      <section className="bg-bg py-20 sm:py-24">
-        <div className="mx-auto max-w-6xl px-5">
-          <Reveal className="mx-auto max-w-[54ch] text-center">
-            <p className="eyebrow-mono text-sage">나를 돕는 AI</p>
-            <h2 className="mt-4 text-[30px] font-extrabold tracking-[-0.03em] text-ink sm:text-[38px]">
-              하루를 함께 만드는 네 가지 도움
-            </h2>
-            <p className="mt-4 text-[19px] leading-[1.7] text-ink-soft">
-              각자 맡은 역할로, 나의 하루를 곁에서 돕습니다.
-            </p>
-          </Reveal>
-          <div className="mt-12 grid gap-5 sm:grid-cols-2">
-            <HelpCard title="새 활동을 찾아드려요" delay={0}>
-              내 관심사에 맞는 강좌·모임·활동을, 동네 밖 몰랐던 것까지 찾아
-              보여드립니다.
-            </HelpCard>
-            <HelpCard title="신청 날짜를 챙겨드려요" delay={100}>
-              &ldquo;내일 아침 9시 신청이에요&rdquo;. 놓치기 쉬운 시점을 미리
-              알려드립니다.
-            </HelpCard>
-            <HelpCard title="나를 기억해요" delay={200}>
-              어제의 선택을 기억해, 쓸수록 더 잘 맞는 하루가 됩니다.
-            </HelpCard>
-            <HelpCard title="함께할 사람을 이어드려요" delay={300}>
-              비슷한 또래의 모임과 동호회로, 혼자가 아닌 하루를 만듭니다.
-            </HelpCard>
-          </div>
-        </div>
-      </section>
-
-      {/* 5.5 habit / gamification — senior-facing (2nd person). Real characters
-          + levels + welcome points, mirrored from the in-app screens. */}
+      {/* ─────────── 5. 즐거움 — 캐릭터·레벨 (앱 화면 1:1 미러) ─────────── */}
       <HabitGamification />
 
-      {/* 6. FAQ */}
-      <section id="faq" className="border-y border-line bg-ivory py-20 sm:py-24">
-        <div className="mx-auto max-w-3xl px-5">
-          <Reveal className="text-center">
-            <p className="eyebrow-mono text-sage">자주 묻는 질문</p>
+      {/* ─────────── 6. FAQ ─────────── */}
+      <section id="faq" className="border-t border-hair bg-bg py-20 sm:py-24">
+        <div className="mx-auto max-w-3xl px-5 sm:px-8">
+          <Reveal>
+            <p className="text-eyebrow uppercase text-sage">자주 묻는 질문</p>
             <h2 className="mt-4 text-[30px] font-extrabold tracking-[-0.03em] text-ink sm:text-[38px]">
               궁금한 점을 모았습니다
             </h2>
           </Reveal>
-          <div className="mt-10 flex flex-col gap-3.5">
+          <div className="mt-10 divide-y divide-hair border-y border-hair">
             {faq.map((item, i) => (
               <Faq key={item.id} item={item} open={i === 0} />
             ))}
@@ -233,19 +235,18 @@ export default async function ProductPage() {
         </div>
       </section>
 
-      {/* 6.5 사람과 연결 — FAQ로 안 풀리면 진짜 사람에게.
-          채널: 카카오 1:1 · 이메일 · 두 창업자 공개 전화(결정 ④, 6/18 공개로 변경). */}
-      <section id="contact" className="bg-bg py-20 sm:py-24">
-        <div className="mx-auto max-w-3xl px-5">
-          <Reveal className="rounded-3xl border border-line bg-white p-8 text-center shadow-[0_30px_70px_-40px_rgba(30,45,64,0.3)] sm:p-12">
-            <p className="eyebrow-mono text-sage">사람과 연결</p>
+      {/* ─────────── 7. 사람과 연결 — FAQ로 안 풀리면 진짜 사람에게 ─────────── */}
+      <section id="contact" className="ed-paper border-t border-hair py-20 sm:py-24">
+        <div className="mx-auto max-w-3xl px-5 text-center sm:px-8">
+          <Reveal>
+            <p className="text-eyebrow uppercase text-sage">사람과 연결</p>
             <h2 className="mt-4 text-[30px] font-extrabold tracking-[-0.03em] text-ink sm:text-[36px]">
               여전히 궁금한 점이 있으신가요?
             </h2>
-            <p className="mx-auto mt-4 max-w-[46ch] text-[19px] leading-[1.7] text-ink-soft">
+            <p className="mx-auto mt-5 max-w-[46ch] text-[19px] leading-[1.7] text-ink-soft">
               찾으시는 답이 없으면, 사람이 직접 도와드립니다. 편하게 연락 주세요.
             </p>
-            <div className="mt-9 flex flex-col flex-wrap items-center justify-center gap-4 sm:flex-row">
+            <div className="mt-9 flex flex-col flex-wrap items-center justify-center gap-3.5 sm:flex-row">
               {contact.kakao_url ? (
                 <ButtonLink
                   href={contact.kakao_url}
@@ -268,7 +269,7 @@ export default async function ProductPage() {
               </ButtonLink>
             </div>
             {contact.phones.length > 0 ? (
-              <div className="mt-6 flex flex-col items-center gap-3">
+              <div className="mt-8 flex flex-col items-center gap-3">
                 <p className="text-[17px] font-bold text-ink">전화로 바로 연결</p>
                 <div className="flex flex-col flex-wrap items-center justify-center gap-3 sm:flex-row">
                   {contact.phones.map((p) => (
@@ -287,43 +288,41 @@ export default async function ProductPage() {
               </div>
             ) : null}
             {contact.response_note ? (
-              <p className="mt-6 text-[16px] leading-[1.6] text-ink-soft">
-                {contact.response_note}
-              </p>
+              <p className="mt-7 text-[16px] leading-[1.6] text-ink-soft">{contact.response_note}</p>
             ) : null}
           </Reveal>
         </div>
       </section>
 
-      {/* 7. final CTA */}
-      <section id="get" className="bg-gradient-to-b from-sage to-sage-dk py-24 text-center text-white sm:py-28">
-        <div className="mx-auto max-w-6xl px-5">
+      {/* ─────────── 8. 마무리 — FD-015 회사 한 줄 약속 ─────────── */}
+      <section id="get" className="ed-stage py-24 text-center sm:py-28">
+        <div className="hx-stage-grid" aria-hidden="true" />
+        <div className="hx-grain" aria-hidden="true" />
+        <div className="relative mx-auto max-w-wrap px-5 sm:px-8">
           <Reveal>
-            <h2 className="mx-auto max-w-[20ch] text-[32px] font-extrabold leading-[1.2] tracking-[-0.03em] sm:text-[42px]">
-              오늘부터, 내가 설계하는 하루.
+            <h2 className="mx-auto max-w-[20ch] text-[34px] font-extrabold leading-[1.22] tracking-[-0.03em] text-ivory sm:text-[46px]">
+              할 줄 몰라서
+              <br />못 하는 일이 없는 삶.
             </h2>
-            <p className="mt-5 text-[19px] text-white/85">
-              설치하지 않아도, 지금 바로 웹에서 써 보실 수 있어요.
+            <p className="mx-auto mt-6 max-w-[40ch] text-[19px] leading-[1.7] text-ivory/70">
+              마음먹은 일은 끝까지 되게 하는 것. DailyFit이 하는 약속입니다.
             </p>
-            {/* 웹을 1순위 출구로 둔다 — 안드로이드는 아직 스토어에 없어서
-                (storeLinks.android 빈 값 → "곧 출시" 비클릭 배지) 여기까지 온
-                안드 방문자는 이 버튼이 없으면 아무 데도 못 간다. 2026-08-04. */}
-            <div className="mt-9 flex justify-center">
+            {/* 웹이 1순위 출구다 — 안드로이드는 아직 스토어에 없어서(“곧 출시” 비클릭 배지)
+                여기까지 온 안드 방문자는 이 버튼이 없으면 아무 데도 못 간다. 2026-08-04. */}
+            <div className="mt-10 flex justify-center">
               <a
                 href={productAppUrl}
                 {...externalLinkProps}
-                className="inline-flex min-h-[62px] items-center rounded-xl bg-white px-9 text-[19px] font-extrabold text-sage-dk transition-transform hover:bg-white/95 active:scale-[0.98]"
+                className="inline-flex min-h-[62px] items-center rounded-xl bg-white px-9 text-[19px] font-extrabold text-sage-dk transition-transform hover:bg-ivory active:scale-[0.98]"
               >
                 웹에서 바로 시작하기
               </a>
             </div>
-            <div className="mt-6 flex flex-wrap justify-center gap-4">
+            <div className="mt-6 flex flex-wrap justify-center gap-3.5">
               <StoreBadge store="Google Play" href={storeLinks.android} />
               <StoreBadge store="App Store" href={storeLinks.ios} />
             </div>
-            <p className="mt-6 text-[15px] text-white/70">
-              무료로 시작 · 카드 등록 없이
-            </p>
+            <p className="mt-6 text-[16px] text-ivory/60">무료로 시작 · 카드 등록 없이</p>
           </Reveal>
         </div>
       </section>
@@ -333,100 +332,28 @@ export default async function ProductPage() {
 
 /* ───────────────────────── partials ───────────────────────── */
 
-function ProblemCard({
-  n,
-  title,
+function StepShot({
+  step,
+  src,
+  alt,
   delay,
-  children,
 }: {
-  n: string;
-  title: string;
+  step: { n: string; title: string; body: string };
+  src: string;
+  alt: string;
   delay: number;
-  children: React.ReactNode;
 }) {
   return (
     <Reveal delay={delay}>
-      <div className="h-full rounded-2xl border border-line bg-white p-7">
-        <p className="eyebrow-mono text-sage">{n}</p>
-        <h3 className="mt-3 text-[20px] font-bold text-ink">{title}</h3>
-        <p className="mt-2 text-[18px] leading-relaxed text-ink-soft">{children}</p>
-      </div>
-    </Reveal>
-  );
-}
-
-function Bubble({
-  who,
-  me,
-  children,
-}: {
-  who: string;
-  me?: boolean;
-  children: React.ReactNode;
-}) {
-  return (
-    <div
-      className={
-        me
-          ? 'max-w-[84%] self-end rounded-2xl rounded-br-md bg-sage px-4 py-3 text-white'
-          : 'max-w-[84%] self-start rounded-2xl rounded-bl-md bg-surface px-4 py-3 text-ink'
-      }
-    >
-      <span className="block text-[11px] font-bold uppercase tracking-wider opacity-60">
-        {who}
-      </span>
-      <span className="text-[18px] leading-relaxed">{children}</span>
-    </div>
-  );
-}
-
-function ValueItem({ title, children }: { title: string; children: React.ReactNode }) {
-  return (
-    <div className="rounded-2xl border border-line border-l-[3px] border-l-sage bg-white px-6 py-5">
-      <p className="text-[18px] font-bold text-ink">{title}</p>
-      <p className="mt-1 text-[18px] leading-relaxed text-ink-soft">{children}</p>
-    </div>
-  );
-}
-
-function StepCard({
-  n,
-  title,
-  delay,
-  children,
-}: {
-  n: string;
-  title: string;
-  delay: number;
-  children: React.ReactNode;
-}) {
-  return (
-    <Reveal delay={delay}>
-      <div className="h-full rounded-2xl border border-line bg-white p-7 text-center">
-        <span className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-sage text-[20px] font-extrabold text-white">
-          {n}
-        </span>
-        <h3 className="mt-4 text-[20px] font-bold text-ink">{title}</h3>
-        <p className="mt-2 text-[18px] leading-relaxed text-ink-soft">{children}</p>
-      </div>
-    </Reveal>
-  );
-}
-
-function HelpCard({
-  title,
-  delay,
-  children,
-}: {
-  title: string;
-  delay: number;
-  children: React.ReactNode;
-}) {
-  return (
-    <Reveal delay={delay}>
-      <div className="h-full rounded-2xl border border-line bg-white p-7">
-        <h3 className="text-[20px] font-bold text-ink">{title}</h3>
-        <p className="mt-2 text-[18px] leading-relaxed text-ink-soft">{children}</p>
+      <div className="flex flex-col gap-6">
+        <DeviceShot src={src} alt={alt} className="mx-auto w-[70%] max-w-[260px] sm:w-full" />
+        <div>
+          <span className="inline-flex h-11 w-11 items-center justify-center rounded-full bg-sage text-[19px] font-extrabold text-white">
+            {step.n}
+          </span>
+          <h3 className="mt-4 text-[21px] font-bold leading-[1.4] text-ink">{step.title}</h3>
+          <p className="mt-2 text-[18px] leading-[1.7] text-ink-soft">{step.body}</p>
+        </div>
       </div>
     </Reveal>
   );
@@ -434,24 +361,14 @@ function HelpCard({
 
 function Faq({ item, open }: { item: FaqItem; open?: boolean }) {
   return (
-    <details
-      open={open}
-      className="group rounded-2xl border border-line bg-white px-6 py-1 open:pb-5"
-    >
-      <summary className="flex min-h-[56px] cursor-pointer list-none items-center justify-between gap-4 text-[18px] font-bold text-ink [&::-webkit-details-marker]:hidden">
+    <details open={open} className="group py-1 open:pb-5">
+      <summary className="flex min-h-[60px] cursor-pointer list-none items-center justify-between gap-4 text-[19px] font-bold text-ink [&::-webkit-details-marker]:hidden">
         {item.q}
-        <span
-          className="text-sage transition-transform group-open:rotate-45"
-          aria-hidden="true"
-        >
+        <span className="shrink-0 text-[22px] text-sage transition-transform group-open:rotate-45" aria-hidden="true">
           +
         </span>
       </summary>
-      <div className="border-t border-line pt-4">
-        <p className="whitespace-pre-line text-[18px] leading-[1.75] text-ink-soft">
-          {item.a}
-        </p>
-      </div>
+      <p className="whitespace-pre-line pt-2 text-[18px] leading-[1.75] text-ink-soft">{item.a}</p>
     </details>
   );
 }

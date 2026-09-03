@@ -15,16 +15,21 @@ export const metadata: Metadata = pageSeo({
 
 export default function AccountDeletionPage() {
   return (
-    <section className="bg-bg py-24">
-      <div className="mx-auto max-w-3xl px-5">
-        <p className="eyebrow-mono text-sage">Legal</p>
-        <h1 className="mt-4 text-h2 text-ink">계정 및 데이터 삭제</h1>
-        <p className="mt-6 text-body leading-[1.75] text-ink-soft">
+    <section className="bg-bg pb-24">
+      <div className="ed-hero mb-14">
+        <div className="ed-hero-grid" aria-hidden="true" />
+        <div className="relative mx-auto max-w-3xl px-5 pb-12 pt-16 sm:px-8">
+          <p className="text-eyebrow uppercase text-sage">Legal</p>
+          <h1 className="mt-5 text-[32px] font-extrabold leading-[1.2] tracking-[-0.03em] text-ink sm:text-[40px]">계정 및 데이터 삭제</h1>
+        </div>
+      </div>
+      <div className="mx-auto max-w-3xl px-5 sm:px-8">
+        <p className="text-body leading-[1.75] text-ink-soft">
           {site.name} 계정과 계정에 연결된 데이터는 언제든지 삭제하실 수 있습니다.
           아래 두 가지 방법 중 하나를 이용하세요.
         </p>
 
-        <div className="mt-10 border-t border-line pt-8">
+        <div className="mt-10 border-t border-hair pt-8">
           <h2 className="text-h3 text-ink">
             <span className="text-sage">1.</span> 앱에서 직접 탈퇴하기 (권장)
           </h2>
@@ -40,7 +45,7 @@ export default function AccountDeletionPage() {
           </ol>
         </div>
 
-        <div className="mt-10 border-t border-line pt-8">
+        <div className="mt-10 border-t border-hair pt-8">
           <h2 className="text-h3 text-ink">
             <span className="text-sage">2.</span> 이메일로 요청하기
           </h2>
@@ -56,7 +61,7 @@ export default function AccountDeletionPage() {
           </p>
         </div>
 
-        <div className="mt-10 border-t border-line pt-8">
+        <div className="mt-10 border-t border-hair pt-8">
           <h2 className="text-h3 text-ink">삭제되는 정보</h2>
           <p className="mt-4 text-body leading-[1.75] text-ink-soft">
             회원 탈퇴 시 아래 정보가 지체 없이 파기되며 복구할 수 없습니다.
@@ -76,7 +81,7 @@ export default function AccountDeletionPage() {
           </p>
         </div>
 
-        <div className="mt-10 border-t border-line pt-8">
+        <div className="mt-10 border-t border-hair pt-8">
           <p className="text-body leading-[1.75] text-ink-soft">
             개인정보 처리에 관한 전체 내용은{' '}
             <a

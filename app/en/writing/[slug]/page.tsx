@@ -50,15 +50,15 @@ export default async function WritingPostPage({
   return (
     <article>
       {/* header */}
-      <header className="hero-field relative overflow-hidden">
-        <div className="hero-grid pointer-events-none absolute inset-0" aria-hidden="true" />
+      <header className="ed-hero">
+        <div className="ed-hero-grid" aria-hidden="true" />
         <div className="relative mx-auto max-w-3xl px-5 pb-12 pt-20 lg:pt-24">
-          <Link href="/en/writing" className="eyebrow-mono text-sage hover:underline">
+          <Link href="/en/writing" className="text-eyebrow uppercase text-sage hover:underline">
             ← Writing
           </Link>
           <div className="mt-6 flex items-center gap-3">
-            <span className="eyebrow-mono text-sage">{post.category}</span>
-            <span className="text-caption text-ink-soft">{formatDate(post.date)}</span>
+            <span className="text-eyebrow uppercase text-sage">{post.category}</span>
+            <span className="num text-caption text-ink-soft">{formatDate(post.date)}</span>
           </div>
           <h1 className="mt-4 text-[34px] font-extrabold leading-[1.2] tracking-[-0.03em] text-ink sm:text-[44px]">
             {post.title}
@@ -75,7 +75,7 @@ export default async function WritingPostPage({
       </div>
 
       {/* back */}
-      <div className="border-t border-line bg-surface py-12">
+      <div className="border-t border-hair ed-paper py-12">
         <div className="mx-auto max-w-3xl px-5">
           <Link
             href="/en/writing"

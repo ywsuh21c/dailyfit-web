@@ -134,7 +134,7 @@ export default function AiClassEventPage() {
             className="mx-auto rounded-full"
             priority
           />
-          <p className="eyebrow-mono mt-6 text-sage">DailyFit 무료 수업</p>
+          <p className="mt-6 text-eyebrow uppercase text-sage">DailyFit 무료 수업</p>
           <h1 className="mt-4 text-[32px] font-extrabold leading-[1.25] tracking-[-0.03em] text-ink sm:text-[42px]">
             이번 주 무료 줌 수업
             <br />
@@ -171,7 +171,7 @@ export default function AiClassEventPage() {
             {WEEK.map((day) => (
               <li
                 key={day.dow}
-                className="overflow-hidden rounded-2xl border border-line bg-white shadow-sm"
+                className="overflow-hidden rounded-2xl border border-hair bg-white shadow-sm"
               >
                 {/* 과목 사진 — "잘 만들어진 프로그램 페이지" 인상의 핵심 */}
                 <Image
@@ -228,7 +228,7 @@ export default function AiClassEventPage() {
       </section>
 
       {/* 수업 방식 안내 — 기대치 고정 */}
-      <section className="border-t border-line bg-surface py-12" aria-labelledby="how-heading">
+      <section className="border-t border-hair bg-surface py-12" aria-labelledby="how-heading">
         <div className="mx-auto max-w-3xl px-5">
           <h2 id="how-heading" className="text-[24px] font-bold text-ink sm:text-[28px]">
             수업은 이렇게 진행돼요
@@ -261,7 +261,7 @@ export default function AiClassEventPage() {
       </section>
 
       {/* 서비스 소개 한 줄 + 홈 링크 — 딥링크·스토어 유도 없음 */}
-      <section className="border-t border-line bg-bg py-10">
+      <section className="border-t border-hair bg-bg py-10">
         <div className="mx-auto max-w-3xl px-5 text-center">
           <p className="text-[18px] leading-[1.8] text-ink-soft">
             DailyFit은 대화 한 번으로 나에게 맞는 활동을 찾아주는 AI 서비스예요.
