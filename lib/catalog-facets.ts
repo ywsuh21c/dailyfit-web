@@ -15,12 +15,16 @@ export type RegionFacets = {
   districts: number;
   /** Distinct cities/provinces (서울특별시 · 경기도 …). */
   cities: string[];
+  /** How many of those cities/provinces there are — the label reads from this. */
+  cityCount: number;
 };
 
 export async function getRegionFacets(): Promise<RegionFacets | null> {
   try {
     const res = await fetch(`${API_BASE}/api/activities/public-facets`, {
-      next: { revalidate: 86400 },
+      // 옆 칸의 활동 수와 «같은 창»(6h)이어야 한다. 24h 였을 때 두 숫자가
+      // 최대 하루 어긋날 수 있었다 — 이 PR 이 count 에 대해 고친 바로 그 종류의 낡음이다.
+      next: { revalidate: 21600 },
       signal: AbortSignal.timeout(15000),
     });
     if (!res.ok) return null;
@@ -32,7 +36,7 @@ export async function getRegionFacets(): Promise<RegionFacets | null> {
     );
     if (regions.length === 0) return null;
     const cities = [...new Set(regions.map((r) => String(r.city ?? '')).filter(Boolean))];
-    return { districts: regions.length, cities };
+    return { districts: regions.length, cities, cityCount: cities.length };
   } catch {
     return null;
   }

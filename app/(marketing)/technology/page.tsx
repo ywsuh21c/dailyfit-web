@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { pageSeo } from '@/lib/seo';
+import { getCatalogCount } from '@/lib/catalog-count';
 import { AgentConsole } from '@/components/home/AgentConsole';
 import { OrbitRings } from '@/components/motion/OrbitRings';
 import { OrgTree } from '@/components/motion/OrgTree';
@@ -62,7 +63,12 @@ const SECURITY = [
   },
 ];
 
-export default function TechnologyPage() {
+// 콘솔 안의 활동 수도 라이브 카운트에서 온다 — 홈·investors 와 같은 창(6h).
+export const revalidate = 21600;
+
+export default async function TechnologyPage() {
+  const { count: catalogCount } = await getCatalogCount();
+
   return (
     <>
       <section className="ed-hero">
@@ -122,7 +128,7 @@ export default function TechnologyPage() {
                 </div>
               </Reveal>
               <Reveal delay={120}>
-                <AgentConsole />
+                <AgentConsole catalogCount={catalogCount} />
               </Reveal>
             </div>
           </Spread>

@@ -19,6 +19,7 @@ import { StoreBadge } from '@/components/product/StoreBadge';
 //   · JSON-LD image 는 화면 <img src> 와 같은 URL (사진 블록)
 //   · canonical 자기참조 (myIndexLive=false) · title 에 한글 브랜드 토큰
 //   · 공급처 원문(제목·소개)은 고쳐 쓰지 않는다 — 우리 문장만 우리가 쓴다.
+// 모바일 CTA 는 «콘텐츠 열 안의 sticky» 다(고정 오버레이 아님) — 이유는 그 자리 주석.
 
 // 카톡 미리보기 카드용 이미지.
 //
@@ -154,11 +155,13 @@ export default async function ActivityLandingPage({
   // 설명을 (항목 · 불릿 · 남은 산문)으로 가른다. 표가 아니면 facts 가 비고 원문이 그대로 나온다.
   const summaryFacts = parseFacts(activity.summary);
   const statusChips = summaryFacts.facts.filter((f) => CHIP_LABELS.has(f.label));
-  const tableFacts = summaryFacts.facts;
+  // 헤더 칩으로 끌어올린 항목은 표에서 뺀다 — 안 빼면 「접수상태 마감임박」이 칩과
+  // 표에 두 번 그려진다(9,475장 전부). 칩은 «결정에 쓰는 사실»이고 표는 «나머지»다.
+  const tableFacts = summaryFacts.facts.filter((f) => !CHIP_LABELS.has(f.label));
   const place = activity.address ?? null;
 
   return (
-    <article className="pb-28 lg:pb-0">
+    <article>
       {/* 화면에 실제로 보이는 사실만 마크업한다 — 숨은 값 없음.
           날짜가 있으면 Event, 없으면 종전 WebPage (lib/jsonld.ts 승격 규칙). */}
       <JsonLd data={activityEventJsonLd(activity)} />
@@ -229,8 +232,9 @@ export default async function ActivityLandingPage({
               <h2 id="about-heading" className="text-[22px] font-bold tracking-[-0.02em] text-ink">
                 소개
               </h2>
-              {tableFacts.length > 0 ? (
+              {tableFacts.length > 0 || summaryFacts.bullets.length > 0 ? (
                 <>
+                  {tableFacts.length > 0 && (
                   <dl className="mt-4 grid gap-x-8 gap-y-3 border-t border-hair pt-5 sm:grid-cols-[max-content_1fr]">
                     {tableFacts.map((f) => (
                       <Fragment key={`${f.label}-${f.value}`}>
@@ -239,6 +243,7 @@ export default async function ActivityLandingPage({
                       </Fragment>
                     ))}
                   </dl>
+                  )}
                   {summaryFacts.bullets.length > 0 && (
                     <ul className="mt-5 list-disc space-y-2 pl-5 text-[18px] leading-[1.7] text-ink sm:text-[19px]">
                       {summaryFacts.bullets.map((b) => (
@@ -291,6 +296,30 @@ export default async function ActivityLandingPage({
               </WithCard>
             </div>
           </section>
+
+          {/* ─── mobile: the two exits, held at the bottom of the reading column ───
+              🔴 `fixed` 가 아니라 «콘텐츠 열 안의 sticky» 다. fixed 로 두면 뷰포트
+              바닥에 영원히 붙어 푸터의 이용약관·개인정보처리방침 줄을 덮고 탭까지
+              먹는다(<article> 의 pb-28 은 형제인 Footer 를 밀지 못한다). sticky 는
+              읽는 동안 같은 자리에 붙어 있다가 열이 끝나면 스스로 물러나므로,
+              바로 아래 신청 카드가 그 역할을 이어받는다. */}
+          <div className="sticky bottom-0 -mx-5 mt-auto border-t border-hair bg-white/95 px-5 py-3 backdrop-blur-md lg:hidden">
+            <div className="flex gap-2.5">
+              <a
+                href={productAppUrl}
+                {...externalLinkProps}
+                className="inline-flex min-h-[52px] flex-1 items-center justify-center rounded-xl bg-sage px-4 text-[17px] font-extrabold text-white active:scale-[0.98]"
+              >
+                웹에서 바로 시작하기
+              </a>
+              <a
+                href={deepLink}
+                className="inline-flex min-h-[52px] items-center justify-center rounded-xl border border-hair-strong bg-white px-4 text-[16px] font-bold text-ink active:scale-[0.98]"
+              >
+                앱에서 보기
+              </a>
+            </div>
+          </div>
         </div>
 
         {/* ─── the action card — sticky on desktop ─── */}
@@ -344,24 +373,6 @@ export default async function ActivityLandingPage({
         </aside>
       </div>
 
-      {/* ─── mobile: the same two exits, pinned to the bottom ─── */}
-      <div className="fixed inset-x-0 bottom-0 z-30 border-t border-hair bg-white/95 px-4 py-3 backdrop-blur-md lg:hidden">
-        <div className="mx-auto flex max-w-wrap gap-2.5">
-          <a
-            href={productAppUrl}
-            {...externalLinkProps}
-            className="inline-flex min-h-[52px] flex-1 items-center justify-center rounded-xl bg-sage px-4 text-[17px] font-extrabold text-white active:scale-[0.98]"
-          >
-            웹에서 바로 시작하기
-          </a>
-          <a
-            href={deepLink}
-            className="inline-flex min-h-[52px] items-center justify-center rounded-xl border border-hair-strong px-4 text-[16px] font-bold text-ink active:scale-[0.98]"
-          >
-            앱에서 보기
-          </a>
-        </div>
-      </div>
     </article>
   );
 }

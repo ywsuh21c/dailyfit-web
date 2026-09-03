@@ -91,7 +91,12 @@ export default async function EnHomePage() {
                   <dd className="num text-[30px] font-extrabold leading-none tracking-[-0.03em] text-ink">
                     {facets.districts}
                   </dd>
-                  <dt className="mt-2 text-[13px] text-ink-soft">districts across Seoul and around it</dt>
+                  {/* Label derives from the data — the first pass said "Seoul and around
+                      it" while live facets covered 18 provinces (Seoul + Gyeonggi + Incheon
+                      is only 58 of the 162). */}
+                  <dt className="mt-2 text-[13px] text-ink-soft">
+                    districts across {facets.cityCount} provinces nationwide
+                  </dt>
                 </div>
               )}
               <div>

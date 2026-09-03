@@ -124,7 +124,13 @@
 /* --- scroll reveal --- */
 .reveal {
   opacity: 0;
-  transform: translateY(26px);
+  /* 18px, not 26px — Editorial Daylight 의 섹션은 더 자주 등장하므로 이동량이 크면
+     스크롤이 출렁인다. 🔴 이 값은 반드시 **여기서** 바꾼다. 리디자인 첫 판은 파일
+     하단에 `.reveal{transform:translateY(18px)}` 를 새로 선언했는데, 그게
+     `prefers-reduced-motion` 블록의 `transform:none` 보다 «뒤에» 같은 specificity 로
+     놓여 그걸 덮었다 — 모션을 줄여 달라고 한 사용자가 오히려 transition 없이 툭
+     튀어오르는 화면을 봤다. 새 선언이 아니라 원본 수정. */
+  transform: translateY(18px);
   transition:
     opacity 0.7s cubic-bezier(0.2, 0.6, 0.2, 1),
     transform 0.7s cubic-bezier(0.2, 0.6, 0.2, 1);
@@ -1803,11 +1809,6 @@
     linear-gradient(180deg, var(--navy-2) 0%, var(--navy-deep) 70%);
 }
 
-/* --- reveal: subtler travel than v1 --- */
-.reveal {
-  transform: translateY(18px);
-}
-
 @media (prefers-reduced-motion: reduce) {
   .ed-strip-track {
     animation: none;
@@ -1818,5 +1819,13 @@
   }
   .ed-card-lift:hover {
     transform: none;
+  }
+  /* 위쪽 reduced-motion 블록이 이미 .reveal 을 중화하지만, 이 블록이 파일에서 더
+     뒤에 있으므로 여기서 한 번 더 못박는다 — 나중에 누가 .reveal 을 다시 선언해도
+     «마지막 말»은 모션 줄이기 쪽이 하게. */
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
   }
 }

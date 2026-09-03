@@ -93,7 +93,12 @@ export default async function HomePage() {
                     {facets.districts}
                     <span className="ml-0.5 text-[16px] font-bold">개 지역</span>
                   </dd>
-                  <dt className="mt-2 text-[13px] text-ink-soft">시·구 단위 · 서울과 수도권</dt>
+                  {/* 🔴 라벨을 손으로 적지 않는다. 첫 판은 「서울과 수도권」이라고 썼는데
+                      라이브 facets 는 18개 시·도 162개 시·군·구였다(서울+경기+인천은 58개).
+                      화면이 데이터보다 좁게 말하면 그건 겸손이 아니라 틀린 말이다. */}
+                  <dt className="mt-2 text-[13px] text-ink-soft">
+                    시·군·구 단위 · 전국 {facets.cityCount}개 시·도
+                  </dt>
                 </div>
               )}
               <div>
