@@ -38,10 +38,10 @@ export const metadata: Metadata = pageSeo({
 // 교체했다 — 실물이 있는데 자리표시자를 두는 건 우리 손해다.
 
 const PROBLEMS = [
-  { n: '01', title: '어디서 뭘 하는지 찾기가 어렵다', body: '기관마다 홈페이지가 다르고, 한곳에 모여 있지 않습니다.' },
-  { n: '02', title: '겨우 찾으면 신청이 또 일이다', body: '전화하고, 회원가입하고, 서류를 내야 합니다.' },
-  { n: '03', title: '“선착순”인데 알았을 땐 마감', body: '접수 시작 시각을 놓치면 그걸로 끝입니다.' },
-  { n: '04', title: '혼자 시작하기가 부담이다', body: '같이 갈 사람도, 시작할 계기도 마땅치 않습니다.' },
+  { n: '01', title: '흩어져 있는 정보', body: '기관마다 홈페이지가 다르고, 한곳에 모여 있지 않습니다.' },
+  { n: '02', title: '겨우 찾으면 시작되는 절차', body: '전화하고, 회원가입하고, 서류를 내야 합니다.' },
+  { n: '03', title: '알았을 땐 이미 마감', body: '인기 강좌는 선착순이라, 접수 시작 시각을 놓치면 그걸로 끝입니다.' },
+  { n: '04', title: '혼자 시작하는 부담', body: '같이 갈 사람도, 시작할 계기도 마땅치 않습니다.' },
 ];
 
 const STEPS = [
@@ -77,8 +77,8 @@ export default async function ProductPage() {
               <span className="text-sage">내 Agent가 대신</span> 해 드려요.
             </h1>
             <p className="mt-7 max-w-[34rem] text-[20px] leading-[1.7] text-ink-soft">
-              우리 동네 활동을 말 한마디로 찾아드리고, 접수까지 함께합니다. AI가 돕고, 결정은
-              언제나 내가 합니다.
+              우리 동네 활동을 말 한마디로 찾아드리고, 접수 절차를 대신 밟아 드립니다. AI가
+              돕고, 결정은 언제나 내가 합니다.
             </p>
             <div className="mt-9 flex flex-wrap items-center gap-3.5">
               <a
@@ -180,8 +180,8 @@ export default async function ProductPage() {
                 못 하는 건 그때 말씀드려요.
               </h2>
               <p className="mt-6 max-w-[34rem] text-[19px] leading-[1.7] text-ink-soft">
-                기관마다 절차가 다릅니다. 어디까지 대신 할 수 있는지 미리 알려 드리고, 그 앞까지는
-                Agent가 진행합니다.
+                기관마다 절차가 다릅니다. 어디까지 대신 할 수 있는지 미리 알려 드리고, 거기까지는
+                Agent가 끝냅니다.
               </p>
             </Reveal>
             <div className="flex flex-col gap-4">
@@ -206,7 +206,7 @@ export default async function ProductPage() {
                 <div className="ed-card border-l-[3px] border-l-sage p-7">
                   <p className="text-[19px] font-bold text-ink">선착순 강좌</p>
                   <p className="mt-3 text-[18px] leading-[1.7] text-ink-soft">
-                    접수 시작 시각에 맞춰 Agent가 대신 신청합니다. 새벽에 기다리지 않으셔도 돼요.
+                    접수 시작 시각에 맞춰 Agent가 대신 신청해요. 새벽에 기다리지 않으셔도 돼요.
                   </p>
                 </div>
               </Reveal>

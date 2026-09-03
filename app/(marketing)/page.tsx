@@ -63,7 +63,7 @@ export default async function HomePage() {
             <p className="mt-7 max-w-[34rem] text-[19px] leading-[1.65] text-ink-soft sm:text-lead">
               스마트폰으로 배우고, 만나고, 즐기기 시작한 5060 세대.
               <br />
-              전 세계에서 가장 빠르게 늘어나는 세대의 하루를, Agent가 대신 움직여 설계합니다.
+              전 세계에서 가장 빠르게 늘어나는 세대의 하루를 설계합니다.
             </p>
             <div className="mt-9 flex flex-wrap items-center gap-3.5">
               <Link
@@ -251,7 +251,7 @@ export default async function HomePage() {
             alt="활동 상세에서 «내 Agent가 대신 신청» 버튼을 보여주는 앱 화면"
             delay={0}
           >
-            회원이 고른 강좌에서 &ldquo;내 Agent가 대신 신청&rdquo; 한 번으로 대행이 시작됩니다.
+            회원이 고른 강좌에서 &ldquo;내 Agent가 대신 신청&rdquo; 버튼 하나로 시작됩니다.
           </ShotStep>
           <ShotStep
             n="2"

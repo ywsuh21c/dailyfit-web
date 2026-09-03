@@ -284,10 +284,10 @@ export default async function ActivityLandingPage({
             </h2>
             <div className="mt-6 grid gap-3.5 sm:grid-cols-3">
               <WithCard n="01" title="신청 절차를 대신 밟습니다">
-                회원가입·신청서·접수를 Agent가 진행하고, 본인인증처럼 회원만 할 수 있는 단계는 그
-                순간 바로 안내합니다.
+                회원가입·신청서·접수를 Agent가 진행하고, 본인인증처럼 회원만 할 수 있는 단계는
+                그때 바로 안내합니다.
               </WithCard>
-              <WithCard n="02" title="이런 활동을 계속 찾아드립니다">
+              <WithCard n="02" title="비슷한 활동을 계속 찾아드립니다">
                 관심사를 기억해{activity.neighborhood ? ` ${activity.neighborhood} 안팎에서` : ''} 비슷한
                 강좌와 모임을 매주 새로 골라 보여드립니다.
               </WithCard>
