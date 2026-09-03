@@ -11,6 +11,16 @@ import type { CatalogCard } from '@/lib/catalog-sample';
  * Photos use a plain <img> on purpose — they live on external CDNs that are
  * not in next.config `remotePatterns`, and turning on the image pipeline for
  * them is a separate decision (see /activity/[id]).
+ *
+ * 🔴 The real cards are NOT lazy. Lazy-loading inside a transform-animated,
+ * overflow-hidden track is unreliable: on the 2026-09-03 Netlify preview 14 of
+ * the 24 <img> tags never fetched at all (naturalWidth 0, empty currentSrc)
+ * even though every URL answered 200 — the browser never considered them
+ * "near the viewport" because the track is 2× wide and slid by translateX.
+ * A strip whose whole point is showing real photos must not depend on that.
+ * The duplicated half stays lazy and carries the SAME urls, so the browser
+ * fetches each photo once either way; `fetchPriority="low"` keeps them behind
+ * the hero so first paint is unaffected.
  */
 export function CatalogStrip({
   cards,
@@ -43,7 +53,15 @@ export function CatalogStrip({
               tabIndex={i >= cards.length ? -1 : undefined}
             >
               <span className="ed-photo">
-                <img src={c.photo} alt="" loading="lazy" decoding="async" width={472} height={354} />
+                <img
+                  src={c.photo}
+                  alt=""
+                  loading={i < cards.length ? undefined : 'lazy'}
+                  fetchPriority="low"
+                  decoding="async"
+                  width={472}
+                  height={354}
+                />
               </span>
               <span className="line-clamp-2 text-[15px] font-bold leading-[1.35] text-ink">{c.title}</span>
               <span className="text-[13px] text-ink-soft">
