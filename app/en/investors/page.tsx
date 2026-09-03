@@ -5,7 +5,9 @@ import { getCatalogCount, formatAsOf } from '@/lib/catalog-count';
 import { CountUp } from '@/components/motion/CountUp';
 import { OrbitRings } from '@/components/motion/OrbitRings';
 import { Reveal } from '@/components/motion/Reveal';
-import { Spread, SpreadTitle } from '@/components/ui/Editorial';
+import { SpreadTitle } from '@/components/ui/Editorial';
+import { SpreadSection } from '@/components/ui/SpreadSection';
+import { StatFigure } from '@/components/ui/StatFigure';
 
 export const metadata: Metadata = pageSeo({
   path: '/en/investors',
@@ -85,15 +87,15 @@ export default async function InvestorsEnPage() {
           </div>
 
           <dl className="mt-14 grid gap-x-6 gap-y-8 border-t border-hair-strong pt-8 sm:grid-cols-3">
-            <StatCard suffix="M" label="Koreans aged 55–70">
+            <StatFigure size="lg" suffix="M" label="Koreans aged 55–70">
               <CountUp to={13} duration={1100} />
-            </StatCard>
-            <StatCard suffix="" label={`programs & activities in our live DB · as of ${formatAsOf(asOf)}`}>
+            </StatFigure>
+            <StatFigure size="lg" suffix="" label={`programs & activities in our live DB · as of ${formatAsOf(asOf)}`}>
               <CountUp to={catalogCount} />
-            </StatCard>
-            <StatCard suffix="" label="Agent autonomy tiers">
+            </StatFigure>
+            <StatFigure size="lg" suffix="" label="Agent autonomy tiers">
               <CountUp to={3} duration={900} />
-            </StatCard>
+            </StatFigure>
           </dl>
           <p className="mt-4 text-[12.5px] text-ink-soft/70">
             Population source: MOIS Resident Registration statistics, June 2026 (ages 55–70:
@@ -102,139 +104,104 @@ export default async function InvestorsEnPage() {
         </div>
       </section>
 
-      <section className="border-t border-hair bg-bg py-20 sm:py-28">
-        <div className="mx-auto max-w-wrap px-5 sm:px-8">
-          <Spread n="01" label="Why now">
-            <Reveal>
-              <SpreadTitle>A market at an inflection point</SpreadTitle>
-              <p className="mt-7 max-w-[40rem] text-body text-ink-soft">
-                Koreans aged 55–70 are no longer subjects of care; they are the authors of their own
-                days. Three forces cross at once: digital fluency, demographic shift, and the demand
-                to design their own day.
-              </p>
-            </Reveal>
-            <div className="mt-10 grid gap-4 sm:grid-cols-3">
-              {EVIDENCE.map((e, i) => (
-                <Reveal key={e.stat} delay={i * 80}>
-                  <div className="ed-card flex h-full flex-col p-7">
-                    <p className="num text-[26px] font-extrabold tracking-[-0.02em] text-sage">
-                      {e.stat}
-                    </p>
-                    <p className="mt-3 flex-1 text-[15.5px] leading-[1.7] text-ink-soft">{e.claim}</p>
-                    <p className="mt-5 border-t border-hair pt-4 text-[12px] text-ink-soft/70">
-                      {e.source}
-                    </p>
-                  </div>
-                </Reveal>
-              ))}
-            </div>
-            <Reveal className="mt-12">
-              <OrbitRings
-                aria="Market expansion: from Korea's 13M first market to East Asia and the global 55+ market"
-                coreTop="Korea · 13M"
-                coreBottom="first market"
-                mid="East Asia"
-                outer="global 55+ market"
-              />
-            </Reveal>
-          </Spread>
-        </div>
-      </section>
-
-      <section className="ed-paper border-t border-hair py-20 sm:py-28">
-        <div className="mx-auto max-w-wrap px-5 sm:px-8">
-          <Spread n="02" label="The evidence">
-            <Reveal>
-              <SpreadTitle>Demand, verified in interviews</SpreadTitle>
-              <p className="mt-7 max-w-[40rem] text-body text-ink-soft">
-                In-depth beta interviews validated demand qualitatively. The strongest signal: search
-                is free, but wallets open for delegation.
-              </p>
-              <blockquote className="mt-9 max-w-[44rem] border-l-[3px] border-sage pl-6 text-[21px] font-medium leading-[1.65] text-ink">
-                &ldquo;I won&apos;t pay for search, there are free substitutes. Delegation is the
-                differentiator. If it really works, I&apos;d pay 5,000 to 20,000 won per application.
-                Once it hooks me, I couldn&apos;t leave, like YouTube.&rdquo;
-              </blockquote>
-              <p className="mt-4 text-[13.5px] text-ink-soft">
-                Beta interview participant, male, 60s · June 2026, in person
-              </p>
-              <p className="mt-7 max-w-[40rem] text-[14px] text-ink-soft/80">
-                We are at the qualitative stage. Quantitative conversion metrics will be measured and
-                shared with the paid launch.
-              </p>
-            </Reveal>
-          </Spread>
-        </div>
-      </section>
-
-      <section className="border-t border-hair bg-bg py-20 sm:py-28">
-        <div className="mx-auto max-w-wrap px-5 sm:px-8">
-          <Spread n="03" label="Business model">
-            <Reveal>
-              <SpreadTitle>Search is free. We charge for delegation.</SpreadTitle>
-              <p className="mt-7 max-w-[40rem] text-body text-ink-soft">
-                A credit model for Agent as a Service: pay only when delegation succeeds. It matches
-                how this generation actually spends.
-              </p>
-            </Reveal>
-            <div className="mt-10 grid gap-4 sm:grid-cols-3">
-              {MODEL.map((m, i) => (
-                <Reveal key={m.tag} delay={i * 80}>
-                  <div className="ed-card h-full p-7">
-                    <span className="text-eyebrow uppercase text-sage">{m.tag}</span>
-                    <p className="mt-4 text-[19px] font-bold text-ink">{m.title}</p>
-                    <p className="mt-3 text-[16px] leading-[1.7] text-ink-soft">{m.body}</p>
-                  </div>
-                </Reveal>
-              ))}
-            </div>
-            <p className="mt-5 text-[12.5px] text-ink-soft/70">
-              Subscription benchmark figures are from public press coverage.
-            </p>
-          </Spread>
-        </div>
-      </section>
-
-      <section id="contact" className="ed-paper border-t border-hair py-20 sm:py-28">
-        <div className="mx-auto max-w-wrap px-5 sm:px-8">
-          <Spread n="04" label="Get in touch">
-            <Reveal>
-              <SpreadTitle>Let&apos;s talk</SpreadTitle>
-              <p className="mt-7 max-w-[40rem] text-body text-ink-soft">
-                Reach the founder directly. The fastest, most accurate conversation.
-              </p>
-              <div className="mt-9 flex flex-wrap gap-3.5">
-                <ButtonLink href="/en/contact" variant="primary" size="lg">
-                  Talk to us →
-                </ButtonLink>
-                <ButtonLink href="/investors" variant="ghost" size="lg">
-                  한국어 →
-                </ButtonLink>
+      <SpreadSection n="01" label="Why now">
+        <Reveal>
+          <SpreadTitle>A market at an inflection point</SpreadTitle>
+          <p className="mt-7 max-w-[40rem] text-body text-ink-soft">
+            Koreans aged 55–70 are no longer subjects of care; they are the authors of their own
+            days. Three forces cross at once: digital fluency, demographic shift, and the demand
+            to design their own day.
+          </p>
+        </Reveal>
+        <div className="mt-10 grid gap-4 sm:grid-cols-3">
+          {EVIDENCE.map((e, i) => (
+            <Reveal key={e.stat} delay={i * 80}>
+              <div className="ed-card flex h-full flex-col p-7">
+                <p className="num text-[26px] font-extrabold tracking-[-0.02em] text-sage">
+                  {e.stat}
+                </p>
+                <p className="mt-3 flex-1 text-[15.5px] leading-[1.7] text-ink-soft">{e.claim}</p>
+                <p className="mt-5 border-t border-hair pt-4 text-[12px] text-ink-soft/70">
+                  {e.source}
+                </p>
               </div>
             </Reveal>
-          </Spread>
+          ))}
         </div>
-      </section>
+        <Reveal className="mt-12">
+          <OrbitRings
+            aria="Market expansion: from Korea's 13M first market to East Asia and the global 55+ market"
+            coreTop="Korea · 13M"
+            coreBottom="first market"
+            mid="East Asia"
+            outer="global 55+ market"
+          />
+        </Reveal>
+      </SpreadSection>
+
+      <SpreadSection n="02" label="The evidence" tone="paper">
+        <Reveal>
+          <SpreadTitle>Demand, verified in interviews</SpreadTitle>
+          <p className="mt-7 max-w-[40rem] text-body text-ink-soft">
+            In-depth beta interviews validated demand qualitatively. The strongest signal: search
+            is free, but wallets open for delegation.
+          </p>
+          <blockquote className="mt-9 max-w-[44rem] border-l-[3px] border-sage pl-6 text-[21px] font-medium leading-[1.65] text-ink">
+            &ldquo;I won&apos;t pay for search, there are free substitutes. Delegation is the
+            differentiator. If it really works, I&apos;d pay 5,000 to 20,000 won per application.
+            Once it hooks me, I couldn&apos;t leave, like YouTube.&rdquo;
+          </blockquote>
+          <p className="mt-4 text-[13.5px] text-ink-soft">
+            Beta interview participant, male, 60s · June 2026, in person
+          </p>
+          <p className="mt-7 max-w-[40rem] text-[14px] text-ink-soft/80">
+            We are at the qualitative stage. Quantitative conversion metrics will be measured and
+            shared with the paid launch.
+          </p>
+        </Reveal>
+      </SpreadSection>
+
+      <SpreadSection n="03" label="Business model">
+        <Reveal>
+          <SpreadTitle>Search is free. We charge for delegation.</SpreadTitle>
+          <p className="mt-7 max-w-[40rem] text-body text-ink-soft">
+            A credit model for Agent as a Service: pay only when delegation succeeds. It matches
+            how this generation actually spends.
+          </p>
+        </Reveal>
+        <div className="mt-10 grid gap-4 sm:grid-cols-3">
+          {MODEL.map((m, i) => (
+            <Reveal key={m.tag} delay={i * 80}>
+              <div className="ed-card h-full p-7">
+                <span className="text-eyebrow uppercase text-sage">{m.tag}</span>
+                <p className="mt-4 text-[19px] font-bold text-ink">{m.title}</p>
+                <p className="mt-3 text-[16px] leading-[1.7] text-ink-soft">{m.body}</p>
+              </div>
+            </Reveal>
+          ))}
+        </div>
+        <p className="mt-5 text-[12.5px] text-ink-soft/70">
+          Subscription benchmark figures are from public press coverage.
+        </p>
+      </SpreadSection>
+
+      <SpreadSection n="04" label="Get in touch" tone="paper" id="contact">
+        <Reveal>
+          <SpreadTitle>Let&apos;s talk</SpreadTitle>
+          <p className="mt-7 max-w-[40rem] text-body text-ink-soft">
+            Reach the founder directly. The fastest, most accurate conversation.
+          </p>
+          <div className="mt-9 flex flex-wrap gap-3.5">
+            <ButtonLink href="/en/contact" variant="primary" size="lg">
+              Talk to us →
+            </ButtonLink>
+            <ButtonLink href="/investors" variant="ghost" size="lg">
+              한국어 →
+            </ButtonLink>
+          </div>
+        </Reveal>
+      </SpreadSection>
     </>
   );
 }
 
-function StatCard({
-  suffix,
-  label,
-  children,
-}: {
-  suffix: string;
-  label: string;
-  children: React.ReactNode;
-}) {
-  return (
-    <div>
-      <dd className="num text-[38px] font-extrabold leading-none tracking-[-0.03em] text-ink">
-        {children}
-        {suffix && <span className="ml-1 text-[18px] font-bold">{suffix}</span>}
-      </dd>
-      <dt className="mt-3 text-[13.5px] font-semibold text-ink-soft">{label}</dt>
-    </div>
-  );
-}

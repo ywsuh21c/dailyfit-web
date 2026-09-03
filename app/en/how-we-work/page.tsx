@@ -3,7 +3,8 @@ import { pageSeo } from '@/lib/seo';
 import Link from 'next/link';
 import { Reveal } from '@/components/motion/Reveal';
 import { OrgOrbit } from '@/components/motion/OrgOrbit';
-import { Spread, SpreadTitle } from '@/components/ui/Editorial';
+import { SpreadTitle } from '@/components/ui/Editorial';
+import { SpreadSection } from '@/components/ui/SpreadSection';
 
 export const metadata: Metadata = pageSeo({
   path: '/en/how-we-work',
@@ -70,105 +71,93 @@ export default function EnHowWeWorkPage() {
         </div>
       </section>
 
-      <section className="border-t border-hair bg-bg py-20 sm:py-28">
-        <div className="mx-auto max-w-wrap px-5 sm:px-8">
-          <Spread n="01" label="Operating principles">
-            <Reveal>
-              <SpreadTitle>The four principles we hold to</SpreadTitle>
-              <p className="mt-7 max-w-[40rem] text-body text-ink-soft">
-                How a small team achieves the speed and rigor of a large organization at the same
-                time.
-              </p>
+      <SpreadSection n="01" label="Operating principles">
+        <Reveal>
+          <SpreadTitle>The four principles we hold to</SpreadTitle>
+          <p className="mt-7 max-w-[40rem] text-body text-ink-soft">
+            How a small team achieves the speed and rigor of a large organization at the same
+            time.
+          </p>
+        </Reveal>
+        <ol className="mt-10 flex flex-col divide-y divide-hair border-y border-hair">
+          {PRINCIPLES.map((p, i) => (
+            <Reveal key={p.k} delay={i * 70}>
+              <li className="grid gap-2 py-7 sm:grid-cols-[150px_minmax(0,1fr)] sm:gap-8">
+                <div className="flex items-baseline gap-3 sm:flex-col sm:gap-1.5">
+                  <span className="num text-eyebrow text-sage">
+                    {String(i + 1).padStart(2, '0')}
+                  </span>
+                  <span className="text-[13px] font-semibold uppercase tracking-[0.1em] text-ink-soft">
+                    {p.k}
+                  </span>
+                </div>
+                <div>
+                  <p className="text-[22px] font-bold leading-[1.35] text-ink">{p.title}</p>
+                  <p className="mt-3 max-w-[42rem] text-[16.5px] leading-[1.75] text-ink-soft">
+                    {p.body}
+                  </p>
+                </div>
+              </li>
             </Reveal>
-            <ol className="mt-10 flex flex-col divide-y divide-hair border-y border-hair">
-              {PRINCIPLES.map((p, i) => (
-                <Reveal key={p.k} delay={i * 70}>
-                  <li className="grid gap-2 py-7 sm:grid-cols-[150px_minmax(0,1fr)] sm:gap-8">
-                    <div className="flex items-baseline gap-3 sm:flex-col sm:gap-1.5">
-                      <span className="num text-eyebrow text-sage">
-                        {String(i + 1).padStart(2, '0')}
-                      </span>
-                      <span className="text-[13px] font-semibold uppercase tracking-[0.1em] text-ink-soft">
-                        {p.k}
-                      </span>
-                    </div>
-                    <div>
-                      <p className="text-[22px] font-bold leading-[1.35] text-ink">{p.title}</p>
-                      <p className="mt-3 max-w-[42rem] text-[16.5px] leading-[1.75] text-ink-soft">
-                        {p.body}
-                      </p>
-                    </div>
-                  </li>
-                </Reveal>
-              ))}
-            </ol>
-          </Spread>
-        </div>
-      </section>
+          ))}
+        </ol>
+      </SpreadSection>
 
-      <section className="ed-paper border-t border-hair py-20 sm:py-28">
-        <div className="mx-auto max-w-wrap px-5 sm:px-8">
-          <Spread n="02" label="How we actually work">
-            <div className="grid gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,480px)] lg:items-center lg:gap-14">
-              <Reveal>
-                <SpreadTitle>
-                  Humans set the direction,
-                  <br />
-                  Agents execute.
-                </SpreadTitle>
-                <p className="mt-7 max-w-[36rem] text-body text-ink-soft">
-                  DailyFit is a company that runs a team of AI Agents directly. It is why one person
-                  with a team of Agents delivers the speed and rigor of a large organization at once.
-                </p>
-                <p className="mt-5 max-w-[36rem] text-body font-semibold text-ink">
-                  This is not a demo device. It is how we actually work.
-                </p>
-              </Reveal>
-              <Reveal delay={120}>
-                <OrgOrbit lang="en" />
-              </Reveal>
-            </div>
-            <div className="mt-12 grid gap-3.5 md:grid-cols-3">
-              {WORK.map((w, i) => (
-                <Reveal key={w.title} delay={i * 80}>
-                  <div className="ed-card h-full border-l-[3px] border-l-sage p-6">
-                    <p className="text-[17px] font-bold text-ink">{w.title}</p>
-                    <p className="mt-2 text-[15px] leading-[1.7] text-ink-soft">{w.body}</p>
-                  </div>
-                </Reveal>
-              ))}
-            </div>
-          </Spread>
+      <SpreadSection n="02" label="How we actually work" tone="paper">
+        <div className="grid gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,480px)] lg:items-center lg:gap-14">
+          <Reveal>
+            <SpreadTitle>
+              Humans set the direction,
+              <br />
+              Agents execute.
+            </SpreadTitle>
+            <p className="mt-7 max-w-[36rem] text-body text-ink-soft">
+              DailyFit is a company that runs a team of AI Agents directly. It is why one person
+              with a team of Agents delivers the speed and rigor of a large organization at once.
+            </p>
+            <p className="mt-5 max-w-[36rem] text-body font-semibold text-ink">
+              This is not a demo device. It is how we actually work.
+            </p>
+          </Reveal>
+          <Reveal delay={120}>
+            <OrgOrbit lang="en" />
+          </Reveal>
         </div>
-      </section>
-
-      <section className="border-t border-hair bg-bg py-20 sm:py-28">
-        <div className="mx-auto max-w-wrap px-5 sm:px-8">
-          <Spread n="03" label="Work with us">
-            <Reveal>
-              <SpreadTitle>We have no formal openings yet.</SpreadTitle>
-              <p className="mt-7 max-w-[40rem] text-body text-ink-soft">
-                Still, if this way of working draws you in, if you want to experience a company that
-                works alongside Agents first, reach out in advance. Our next hire starts here.
-              </p>
-              <div className="mt-9 flex flex-wrap gap-3.5">
-                <Link
-                  href="/en/contact"
-                  className="inline-flex min-h-[56px] items-center rounded-xl bg-sage px-7 text-[17px] font-bold text-white transition-colors hover:bg-sage-dk active:scale-[0.98]"
-                >
-                  Say hello first
-                </Link>
-                <Link
-                  href="/en/writing"
-                  className="inline-flex min-h-[56px] items-center rounded-xl border border-hair-strong px-7 text-[17px] font-bold text-ink transition-colors hover:border-sage hover:text-sage active:scale-[0.98]"
-                >
-                  Read our writing
-                </Link>
+        <div className="mt-12 grid gap-3.5 md:grid-cols-3">
+          {WORK.map((w, i) => (
+            <Reveal key={w.title} delay={i * 80}>
+              <div className="ed-card h-full border-l-[3px] border-l-sage p-6">
+                <p className="text-[17px] font-bold text-ink">{w.title}</p>
+                <p className="mt-2 text-[15px] leading-[1.7] text-ink-soft">{w.body}</p>
               </div>
             </Reveal>
-          </Spread>
+          ))}
         </div>
-      </section>
+      </SpreadSection>
+
+      <SpreadSection n="03" label="Work with us">
+        <Reveal>
+          <SpreadTitle>We have no formal openings yet.</SpreadTitle>
+          <p className="mt-7 max-w-[40rem] text-body text-ink-soft">
+            Still, if this way of working draws you in, if you want to experience a company that
+            works alongside Agents first, reach out in advance. Our next hire starts here.
+          </p>
+          <div className="mt-9 flex flex-wrap gap-3.5">
+            <Link
+              href="/en/contact"
+              className="inline-flex min-h-[56px] items-center rounded-xl bg-sage px-7 text-[17px] font-bold text-white transition-colors hover:bg-sage-dk active:scale-[0.98]"
+            >
+              Say hello first
+            </Link>
+            <Link
+              href="/en/writing"
+              className="inline-flex min-h-[56px] items-center rounded-xl border border-hair-strong px-7 text-[17px] font-bold text-ink transition-colors hover:border-sage hover:text-sage active:scale-[0.98]"
+            >
+              Read our writing
+            </Link>
+          </div>
+        </Reveal>
+      </SpreadSection>
     </>
   );
 }

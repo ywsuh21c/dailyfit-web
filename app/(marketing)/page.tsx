@@ -7,8 +7,11 @@ import { getPublishedPosts } from '@/lib/writing';
 import { AgentConsole } from '@/components/home/AgentConsole';
 import { CatalogStrip } from '@/components/home/CatalogStrip';
 import { DeviceShot } from '@/components/home/DeviceShot';
+import { AgentTierCard } from '@/components/home/AgentTierCard';
+import { ShotStep } from '@/components/home/ShotStep';
 import { Reveal } from '@/components/motion/Reveal';
-import { Eyebrow, Spread, SpreadTitle } from '@/components/ui/Editorial';
+import { Eyebrow, SpreadTitle } from '@/components/ui/Editorial';
+import { SpreadSection } from '@/components/ui/SpreadSection';
 
 // Home (/) — Option-B company site (locked 2026-06-11).
 // Audience: VC · press · AI-savvy visitors. Zero senior 2nd-person CTAs;
@@ -127,206 +130,182 @@ export default async function HomePage() {
       </section>
 
       {/* ─────────────── 01 · THE PROBLEM ─────────────── */}
-      <section className="border-t border-hair bg-bg py-24 sm:py-32">
-        <div className="mx-auto max-w-wrap px-5 sm:px-8">
-          <Spread n="01" label="The problem">
-            <Reveal>
-              <SpreadTitle>
-                5060 세대는 시간도, 호기심도 있습니다.
-                <br />
-                무엇을 할지 찾는 게 어려울 뿐입니다.
-              </SpreadTitle>
-              <p className="mt-7 max-w-[40rem] text-body text-ink-soft">
-                배울 곳, 만날 사람, 나들이 갈 곳. 정보는 수십 개 기관과 포털에 흩어져 있습니다.
-                찾기도 어렵고, 신청은 더 복잡합니다.
-              </p>
-            </Reveal>
-          </Spread>
-        </div>
-      </section>
+      <SpreadSection n="01" label="The problem" className="py-24 sm:py-32">
+        <Reveal>
+          <SpreadTitle>
+            5060 세대는 시간도, 호기심도 있습니다.
+            <br />
+            무엇을 할지 찾는 게 어려울 뿐입니다.
+          </SpreadTitle>
+          <p className="mt-7 max-w-[40rem] text-body text-ink-soft">
+            배울 곳, 만날 사람, 나들이 갈 곳. 정보는 수십 개 기관과 포털에 흩어져 있습니다.
+            찾기도 어렵고, 신청은 더 복잡합니다.
+          </p>
+        </Reveal>
+      </SpreadSection>
 
       {/* ─────────────── 02 · WHAT WE BUILT — copy | the shipped app ─────────────── */}
-      <section className="ed-paper border-t border-hair py-24 sm:py-32">
-        <div className="mx-auto max-w-wrap px-5 sm:px-8">
-          <Spread n="02" label="What we built">
-            <div className="grid gap-12 lg:grid-cols-[minmax(0,1fr)_420px] lg:items-center lg:gap-16">
-              <Reveal>
-                <SpreadTitle>
-                  대화 한 번으로,
-                  <br />
-                  하루가 설계됩니다.
-                </SpreadTitle>
-                <p className="mt-7 max-w-[34rem] text-body text-ink-soft">
-                  취미와 일상을 설계하는 멀티 Agent 플랫폼. 평소처럼 말하면 Agent들이 협업해
-                  그날의 하루를 구성하고, 번거로운 신청 절차를 회원 대신 밟습니다.
-                </p>
-                <p className="mt-8 max-w-[34rem] border-t border-hair-strong pt-6 text-[19px] font-semibold leading-relaxed text-ink">
-                  AI는 제안합니다.
-                  <br />
-                  결정은 언제나 사용자가 합니다.
-                </p>
-              </Reveal>
-              <Reveal delay={120}>
-                <div className="flex items-end justify-center gap-5 lg:justify-end">
-                  <DeviceShot
-                    src="/app/05-voice-search.webp"
-                    alt="말로 활동을 찾는 DailyFit 앱 화면"
-                    className="w-[44%] max-w-[200px]"
-                  />
-                  <DeviceShot
-                    src="/app/04-top3-recommend.webp"
-                    alt="딱 맞는 활동 세 개를 추천한 DailyFit 앱 화면"
-                    className="w-[50%] max-w-[224px] -translate-y-6"
-                  />
-                </div>
-                <p className="mt-5 text-center text-[13px] text-ink-soft lg:text-right">
-                  실제 앱 화면 · 2026년 9월 빌드
-                </p>
-              </Reveal>
+      <SpreadSection n="02" label="What we built" tone="paper" className="py-24 sm:py-32">
+        <div className="grid gap-12 lg:grid-cols-[minmax(0,1fr)_420px] lg:items-center lg:gap-16">
+          <Reveal>
+            <SpreadTitle>
+              대화 한 번으로,
+              <br />
+              하루가 설계됩니다.
+            </SpreadTitle>
+            <p className="mt-7 max-w-[34rem] text-body text-ink-soft">
+              취미와 일상을 설계하는 멀티 Agent 플랫폼. 평소처럼 말하면 Agent들이 협업해
+              그날의 하루를 구성하고, 번거로운 신청 절차를 회원 대신 밟습니다.
+            </p>
+            <p className="mt-8 max-w-[34rem] border-t border-hair-strong pt-6 text-[19px] font-semibold leading-relaxed text-ink">
+              AI는 제안합니다.
+              <br />
+              결정은 언제나 사용자가 합니다.
+            </p>
+          </Reveal>
+          <Reveal delay={120}>
+            <div className="flex items-end justify-center gap-5 lg:justify-end">
+              <DeviceShot
+                src="/app/05-voice-search.webp"
+                alt="말로 활동을 찾는 DailyFit 앱 화면"
+                className="w-[44%] max-w-[200px]"
+              />
+              <DeviceShot
+                src="/app/04-top3-recommend.webp"
+                alt="딱 맞는 활동 세 개를 추천한 DailyFit 앱 화면"
+                className="w-[50%] max-w-[224px] -translate-y-6"
+              />
             </div>
-          </Spread>
+            <p className="mt-5 text-center text-[13px] text-ink-soft lg:text-right">
+              실제 앱 화면 · 2026년 9월 빌드
+            </p>
+          </Reveal>
         </div>
-      </section>
+      </SpreadSection>
 
       {/* ─────────────── 03 · HOW THE AGENT WORKS — orchestration pipeline ─────────────── */}
-      <section id="runtime" className="border-t border-hair bg-bg py-24 sm:py-32">
-        <div className="mx-auto max-w-wrap px-5 sm:px-8">
-          <Spread n="03" label="How the agent works">
-            <Reveal>
-              <SpreadTitle>Agent가 하루를 설계하는 과정</SpreadTitle>
-              <p className="mt-7 max-w-[40rem] text-body text-ink-soft">
-                말 한마디 안에 있는 의도를 읽고, 과거 기억을 떠올리고, 공공·제휴 API로 모은 활동
-                Database에서 최적 활동을 골라 하루를 설계합니다.
-              </p>
-            </Reveal>
-            {/* 히어로 콘솔의 시스템 어휘(intent·memory·search·plan)를 그대로 그린 장식 그래픽. */}
-            <Reveal className="mt-12" delay={120}>
-              <div className="hx-runtime-board">
-                <div className="hx-stage-grid" aria-hidden="true" />
-                <div className="hx-grain" aria-hidden="true" />
-                <div className="hx-flow relative" aria-hidden="true">
-                  <span className="hx-flow-node hx-flow-node-user">&gt;</span>
-                  <span className="hx-flow-edge" />
-                  <span className="hx-flow-node">intent</span>
-                  <span className="hx-flow-edge" />
-                  <span className="hx-flow-node">memory</span>
-                  <span className="hx-flow-edge" />
-                  <span className="hx-flow-node">search</span>
-                  <span className="hx-flow-edge" />
-                  <span className="hx-flow-node hx-flow-node-done">✓ plan</span>
-                </div>
-              </div>
-            </Reveal>
-          </Spread>
-        </div>
-      </section>
+      <SpreadSection n="03" label="How the agent works" id="runtime" className="py-24 sm:py-32">
+        <Reveal>
+          <SpreadTitle>Agent가 하루를 설계하는 과정</SpreadTitle>
+          <p className="mt-7 max-w-[40rem] text-body text-ink-soft">
+            말 한마디 안에 있는 의도를 읽고, 과거 기억을 떠올리고, 공공·제휴 API로 모은 활동
+            Database에서 최적 활동을 골라 하루를 설계합니다.
+          </p>
+        </Reveal>
+        {/* 히어로 콘솔의 시스템 어휘(intent·memory·search·plan)를 그대로 그린 장식 그래픽. */}
+        <Reveal className="mt-12" delay={120}>
+          <div className="hx-runtime-board">
+            <div className="hx-stage-grid" aria-hidden="true" />
+            <div className="hx-grain" aria-hidden="true" />
+            <div className="hx-flow relative" aria-hidden="true">
+              <span className="hx-flow-node hx-flow-node-user">&gt;</span>
+              <span className="hx-flow-edge" />
+              <span className="hx-flow-node">intent</span>
+              <span className="hx-flow-edge" />
+              <span className="hx-flow-node">memory</span>
+              <span className="hx-flow-edge" />
+              <span className="hx-flow-node">search</span>
+              <span className="hx-flow-edge" />
+              <span className="hx-flow-node hx-flow-node-done">✓ plan</span>
+            </div>
+          </div>
+        </Reveal>
+      </SpreadSection>
 
       {/* ─────────────── 04 · MEET THE AGENTS ─────────────── */}
-      <section id="agents" className="ed-paper border-t border-hair py-24 sm:py-32">
-        <div className="mx-auto max-w-wrap px-5 sm:px-8">
-          <Spread n="04" label="Meet the agents">
-            <Reveal>
-              <SpreadTitle>하루를 대신 움직이는 세 명의 Agent</SpreadTitle>
-              <p className="mt-7 max-w-[40rem] text-body text-ink-soft">
-                탐색 · 리마인드 · 신청대행. 각 Agent가 맡은 일을 실제로 처리하고, 맡는 범위가
-                넓어질수록 상위 Agent로 이어집니다.
-              </p>
-            </Reveal>
-            <div className="mt-12 grid gap-4 md:grid-cols-3">
-              <AgentCard tier="Discovery" title="탐색 Agent" level={1} delay={0}>
-                관심사를 학습해 동네 밖, 평소 몰랐던 활동까지 정확하게 찾아냅니다.
-              </AgentCard>
-              <AgentCard tier="Planning · Reminders" title="리마인더 Agent" level={2} delay={100}>
-                &ldquo;내일 아침 9시에 신청하셔야 해요.&rdquo; 놓치기 쉬운 신청 시점과 일정을 대신 챙깁니다.
-              </AgentCard>
-              <AgentCard tier="Auto-apply" title="신청대행 Agent" level={3} delay={200}>
-                회원가입·신청서·접수처럼 번거로운 과정을 사용자 대신 처리합니다. 복잡한 절차는
-                Agent가 밟고, 사용자는 마지막 확인만 하면 됩니다.
-              </AgentCard>
-            </div>
-          </Spread>
+      <SpreadSection n="04" label="Meet the agents" tone="paper" id="agents" className="py-24 sm:py-32">
+        <Reveal>
+          <SpreadTitle>하루를 대신 움직이는 세 명의 Agent</SpreadTitle>
+          <p className="mt-7 max-w-[40rem] text-body text-ink-soft">
+            탐색 · 리마인드 · 신청대행. 각 Agent가 맡은 일을 실제로 처리하고, 맡는 범위가
+            넓어질수록 상위 Agent로 이어집니다.
+          </p>
+        </Reveal>
+        <div className="mt-12 grid gap-4 md:grid-cols-3">
+          <AgentTierCard tier="Discovery" title="탐색 Agent" level={1} delay={0} autonomyLabel={`자율성 단계 1 / 3`}>
+            관심사를 학습해 동네 밖, 평소 몰랐던 활동까지 정확하게 찾아냅니다.
+          </AgentTierCard>
+          <AgentTierCard tier="Planning · Reminders" title="리마인더 Agent" level={2} delay={100} autonomyLabel={`자율성 단계 2 / 3`}>
+            &ldquo;내일 아침 9시에 신청하셔야 해요.&rdquo; 놓치기 쉬운 신청 시점과 일정을 대신 챙깁니다.
+          </AgentTierCard>
+          <AgentTierCard tier="Auto-apply" title="신청대행 Agent" level={3} delay={200} autonomyLabel={`자율성 단계 3 / 3`}>
+            회원가입·신청서·접수처럼 번거로운 과정을 사용자 대신 처리합니다. 복잡한 절차는
+            Agent가 밟고, 사용자는 마지막 확인만 하면 됩니다.
+          </AgentTierCard>
         </div>
-      </section>
+      </SpreadSection>
 
       {/* ─────────────── 05 · DELEGATION, AS SHIPPED — the app doing the work ─────────────── */}
-      <section className="border-t border-hair bg-bg py-24 sm:py-32">
-        <div className="mx-auto max-w-wrap px-5 sm:px-8">
-          <Spread n="05" label="Auto-apply, in the app">
-            <Reveal>
-              <SpreadTitle>신청대행은 이렇게 움직입니다</SpreadTitle>
-              <p className="mt-7 max-w-[40rem] text-body text-ink-soft">
-                회원이 고른 활동에서 시작해, 로그인·신청서·접수를 Agent가 진행합니다. 결제와
-                본인인증처럼 회원만 할 수 있는 단계는 그 순간 회원에게 넘깁니다.
-              </p>
-            </Reveal>
-            <div className="mt-12 grid gap-10 sm:grid-cols-3 sm:gap-6">
-              <ShotStep
-                n="1"
-                src="/app/01-delegate-button.webp"
-                alt="활동 상세에서 «내 Agent가 대신 신청» 버튼을 보여주는 앱 화면"
-                delay={0}
-              >
-                회원이 고른 강좌에서 &ldquo;내 Agent가 대신 신청&rdquo; 한 번으로 대행이 시작됩니다.
-              </ShotStep>
-              <ShotStep
-                n="2"
-                src="/app/02-openrun-reserved.webp"
-                alt="선착순 접수 시각에 맞춰 대행이 예약된 앱 화면"
-                delay={100}
-              >
-                선착순 강좌는 접수 시작 시각에 맞춰 Agent가 대신 신청합니다.
-              </ShotStep>
-              <ShotStep
-                n="3"
-                src="/app/08-portal-payment.webp"
-                alt="기관 포털 결제 단계를 회원에게 넘기는 앱 화면"
-                delay={200}
-              >
-                로그인부터 신청서까지 Agent가 진행하고, 결제와 본인인증은 회원이 직접 합니다.
-              </ShotStep>
-            </div>
-            <p className="mt-8 text-[13px] text-ink-soft">실제 앱 화면 · 2026년 9월 빌드</p>
-          </Spread>
+      <SpreadSection n="05" label="Auto-apply, in the app" className="py-24 sm:py-32">
+        <Reveal>
+          <SpreadTitle>신청대행은 이렇게 움직입니다</SpreadTitle>
+          <p className="mt-7 max-w-[40rem] text-body text-ink-soft">
+            회원이 고른 활동에서 시작해, 로그인·신청서·접수를 Agent가 진행합니다. 결제와
+            본인인증처럼 회원만 할 수 있는 단계는 그 순간 회원에게 넘깁니다.
+          </p>
+        </Reveal>
+        <div className="mt-12 grid gap-10 sm:grid-cols-3 sm:gap-6">
+          <ShotStep
+            n="1"
+            src="/app/01-delegate-button.webp"
+            alt="활동 상세에서 «내 Agent가 대신 신청» 버튼을 보여주는 앱 화면"
+            delay={0}
+          >
+            회원이 고른 강좌에서 &ldquo;내 Agent가 대신 신청&rdquo; 한 번으로 대행이 시작됩니다.
+          </ShotStep>
+          <ShotStep
+            n="2"
+            src="/app/02-openrun-reserved.webp"
+            alt="선착순 접수 시각에 맞춰 대행이 예약된 앱 화면"
+            delay={100}
+          >
+            선착순 강좌는 접수 시작 시각에 맞춰 Agent가 대신 신청합니다.
+          </ShotStep>
+          <ShotStep
+            n="3"
+            src="/app/08-portal-payment.webp"
+            alt="기관 포털 결제 단계를 회원에게 넘기는 앱 화면"
+            delay={200}
+          >
+            로그인부터 신청서까지 Agent가 진행하고, 결제와 본인인증은 회원이 직접 합니다.
+          </ShotStep>
         </div>
-      </section>
+        <p className="mt-8 text-[13px] text-ink-soft">실제 앱 화면 · 2026년 9월 빌드</p>
+      </SpreadSection>
 
       {/* ─────────────── 06 · WRITING — we write as we build ─────────────── */}
       {posts.length > 0 && (
-        <section className="ed-paper border-t border-hair py-24 sm:py-32">
-          <div className="mx-auto max-w-wrap px-5 sm:px-8">
-            <Spread n="06" label="Writing">
-              <Reveal>
-                <SpreadTitle>만들면서 씁니다.</SpreadTitle>
-                <p className="mt-7 max-w-[40rem] text-body text-ink-soft">
-                  AI Agent 팀으로 회사를 운영하는 방법, 5060 시장이라는 가설, 그리고 잘 안 풀린
-                  것들까지. 결론보다 사고 과정을 남깁니다.
-                </p>
+        <SpreadSection n="06" label="Writing" tone="paper" className="py-24 sm:py-32">
+          <Reveal>
+            <SpreadTitle>만들면서 씁니다.</SpreadTitle>
+            <p className="mt-7 max-w-[40rem] text-body text-ink-soft">
+              AI Agent 팀으로 회사를 운영하는 방법, 5060 시장이라는 가설, 그리고 잘 안 풀린
+              것들까지. 결론보다 사고 과정을 남깁니다.
+            </p>
+          </Reveal>
+          <div className="mt-10 divide-y divide-hair border-y border-hair">
+            {posts.map((p, i) => (
+              <Reveal key={p.slug} delay={i * 80}>
+                <Link
+                  href={`/writing/${p.slug}`}
+                  className="group grid gap-2 py-6 sm:grid-cols-[150px_minmax(0,1fr)_auto] sm:items-baseline sm:gap-8"
+                >
+                  <span className="text-eyebrow uppercase text-sage">{p.category}</span>
+                  <span className="text-[21px] font-bold leading-[1.3] tracking-[-0.02em] text-ink transition-colors group-hover:text-sage">
+                    {p.title}
+                  </span>
+                  <span className="num text-[14px] text-ink-soft">{p.date?.replace(/-/g, '.')}</span>
+                </Link>
               </Reveal>
-              <div className="mt-10 divide-y divide-hair border-y border-hair">
-                {posts.map((p, i) => (
-                  <Reveal key={p.slug} delay={i * 80}>
-                    <Link
-                      href={`/writing/${p.slug}`}
-                      className="group grid gap-2 py-6 sm:grid-cols-[150px_minmax(0,1fr)_auto] sm:items-baseline sm:gap-8"
-                    >
-                      <span className="text-eyebrow uppercase text-sage">{p.category}</span>
-                      <span className="text-[21px] font-bold leading-[1.3] tracking-[-0.02em] text-ink transition-colors group-hover:text-sage">
-                        {p.title}
-                      </span>
-                      <span className="num text-[14px] text-ink-soft">{p.date?.replace(/-/g, '.')}</span>
-                    </Link>
-                  </Reveal>
-                ))}
-              </div>
-              <Link
-                href="/writing"
-                className="mt-8 inline-flex min-h-tap items-center font-bold text-sage underline-offset-4 hover:underline"
-              >
-                모든 글 보기 →
-              </Link>
-            </Spread>
+            ))}
           </div>
-        </section>
+          <Link
+            href="/writing"
+            className="mt-8 inline-flex min-h-tap items-center font-bold text-sage underline-offset-4 hover:underline"
+          >
+            모든 글 보기 →
+          </Link>
+        </SpreadSection>
       )}
 
       {/* ─────────────── CLOSING STAGE — the runtime bookend ─────────────── */}
@@ -362,87 +341,3 @@ export default async function HomePage() {
   );
 }
 
-/* ───────────────────────── partials ───────────────────────── */
-
-function AgentCard({
-  tier,
-  title,
-  level,
-  delay,
-  children,
-}: {
-  tier: string;
-  title: string;
-  level: 1 | 2 | 3;
-  delay: number;
-  children: React.ReactNode;
-}) {
-  const top = level === 3;
-  return (
-    <Reveal delay={delay} className="h-full">
-      <div
-        className={
-          top
-            ? 'flex h-full flex-col rounded-[20px] border border-navy bg-navy p-7 text-ivory'
-            : 'ed-card ed-card-lift flex h-full flex-col p-7'
-        }
-      >
-        <span
-          className={
-            top
-              ? 'self-start rounded-md border border-sage-lt/40 px-2.5 py-1 text-[11px] font-bold uppercase tracking-[0.14em] text-sage-lt'
-              : 'self-start rounded-md border border-sage/30 px-2.5 py-1 text-[11px] font-bold uppercase tracking-[0.14em] text-sage'
-          }
-        >
-          {tier} · Lv {level}
-        </span>
-        <h3 className="mt-5 text-[23px] font-bold">{title}</h3>
-        <p className={`mt-3 flex-1 text-[15.5px] leading-[1.7] ${top ? 'text-ivory/75' : 'text-ink-soft'}`}>
-          {children}
-        </p>
-        <div className="mt-6 flex items-center gap-2" aria-label={`자율성 단계 ${level} / 3`}>
-          <span className={`text-[11px] font-semibold uppercase tracking-[0.14em] ${top ? 'text-ivory/50' : 'text-ink-soft/60'}`}>
-            autonomy
-          </span>
-          <span className="ml-auto flex gap-1.5" aria-hidden="true">
-            {[1, 2, 3].map((n) => (
-              <span
-                key={n}
-                className={`h-1.5 w-8 rounded-full ${
-                  n <= level ? (top ? 'agent-bar bg-sage-lt' : 'agent-bar bg-sage') : top ? 'bg-ivory/15' : 'bg-hair'
-                }`}
-                style={n <= level ? { transitionDelay: `${300 + n * 140}ms` } : undefined}
-              />
-            ))}
-          </span>
-        </div>
-      </div>
-    </Reveal>
-  );
-}
-
-function ShotStep({
-  n,
-  src,
-  alt,
-  delay,
-  children,
-}: {
-  n: string;
-  src: string;
-  alt: string;
-  delay: number;
-  children: React.ReactNode;
-}) {
-  return (
-    <Reveal delay={delay}>
-      <div className="flex flex-col gap-5">
-        <DeviceShot src={src} alt={alt} className="mx-auto w-[70%] max-w-[240px] sm:w-full" />
-        <div className="flex gap-3">
-          <span className="num shrink-0 text-eyebrow text-sage">{n.padStart(2, '0')}</span>
-          <p className="text-[16px] leading-[1.7] text-ink">{children}</p>
-        </div>
-      </div>
-    </Reveal>
-  );
-}

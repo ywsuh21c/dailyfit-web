@@ -5,7 +5,9 @@ import { getCatalogCount, formatAsOf } from '@/lib/catalog-count';
 import { CountUp } from '@/components/motion/CountUp';
 import { OrbitRings } from '@/components/motion/OrbitRings';
 import { Reveal } from '@/components/motion/Reveal';
-import { Spread, SpreadTitle } from '@/components/ui/Editorial';
+import { SpreadTitle } from '@/components/ui/Editorial';
+import { SpreadSection } from '@/components/ui/SpreadSection';
+import { StatFigure } from '@/components/ui/StatFigure';
 
 // Per plan decision D / IR Q24: keep out of top nav; noindex until the
 // indexing decision is locked.
@@ -97,15 +99,15 @@ export default async function InvestorsPage() {
           </div>
 
           <dl className="mt-14 grid gap-x-6 gap-y-8 border-t border-hair-strong pt-8 sm:grid-cols-3">
-            <StatCard suffix="만 명" label="한국 55–70세 인구">
+            <StatFigure size="lg" suffix="만 명" label="한국 55–70세 인구">
               <CountUp to={1300} />
-            </StatCard>
-            <StatCard suffix="건" label={`보유 프로그램·활동 DB · ${formatAsOf(asOf)} 기준`}>
+            </StatFigure>
+            <StatFigure size="lg" suffix="건" label={`보유 프로그램·활동 DB · ${formatAsOf(asOf)} 기준`}>
               <CountUp to={catalogCount} />
-            </StatCard>
-            <StatCard suffix="티어" label="Agent 자율성 단계">
+            </StatFigure>
+            <StatFigure size="lg" suffix="티어" label="Agent 자율성 단계">
               <CountUp to={3} duration={900} />
-            </StatCard>
+            </StatFigure>
           </dl>
           <p className="mt-4 text-[12.5px] text-ink-soft/70">
             인구 수치 출처: 행정안전부 주민등록 인구통계, 2026년 6월 기준(55~70세 13,014,756명)
@@ -114,175 +116,136 @@ export default async function InvestorsPage() {
       </section>
 
       {/* 01 · Why now */}
-      <section className="border-t border-hair bg-bg py-20 sm:py-28">
-        <div className="mx-auto max-w-wrap px-5 sm:px-8">
-          <Spread n="01" label="Why now">
-            <Reveal>
-              <SpreadTitle>왜 지금인가</SpreadTitle>
-              <p className="mt-7 max-w-[40rem] text-body text-ink-soft">
-                한국 55–70세 시장이 변곡점을 맞은 이유는 세 가지 흐름이 동시에 교차하기 때문입니다.
-                디지털 친숙도 · 인구 구조 · 스스로 하루를 설계하려는 수요.
-              </p>
+      <SpreadSection n="01" label="Why now">
+        <Reveal>
+          <SpreadTitle>왜 지금인가</SpreadTitle>
+          <p className="mt-7 max-w-[40rem] text-body text-ink-soft">
+            한국 55–70세 시장이 변곡점을 맞은 이유는 세 가지 흐름이 동시에 교차하기 때문입니다.
+            디지털 친숙도 · 인구 구조 · 스스로 하루를 설계하려는 수요.
+          </p>
+        </Reveal>
+        {/* 세 흐름 각각에 1차 출처 수치를 붙인 근거 카드 (2026-07-09, 어머니 피드백 r6-05).
+            수치는 전부 primary — 통계청/과기정통부·NIA/서울시50플러스재단. */}
+        <div className="mt-10 grid gap-4 sm:grid-cols-3">
+          {EVIDENCE.map((e, i) => (
+            <Reveal key={e.stat} delay={i * 80}>
+              <div className="ed-card flex h-full flex-col p-7">
+                <p className="num text-[26px] font-extrabold tracking-[-0.02em] text-sage">
+                  {e.stat}
+                </p>
+                <p className="mt-3 flex-1 text-[15.5px] leading-[1.7] text-ink-soft">{e.claim}</p>
+                <p className="mt-5 border-t border-hair pt-4 text-[12px] text-ink-soft/70">
+                  {e.source}
+                </p>
+              </div>
             </Reveal>
-            {/* 세 흐름 각각에 1차 출처 수치를 붙인 근거 카드 (2026-07-09, 어머니 피드백 r6-05).
-                수치는 전부 primary — 통계청/과기정통부·NIA/서울시50플러스재단. */}
-            <div className="mt-10 grid gap-4 sm:grid-cols-3">
-              {EVIDENCE.map((e, i) => (
-                <Reveal key={e.stat} delay={i * 80}>
-                  <div className="ed-card flex h-full flex-col p-7">
-                    <p className="num text-[26px] font-extrabold tracking-[-0.02em] text-sage">
-                      {e.stat}
-                    </p>
-                    <p className="mt-3 flex-1 text-[15.5px] leading-[1.7] text-ink-soft">{e.claim}</p>
-                    <p className="mt-5 border-t border-hair pt-4 text-[12px] text-ink-soft/70">
-                      {e.source}
-                    </p>
-                  </div>
-                </Reveal>
-              ))}
-            </div>
-            <p className="mt-9 max-w-[40rem] text-body font-semibold text-ink">
-              이 세대는 더 이상 돌봄의 대상이 아니라 자기 하루의 저자입니다.
-            </p>
-            <Reveal className="mt-12">
-              <OrbitRings
-                aria="시장 확장: 한국 1,300만 첫 시장에서 동아시아, 글로벌 5060 시장으로"
-                coreTop="한국 1,300만"
-                coreBottom="첫 시장"
-                mid="동아시아"
-                outer="글로벌 5060 시장"
-              />
-            </Reveal>
-          </Spread>
+          ))}
         </div>
-      </section>
+        <p className="mt-9 max-w-[40rem] text-body font-semibold text-ink">
+          이 세대는 더 이상 돌봄의 대상이 아니라 자기 하루의 저자입니다.
+        </p>
+        <Reveal className="mt-12">
+          <OrbitRings
+            aria="시장 확장: 한국 1,300만 첫 시장에서 동아시아, 글로벌 5060 시장으로"
+            coreTop="한국 1,300만"
+            coreBottom="첫 시장"
+            mid="동아시아"
+            outer="글로벌 5060 시장"
+          />
+        </Reveal>
+      </SpreadSection>
 
       {/* 02 · What we're building */}
-      <section className="ed-paper border-t border-hair py-20 sm:py-28">
-        <div className="mx-auto max-w-wrap px-5 sm:px-8">
-          <Spread n="02" label="What we're building">
-            <Reveal>
-              <SpreadTitle>무엇을 만들고 있나</SpreadTitle>
-              <p className="mt-7 max-w-[40rem] text-body text-ink-soft">
-                DailyFit은 회원이 매일을 의미 있게 설계하도록 돕는 AI Agent입니다. 인기 복지관·문화
-                센터 프로그램은 신청이 복잡하고 경쟁이 치열합니다. DailyFit은 회원 대신 활동을 찾아
-                신청까지 대행하는 Agent as a Service입니다. 카카오톡 위에서, 익숙한 대화로
-                움직입니다.
-              </p>
+      <SpreadSection n="02" label="What we're building" tone="paper">
+        <Reveal>
+          <SpreadTitle>무엇을 만들고 있나</SpreadTitle>
+          <p className="mt-7 max-w-[40rem] text-body text-ink-soft">
+            DailyFit은 회원이 매일을 의미 있게 설계하도록 돕는 AI Agent입니다. 인기 복지관·문화
+            센터 프로그램은 신청이 복잡하고 경쟁이 치열합니다. DailyFit은 회원 대신 활동을 찾아
+            신청까지 대행하는 Agent as a Service입니다. 카카오톡 위에서, 익숙한 대화로
+            움직입니다.
+          </p>
+        </Reveal>
+        <ol className="mt-10 flex flex-col divide-y divide-hair border-y border-hair">
+          {STEPS.map((s, i) => (
+            <Reveal key={s.n} delay={i * 80}>
+              <li className="grid gap-2 py-6 sm:grid-cols-[110px_220px_minmax(0,1fr)] sm:items-baseline sm:gap-6">
+                <span className="num text-eyebrow text-sage">STEP {s.n}</span>
+                <span className="text-[19px] font-bold text-ink">{s.title}</span>
+                <span className="text-[16.5px] leading-[1.7] text-ink-soft">{s.body}</span>
+              </li>
             </Reveal>
-            <ol className="mt-10 flex flex-col divide-y divide-hair border-y border-hair">
-              {STEPS.map((s, i) => (
-                <Reveal key={s.n} delay={i * 80}>
-                  <li className="grid gap-2 py-6 sm:grid-cols-[110px_220px_minmax(0,1fr)] sm:items-baseline sm:gap-6">
-                    <span className="num text-eyebrow text-sage">STEP {s.n}</span>
-                    <span className="text-[19px] font-bold text-ink">{s.title}</span>
-                    <span className="text-[16.5px] leading-[1.7] text-ink-soft">{s.body}</span>
-                  </li>
-                </Reveal>
-              ))}
-            </ol>
-          </Spread>
-        </div>
-      </section>
+          ))}
+        </ol>
+      </SpreadSection>
 
       {/* 03 · The evidence — 수요 근거는 자체 베타 인터뷰(정성). 인용은 실제 발화
           near-verbatim, 실명·개인정보 없음. 정량 지표 미보유 사실을 명시(정직성). */}
-      <section className="border-t border-hair bg-bg py-20 sm:py-28">
-        <div className="mx-auto max-w-wrap px-5 sm:px-8">
-          <Spread n="03" label="The evidence">
-            <Reveal>
-              <SpreadTitle>수요는 인터뷰에서 확인했습니다</SpreadTitle>
-              <p className="mt-7 max-w-[40rem] text-body text-ink-soft">
-                베타 사용자 심층 인터뷰로 수요를 정성 검증했습니다. 가장 강한 신호는 대행입니다.
-                검색은 공짜지만, 대행에는 지갑이 열립니다.
-              </p>
-              <blockquote className="mt-9 max-w-[44rem] border-l-[3px] border-sage pl-6 text-[21px] font-medium leading-[1.65] text-ink">
-                &ldquo;검색은 무료 대체재라 돈 안 낸다. 대행만이 차별화다. 대행이 진짜 되면 신청당
-                5천 원에서 2만 원도 낸다. 한 번 묶이면 유튜브처럼 못 떠난다.&rdquo;
-              </blockquote>
-              <p className="mt-4 text-[13.5px] text-ink-soft">
-                베타 인터뷰 참가자, 60대 남성 · 2026년 6월, 대면
-              </p>
-              <p className="mt-7 max-w-[40rem] text-[14px] text-ink-soft/80">
-                지금은 정성 검증 단계입니다. 유료 전환 등 정량 지표는 유료화와 함께 측정해
-                공개합니다.
-              </p>
-            </Reveal>
-          </Spread>
-        </div>
-      </section>
+      <SpreadSection n="03" label="The evidence">
+        <Reveal>
+          <SpreadTitle>수요는 인터뷰에서 확인했습니다</SpreadTitle>
+          <p className="mt-7 max-w-[40rem] text-body text-ink-soft">
+            베타 사용자 심층 인터뷰로 수요를 정성 검증했습니다. 가장 강한 신호는 대행입니다.
+            검색은 공짜지만, 대행에는 지갑이 열립니다.
+          </p>
+          <blockquote className="mt-9 max-w-[44rem] border-l-[3px] border-sage pl-6 text-[21px] font-medium leading-[1.65] text-ink">
+            &ldquo;검색은 무료 대체재라 돈 안 낸다. 대행만이 차별화다. 대행이 진짜 되면 신청당
+            5천 원에서 2만 원도 낸다. 한 번 묶이면 유튜브처럼 못 떠난다.&rdquo;
+          </blockquote>
+          <p className="mt-4 text-[13.5px] text-ink-soft">
+            베타 인터뷰 참가자, 60대 남성 · 2026년 6월, 대면
+          </p>
+          <p className="mt-7 max-w-[40rem] text-[14px] text-ink-soft/80">
+            지금은 정성 검증 단계입니다. 유료 전환 등 정량 지표는 유료화와 함께 측정해
+            공개합니다.
+          </p>
+        </Reveal>
+      </SpreadSection>
 
       {/* 04 · Business model — 크레딧 모델(검색 무료·대행 과금). 매출 수치·LTV
           비공개(미검증), 벤치마크는 회사명 없이 공개 보도 수치만. */}
-      <section className="ed-paper border-t border-hair py-20 sm:py-28">
-        <div className="mx-auto max-w-wrap px-5 sm:px-8">
-          <Spread n="04" label="Business model">
-            <Reveal>
-              <SpreadTitle>검색은 무료, 대행에 과금합니다</SpreadTitle>
-              <p className="mt-7 max-w-[40rem] text-body text-ink-soft">
-                Agent as a Service의 크레딧 모델입니다. 대행이 성공했을 때만 지불하는 구조가 이
-                세대의 소비 습관과 맞습니다.
-              </p>
-            </Reveal>
-            <div className="mt-10 grid gap-4 sm:grid-cols-3">
-              {MODEL.map((m, i) => (
-                <Reveal key={m.tag} delay={i * 80}>
-                  <div className="ed-card h-full p-7">
-                    <span className="text-eyebrow uppercase text-sage">{m.tag}</span>
-                    <p className="mt-4 text-[19px] font-bold text-ink">{m.title}</p>
-                    <p className="mt-3 text-[16px] leading-[1.7] text-ink-soft">{m.body}</p>
-                  </div>
-                </Reveal>
-              ))}
-            </div>
-            <p className="mt-5 text-[12.5px] text-ink-soft/70">
-              구독 벤치마크 수치는 공개 언론 보도 기준입니다.
-            </p>
-          </Spread>
-        </div>
-      </section>
-
-      {/* 05 · Get in touch — founder-direct only. Team bios live on /about. */}
-      <section id="contact" className="border-t border-hair bg-bg py-20 sm:py-28">
-        <div className="mx-auto max-w-wrap px-5 sm:px-8">
-          <Spread n="05" label="Get in touch">
-            <Reveal>
-              <SpreadTitle>직접 이야기 나눠요</SpreadTitle>
-              <p className="mt-7 max-w-[40rem] text-body text-ink-soft">
-                덱을 받기 전에, 먼저 창업자에게 직접 연락 주세요. 가장 빠르고 정확한 대화입니다.
-              </p>
-              <div className="mt-9 flex flex-wrap gap-3.5">
-                <ButtonLink href="/contact" variant="primary" size="lg">
-                  직접 이야기 나누기 →
-                </ButtonLink>
-                <ButtonLink href="/en/investors" variant="ghost" size="lg">
-                  English →
-                </ButtonLink>
+      <SpreadSection n="04" label="Business model" tone="paper">
+        <Reveal>
+          <SpreadTitle>검색은 무료, 대행에 과금합니다</SpreadTitle>
+          <p className="mt-7 max-w-[40rem] text-body text-ink-soft">
+            Agent as a Service의 크레딧 모델입니다. 대행이 성공했을 때만 지불하는 구조가 이
+            세대의 소비 습관과 맞습니다.
+          </p>
+        </Reveal>
+        <div className="mt-10 grid gap-4 sm:grid-cols-3">
+          {MODEL.map((m, i) => (
+            <Reveal key={m.tag} delay={i * 80}>
+              <div className="ed-card h-full p-7">
+                <span className="text-eyebrow uppercase text-sage">{m.tag}</span>
+                <p className="mt-4 text-[19px] font-bold text-ink">{m.title}</p>
+                <p className="mt-3 text-[16px] leading-[1.7] text-ink-soft">{m.body}</p>
               </div>
             </Reveal>
-          </Spread>
+          ))}
         </div>
-      </section>
+        <p className="mt-5 text-[12.5px] text-ink-soft/70">
+          구독 벤치마크 수치는 공개 언론 보도 기준입니다.
+        </p>
+      </SpreadSection>
+
+      {/* 05 · Get in touch — founder-direct only. Team bios live on /about. */}
+      <SpreadSection n="05" label="Get in touch" id="contact">
+        <Reveal>
+          <SpreadTitle>직접 이야기 나눠요</SpreadTitle>
+          <p className="mt-7 max-w-[40rem] text-body text-ink-soft">
+            덱을 받기 전에, 먼저 창업자에게 직접 연락 주세요. 가장 빠르고 정확한 대화입니다.
+          </p>
+          <div className="mt-9 flex flex-wrap gap-3.5">
+            <ButtonLink href="/contact" variant="primary" size="lg">
+              직접 이야기 나누기 →
+            </ButtonLink>
+            <ButtonLink href="/en/investors" variant="ghost" size="lg">
+              English →
+            </ButtonLink>
+          </div>
+        </Reveal>
+      </SpreadSection>
     </>
   );
 }
 
-function StatCard({
-  suffix,
-  label,
-  children,
-}: {
-  suffix: string;
-  label: string;
-  children: React.ReactNode;
-}) {
-  return (
-    <div>
-      <dd className="num text-[38px] font-extrabold leading-none tracking-[-0.03em] text-ink">
-        {children}
-        <span className="ml-1 text-[18px] font-bold">{suffix}</span>
-      </dd>
-      <dt className="mt-3 text-[13.5px] font-semibold text-ink-soft">{label}</dt>
-    </div>
-  );
-}
