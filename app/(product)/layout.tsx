@@ -22,9 +22,9 @@ export default function ProductLayout({
         </Link>
       </div>
 
-      <header className="sticky top-0 z-40 border-b border-line bg-bg/90 backdrop-blur-md">
+      <header className="sticky top-0 z-40 border-b border-hair bg-ivory/90 backdrop-blur-md">
         <nav
-          className="mx-auto flex h-[72px] max-w-6xl items-center justify-between gap-4 px-5"
+          className="mx-auto flex h-[72px] max-w-wrap items-center justify-between gap-4 px-5 sm:px-8"
           aria-label="제품 메뉴"
         >
           <Link
@@ -40,10 +40,10 @@ export default function ProductLayout({
 
           <div className="flex items-center gap-1">
             <a
-              href="#features"
+              href="#how"
               className="hidden min-h-tap items-center rounded-lg px-4 text-[17px] font-medium text-ink-soft transition-colors hover:bg-surface hover:text-ink sm:flex"
             >
-              기능
+              사용법
             </a>
             <a
               href="#faq"
@@ -61,7 +61,7 @@ export default function ProductLayout({
               href="#get"
               className="ml-2 flex min-h-tap items-center whitespace-nowrap rounded-lg bg-sage px-5 text-[17px] font-semibold text-white transition-colors hover:bg-sage-dk active:scale-[0.98]"
             >
-              앱 다운로드
+              시작하기
             </a>
           </div>
         </nav>
@@ -72,7 +72,7 @@ export default function ProductLayout({
       </main>
 
       <footer className="bg-navy-deep py-12 text-ivory/70">
-        <div className="mx-auto flex max-w-6xl flex-col gap-6 px-5 sm:flex-row sm:items-center sm:justify-between">
+        <div className="mx-auto flex max-w-wrap flex-col gap-6 px-5 sm:flex-row sm:items-center sm:justify-between sm:px-8">
           <div className="flex items-center gap-2.5">
             <BrandMark className="h-7 w-7" />
             <span className="text-[19px] font-extrabold tracking-tight text-ivory">

@@ -18,9 +18,9 @@ export function Nav({ locale = 'ko' }: { locale?: Locale }) {
   const ctaLabel = locale === 'en' ? 'Try DailyFit' : productCta.label;
 
   return (
-    <header className="sticky top-0 z-40 border-b border-line bg-bg/85 backdrop-blur-md">
+    <header className="sticky top-0 z-40 border-b border-hair bg-ivory/90 backdrop-blur-md">
       <nav
-        className="mx-auto flex h-[72px] max-w-6xl items-center justify-between gap-4 px-5"
+        className="mx-auto flex h-[72px] max-w-wrap items-center justify-between gap-4 px-5 sm:px-8"
         aria-label={ariaMenu}
       >
         <Link
@@ -57,7 +57,7 @@ export function Nav({ locale = 'ko' }: { locale?: Locale }) {
                 ▾
               </span>
             </button>
-            <ul className="nav-sub absolute left-0 top-full min-w-[180px] rounded-xl border border-line bg-white p-1.5 shadow-xl shadow-navy/15">
+            <ul className="nav-sub absolute left-0 top-full min-w-[180px] rounded-xl border border-hair bg-white p-1.5 shadow-soft">
               {companyNav.map((item) => (
                 <li key={item.href}>
                   <Link

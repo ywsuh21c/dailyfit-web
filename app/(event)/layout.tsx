@@ -14,7 +14,7 @@ export default function EventLayout({
 }) {
   return (
     <>
-      <header className="sticky top-0 z-40 border-b border-line bg-bg/85 backdrop-blur-md">
+      <header className="sticky top-0 z-40 border-b border-hair bg-bg/85 backdrop-blur-md">
         <div className="mx-auto flex h-[64px] max-w-6xl items-center px-5">
           <Link
             href="/"

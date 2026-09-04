@@ -114,7 +114,7 @@ export function WeekAttendance() {
   const attended = [true, true, false, true, true, false, false];
   const today = 4;
   return (
-    <div className="flex justify-between rounded-2xl border border-line bg-white px-3 py-4 sm:px-5">
+    <div className="flex justify-between rounded-2xl border border-hair bg-white px-3 py-4 sm:px-5">
       {WEEK.map((l, i) => (
         <div key={l} className="flex flex-col items-center gap-2">
           <span className={`text-[13px] font-bold ${i === today ? 'text-sage' : 'text-ink-soft/70'}`}>
@@ -136,7 +136,7 @@ export function WeekAttendance() {
 // Welcome 20,000P moment — mascot hands it over (mirrors WelcomePointsModal).
 export function WelcomePoints() {
   return (
-    <div className="relative overflow-hidden rounded-3xl border border-line bg-ivory px-6 py-10 text-center">
+    <div className="relative overflow-hidden rounded-3xl border border-hair bg-ivory px-6 py-10 text-center">
       <span className="sparkle-tw absolute left-[16%] top-[16%] text-[18px] text-[#B8923C]" aria-hidden="true">
         ✦
       </span>

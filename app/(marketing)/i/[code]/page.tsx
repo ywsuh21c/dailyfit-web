@@ -73,7 +73,7 @@ export default async function InviteLandingPage({
             className="mx-auto rounded-full"
             priority
           />
-          <p className="eyebrow-mono mt-6 text-sage">DailyFit 초대장</p>
+          <p className="mt-6 text-eyebrow uppercase text-sage">DailyFit 초대장</p>
           <h1 className="mt-4 text-[34px] font-extrabold leading-[1.2] tracking-[-0.03em] text-ink sm:text-[44px]">
             친구가 DailyFit으로
             <br />

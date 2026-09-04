@@ -1,405 +1,349 @@
+import Link from 'next/link';
 import type { Metadata } from 'next';
 import { pageSeo } from '@/lib/seo';
-import Link from 'next/link';
-import { externalLinkProps, productAppUrl, site } from '@/lib/site';
-import { getCatalogCount } from '@/lib/catalog-count';
+import { externalLinkProps, productAppUrl } from '@/lib/site';
+import { getCatalogCount, formatAsOf } from '@/lib/catalog-count';
+import { getCatalogSample } from '@/lib/catalog-sample';
+import { getRegionFacets } from '@/lib/catalog-facets';
+import { getPublishedPosts } from '@/lib/writing';
 import { AgentConsole } from '@/components/home/AgentConsole';
+import { CatalogStrip } from '@/components/home/CatalogStrip';
+import { DeviceShot } from '@/components/home/DeviceShot';
+import { AgentTierCard } from '@/components/home/AgentTierCard';
+import { ShotStep } from '@/components/home/ShotStep';
 import { Reveal } from '@/components/motion/Reveal';
+import { Eyebrow, SpreadTitle } from '@/components/ui/Editorial';
+import { SpreadSection } from '@/components/ui/SpreadSection';
 
-// English landing (/en) — mirror of the Korean root ("/"), same "Runtime &
-// Daylight" art direction (hx-* stage → daylight body), translated. The Korean
-// root is ALWAYS the default; this page is reached only by the language toggle.
-// Audience: VC · press · AI-savvy visitors (3rd person), same as the KO home.
+// English landing (/en) — mirror of the Korean root ("/"), same "Editorial
+// Daylight" art direction, translated. The Korean root is ALWAYS the default;
+// this page is reached only by the language toggle. Audience: VC · press ·
+// AI-savvy visitors (3rd person), same as the KO home.
+//
+// 🔴 The catalog strip shows the SAME real rows as the Korean home, with their
+// Korean titles intact. The previous version carried a hand-written English
+// list ("Hangang Cycling", "Book Club") — invented labels for programs whose
+// real names are Korean. Naming a real institution's course in words it does
+// not use is the same failure we removed from the Korean ticker, so the strip
+// is labelled in English and the programs keep their own names.
 
 export const metadata: Metadata = pageSeo({
   path: '/en',
   title: 'DailyFit · AI Agents for adults 55+',
   absoluteTitle: true, // title already carries the brand
   description:
-    'We build AI Agents for the 55+ generation. One conversation designs the day: discovery, reminders, and auto-apply.',
+    'We build AI Agents for the 55+ generation. One conversation designs the day: discovery, reminders, and applying on your behalf.',
 });
-
-// Floating data motes inside the runtime stage — deterministic positions
-// (no Math.random: server/client markup must match). Pure decoration.
-const MOTES: Array<{ left: string; top: string; size: number; dur: string; delay: string }> = [
-  { left: '6%', top: '72%', size: 3, dur: '13s', delay: '0s' },
-  { left: '11%', top: '34%', size: 2, dur: '17s', delay: '1.8s' },
-  { left: '19%', top: '58%', size: 2, dur: '15s', delay: '4.2s' },
-  { left: '27%', top: '20%', size: 3, dur: '19s', delay: '2.6s' },
-  { left: '38%', top: '80%', size: 2, dur: '14s', delay: '6.1s' },
-  { left: '47%', top: '14%', size: 2, dur: '18s', delay: '0.9s' },
-  { left: '56%', top: '66%', size: 3, dur: '16s', delay: '3.4s' },
-  { left: '64%', top: '28%', size: 2, dur: '13.5s', delay: '5.2s' },
-  { left: '73%', top: '75%', size: 2, dur: '17.5s', delay: '1.2s' },
-  { left: '81%', top: '40%', size: 3, dur: '15.5s', delay: '7.4s' },
-  { left: '89%', top: '62%', size: 2, dur: '14.5s', delay: '2.1s' },
-  { left: '94%', top: '22%', size: 2, dur: '18.5s', delay: '4.8s' },
-];
-
-// Static, English-labeled sample of real catalog activities (the live database
-// is Korean-first; this mirrors the KO home's live ticker with representative
-// English examples so the marquee reads for an English audience).
-const TICKER: Array<[string, string]> = [
-  ['In-house', 'Hangang Cycling'],
-  ['In-house', 'AI & Digital Basics'],
-  ['Fitness', 'Yogalates'],
-  ['Fitness', 'Morning Pilates'],
-  ['Leisure', 'Hangang Wellness Week'],
-  ['Learning', 'Botanical Art'],
-  ['Learning', 'Dance Sport'],
-  ['Social', 'Book Club'],
-  ['In-house', 'ChatGPT 101'],
-];
 
 export const revalidate = 21600;
 
 export default async function EnHomePage() {
-  const { count: catalogCount } = await getCatalogCount();
+  const [{ count: catalogCount, asOf }, cards, facets] = await Promise.all([
+    getCatalogCount(),
+    getCatalogSample(12),
+    getRegionFacets(),
+  ]);
+  const posts = getPublishedPosts('en').slice(0, 3);
+
   return (
     <>
-      {/* ─────────────── HERO — the runtime stage ─────────────── */}
-      <section className="px-3 pt-3 sm:px-5 sm:pt-4">
-        <div className="hx-stage mx-auto max-w-[1400px] rounded-[24px] sm:rounded-[32px]">
-          <div className="hx-stage-grid" aria-hidden="true" />
-          <div className="hx-aurora hx-aurora-a" aria-hidden="true" />
-          <div className="hx-aurora hx-aurora-b" aria-hidden="true" />
-          <div aria-hidden="true">
-            {MOTES.map((m, i) => (
-              <span
-                key={i}
-                className="hx-mote"
-                style={{
-                  left: m.left,
-                  top: m.top,
-                  width: m.size,
-                  height: m.size,
-                  ['--dur' as string]: m.dur,
-                  ['--delay' as string]: m.delay,
-                }}
-              />
-            ))}
-          </div>
-          <div className="hx-grain" aria-hidden="true" />
-
-          <div className="relative mx-auto flex max-w-5xl flex-col items-center px-5 pb-20 pt-16 text-center sm:px-10 sm:pb-24 sm:pt-24">
-            <p className="hx-chip-live">Agent-as-a-Service</p>
-            <h1 className="mt-8 text-[30px] font-extrabold leading-[1.1] tracking-[-0.04em] text-ivory min-[430px]:text-[34px] sm:text-[60px] sm:leading-[1.08] lg:text-[72px]">
-              <span className="hx-glow-text">AI Agents</span>
+      {/* ─────────────── HERO ─────────────── */}
+      <section className="ed-hero">
+        <div className="ed-hero-grid" aria-hidden="true" />
+        <div className="relative mx-auto grid max-w-wrap gap-12 px-5 pb-16 pt-16 sm:px-8 lg:grid-cols-12 lg:items-center lg:gap-16 lg:pb-20 lg:pt-24">
+          <div className="lg:col-span-7">
+            <p className="flex items-center gap-3 text-eyebrow uppercase text-sage">
+              <span className="inline-block h-2 w-2 rounded-full bg-sage" aria-hidden="true" />
+              Agent-as-a-Service · Seoul
+            </p>
+            <h1 className="mt-7 text-display-sm text-ink sm:text-[52px] sm:leading-[1.06] lg:text-display">
+              <span className="text-sage">AI Agents</span>
               <br />
               for adults 55+.
             </h1>
-            <p className="mt-7 max-w-[46ch] text-[18px] leading-relaxed text-ivory/70 sm:text-[21px]">
-              <span className="block">Adults 55+ are learning, meeting, and enjoying life on their smartphones.</span>
-              <span className="mt-2 block">We design the day for the fastest-growing generation in the world.</span>
+            <p className="mt-7 max-w-[36rem] text-[19px] leading-[1.65] text-ink-soft sm:text-lead">
+              Adults 55+ are learning, meeting, and enjoying life on their smartphones. We design the
+              day for the fastest-growing generation in the world, and our Agents act on their behalf.
             </p>
-            <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
+            <div className="mt-9 flex flex-wrap items-center gap-3.5">
               <Link
                 href="/en/contact"
-                className="hx-glow-cta inline-flex min-h-[56px] items-center rounded-xl bg-sage px-8 text-[17px] font-bold text-white transition-colors hover:bg-sage-dk active:scale-[0.98]"
+                className="inline-flex min-h-[56px] items-center rounded-xl bg-sage px-7 text-[17px] font-bold text-white transition-colors hover:bg-sage-dk active:scale-[0.98]"
               >
                 Talk to us
               </Link>
               <a
                 href="#runtime"
-                className="inline-flex min-h-[56px] items-center rounded-xl border border-ivory/25 bg-white/5 px-8 text-[17px] font-bold text-ivory transition-colors hover:border-sage-lt hover:text-sage-lt active:scale-[0.98]"
+                className="inline-flex min-h-[56px] items-center rounded-xl border border-hair-strong bg-white/50 px-7 text-[17px] font-bold text-ink transition-colors hover:border-sage hover:text-sage active:scale-[0.98]"
               >
                 See how it works ↓
               </a>
             </div>
 
-            {/* The runtime, visible — the product working, front and center. */}
-            <div className="relative mt-16 w-full max-w-2xl sm:mt-20">
-              <div className="hx-console-halo" aria-hidden="true" />
-              <div className="hx-console-tilt">
-                <AgentConsole lang="en" catalogCount={catalogCount} />
+            <dl className="mt-12 grid max-w-[40rem] grid-cols-2 gap-x-6 gap-y-6 border-t border-hair-strong pt-6 sm:grid-cols-3">
+              <div>
+                <dd className="num text-[30px] font-extrabold leading-none tracking-[-0.03em] text-ink">
+                  {catalogCount.toLocaleString('en-US')}
+                </dd>
+                <dt className="mt-2 text-[13px] text-ink-soft">
+                  live activities · as of {formatAsOf(asOf)}
+                </dt>
               </div>
-            </div>
+              {facets && (
+                <div>
+                  <dd className="num text-[30px] font-extrabold leading-none tracking-[-0.03em] text-ink">
+                    {facets.districts}
+                  </dd>
+                  {/* Label derives from the data — the first pass said "Seoul and around
+                      it" while live facets covered 18 provinces (Seoul + Gyeonggi + Incheon
+                      is only 58 of the 162). */}
+                  <dt className="mt-2 text-[13px] text-ink-soft">
+                    districts across {facets.cityCount} provinces nationwide
+                  </dt>
+                </div>
+              )}
+              <div>
+                <dd className="num text-[30px] font-extrabold leading-none tracking-[-0.03em] text-ink">
+                  3
+                </dd>
+                <dt className="mt-2 text-[13px] text-ink-soft">
+                  Agent tiers · discovery, reminders, auto-apply
+                </dt>
+              </div>
+            </dl>
           </div>
-          <div className="hx-horizon" aria-hidden="true" />
+
+          <div className="lg:col-span-5">
+            <AgentConsole lang="en" catalogCount={catalogCount} />
+          </div>
         </div>
       </section>
 
-      {/* ─────────────────────── PROBLEM ─────────────────────── */}
-      <section className="bg-bg py-28 sm:py-40">
-        <div className="mx-auto max-w-5xl px-5 text-center">
-          <Reveal>
-            <p className="hx-eyebrow eyebrow-mono text-sage">The problem</p>
-            <h2 className="mt-6 text-[30px] font-extrabold leading-[1.18] tracking-[-0.035em] text-ink sm:text-[42px]">
-              Adults 55+ have the time and the curiosity.
-              <br />
-              Finding what to do is the hard part.
-            </h2>
-            <p className="mx-auto mt-7 max-w-3xl text-body text-ink-soft">
-              Places to learn, people to meet, outings to take.
-              <br />
-              The information is scattered across dozens of agencies and portals.
-              <br />
-              Hard to find, and harder to sign up for.
-            </p>
-          </Reveal>
-        </div>
+      {/* ─────────────── LIVE CATALOG ─────────────── */}
+      <section className="ed-paper pb-20 sm:pb-24">
+        <CatalogStrip
+          cards={cards}
+          label="Activity database · real programs, live right now"
+          note="Photos and titles come from the providers, in Korean · refreshed every 6 hours"
+        />
       </section>
 
-      {/* ─────────────── WHAT WE BUILD (solution) ─────────────── */}
-      <section className="bg-surface py-24 sm:py-32">
-        <div className="mx-auto grid max-w-6xl items-center gap-14 px-5 lg:grid-cols-2">
+      {/* ─────────────── 01 · THE PROBLEM ─────────────── */}
+      <SpreadSection n="01" label="The problem" className="py-24 sm:py-32">
+        <Reveal>
+          <SpreadTitle>
+            Adults 55+ have the time and the curiosity.
+            <br />
+            Finding what to do is the hard part.
+          </SpreadTitle>
+          <p className="mt-7 max-w-[40rem] text-body text-ink-soft">
+            Places to learn, people to meet, outings to take. The information is scattered across
+            dozens of agencies and portals. Hard to find, and harder to sign up for.
+          </p>
+        </Reveal>
+      </SpreadSection>
+
+      {/* ─────────────── 02 · WHAT WE BUILT ─────────────── */}
+      <SpreadSection n="02" label="What we built" tone="paper" className="py-24 sm:py-32">
+        <div className="grid gap-12 lg:grid-cols-[minmax(0,1fr)_420px] lg:items-center lg:gap-16">
           <Reveal>
-            <p className="eyebrow-mono text-sage">Solution: What we built</p>
-            <h2 className="mt-5 text-[34px] font-extrabold leading-[1.15] tracking-[-0.035em] text-ink sm:text-[46px]">
+            <SpreadTitle>
               One conversation
               <br />
               designs the day.
-            </h2>
-            <p className="mt-7 max-w-[46ch] text-body text-ink-soft">
-              A multi-Agent platform that designs hobbies and daily life.
-              <br />
-              Speak as you normally would, and the Agents collaborate to compose the day.
+            </SpreadTitle>
+            <p className="mt-7 max-w-[34rem] text-body text-ink-soft">
+              A multi-Agent platform that designs hobbies and daily life. Speak as you normally
+              would, and the Agents collaborate to compose the day, then walk the tedious
+              application steps on the member&rsquo;s behalf.
             </p>
-            <p className="hx-pull mt-8 text-[19px] font-semibold leading-relaxed text-ink">
-              <span className="block">AI proposes.</span>
-              <span className="mt-2 block">The user always decides.</span>
+            <p className="mt-8 max-w-[34rem] border-t border-hair-strong pt-6 text-[19px] font-semibold leading-relaxed text-ink">
+              AI proposes.
+              <br />
+              The user always decides.
             </p>
           </Reveal>
           <Reveal delay={120}>
-            <div className="hx-window">
-              <div className="hx-window-bar" aria-hidden="true">
-                <span className="hx-window-dot" style={{ background: '#E5E1D8' }} />
-                <span className="hx-window-dot" style={{ background: '#D9D4C9' }} />
-                <span className="hx-window-dot" style={{ background: '#8FBF9F' }} />
-              </div>
-              <div className="flex flex-col gap-3 p-7">
-                <Reveal delay={150}>
-                  <div className="flex flex-col">
-                    <ChatBubble who="DailyFit">How was your evening walk yesterday?</ChatBubble>
-                  </div>
-                </Reveal>
-                <Reveal delay={420}>
-                  <div className="flex flex-col">
-                    <ChatBubble who="You" me>
-                      My knee felt a little stiff.
-                    </ChatBubble>
-                  </div>
-                </Reveal>
-                <Reveal delay={700}>
-                  <div className="flex flex-col">
-                    <ChatBubble who="DailyFit">
-                      Today, 15 minutes of light stretching, and this afternoon
-                      there&rsquo;s a book club nearby. Shall we start there?
-                    </ChatBubble>
-                  </div>
-                </Reveal>
-              </div>
+            <div className="flex items-end justify-center gap-5 lg:justify-end">
+              <DeviceShot
+                src="/app/05-voice-search.webp"
+                alt="Searching for an activity by voice in the DailyFit app"
+                className="w-[44%] max-w-[200px]"
+              />
+              <DeviceShot
+                src="/app/04-top3-recommend.webp"
+                alt="Three matching activities recommended in the DailyFit app"
+                className="w-[50%] max-w-[224px] -translate-y-6"
+              />
             </div>
-          </Reveal>
-        </div>
-      </section>
-
-      {/* ───────────── AGENT RUNTIME — orchestration pipeline ───────────── */}
-      <section id="runtime" className="bg-bg pt-24 sm:pt-32">
-        <div className="mx-auto max-w-6xl px-5">
-          <Reveal className="text-center">
-            <p className="hx-eyebrow eyebrow-mono text-sage">How our agent works</p>
-            <h2 className="mt-6 text-[30px] font-extrabold leading-[1.18] tracking-[-0.035em] text-ink sm:text-[44px]">
-              How an Agent designs the day
-            </h2>
-            <p className="mx-auto mt-6 max-w-6xl text-body text-ink-soft">
-              It reads the intent inside a single sentence, recalls past memory, and designs the day by picking the best activities from an activity Database gathered through public and partner APIs.
+            <p className="mt-5 text-center text-[13px] text-ink-soft lg:text-right">
+              Real app screens · September 2026 build
             </p>
           </Reveal>
-          <Reveal className="mt-14" delay={120}>
-            <div className="hx-runtime-board mx-auto max-w-4xl">
-              <div className="hx-stage-grid" aria-hidden="true" />
-              <div className="hx-grain" aria-hidden="true" />
-              <div className="hx-flow relative" aria-hidden="true">
-                <span className="hx-flow-node hx-flow-node-user">&gt;</span>
-                <span className="hx-flow-edge" />
-                <span className="hx-flow-node">intent</span>
-                <span className="hx-flow-edge" />
-                <span className="hx-flow-node">memory</span>
-                <span className="hx-flow-edge" />
-                <span className="hx-flow-node">search</span>
-                <span className="hx-flow-edge" />
-                <span className="hx-flow-node hx-flow-node-done">✓ plan</span>
-              </div>
-            </div>
-            <div className="hx-flow-drop" aria-hidden="true" />
-          </Reveal>
         </div>
-      </section>
+      </SpreadSection>
 
-      {/* ─────────────── LIVE ACTIVITY TICKER ─────────────── */}
-      <div className="hx-ticker border-y border-line bg-bg py-5" aria-label="Sample activities in the activity database">
-        <div className="mx-auto max-w-6xl px-5">
-          <div className="mb-3 flex items-center justify-center gap-2.5">
-            <span className="console-live-dot !bg-sage" aria-hidden="true" />
-            <span className="eyebrow-mono text-ink-soft/70">activity database · live</span>
+      {/* ─────────────── 03 · HOW THE AGENT WORKS ─────────────── */}
+      <SpreadSection n="03" label="How the agent works" id="runtime" className="py-24 sm:py-32">
+        <Reveal>
+          <SpreadTitle>How an Agent designs the day</SpreadTitle>
+          <p className="mt-7 max-w-[40rem] text-body text-ink-soft">
+            It reads the intent inside a single sentence, recalls past memory, and designs the day
+            by picking the best activities from an activity database gathered through public and
+            partner APIs.
+          </p>
+        </Reveal>
+        <Reveal className="mt-12" delay={120}>
+          <div className="hx-runtime-board">
+            <div className="hx-stage-grid" aria-hidden="true" />
+            <div className="hx-grain" aria-hidden="true" />
+            <div className="hx-flow relative" aria-hidden="true">
+              <span className="hx-flow-node hx-flow-node-user">&gt;</span>
+              <span className="hx-flow-edge" />
+              <span className="hx-flow-node">intent</span>
+              <span className="hx-flow-edge" />
+              <span className="hx-flow-node">memory</span>
+              <span className="hx-flow-edge" />
+              <span className="hx-flow-node">search</span>
+              <span className="hx-flow-edge" />
+              <span className="hx-flow-node hx-flow-node-done">✓ plan</span>
+            </div>
           </div>
+        </Reveal>
+      </SpreadSection>
+
+      {/* ─────────────── 04 · MEET THE AGENTS ─────────────── */}
+      <SpreadSection n="04" label="Meet the agents" tone="paper" id="agents" className="py-24 sm:py-32">
+        <Reveal>
+          <SpreadTitle>Three Agents that act on your behalf</SpreadTitle>
+          <p className="mt-7 max-w-[40rem] text-body text-ink-soft">
+            Discovery · Reminders · Auto-apply. Each Agent does the actual work, and the wider the
+            scope, the higher-tier the Agent.
+          </p>
+        </Reveal>
+        <div className="mt-12 grid gap-4 md:grid-cols-3">
+          <AgentTierCard tier="Discovery" title="Discovery Agent" level={1} delay={0} autonomyLabel={`Autonomy level 1 of 3`}>
+            Learns your interests and finds activities beyond your neighborhood, the ones you
+            would never have discovered.
+          </AgentTierCard>
+          <AgentTierCard tier="Reminders" title="Reminder Agent" level={2} delay={100} autonomyLabel={`Autonomy level 2 of 3`}>
+            &ldquo;You need to sign up by 9 AM tomorrow.&rdquo; It tracks the easy-to-miss
+            deadlines and schedules for you.
+          </AgentTierCard>
+          <AgentTierCard tier="Auto-apply" title="Auto-apply Agent" level={3} delay={200} autonomyLabel={`Autonomy level 3 of 3`}>
+            Handles the tedious parts like sign-ups, forms, and registration on your behalf. The
+            Agent walks the complex steps; you just confirm the last one.
+          </AgentTierCard>
         </div>
-        <div className="marquee">
-          <div className="marquee-track">
-            {[...TICKER, ...TICKER].map(([tag, name], i) => (
-              <span className="chip" key={`${name}-${i}`} aria-hidden={i >= TICKER.length}>
-                <span className="chip-tag">{tag}</span>
-                {name}
-              </span>
+      </SpreadSection>
+
+      {/* ─────────────── 05 · AUTO-APPLY, AS SHIPPED ─────────────── */}
+      <SpreadSection n="05" label="Auto-apply, in the app" className="py-24 sm:py-32">
+        <Reveal>
+          <SpreadTitle>How applying on someone&rsquo;s behalf actually works</SpreadTitle>
+          <p className="mt-7 max-w-[40rem] text-body text-ink-soft">
+            It starts from the activity the member picked: the Agent handles login, the form, and
+            the submission. Steps only the member can take, such as payment and identity
+            verification, are handed back at that moment.
+          </p>
+        </Reveal>
+        <div className="mt-12 grid gap-10 sm:grid-cols-3 sm:gap-6">
+          <ShotStep
+            n="1"
+            src="/app/01-delegate-button.webp"
+            alt="An activity page with the 'my Agent applies for me' button"
+            delay={0}
+          >
+            One tap on &ldquo;my Agent applies for me&rdquo; starts the delegation.
+          </ShotStep>
+          <ShotStep
+            n="2"
+            src="/app/02-openrun-reserved.webp"
+            alt="A first-come course with the delegated application scheduled"
+            delay={100}
+          >
+            For first-come courses, the Agent applies the moment registration opens.
+          </ShotStep>
+          <ShotStep
+            n="3"
+            src="/app/08-portal-payment.webp"
+            alt="The portal payment step handed back to the member"
+            delay={200}
+          >
+            The Agent goes from login to the form; payment and identity checks stay with the
+            member.
+          </ShotStep>
+        </div>
+        <p className="mt-8 text-[13px] text-ink-soft">Real app screens · September 2026 build</p>
+      </SpreadSection>
+
+      {/* ─────────────── 06 · WRITING ─────────────── */}
+      {posts.length > 0 && (
+        <SpreadSection n="06" label="Writing" tone="paper" className="py-24 sm:py-32">
+          <Reveal>
+            <SpreadTitle>We write as we build.</SpreadTitle>
+            <p className="mt-7 max-w-[40rem] text-body text-ink-soft">
+              How we run a company as a team of AI Agents, our hypothesis about the 55+ market,
+              and the things that did not work out. We leave the thinking, not just the
+              conclusion.
+            </p>
+          </Reveal>
+          <div className="mt-10 divide-y divide-hair border-y border-hair">
+            {posts.map((p, i) => (
+              <Reveal key={p.slug} delay={i * 80}>
+                <Link
+                  href={`/en/writing/${p.slug}`}
+                  className="group grid gap-2 py-6 sm:grid-cols-[150px_minmax(0,1fr)_auto] sm:items-baseline sm:gap-8"
+                >
+                  <span className="text-eyebrow uppercase text-sage">{p.category}</span>
+                  <span className="text-[21px] font-bold leading-[1.3] tracking-[-0.02em] text-ink transition-colors group-hover:text-sage">
+                    {p.title}
+                  </span>
+                  <span className="num text-[14px] text-ink-soft">
+                    {p.date?.replace(/-/g, '.')}
+                  </span>
+                </Link>
+              </Reveal>
             ))}
           </div>
-        </div>
-      </div>
-
-      {/* ──────────────────── MEET THE AGENTS ──────────────────── */}
-      <section id="agents" className="hx-agents border-b border-line py-24 sm:py-32">
-        <div className="mx-auto max-w-6xl px-5">
-          <Reveal className="mx-auto max-w-3xl text-center">
-            <p className="hx-eyebrow eyebrow-mono text-sage">Meet the agents</p>
-            <h2 className="mt-6 text-[30px] font-extrabold leading-[1.18] tracking-[-0.035em] text-ink sm:text-[42px]">
-              Three Agents that act on your behalf
-            </h2>
-            <p className="mt-6 text-body text-ink-soft">
-              Discovery · Reminders · Auto-apply. Each Agent does the actual work, and the wider the scope, the higher-tier the Agent.
-            </p>
-          </Reveal>
-          <div className="mt-14 grid gap-5 md:grid-cols-3">
-            <AgentCard tier="Discovery" title="Discovery Agent" level={1} delay={0}>
-              Learns your interests and finds activities beyond your neighborhood,
-              <br />
-              the ones you&rsquo;d never have discovered.
-            </AgentCard>
-            <AgentCard tier="Planning · Reminders" title="Reminder Agent" level={2} delay={120}>
-              &ldquo;You need to sign up by 9 AM tomorrow.&rdquo;
-              <br />
-              It tracks the easy-to-miss deadlines and schedules for you.
-            </AgentCard>
-            <AgentCard tier="Auto-apply" title="Auto-apply Agent" level={3} delay={240}>
-              Handles the tedious parts like sign-ups, forms, and registration on your behalf.
-              <br />
-              The Agent walks the complex steps; you just confirm the last one.
-            </AgentCard>
-          </div>
-        </div>
-      </section>
-
-      {/* ────────── FINAL CTA — return to the runtime (bookend) ────────── */}
-      <section className="px-3 py-20 sm:px-5 sm:py-24">
-        <div className="hx-stage mx-auto max-w-[1400px] rounded-[24px] py-24 text-center sm:rounded-[32px] sm:py-32">
-          <div className="hx-stage-grid" aria-hidden="true" />
-          <div className="hx-aurora hx-aurora-a" aria-hidden="true" />
-          <div className="hx-aurora hx-aurora-b" aria-hidden="true" />
-          <div className="hx-grain" aria-hidden="true" />
-          <svg
-            viewBox="0 0 1200 600"
-            aria-hidden="true"
-            className="pointer-events-none absolute inset-0 h-full w-full opacity-40"
-            preserveAspectRatio="xMidYMid slice"
+          <Link
+            href="/en/writing"
+            className="mt-8 inline-flex min-h-tap items-center font-bold text-sage underline-offset-4 hover:underline"
           >
-            <circle cx="600" cy="300" r="260" fill="none" stroke="#8FBF9F" strokeWidth="1.5" className="ripple-ring" />
-            <circle cx="600" cy="300" r="260" fill="none" stroke="#8FBF9F" strokeWidth="1.5" className="ripple-ring ripple-d1" />
-            <circle cx="600" cy="300" r="260" fill="none" stroke="#8FBF9F" strokeWidth="1.5" className="ripple-ring ripple-d2" />
-          </svg>
-          <div className="relative mx-auto max-w-6xl px-5">
-            <Reveal>
-              <p className="eyebrow-mono text-sage-lt/80">Agent-as-a-Service</p>
-              <h2 className="mx-auto mt-6 max-w-[20ch] text-[34px] font-extrabold leading-[1.16] tracking-[-0.035em] text-ivory sm:text-[46px]">
-                Building the next AI for adults 55+.
-              </h2>
-              <div className="mt-10 flex flex-wrap justify-center gap-4">
-                <Link
-                  href="/en/contact"
-                  className="hx-glow-cta inline-flex min-h-[56px] items-center rounded-xl bg-sage px-8 text-[17px] font-bold text-white transition-colors hover:bg-sage-dk active:scale-[0.98]"
-                >
-                  Talk to us
-                </Link>
-                <Link
-                  href={productAppUrl}
-                  {...externalLinkProps}
-                  className="inline-flex min-h-[56px] items-center rounded-xl border border-ivory/25 bg-white/5 px-8 text-[17px] font-bold text-ivory transition-colors hover:border-sage-lt hover:text-sage-lt active:scale-[0.98]"
-                >
-                  Try DailyFit →
-                </Link>
-              </div>
-            </Reveal>
-          </div>
+            Read all →
+          </Link>
+        </SpreadSection>
+      )}
+
+      {/* ─────────────── CLOSING STAGE ─────────────── */}
+      <section className="ed-stage py-24 text-center sm:py-32">
+        <div className="hx-stage-grid" aria-hidden="true" />
+        <div className="hx-grain" aria-hidden="true" />
+        <div className="relative mx-auto max-w-wrap px-5 sm:px-8">
+          <Reveal>
+            <Eyebrow invert>Agent-as-a-Service</Eyebrow>
+            <h2 className="mx-auto mt-6 max-w-[20ch] text-[34px] font-extrabold leading-[1.16] tracking-[-0.035em] text-ivory sm:text-[46px]">
+              Building the next AI for adults 55+.
+            </h2>
+            <div className="mt-10 flex flex-wrap justify-center gap-4">
+              <Link
+                href="/en/contact"
+                className="inline-flex min-h-[56px] items-center rounded-xl bg-sage px-8 text-[17px] font-bold text-white transition-colors hover:bg-sage-dk active:scale-[0.98]"
+              >
+                Talk to us
+              </Link>
+              <Link
+                href={productAppUrl}
+                {...externalLinkProps}
+                className="inline-flex min-h-[56px] items-center rounded-xl border border-ivory/25 bg-white/5 px-8 text-[17px] font-bold text-ivory transition-colors hover:border-sage-lt hover:text-sage-lt active:scale-[0.98]"
+              >
+                Try DailyFit →
+              </Link>
+            </div>
+          </Reveal>
         </div>
       </section>
     </>
   );
 }
 
-/* ───────────────────────── partials ───────────────────────── */
-
-function ChatBubble({
-  who,
-  me,
-  children,
-}: {
-  who: string;
-  me?: boolean;
-  children: React.ReactNode;
-}) {
-  return (
-    <div
-      className={
-        me
-          ? 'max-w-[84%] self-end rounded-2xl rounded-br-md bg-sage px-4 py-3 text-white'
-          : 'max-w-[84%] self-start rounded-2xl rounded-bl-md bg-surface px-4 py-3 text-ink'
-      }
-    >
-      <span className="block text-[11px] font-bold uppercase tracking-wider opacity-60">
-        {who}
-      </span>
-      <span className="text-[15.5px] leading-relaxed">{children}</span>
-    </div>
-  );
-}
-
-function AgentCard({
-  tier,
-  title,
-  level,
-  delay,
-  children,
-}: {
-  tier: string;
-  title: string;
-  level: 1 | 2 | 3;
-  delay: number;
-  children: React.ReactNode;
-}) {
-  return (
-    <Reveal delay={delay}>
-      <div className={`hx-agent-card ${level === 3 ? 'hx-agent-crown' : ''}`}>
-        <span className="hx-agent-num" aria-hidden="true">
-          {String(level).padStart(2, '0')}
-        </span>
-        <span className="relative self-start rounded-md border border-sage/25 bg-sage/10 px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wider text-sage">
-          {tier}
-        </span>
-        <h3 className="relative mt-5 text-[22px] font-bold text-ink">{title}</h3>
-        <p className="relative mt-3 flex-1 text-[14px] leading-relaxed text-ink-soft">
-          {children}
-        </p>
-        <div
-          className="relative mt-6 flex items-center gap-2 border-t border-line pt-5"
-          aria-label={`Autonomy level ${level} of 3`}
-        >
-          <span className="text-[11px] font-semibold uppercase tracking-[0.14em] text-ink-soft/60">
-            autonomy
-          </span>
-          <span className="ml-auto flex gap-1.5" aria-hidden="true">
-            {[1, 2, 3].map((n) => (
-              <span
-                key={n}
-                className={`h-2 w-8 rounded-full ${
-                  n <= level
-                    ? 'agent-bar bg-sage shadow-[0_0_10px_rgba(74,124,89,0.45)]'
-                    : 'bg-line'
-                }`}
-                style={n <= level ? { transitionDelay: `${300 + n * 140}ms` } : undefined}
-              />
-            ))}
-          </span>
-        </div>
-      </div>
-    </Reveal>
-  );
-}

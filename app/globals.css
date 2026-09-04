@@ -15,6 +15,8 @@
   --color-bg: #fafaf8;
   --color-surface: #f4f1ec;
   --color-line: #e5e7eb;
+  --hair: rgba(26, 26, 26, 0.1); /* warm hairline rule (ink @10%) */
+  --hair-strong: rgba(26, 26, 26, 0.18);
   --tap-min: 48px; /* senior tap-target floor */
   --focus-ring: #4a7c59;
 }
@@ -47,7 +49,15 @@
   h4 {
     word-break: keep-all;
     line-height: 1.2;
+    letter-spacing: -0.02em;
     text-wrap: balance;
+  }
+
+  /* Numbers line up in tables, metric rows and prices. */
+  .num,
+  time,
+  dd {
+    font-variant-numeric: tabular-nums;
   }
 
   /* Balance copy so short paragraphs read as even-length lines (≤2줄 균형).
@@ -114,7 +124,13 @@
 /* --- scroll reveal --- */
 .reveal {
   opacity: 0;
-  transform: translateY(26px);
+  /* 18px, not 26px — Editorial Daylight 의 섹션은 더 자주 등장하므로 이동량이 크면
+     스크롤이 출렁인다. 🔴 이 값은 반드시 **여기서** 바꾼다. 리디자인 첫 판은 파일
+     하단에 `.reveal{transform:translateY(18px)}` 를 새로 선언했는데, 그게
+     `prefers-reduced-motion` 블록의 `transform:none` 보다 «뒤에» 같은 specificity 로
+     놓여 그걸 덮었다 — 모션을 줄여 달라고 한 사용자가 오히려 transition 없이 툭
+     튀어오르는 화면을 봤다. 새 선언이 아니라 원본 수정. */
+  transform: translateY(18px);
   transition:
     opacity 0.7s cubic-bezier(0.2, 0.6, 0.2, 1),
     transform 0.7s cubic-bezier(0.2, 0.6, 0.2, 1);
@@ -215,12 +231,15 @@
   transform: translateY(8px);
   animation: line-in 0.55s cubic-bezier(0.2, 0.6, 0.2, 1) forwards;
 }
-.console-d1 { animation-delay: 0.4s; }
-.console-d2 { animation-delay: 2.2s; }
-.console-d3 { animation-delay: 3.0s; }
-.console-d4 { animation-delay: 3.8s; }
-.console-d5 { animation-delay: 4.8s; }
-.console-d6 { animation-delay: 5.7s; }
+/* The console is the hero's right column now, so an empty dark box for six
+   seconds is the first impression. Same beats, ~40% faster: the plan lands at
+   ~3.4s instead of ~5.7s and the replay (15s) still reads as a live runtime. */
+.console-d1 { animation-delay: 0.3s; }
+.console-d2 { animation-delay: 1.5s; }
+.console-d3 { animation-delay: 2.1s; }
+.console-d4 { animation-delay: 2.7s; }
+.console-d5 { animation-delay: 3.4s; }
+.console-d6 { animation-delay: 4.1s; }
 .console-prompt {
   color: var(--sage-lt);
   font-family: var(--mono);
@@ -235,8 +254,8 @@
 .console-type {
   display: inline-block;
   clip-path: inset(0 100% 0 0);
-  animation: type 1.5s steps(22, end) forwards;
-  animation-delay: 0.55s;
+  animation: type 1.1s steps(22, end) forwards;
+  animation-delay: 0.45s;
 }
 .console-step {
   display: flex;
@@ -1618,5 +1637,195 @@
   .hx-window:hover,
   .hx-agent-card:hover {
     transform: none;
+  }
+}
+
+/* ============================================================
+ * ED — Editorial Daylight (2026-09-03 site redesign).
+ * The site reads as a printed page: ivory paper, warm hairline
+ * rules, numbered section markers, left-aligned asymmetric grids.
+ * Dark surfaces survive only where they mean something (the agent
+ * console, the closing stage, the footer). Every color derives
+ * from the LOCKED brand tokens. Motion is transform/opacity only
+ * and switches off under prefers-reduced-motion at the bottom.
+ * ============================================================ */
+
+/* --- paper grounds --- */
+.ed-paper {
+  background-color: var(--color-ivory);
+}
+.ed-hero {
+  position: relative;
+  overflow: hidden;
+  background:
+    radial-gradient(52% 46% at 88% -6%, rgba(74, 124, 89, 0.14), transparent 62%),
+    radial-gradient(40% 40% at -6% 100%, rgba(74, 124, 89, 0.08), transparent 60%),
+    var(--color-ivory);
+}
+/* faint sage grid, masked toward the top-right — a drafting-table texture */
+.ed-hero-grid {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(74, 124, 89, 0.07) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(74, 124, 89, 0.07) 1px, transparent 1px);
+  background-size: 48px 48px;
+  mask-image: radial-gradient(70% 70% at 80% 10%, black 10%, transparent 100%);
+}
+
+/* --- section markers: "01 · The problem" in a side column --- */
+.ed-marker {
+  display: grid;
+  gap: 28px;
+}
+@media (min-width: 1024px) {
+  .ed-marker {
+    grid-template-columns: 220px minmax(0, 1fr);
+    gap: 56px;
+  }
+  .ed-marker-side {
+    position: sticky;
+    top: 104px;
+    align-self: start;
+  }
+}
+.ed-num {
+  font-variant-numeric: tabular-nums;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  color: var(--color-sage);
+}
+
+/* --- cards & chips --- */
+.ed-card {
+  border-radius: 20px;
+  background: #fff;
+  border: 1px solid var(--hair);
+  transition:
+    transform 0.3s cubic-bezier(0.2, 0.6, 0.2, 1),
+    border-color 0.3s,
+    box-shadow 0.3s;
+}
+@media (hover: hover) {
+  .ed-card-lift:hover {
+    transform: translateY(-4px);
+    border-color: rgba(74, 124, 89, 0.4);
+    box-shadow: 0 28px 60px -32px rgba(30, 45, 64, 0.3);
+  }
+}
+.ed-chip {
+  display: inline-flex;
+  align-items: center;
+  min-height: 40px;
+  padding: 0 14px;
+  border-radius: 999px;
+  background: #fff;
+  border: 1px solid var(--hair-strong);
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--color-ink);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.ed-chip-sage {
+  background: rgba(74, 124, 89, 0.12);
+  border-color: transparent;
+  color: var(--color-sage);
+  font-weight: 700;
+}
+
+/* --- phone frame for real app screenshots --- */
+.ed-device {
+  border-radius: 30px;
+  background: #fff;
+  border: 1px solid var(--hair-strong);
+  padding: 8px;
+  box-shadow: 0 40px 90px -44px rgba(30, 45, 64, 0.45);
+}
+.ed-device img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 23px;
+}
+
+/* --- live catalog strip (photo cards on a slow marquee) --- */
+.ed-strip {
+  overflow: hidden;
+  mask-image: linear-gradient(90deg, transparent, black 6%, black 94%, transparent);
+}
+.ed-strip-track {
+  display: flex;
+  gap: 16px;
+  width: max-content;
+  padding: 4px 0 8px;
+  animation: ed-strip 70s linear infinite;
+  will-change: transform;
+}
+.ed-strip:hover .ed-strip-track {
+  animation-play-state: paused;
+}
+@keyframes ed-strip {
+  to {
+    transform: translateX(calc(-50% - 8px));
+  }
+}
+.ed-photo-card {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 236px;
+  text-decoration: none;
+  color: inherit;
+}
+.ed-photo {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  border-radius: 14px;
+  background: linear-gradient(160deg, #e4e8df, #d2dccf);
+  border: 1px solid var(--hair);
+}
+.ed-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.6s cubic-bezier(0.2, 0.6, 0.2, 1);
+}
+@media (hover: hover) {
+  .ed-photo-card:hover .ed-photo img {
+    transform: scale(1.04);
+  }
+}
+
+/* --- the closing stage (dark bookend) --- */
+.ed-stage {
+  position: relative;
+  overflow: hidden;
+  background:
+    radial-gradient(110% 80% at 80% -10%, #2c3f58 0%, transparent 55%),
+    linear-gradient(180deg, var(--navy-2) 0%, var(--navy-deep) 70%);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ed-strip-track {
+    animation: none;
+  }
+  .ed-card,
+  .ed-photo img {
+    transition: none;
+  }
+  .ed-card-lift:hover {
+    transform: none;
+  }
+  /* 위쪽 reduced-motion 블록이 이미 .reveal 을 중화하지만, 이 블록이 파일에서 더
+     뒤에 있으므로 여기서 한 번 더 못박는다 — 나중에 누가 .reveal 을 다시 선언해도
+     «마지막 말»은 모션 줄이기 쪽이 하게. */
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
   }
 }

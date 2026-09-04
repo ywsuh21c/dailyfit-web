@@ -15,11 +15,16 @@ export const metadata: Metadata = pageSeo({
 
 export default function TermsPage() {
   return (
-    <section className="bg-bg py-24">
-      <div className="mx-auto max-w-3xl px-5">
-        <p className="eyebrow-mono text-sage">Legal</p>
-        <h1 className="mt-4 text-h2 text-ink">Terms of Service</h1>
-        <p className="mt-4 text-sm text-ink-soft">
+    <section className="bg-bg pb-24">
+      <div className="ed-hero mb-14">
+        <div className="ed-hero-grid" aria-hidden="true" />
+        <div className="relative mx-auto max-w-3xl px-5 pb-12 pt-16 sm:px-8">
+          <p className="text-eyebrow uppercase text-sage">Legal</p>
+          <h1 className="mt-5 text-[32px] font-extrabold leading-[1.2] tracking-[-0.03em] text-ink sm:text-[40px]">Terms of Service</h1>
+        </div>
+      </div>
+      <div className="mx-auto max-w-3xl px-5 sm:px-8">
+        <p className="text-sm text-ink-soft">
           This English text is provided for convenience. The Korean version is
           the legally binding version.
         </p>
