@@ -18,9 +18,14 @@ import type { CatalogCard } from '@/lib/catalog-sample';
  * even though every URL answered 200 — the browser never considered them
  * "near the viewport" because the track is 2× wide and slid by translateX.
  * A strip whose whole point is showing real photos must not depend on that.
- * The duplicated half stays lazy and carries the SAME urls, so the browser
- * fetches each photo once either way; `fetchPriority="low"` keeps them behind
- * the hero so first paint is unaffected.
+ *
+ * 2026-09-04, measured on live: keeping the duplicated half lazy was still
+ * wrong. Fetch COUNT was fine (same urls -> one fetch each), but PAINT time
+ * was not: each duplicate card entered the viewport blank and stayed blank
+ * ~3.2-3.6s on desktop (~0.4s on mobile) before the observer fired. Half the
+ * 70s loop is duplicate cards, so that is a visible hole in the strip. Neither
+ * half is lazy now; the urls are identical so this adds no requests, and
+ * `fetchPriority="low"` still keeps them behind the hero.
  */
 export function CatalogStrip({
   cards,
@@ -56,7 +61,6 @@ export function CatalogStrip({
                 <img
                   src={c.photo}
                   alt=""
-                  loading={i < cards.length ? undefined : 'lazy'}
                   fetchPriority="low"
                   decoding="async"
                   width={472}
