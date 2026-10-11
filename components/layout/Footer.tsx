@@ -74,15 +74,9 @@ export function Footer({ locale = 'ko' }: { locale?: Locale }) {
                   {site.contactEmail}
                 </a>
               </li>
-              <li>
-                <Link
-                  href={productCta.href}
-                  {...externalLinkProps}
-                  className="flex min-h-tap items-center text-base transition-colors hover:text-ivory"
-                >
-                  {ctaLabel} →
-                </Link>
-              </li>
+              {/* 2026-10-11 서비스 종료(10/20) — 푸터의 가입 입구도 제거한다.
+                  Nav·히어로만 지웠더니 라이브에 이 링크가 남아 있었다(실측).
+                  되살리려면 이 블록과 `productCta`·`ctaLabel` 을 함께 복원한다. */}
             </ul>
           </nav>
         </div>
