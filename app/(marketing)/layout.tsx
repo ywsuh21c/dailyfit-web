@@ -1,4 +1,5 @@
 import { Nav } from '@/components/layout/Nav';
+import { SunsetBanner } from '@/components/layout/SunsetBanner';
 import { Footer } from '@/components/layout/Footer';
 
 export default function MarketingLayout({
@@ -8,6 +9,7 @@ export default function MarketingLayout({
 }) {
   return (
     <>
+      <SunsetBanner />
       <Nav />
       <main id="main" className="min-h-[60vh]">
         {children}
