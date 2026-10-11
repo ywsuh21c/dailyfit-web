@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { Nav } from '@/components/layout/Nav';
+import { SunsetBanner } from '@/components/layout/SunsetBanner';
 import { Footer } from '@/components/layout/Footer';
 import { site } from '@/lib/site';
 
@@ -25,6 +26,7 @@ export const metadata: Metadata = {
 export default function EnLayout({ children }: { children: React.ReactNode }) {
   return (
     <div lang="en">
+      <SunsetBanner en />
       <Nav locale="en" />
       <main id="main" className="min-h-[60vh]">
         {children}
