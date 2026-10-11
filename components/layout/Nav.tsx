@@ -74,13 +74,10 @@ export function Nav({ locale = 'ko' }: { locale?: Locale }) {
 
         <div className="flex items-center gap-1.5">
           <LangToggle locale={locale} />
-          <Link
-            href={productCta.href}
-            {...externalLinkProps}
-            className="flex min-h-tap items-center whitespace-nowrap rounded-lg bg-sage px-5 text-base font-semibold text-white transition-colors hover:bg-sage-dk active:scale-[0.98]"
-          >
-            {ctaLabel} →
-          </Link>
+          {/* 2026-10-11 서비스 종료(10/20) — 가입 입구를 «비활성화»가 아니라 «제거»한다.
+              살아 있으면 종료를 공지하면서 새 개인정보를 계속 수집하는 셈이고,
+              그건 「목적 달성으로 파기했다」와 정면으로 어긋난다(개인정보 보호법 제21조).
+              되살리려면 이 블록과 `productCta`·`ctaLabel` 을 함께 복원한다. */}
         </div>
       </nav>
     </header>

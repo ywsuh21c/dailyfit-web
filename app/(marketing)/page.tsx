@@ -326,13 +326,7 @@ export default async function HomePage() {
               >
                 Talk to us
               </Link>
-              <Link
-                href={productAppUrl}
-                {...externalLinkProps}
-                className="inline-flex min-h-[56px] items-center rounded-xl border border-ivory/25 bg-white/5 px-8 text-[17px] font-bold text-ivory transition-colors hover:border-sage-lt hover:text-sage-lt active:scale-[0.98]"
-              >
-                DailyFit 시작하기 →
-              </Link>
+              {/* 2026-10-11 서비스 종료 — 가입 CTA 제거(위 Nav 와 같은 이유) */}
             </div>
           </Reveal>
         </div>
